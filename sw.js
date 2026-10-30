@@ -1,4 +1,4 @@
-const CACHE_NAME = "lexiaa-shell-v5";
+const CACHE_NAME = "lexiaa-shell-v6";
 const APP_SHELL = ["./", "./index.html", "./app-icon.webp", "./manifest.webmanifest", "./welcome-mascot.webp", "./mascot-member.png", "./welcome-character.png"];
 
 self.addEventListener("install", event => {
