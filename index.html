@@ -473,7 +473,16 @@
     @media(max-width:520px){.music-hub-inputrow{flex-direction:column}.music-hub-action{min-height:44px}.music-hub-player iframe{min-height:300px}}
     @media(prefers-reduced-motion:reduce){.music-hub-backdrop,.music-hub-panel{transition:none}}
 
-</style>
+
+    .music-menu-card{background:radial-gradient(ellipse at 50% 0%,#dce7ff20,transparent 62%),linear-gradient(140deg,#202633,#0b0d13);border-color:#8996ad}
+    .music-menu-card h3{letter-spacing:.1em}
+    .dash-utilities #musicHubBtn{display:none}
+    .music-hub-intro{display:grid;grid-template-columns:minmax(110px,155px) 1fr;align-items:center;gap:18px;margin:4px 0 20px;padding:14px;border:1px solid #4c5668;border-radius:15px;background:linear-gradient(120deg,#dce7ff12,#ffffff04)}
+    .music-hub-character{display:block;width:100%;height:190px;object-fit:cover;object-position:center 18%;border-radius:11px;border:1px solid #76839a}
+    .music-hub-intro .music-hub-sub{margin:0;color:#e0e6f1;font-size:12px;line-height:1.85;font-weight:700}
+    @media(max-width:480px){.music-hub-intro{grid-template-columns:105px 1fr;gap:12px;padding:10px}.music-hub-character{height:165px}.music-hub-intro .music-hub-sub{font-size:10px;line-height:1.7}}
+
+  </style>
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -570,6 +579,9 @@
             </div>
           </div>
           <div class="menu-grid">
+            <button id="musicHubBtn" class="menu-card wide music-menu-card" type="button" aria-label="Buka LEXIAA Music"><span class="menu-arrow" aria-hidden="true">♫</span>
+              <span class="menu-number">00 / MUSIC PLAYER</span><h3>LEXIAA MUSIC</h3><p>SPOTIFY &amp; YOUTUBE PLAYER</p>
+            </button>
             <button class="menu-card" type="button" data-content="penemuan"><span class="menu-arrow" aria-hidden="true">↗</span>
               <span class="menu-number">01 / EXPLORE</span><h3>PENEMUAN</h3><p>LEXIAA &amp; ELSTAR</p>
             </button>
@@ -603,7 +615,7 @@
           </section>
           <div class="dash-utilities">
             <button id="musicBtn" class="small-btn" type="button">MUSIK: OFF</button>
-            <button id="musicHubBtn" class="small-btn music-hub-trigger" type="button">MUSIC HUB ♫</button>
+            
             <button id="logoutBtn" class="small-btn" type="button">LOGOUT ↗</button>
           </div>
           <!-- Musik latar otomatis; file music.mp3 berada di folder utama repository. -->
@@ -615,7 +627,10 @@
                 <div><p class="modal-kicker">LEXIAA / ENTERTAINMENT</p><h2 id="musicHubTitle" class="music-hub-title">MUSIC HUB ♫</h2></div>
                 <button id="musicHubClose" class="music-hub-secondary" type="button" aria-label="Tutup Music Hub">✕</button>
               </div>
-              <p class="music-hub-sub">Tempel link playlist atau video Spotify / YouTube. LEXIAA akan mengenali sumbernya secara otomatis.</p>
+              <div class="music-hub-intro">
+                <img class="music-hub-character" src="./lexiaa-music-character.webp" alt="Karakter ilustrasi LEXIAA">
+                <p class="music-hub-sub">LEXIAA: TEMPEL LINK PLAYLIST/MUSIK SPOTIFY ANDA DISINI UNTUK MEMUTAR MUSIK. ATAU KAMU JUGA BISA PAKAI LINK YOUTUBE UNTUK MEMUTARNYA MENJADI MUSIK!!</p>
+              </div>
               <form id="musicHubForm">
                 <div class="music-hub-inputrow">
                   <input id="musicHubUrl" class="music-hub-input" type="url" inputmode="url" placeholder="https://open.spotify.com/... atau youtube.com/..." autocomplete="url" required aria-label="Link Spotify atau YouTube">
