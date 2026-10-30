@@ -553,8 +553,8 @@
             <button id="musicBtn" class="small-btn" type="button">MUSIK: OFF</button>
             <button id="logoutBtn" class="small-btn" type="button">LOGOUT ↗</button>
           </div>
-          <!-- Letakkan file musik milikmu bernama music.mp3 di folder yang sama jika sudah siap. -->
-          <audio id="bgMusic" src="music.mp3" loop preload="none"></audio>
+          <!-- Musik latar otomatis; file music.mp3 berada di folder utama repository. -->
+          <audio id="bgMusic" src="music.mp3" loop preload="auto"></audio>
         </div>
       </section>
 
@@ -824,6 +824,7 @@
       if (name === "login" || name === "signup") openTutorial();
       if (name === "home" || name === "dashboard") {
         window.setTimeout(openWelcomePopup, 180);
+        window.setTimeout(startBackgroundMusic, 250);
       }
     }
     // Popup voice audio: restart from the beginning every time its popup opens.
@@ -1024,12 +1025,55 @@
 
     const music = document.getElementById("bgMusic");
     const musicBtn = document.getElementById("musicBtn");
+    let musicManuallyDisabled = false;
+    music.volume = 0.45;
+
+    async function startBackgroundMusic() {
+      if (musicManuallyDisabled || !music.paused) return;
+      try {
+        await music.play();
+        musicBtn.textContent = "MUSIK: ON";
+      } catch (_) {
+        // Browser HP dapat memblokir autoplay sampai ada interaksi pengguna.
+        musicBtn.textContent = "MUSIK: ON";
+      }
+    }
+
+    music.addEventListener("play", () => { musicBtn.textContent = "MUSIK: ON"; });
+    music.addEventListener("pause", () => { musicBtn.textContent = "MUSIK: OFF"; });
+
     musicBtn.addEventListener("click", async () => {
       if (music.paused) {
-        try { await music.play(); musicBtn.textContent = "MUSIK: ON"; }
-        catch { toast("Tambahkan music.mp3 dan coba lagi."); }
-      } else { music.pause(); musicBtn.textContent = "MUSIK: OFF"; }
+        musicManuallyDisabled = false;
+        try {
+          await music.play();
+          musicBtn.textContent = "MUSIK: ON";
+        } catch (_) {
+          toast("Browser memblokir pemutaran. Coba tekan MUSIK: ON sekali lagi.");
+        }
+      } else {
+        musicManuallyDisabled = true;
+        music.pause();
+        musicBtn.textContent = "MUSIK: OFF";
+      }
     });
+
+    // Coba lagi setelah interaksi pertama jika autoplay awal diblokir browser.
+    ["pointerdown", "keydown", "touchstart"].forEach(eventName => {
+      document.addEventListener(eventName, () => {
+        if (!musicManuallyDisabled && music.paused &&
+            (document.getElementById("homeView").classList.contains("active") ||
+             document.getElementById("dashboardView").classList.contains("active"))) {
+          startBackgroundMusic();
+        }
+      }, {passive:true});
+    });
+
+    // Putar otomatis saat halaman pertama kali dibuka jika home/dashboard sedang aktif.
+    if (document.getElementById("homeView").classList.contains("active") ||
+        document.getElementById("dashboardView").classList.contains("active")) {
+      window.setTimeout(startBackgroundMusic, 350);
+    }
 
     if (supabase) {
       const { data: { session } } = await supabase.auth.getSession();
