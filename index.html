@@ -622,6 +622,23 @@
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
+    <div id="welcomeInstallModal" class="modal-backdrop welcome-backdrop" role="dialog" aria-modal="true" aria-labelledby="welcomeTitle">
+    <div class="welcome-card">
+      <div class="welcome-copy">
+        <p class="welcome-kicker">LEXIAA &amp; ELSTAR / WELCOME</p>
+        <h2 id="welcomeTitle" class="welcome-title">LEXIAA:</h2>
+        <p class="welcome-message"><span id="welcomeTypedText"></span><span class="welcome-cursor" aria-hidden="true"></span></p>
+        <div class="welcome-actions">
+          <button id="stayWebsiteBtn" class="btn secondary" type="button">TETAP DI WEBSITE</button>
+          <button id="installAppBtn" class="btn" type="button">UNDUH APP</button>
+        </div>
+        <button id="alreadyInstalledBtn" class="text-button" type="button" hidden>SUDAH UNDUH</button>
+        <p id="welcomeInstallStatus" class="welcome-status" aria-live="polite"></p>
+      </div>
+      <div class="welcome-mascot-wrap"><img class="welcome-mascot" src="mascot-member.png" alt="Maskot anime LEXIAA"></div>
+    </div>
+  </div>
+
   <script type="module">
     // 1) Buat project Supabase, lalu isi URL dan anon/publishable key di bawah.
     // 2) Di Supabase Dashboard > Authentication > Providers/Sign In, nonaktifkan Confirm email
@@ -1077,23 +1094,10 @@
     if ("serviceWorker" in navigator && location.protocol === "https:") {
       window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js").catch(err => console.warn("PWA service worker:", err)));
     }
-\n  </script>
 
-  <div id="welcomeInstallModal" class="modal-backdrop welcome-backdrop" role="dialog" aria-modal="true" aria-labelledby="welcomeTitle">
-    <div class="welcome-card">
-      <div class="welcome-copy">
-        <p class="welcome-kicker">LEXIAA &amp; ELSTAR / WELCOME</p>
-        <h2 id="welcomeTitle" class="welcome-title">LEXIAA:</h2>
-        <p class="welcome-message"><span id="welcomeTypedText"></span><span class="welcome-cursor" aria-hidden="true"></span></p>
-        <div class="welcome-actions">
-          <button id="stayWebsiteBtn" class="btn secondary" type="button">TETAP DI WEBSITE</button>
-          <button id="installAppBtn" class="btn" type="button">UNDUH APP</button>
-        </div>
-        <button id="alreadyInstalledBtn" class="text-button" type="button" hidden>SUDAH UNDUH</button>
-        <p id="welcomeInstallStatus" class="welcome-status" aria-live="polite"></p>
-      </div>
-      <div class="welcome-mascot-wrap"><img class="welcome-mascot" src="mascot-member.png" alt="Maskot anime LEXIAA"></div>
-    </div>
-  </div>
-\n</body>
+  </script>
+
+
+
+</body>
 </html>
