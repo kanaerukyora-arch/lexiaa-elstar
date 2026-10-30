@@ -396,32 +396,32 @@
     /* Member gate closes only from its explicit TUTUP button. */
 
   
-    /* LEXIAA blue-neon welcome / PWA install popup */
-    .welcome-backdrop{z-index:80;background:rgba(2,8,22,.86);backdrop-filter:blur(18px) saturate(1.25);display:grid;place-items:center;padding:18px}
-    .welcome-card{position:relative;width:min(1120px,100%);min-height:470px;display:grid;grid-template-columns:.88fr 1.12fr;align-items:center;gap:12px;overflow:hidden;padding:clamp(26px,4vw,48px);border:1.5px solid #438cff;border-radius:30px;background:radial-gradient(ellipse at 15% 55%,#087bff35,transparent 48%),radial-gradient(ellipse at 88% 12%,#176dff35,transparent 46%),linear-gradient(120deg,#071a3a 0%,#07132d 58%,#040c20 100%);box-shadow:0 0 0 1px #9ccaff35 inset,0 0 32px #167cff70,0 0 95px #126aff35,0 35px 110px #000e;transform:translateY(22px) scale(.96);transition:transform .4s cubic-bezier(.2,.8,.2,1)}
-    .welcome-card:before{content:"";position:absolute;inset:9px;border:1px solid #5caaff55;border-radius:22px;pointer-events:none}
-    .welcome-card:after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 25%,#67baff0b 48%,transparent 68%);pointer-events:none}
-    .welcome-backdrop.open .welcome-card{transform:translateY(0) scale(1)}
-    .welcome-copy{position:relative;z-index:2;padding:18px 4px 12px}
-    .welcome-kicker{font:800 11px Orbitron,sans-serif;letter-spacing:.24em;color:#8ddfff;margin:0 0 13px;text-shadow:0 0 18px #38aaffaa}
-    .welcome-title{font:900 clamp(40px,6vw,72px)/1.05 Georgia,serif;letter-spacing:.045em;margin:0 0 20px;background:linear-gradient(180deg,#fff 8%,#c9e8ff 55%,#388cff);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 16px #287dff99)}
-    .welcome-message{min-height:0;font:800 clamp(16px,2.1vw,22px)/1.6 Inter,system-ui,sans-serif;color:#edf6ff;letter-spacing:.025em;margin:0;max-width:590px;text-shadow:0 2px 18px #0009}
-    .welcome-cursor{display:none}
-    .welcome-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:32px}
-    .welcome-actions .btn{min-width:0;min-height:66px;padding:13px 10px;font-size:clamp(9px,1vw,12px);line-height:1.45;border-radius:22px;letter-spacing:.045em;font-weight:900;color:#eaf5ff;border:1px solid #649cff;background:linear-gradient(145deg,#243b68,#101f42);box-shadow:0 0 18px #246bff35,inset 0 1px #ffffff25}
-    .welcome-actions .btn.secondary{border-color:#6099ff;color:#eaf5ff;background:linear-gradient(145deg,#263c68,#101c3c)}
-    .welcome-actions #installAppBtn{border:1px solid #68edff;background:linear-gradient(135deg,#168dff,#1748f4);color:#fff;box-shadow:0 0 10px #39dfff,0 0 30px #147aff99,inset 0 1px #ffffff80}
-    .welcome-actions .btn:disabled{opacity:.65;cursor:wait;transform:none}
-    .welcome-actions .text-button{display:block;margin:0;color:#e6f4ff;font-weight:900}
-    .welcome-close{position:absolute;z-index:5;right:24px;top:22px;width:48px;height:48px;border-radius:50%;border:1px solid #5caaff;background:#102c60;color:#fff;font-size:31px;line-height:1;box-shadow:0 0 20px #278aff66;cursor:pointer}
-    .welcome-mascot-wrap{grid-column:1;grid-row:1;align-self:stretch;display:flex;align-items:center;justify-content:center;min-width:0;position:relative}
-    .welcome-mascot-wrap:before{content:"";position:absolute;width:110%;height:90%;border-radius:50%;background:radial-gradient(ellipse,#138aff55,transparent 68%);filter:blur(18px)}
-    .welcome-mascot{position:relative;z-index:1;display:block;width:100%;max-width:430px;max-height:500px;object-fit:contain;object-position:center bottom;filter:drop-shadow(0 0 22px #319dff9c);animation:welcomeFloat 4s ease-in-out infinite}
-    @keyframes welcomeFloat{0%,100%{transform:translateY(4px)}50%{transform:translateY(-9px)}}
-    .welcome-status{min-height:18px;margin-top:12px;color:#9bdfff;font-size:12px;font-weight:700;line-height:1.5}
-    @media(max-width:700px){.welcome-card{grid-template-columns:1fr;gap:0;padding:22px 18px 20px;text-align:center;max-width:500px;min-height:0}.welcome-copy{grid-column:1;grid-row:2;padding:4px 0 0}.welcome-mascot-wrap{grid-column:1;grid-row:1;height:175px;margin:0 0 6px}.welcome-mascot{max-height:190px;width:auto;max-width:230px}.welcome-close{right:15px;top:14px;width:40px;height:40px;font-size:26px}.welcome-title{font-size:clamp(38px,10vw,54px);margin-bottom:12px}.welcome-message{font-size:clamp(14px,3.9vw,18px);line-height:1.5}.welcome-actions{gap:7px;margin-top:20px}.welcome-actions .btn{min-height:58px;padding:10px 5px;font-size:clamp(8px,2.2vw,10px);border-radius:16px}.welcome-kicker{font-size:9px}}
-    @media(max-width:390px){.welcome-actions{grid-template-columns:1fr}.welcome-actions .btn{width:100%;min-height:48px}}
-    @media(prefers-reduced-motion:reduce){.welcome-mascot{animation:none}.welcome-card{transition:none}}
+    /* LEXIAA holographic welcome / install popup */
+     .welcome-backdrop{z-index:80;background:rgba(2,8,22,.88);backdrop-filter:blur(18px) saturate(1.25);display:grid;place-items:center;padding:18px}
+     .welcome-card{position:relative;width:min(1240px,100%);min-height:570px;display:grid;grid-template-columns:minmax(300px,.9fr) minmax(0,1.1fr);align-items:center;gap:clamp(18px,3vw,42px);overflow:hidden;padding:clamp(28px,4vw,58px);border:1.5px solid #438cff;border-radius:30px;background:radial-gradient(ellipse at 18% 54%,#087bff42,transparent 49%),radial-gradient(ellipse at 88% 12%,#176dff35,transparent 46%),linear-gradient(120deg,#071a3a 0%,#07132d 58%,#040c20 100%);box-shadow:0 0 0 1px #9ccaff35 inset,0 0 32px #167cff70,0 0 95px #126aff35,0 35px 110px #000e;transform:translateY(22px) scale(.96);transition:transform .4s cubic-bezier(.2,.8,.2,1)}
+     .welcome-card:before{content:"";position:absolute;inset:10px;border:1px solid #5caaff55;border-radius:22px;pointer-events:none}
+     .welcome-card:after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 25%,#67baff0b 48%,transparent 68%);pointer-events:none}
+     .welcome-backdrop.open .welcome-card{transform:translateY(0) scale(1)}
+     .welcome-copy{position:relative;z-index:2;grid-column:2;grid-row:1;padding:22px 4px 12px}
+     .welcome-kicker{font:800 11px Orbitron,sans-serif;letter-spacing:.24em;color:#8ddfff;margin:0 0 13px;text-shadow:0 0 18px #38aaffaa}
+     .welcome-title{font:900 clamp(48px,6.4vw,88px)/1.02 "Playfair Display",Georgia,serif;letter-spacing:.045em;margin:0 0 28px;background:linear-gradient(180deg,#fff 8%,#c9e8ff 55%,#388cff);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 16px #287dff99)}
+     .welcome-message{font:800 clamp(19px,2vw,27px)/1.55 Inter,system-ui,sans-serif;color:#edf6ff;letter-spacing:.025em;margin:0;max-width:650px;text-shadow:0 2px 18px #0009}
+     .welcome-cursor{display:none}
+     .welcome-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:36px;width:100%}
+     .welcome-actions .btn{width:100%;min-width:0;min-height:86px;padding:18px 16px;font-size:clamp(12px,1.25vw,16px);line-height:1.35;border-radius:22px;letter-spacing:.055em;font-weight:900;color:#eaf5ff;border:1px solid #649cff;background:linear-gradient(145deg,#243b68,#101f42);box-shadow:0 0 18px #246bff35,inset 0 1px #ffffff25}
+     .welcome-actions .btn.secondary{border-color:#6099ff;color:#eaf5ff;background:linear-gradient(145deg,#263c68,#101c3c)}
+     .welcome-actions #installAppBtn{border:1px solid #68edff;background:linear-gradient(135deg,#168dff,#1748f4);color:#fff;box-shadow:0 0 10px #39dfff,0 0 30px #147aff99,inset 0 1px #ffffff80}
+     .welcome-actions #alreadyInstalledBtn{grid-column:1/-1;min-height:62px}
+     .welcome-actions .btn:disabled{opacity:.65;cursor:wait;transform:none}
+     .welcome-actions .text-button{display:block;margin:0;color:#e6f4ff;font-weight:900}
+     .welcome-close{position:absolute;z-index:5;right:24px;top:22px;width:48px;height:48px;border-radius:50%;border:1px solid #5caaff;background:#102c60;color:#fff;font-size:31px;line-height:1;box-shadow:0 0 20px #278aff66;cursor:pointer}
+     .welcome-mascot-wrap{grid-column:1;grid-row:1;align-self:stretch;display:flex;align-items:center;justify-content:center;min-width:0;position:relative}
+     .welcome-mascot-wrap:before{content:"";position:absolute;width:115%;height:95%;border-radius:50%;background:radial-gradient(ellipse,#138aff66,transparent 68%);filter:blur(22px)}
+     .welcome-mascot{position:relative;z-index:1;display:block;width:100%;max-width:500px;max-height:560px;object-fit:contain;object-position:center bottom;filter:drop-shadow(0 0 22px #319dff9c);animation:welcomeFloat 4s ease-in-out infinite}
+     @keyframes welcomeFloat{0%,100%{transform:translateY(4px)}50%{transform:translateY(-9px)}}
+     .welcome-status{min-height:18px;margin-top:12px;color:#9bdfff;font-size:12px;font-weight:700;line-height:1.5}
+     @media(max-width:700px){.welcome-backdrop{padding:12px}.welcome-card{grid-template-columns:1fr;gap:0;padding:24px 18px 20px;text-align:center;max-width:540px;min-height:0;max-height:94svh;overflow-y:auto}.welcome-copy{grid-column:1;grid-row:2;padding:2px 0 0}.welcome-mascot-wrap{grid-column:1;grid-row:1;height:clamp(180px,34svh,270px);margin:0 0 5px}.welcome-mascot{max-height:100%;width:auto;max-width:min(78vw,330px)}.welcome-close{right:14px;top:13px;width:40px;height:40px;font-size:26px}.welcome-title{font-size:clamp(43px,11vw,62px);margin-bottom:16px}.welcome-message{font-size:clamp(16px,4.1vw,21px);line-height:1.5}.welcome-actions{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:23px}.welcome-actions .btn{min-height:72px;padding:12px 8px;font-size:clamp(10px,2.8vw,13px);border-radius:16px}.welcome-actions #alreadyInstalledBtn{grid-column:1/-1;min-height:58px}.welcome-kicker{font-size:9px}}
+     @media(max-width:360px){.welcome-actions{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.welcome-actions .btn{font-size:9px;padding:10px 5px}}
   </style>
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="mobile-web-app-capable" content="yes">
@@ -635,7 +635,7 @@
       <div class="welcome-copy">
         <p class="welcome-kicker">LEXIAA / MEMBER ACCESS</p>
         <h2 id="welcomeTitle" class="welcome-title">LEXIAA:</h2>
-        <p class="welcome-message"><span id="welcomeTypedText">SELAMAT DATANG KEMBALI!<br><br>Kamu berhasil login. Terima kasih sudah menjadi bagian dari LEXIAA. Semoga harimu menyenangkan!</span></p>
+        <p class="welcome-message"><span id="welcomeTypedText">UNTUK PENGALAMAN YANG LEBIH BAIK, AYO UNDUH/TAMBAHKAN APP DI BERANDA HP ANDA.</span></p>
         <div class="welcome-actions">
           <button id="stayWebsiteBtn" class="btn secondary" type="button">◉ &nbsp; TETAP DI WEBSITE</button>
           <button id="installAppBtn" class="btn" type="button">↓ &nbsp; UNDUH APP</button>
@@ -1029,7 +1029,7 @@
     const welcomeInstallStatus = document.getElementById("welcomeInstallStatus");
     const installAppBtn = document.getElementById("installAppBtn");
     const alreadyInstalledBtn = document.getElementById("alreadyInstalledBtn");
-    const welcomeMessage = "UNTUK PENGALAMAN YG LEBIH BAIK, AYO UNDUH/TAMBAHKAN APP LEXIAA DI BERANDA MU!!";
+    const welcomeMessage = "UNTUK PENGALAMAN YANG LEBIH BAIK, AYO UNDUH/TAMBAHKAN APP DI BERANDA HP ANDA.";
 
     function isAppInstalled() {
       return window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
@@ -1039,7 +1039,7 @@
       welcomeInstallStatus.textContent = "";
       alreadyInstalledBtn.hidden = !isAppInstalled();
       installAppBtn.hidden = isAppInstalled();
-      welcomeTypedText.innerHTML = "SELAMAT DATANG KEMBALI!<br><br>Kamu berhasil login. Terima kasih sudah menjadi bagian dari <strong style='color:#67ddff'>LEXIAA</strong>. Semoga harimu menyenangkan!";
+      welcomeTypedText.textContent = welcomeMessage;
       document.getElementById("stayWebsiteBtn").focus({preventScroll:true});
     }
     function closeWelcomePopup() {
