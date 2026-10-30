@@ -1041,7 +1041,7 @@
     }
 
 
-    // Jam berjalan menggunakan waktu perangkat; lokasi perkiraan dari zona waktu browser (tanpa meminta GPS).
+    // Jam berjalan mengikuti waktu perangkat; kota ditentukan dari lokasi perangkat setelah izin pengguna.
     (function initLiveInfo(){
       const zone = Intl.DateTimeFormat().resolvedOptions().timeZone || "";
       const knownPlaces = {
@@ -1051,27 +1051,55 @@
         "Asia/Ujung_Pandang":"MAKASSAR, INDONESIA · WITA",
         "Asia/Jayapura":"JAYAPURA, INDONESIA · WIT"
       };
-      let place = knownPlaces[zone];
-      if (!place) {
-        const parts = zone.split("/");
-        const city = parts.length > 1 ? parts[parts.length-1].replace(/_/g," ") : "LOKASI PERANGKAT";
-        place = city.toUpperCase() + (zone.startsWith("Asia/") ? ", ASIA" : "");
-      }
       const timeFormatter = new Intl.DateTimeFormat("id-ID",{hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:false});
       const dateFormatter = new Intl.DateTimeFormat("id-ID",{weekday:"long",day:"2-digit",month:"long",year:"numeric"});
+      let place = knownPlaces[zone] || "IZINKAN AKSES LOKASI UNTUK MENAMPILKAN KOTA";
+      function updateLocation(value){
+        place = value;
+        document.querySelectorAll("[data-live-location]").forEach(el => {
+          el.textContent = "LOKASI: " + place;
+        });
+      }
       function tick(){
         const now = new Date();
         document.querySelectorAll("[data-live-info]").forEach(el=>{
           const time=el.querySelector("[data-live-time]");
           const date=el.querySelector("[data-live-date]");
-          const location=el.querySelector("[data-live-location]");
           if(time) time.textContent=timeFormatter.format(now);
           if(date) date.textContent=dateFormatter.format(now).toUpperCase();
-          if(location) location.textContent="LOKASI: "+place;
         });
       }
       tick();
       window.setInterval(tick,1000);
+
+      if (!("geolocation" in navigator)) {
+        updateLocation(knownPlaces[zone] || "LOKASI TIDAK DIDUKUNG PERANGKAT");
+        return;
+      }
+      navigator.geolocation.getCurrentPosition(async position => {
+        try {
+          const {latitude,longitude} = position.coords;
+          const url = "https://api.bigdatacloud.net/data/reverse-geocode-client?latitude="
+            + encodeURIComponent(latitude) + "&longitude=" + encodeURIComponent(longitude)
+            + "&localityLanguage=id";
+          const response = await fetch(url);
+          if (!response.ok) throw new Error("Reverse geocoding gagal");
+          const data = await response.json();
+          const city = data.city || data.locality || data.principalSubdivision || data.localityInfo?.administrative?.[0]?.name;
+          const country = data.countryName || "";
+          if (city) {
+            updateLocation((city + (country ? ", " + country : "")).toUpperCase());
+          } else {
+            updateLocation(knownPlaces[zone] || "KOTA TIDAK TERDETEKSI");
+          }
+        } catch (error) {
+          console.warn("Gagal menentukan kota dari koordinat:", error);
+          updateLocation(knownPlaces[zone] || "KOTA TIDAK TERDETEKSI");
+        }
+      }, error => {
+        console.info("Izin lokasi tidak diberikan atau lokasi tidak tersedia:", error.message);
+        updateLocation(knownPlaces[zone] || "IZIN LOKASI DITOLAK");
+      }, {enableHighAccuracy:true,timeout:15000,maximumAge:300000});
     })();
 
     // PWA install prompt: browser tetap meminta persetujuan pengguna.
