@@ -692,19 +692,23 @@
     </div>
   </div>
 
-  <script type="module">
-    // Splash screen: 3.5 seconds, with an immediate skip option.
+  <script>
+    // Keep splash independent from module/CDN loading so it cannot block the app.
     (() => {
       const loader = document.getElementById("appLoader");
+      if (!loader) return;
+      let finished = false;
       const finish = () => {
-        if (!loader || loader.classList.contains("done")) return;
+        if (finished) return;
+        finished = true;
         loader.classList.add("done");
         window.setTimeout(() => loader.remove(), 400);
       };
       document.getElementById("skipLoader")?.addEventListener("click", finish);
       window.setTimeout(finish, 3500);
     })();
-
+  </script>
+  <script type="module">
     // 1) Buat project Supabase, lalu isi URL dan anon/publishable key di bawah.
     // 2) Di Supabase Dashboard > Authentication > Providers/Sign In, nonaktifkan Confirm email
     //    jika memang ingin pendaftaran tanpa konfirmasi email.
