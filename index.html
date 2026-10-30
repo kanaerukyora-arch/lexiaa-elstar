@@ -822,6 +822,9 @@
       views.forEach(v => document.getElementById(v + "View").classList.toggle("active", v === name));
       window.scrollTo({top:0,behavior:"smooth"});
       if (name === "login" || name === "signup") openTutorial();
+      if (name === "home" || name === "dashboard") {
+        window.setTimeout(openWelcomePopup, 180);
+      }
     }
     // Popup voice audio: restart from the beginning every time its popup opens.
     const tutorialPopupAudio = new Audio("tutorial-daftar-otw.mp3");
@@ -909,7 +912,6 @@
         if (data.session) {
           setNotice("signupNotice", "Akun berhasil dibuat. Membuka dashboard...", "success");
           showDashboard(data.user);
-          setTimeout(openWelcomePopup, 420);
         } else {
           setNotice("signupNotice", "Permintaan daftar berhasil, tetapi belum ada sesi login. Periksa pengaturan Confirm email di Supabase.", "error");
         }
@@ -931,7 +933,6 @@
         if (error) throw error;
         setNotice("loginNotice", "Login berhasil.", "success");
         showDashboard(data.user);
-        setTimeout(openWelcomePopup, 420);
       } catch (err) {
         setNotice("loginNotice", err.message || "Login gagal. Periksa email dan sandi.", "error");
       } finally { submit.disabled = false; submit.textContent = "LOGIN"; }
@@ -1114,6 +1115,22 @@
     function isAppInstalled() {
       return window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
     }
+    const welcomePopupAudio = new Audio("welcome-anime.mp3");
+    welcomePopupAudio.preload = "auto";
+    let welcomeAudioStarted = false;
+    function playWelcomePopupAudio() {
+      try {
+        welcomePopupAudio.pause();
+        welcomePopupAudio.currentTime = 0;
+        const playback = welcomePopupAudio.play();
+        if (playback && typeof playback.then === "function") {
+          playback.then(() => { welcomeAudioStarted = true; }).catch(() => {
+            // Browser dapat memblokir autoplay; coba lagi pada interaksi pertama pengguna.
+            welcomeAudioStarted = false;
+          });
+        }
+      } catch (_) { welcomeAudioStarted = false; }
+    }
     function openWelcomePopup() {
       const installed = isAppInstalled();
       const stayWebsiteBtn = document.getElementById("stayWebsiteBtn");
@@ -1124,11 +1141,23 @@
       installAppBtn.hidden = installed;
       alreadyInstalledBtn.hidden = !installed;
       welcomeTypedText.textContent = welcomeMessage;
+      playWelcomePopupAudio();
       (installed ? alreadyInstalledBtn : stayWebsiteBtn).focus({preventScroll:true});
     }
     function closeWelcomePopup() {
       welcomeModal.classList.remove("open");
+      welcomePopupAudio.pause();
+      welcomePopupAudio.currentTime = 0;
+      welcomeAudioStarted = false;
     }
+    // Jika autoplay diblokir browser, mulai audio pada interaksi pertama saat popup masih terbuka.
+    ["pointerdown","keydown","touchstart"].forEach(eventName => {
+      document.addEventListener(eventName, () => {
+        if (welcomeModal.classList.contains("open") && !welcomeAudioStarted && welcomePopupAudio.paused) {
+          playWelcomePopupAudio();
+        }
+      }, {passive:true});
+    });
     // Popup hanya boleh ditutup melalui tombol "Tetap di Website" atau "Sudah Unduh".
     welcomeModal.addEventListener("click", event => {
       if (event.target === welcomeModal) event.preventDefault();
