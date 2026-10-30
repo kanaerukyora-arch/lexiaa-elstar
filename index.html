@@ -477,10 +477,16 @@
     .music-menu-card{background:radial-gradient(ellipse at 50% 0%,#dce7ff20,transparent 62%),linear-gradient(140deg,#202633,#0b0d13);border-color:#8996ad}
     .music-menu-card h3{letter-spacing:.1em}
     .dash-utilities #musicHubBtn{display:none}
-    .music-hub-intro{display:grid;grid-template-columns:minmax(110px,155px) 1fr;align-items:center;gap:18px;margin:4px 0 20px;padding:14px;border:1px solid #4c5668;border-radius:15px;background:linear-gradient(120deg,#dce7ff12,#ffffff04)}
-    .music-hub-character{display:block;width:100%;height:190px;object-fit:cover;object-position:center 18%;border-radius:11px;border:1px solid #76839a}
-    .music-hub-intro .music-hub-sub{margin:0;color:#e0e6f1;font-size:12px;line-height:1.85;font-weight:700}
-    @media(max-width:480px){.music-hub-intro{grid-template-columns:105px 1fr;gap:12px;padding:10px}.music-hub-character{height:165px}.music-hub-intro .music-hub-sub{font-size:10px;line-height:1.7}}
+    .music-hub-panel{position:relative;isolation:isolate;overflow:hidden;border-color:#76a9e8;background:linear-gradient(135deg,#071629 0%,#0b1321 54%,#080b13 100%);box-shadow:0 25px 90px #000e,0 0 42px #3289d622}
+    .music-hub-panel:before{content:"";position:absolute;inset:9px;border:1px solid #6b9bc633;border-radius:14px;pointer-events:none;z-index:-1}
+    .music-hub-head,.music-hub-panel form,.music-hub-status,.music-hub-player,.music-hub-foot,.music-hub-panel>p:last-child{position:relative;z-index:2}
+    .music-hub-intro{position:relative;display:flex;align-items:center;min-height:260px;margin:0 0 20px;padding:24px 18px;border:1px solid #5483b755;border-radius:15px;overflow:hidden;background:radial-gradient(ellipse at 76% 45%,#1d477044,transparent 56%),linear-gradient(120deg,#071525,#0a1424 60%,#0b101b)}
+    .music-hub-character{position:absolute;right:0;bottom:0;width:57%;height:115%;object-fit:contain;object-position:center bottom;opacity:.98;z-index:0;filter:drop-shadow(0 5px 18px #0009);mask-image:linear-gradient(90deg,transparent 0%,#000 28%);-webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 28%)}
+    .music-hub-intro .music-hub-sub{position:relative;z-index:1;width:62%;max-width:360px;margin:0;color:#e6f0ff;font-size:12px;line-height:1.9;font-weight:700;text-shadow:0 2px 9px #020711}
+    .music-hub-input{border-color:#50749d;background:#050d19}
+    .music-hub-action{background:linear-gradient(135deg,#dceeff,#9fc8f5);color:#071426;border-color:#a8d2ff}
+    @media(max-width:480px){.music-hub-intro{min-height:230px;padding:18px 12px}.music-hub-character{width:67%;height:112%;right:-3%;mask-image:linear-gradient(90deg,transparent 0%,#000 30%);-webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 30%)}.music-hub-intro .music-hub-sub{width:70%;font-size:10px;line-height:1.85}}
+    @media(max-width:360px){.music-hub-intro{min-height:245px}.music-hub-intro .music-hub-sub{width:76%;font-size:9px}}
 
   </style>
   <link rel="manifest" href="manifest.webmanifest">
