@@ -423,6 +423,14 @@
      .welcome-status{min-height:18px;margin-top:12px;color:#9bdfff;font-size:12px;font-weight:700;line-height:1.5}
      @media(max-width:700px){.welcome-backdrop{padding:12px}.welcome-card{grid-template-columns:1fr;gap:0;padding:25px 16px 20px;text-align:left;max-width:540px;min-height:0;max-height:94svh;overflow-y:auto}.welcome-copy{grid-column:1;grid-row:1;padding:3px 0 0;min-width:0}.welcome-mascot-wrap{position:absolute;z-index:1;right:-2px;top:38px;width:68%;height:76%;margin:0;display:flex;align-items:flex-start;justify-content:flex-end;pointer-events:none}.welcome-mascot-wrap:before{width:120%;height:95%;background:radial-gradient(ellipse,#168cff70,transparent 70%);filter:blur(18px)}.welcome-mascot{width:100%;height:100%;max-height:100%;max-width:none;object-fit:contain;object-position:top right;opacity:.9;filter:drop-shadow(0 0 22px #319dffb8)}.welcome-kicker{position:relative;z-index:2;width:74%;font-size:8px;letter-spacing:.14em;line-height:1.5;margin:4px 0 22px}.welcome-title{position:relative;z-index:2;width:78%;font-size:clamp(37px,10vw,53px);line-height:1.05;margin-bottom:17px}.welcome-message{position:relative;z-index:2;width:78%;font-size:clamp(14px,3.8vw,18px);line-height:1.55}.welcome-actions{position:relative;z-index:2;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:25px}.welcome-actions .btn{min-height:68px;padding:12px 7px;font-size:clamp(9px,2.7vw,12px);border-radius:15px}.welcome-actions #alreadyInstalledBtn{grid-column:1/-1;min-height:56px}.welcome-status{position:relative;z-index:2;font-size:10px}.welcome-close{right:12px;top:11px;width:36px;height:36px;font-size:23px}}
      @media(max-width:360px){.welcome-actions{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.welcome-actions .btn{font-size:9px;padding:10px 5px}}
+
+    /* Live clock, date, and timezone-based location */
+    .live-info{width:min(390px,100%);margin:28px auto 0;padding:17px 20px;border:1px solid #59616f;border-radius:13px;background:linear-gradient(145deg,#ffffff0a,#ffffff03);box-shadow:inset 0 0 0 1px #ffffff05,0 12px 35px #0005;text-align:center}
+    .live-time{font:700 clamp(25px,6vw,38px)/1.2 Orbitron,sans-serif;letter-spacing:.12em;color:#f3f6fc;text-shadow:0 0 20px #e8eefb35;font-variant-numeric:tabular-nums}
+    .live-date{margin-top:8px;color:#c5ccd7;font-size:11px;letter-spacing:.12em}
+    .live-location{margin-top:9px;color:#929baa;font-size:10px;letter-spacing:.14em;overflow-wrap:anywhere}
+    .live-info-dashboard{margin-top:22px}
+    @media(max-width:620px){.live-info{margin-top:22px;padding:15px 14px}.live-date{font-size:10px}.live-location{font-size:9px}}
   </style>
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="mobile-web-app-capable" content="yes">
@@ -452,6 +460,11 @@
             <button class="home-action" data-go="signup"><span class="action-icon" aria-hidden="true">♧</span><span class="action-divider"></span><span class="action-label">DAFTAR</span><span class="action-arrow" aria-hidden="true">›</span></button>
             <button id="tutorialBtn" class="home-action"><span class="action-icon book-icon" aria-hidden="true">▤</span><span class="action-divider"></span><span class="action-label">TUTORIAL DAFTAR OTW</span><span class="action-arrow" aria-hidden="true">›</span></button>
             <div class="panel-spark" aria-hidden="true">✦</div>
+          </div>
+          <div class="live-info" data-live-info>
+            <div class="live-time" data-live-time>00:00:00</div>
+            <div class="live-date" data-live-date>MEMUAT TANGGAL...</div>
+            <div class="live-location" data-live-location>LOKASI: MEMUAT...</div>
           </div>
         </div>
       </section>
@@ -498,6 +511,11 @@
             <p class="slogan">TEMUKAN YANG TERSEMBUNYI,<br>SIMPAN YANG BERARTI.</p>
             <div class="hero-line"></div>
             <p class="dash-meta">AKSES MEMBER AKTIF <span aria-hidden="true">·</span> OBSIDIAN EDITION</p>
+            <div class="live-info live-info-dashboard" data-live-info>
+              <div class="live-time" data-live-time>00:00:00</div>
+              <div class="live-date" data-live-date>MEMUAT TANGGAL...</div>
+              <div class="live-location" data-live-location>LOKASI: MEMUAT...</div>
+            </div>
           </div>
           <div class="menu-grid">
             <button class="menu-card" type="button" data-content="penemuan"><span class="menu-arrow" aria-hidden="true">↗</span>
@@ -1021,6 +1039,40 @@
         }
       });
     }
+
+
+    // Jam berjalan menggunakan waktu perangkat; lokasi perkiraan dari zona waktu browser (tanpa meminta GPS).
+    (function initLiveInfo(){
+      const zone = Intl.DateTimeFormat().resolvedOptions().timeZone || "";
+      const knownPlaces = {
+        "Asia/Jakarta":"JAKARTA, INDONESIA · WIB",
+        "Asia/Pontianak":"PONTIANAK, INDONESIA · WIB",
+        "Asia/Makassar":"MAKASSAR, INDONESIA · WITA",
+        "Asia/Ujung_Pandang":"MAKASSAR, INDONESIA · WITA",
+        "Asia/Jayapura":"JAYAPURA, INDONESIA · WIT"
+      };
+      let place = knownPlaces[zone];
+      if (!place) {
+        const parts = zone.split("/");
+        const city = parts.length > 1 ? parts[parts.length-1].replace(/_/g," ") : "LOKASI PERANGKAT";
+        place = city.toUpperCase() + (zone.startsWith("Asia/") ? ", ASIA" : "");
+      }
+      const timeFormatter = new Intl.DateTimeFormat("id-ID",{hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:false});
+      const dateFormatter = new Intl.DateTimeFormat("id-ID",{weekday:"long",day:"2-digit",month:"long",year:"numeric"});
+      function tick(){
+        const now = new Date();
+        document.querySelectorAll("[data-live-info]").forEach(el=>{
+          const time=el.querySelector("[data-live-time]");
+          const date=el.querySelector("[data-live-date]");
+          const location=el.querySelector("[data-live-location]");
+          if(time) time.textContent=timeFormatter.format(now);
+          if(date) date.textContent=dateFormatter.format(now).toUpperCase();
+          if(location) location.textContent="LOKASI: "+place;
+        });
+      }
+      tick();
+      window.setInterval(tick,1000);
+    })();
 
     // PWA install prompt: browser tetap meminta persetujuan pengguna.
     let deferredInstallPrompt = null;
