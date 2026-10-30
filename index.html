@@ -632,7 +632,6 @@
 
     <div id="welcomeInstallModal" class="modal-backdrop welcome-backdrop" role="dialog" aria-modal="true" aria-labelledby="welcomeTitle">
     <div class="welcome-card">
-      <button class="welcome-close" id="welcomeCloseBtn" type="button" aria-label="Tutup popup">×</button>
       <div class="welcome-copy">
         <p class="welcome-kicker">LEXIAA / MEMBER ACCESS</p>
         <h2 id="welcomeTitle" class="welcome-title">LEXIAA:</h2>
@@ -644,7 +643,7 @@
         </div>
         <p id="welcomeInstallStatus" class="welcome-status" aria-live="polite"></p>
       </div>
-      <div class="welcome-mascot-wrap"><img class="welcome-mascot" src="mascot-member.png" alt="Karakter anime original LEXIAA"></div>
+      <div class="welcome-mascot-wrap"><img class="welcome-mascot" src="welcome-mascot.webp" alt="Karakter anime LEXIAA"></div>
     </div>
   </div>
 
@@ -1045,8 +1044,17 @@
     }
     function closeWelcomePopup() {
       welcomeModal.classList.remove("open");
-      
     }
+    // Popup hanya boleh ditutup melalui tombol "Tetap di Website" atau "Sudah Unduh".
+    welcomeModal.addEventListener("click", event => {
+      if (event.target === welcomeModal) event.preventDefault();
+    });
+    document.addEventListener("keydown", event => {
+      if (welcomeModal.classList.contains("open") && event.key === "Escape") {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+    }, true);
     window.addEventListener("beforeinstallprompt", event => {
       event.preventDefault();
       deferredInstallPrompt = event;
@@ -1059,9 +1067,10 @@
       installAppBtn.hidden = true;
     });
     document.getElementById("stayWebsiteBtn").addEventListener("click", closeWelcomePopup);
-    document.getElementById("welcomeCloseBtn").addEventListener("click", closeWelcomePopup);
     alreadyInstalledBtn.addEventListener("click", closeWelcomePopup);
     installAppBtn.addEventListener("click", async () => {
+      // Setelah pengguna mencoba mengunduh, tombol konfirmasi ditampilkan di bawah.
+      alreadyInstalledBtn.hidden = false;
       if (isAppInstalled()) {
         alreadyInstalledBtn.hidden = false;
         welcomeInstallStatus.textContent = "LEXIAA SUDAH TERPASANG DI PERANGKAT INI.";
