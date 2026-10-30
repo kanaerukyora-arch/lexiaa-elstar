@@ -448,7 +448,32 @@
     @keyframes loaderFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
     @media(prefers-reduced-motion:reduce){.loader-mark,.loader-progress{animation:none}.loader-progress{width:100%}}
 
-  </style>
+  
+    /* LEXIAA Music Hub */
+    .music-hub-trigger{border-color:#667184}
+    .music-hub-backdrop{position:fixed;inset:0;z-index:80;display:grid;place-items:center;padding:16px;background:#030407d9;backdrop-filter:blur(12px);opacity:0;visibility:hidden;transition:opacity .22s,visibility .22s}
+    .music-hub-backdrop.open{opacity:1;visibility:visible}
+    .music-hub-panel{width:min(620px,100%);max-height:min(88vh,760px);overflow:auto;border:1px solid #697486;border-radius:20px;padding:clamp(18px,4vw,28px);background:linear-gradient(145deg,#1a1d25,#090a0f);box-shadow:0 25px 90px #000c,0 0 45px #dce7ff12;transform:translateY(14px) scale(.98);transition:transform .22s}
+    .music-hub-backdrop.open .music-hub-panel{transform:translateY(0) scale(1)}
+    .music-hub-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
+    .music-hub-title{font:700 clamp(17px,4vw,22px) Orbitron,sans-serif;letter-spacing:.06em;margin:0}
+    .music-hub-sub{color:#aeb6c4;font-size:12px;line-height:1.7;margin:7px 0 18px}
+    .music-hub-inputrow{display:flex;gap:8px}
+    .music-hub-input{min-width:0;flex:1;border:1px solid #48505e;border-radius:10px;padding:13px;background:#080a0f;color:#f5f7fb;font-size:14px}
+    .music-hub-input:focus{outline:2px solid #cbd6e8;outline-offset:2px}
+    .music-hub-action{border:1px solid #8994a5;border-radius:10px;padding:12px 15px;background:linear-gradient(135deg,#f4f6fa,#bfc8d6);color:#11141a;font-size:11px;font-weight:800;letter-spacing:.06em}
+    .music-hub-secondary{border:1px solid #48505e;border-radius:10px;padding:10px 13px;background:#ffffff08;color:#e8edf5;font-size:11px}
+    .music-hub-status{min-height:22px;margin:11px 0;color:#b9c3d2;font-size:12px;line-height:1.6}
+    .music-hub-player{min-height:100px;border:1px solid #353d4a;border-radius:13px;overflow:hidden;background:#050609;display:grid;place-items:center}
+    .music-hub-player iframe{display:block;width:100%;border:0;min-height:352px}
+    .music-hub-player iframe.spotify-track{min-height:152px}
+    .music-hub-empty{padding:28px 18px;text-align:center;color:#9da7b7;font-size:12px;line-height:1.8}
+    .music-hub-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:14px}
+    .music-hub-foot a{color:#e1e8f3;font-size:11px;text-underline-offset:3px}
+    @media(max-width:520px){.music-hub-inputrow{flex-direction:column}.music-hub-action{min-height:44px}.music-hub-player iframe{min-height:300px}}
+    @media(prefers-reduced-motion:reduce){.music-hub-backdrop,.music-hub-panel{transition:none}}
+
+</style>
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -578,10 +603,34 @@
           </section>
           <div class="dash-utilities">
             <button id="musicBtn" class="small-btn" type="button">MUSIK: OFF</button>
+            <button id="musicHubBtn" class="small-btn music-hub-trigger" type="button">MUSIC HUB ♫</button>
             <button id="logoutBtn" class="small-btn" type="button">LOGOUT ↗</button>
           </div>
           <!-- Musik latar otomatis; file music.mp3 berada di folder utama repository. -->
           <audio id="bgMusic" src="music.mp3" loop preload="auto"></audio>
+
+          <div id="musicHub" class="music-hub-backdrop" aria-hidden="true">
+            <section class="music-hub-panel" role="dialog" aria-modal="true" aria-labelledby="musicHubTitle">
+              <div class="music-hub-head">
+                <div><p class="modal-kicker">LEXIAA / ENTERTAINMENT</p><h2 id="musicHubTitle" class="music-hub-title">MUSIC HUB ♫</h2></div>
+                <button id="musicHubClose" class="music-hub-secondary" type="button" aria-label="Tutup Music Hub">✕</button>
+              </div>
+              <p class="music-hub-sub">Tempel link playlist atau video Spotify / YouTube. LEXIAA akan mengenali sumbernya secara otomatis.</p>
+              <form id="musicHubForm">
+                <div class="music-hub-inputrow">
+                  <input id="musicHubUrl" class="music-hub-input" type="url" inputmode="url" placeholder="https://open.spotify.com/... atau youtube.com/..." autocomplete="url" required aria-label="Link Spotify atau YouTube">
+                  <button class="music-hub-action" type="submit">BUKA MUSIK ↗</button>
+                </div>
+              </form>
+              <p id="musicHubStatus" class="music-hub-status" role="status" aria-live="polite">Belum ada musik dipilih. Masukkan link untuk mulai.</p>
+              <div id="musicHubPlayer" class="music-hub-player"><div class="music-hub-empty">♫<br>Player Spotify atau YouTube akan muncul di sini.</div></div>
+              <div class="music-hub-foot">
+                <a id="musicHubExternal" href="#" target="_blank" rel="noopener noreferrer" hidden>Buka di platform asli ↗</a>
+                <button id="musicHubClear" class="music-hub-secondary" type="button">BERSIHKAN PLAYER</button>
+              </div>
+              <p class="music-hub-sub" style="margin:14px 0 0">Catatan: pemutaran mengikuti aturan platform. Spotify mungkin meminta login; beberapa video YouTube tidak mengizinkan pemutaran melalui embed.</p>
+            </section>
+          </div>
         </div>
       </section>
 
@@ -1063,6 +1112,97 @@
         console.error(err);
         status.className = "member-status error";
         status.textContent = "GAGAL MEMERIKSA KODE. PASTIKAN SQL SETUP SUDAH DIJALANKAN DAN LU SUDAH LOGIN.";
+      }
+    });
+
+
+    // LEXIAA Music Hub: deteksi dan embed resmi Spotify / YouTube.
+    const musicHub = document.getElementById("musicHub");
+    const musicHubForm = document.getElementById("musicHubForm");
+    const musicHubUrl = document.getElementById("musicHubUrl");
+    const musicHubStatus = document.getElementById("musicHubStatus");
+    const musicHubPlayer = document.getElementById("musicHubPlayer");
+    const musicHubExternal = document.getElementById("musicHubExternal");
+
+    function parseMusicLink(raw) {
+      let url;
+      try { url = new URL(raw.trim()); } catch (_) { throw new Error("Link tidak valid. Periksa kembali URL yang ditempel."); }
+      if (url.protocol !== "https:" && url.protocol !== "http:") throw new Error("Gunakan link HTTPS atau HTTP yang valid.");
+      const host = url.hostname.toLowerCase().replace(/^www\./, "");
+      if (host === "open.spotify.com" || host === "spotify.link") {
+        if (host === "spotify.link") throw new Error("Link pendek Spotify belum didukung. Salin link playlist/lagu langsung dari Spotify.");
+        const parts = url.pathname.split("/").filter(Boolean);
+        const type = parts[0];
+        const id = parts[1];
+        if (!["playlist","album","track","episode","show"].includes(type) || !id || !/^[A-Za-z0-9]+$/.test(id)) {
+          throw new Error("Link Spotify harus berupa playlist, album, lagu, episode, atau show.");
+        }
+        return { source:"Spotify", embed:"https://open.spotify.com/embed/"+type+"/"+id, external:url.href, track:type==="track" };
+      }
+      if (["youtube.com","m.youtube.com","music.youtube.com","youtu.be","youtube-nocookie.com"].includes(host)) {
+        let videoId = "";
+        let listId = url.searchParams.get("list") || "";
+        if (host === "youtu.be") videoId = url.pathname.split("/").filter(Boolean)[0] || "";
+        else if (url.pathname === "/watch") videoId = url.searchParams.get("v") || "";
+        else {
+          const parts = url.pathname.split("/").filter(Boolean);
+          if (["embed","shorts","live"].includes(parts[0])) videoId = parts[1] || "";
+          else if (parts[0] === "playlist") listId = listId || url.searchParams.get("list") || "";
+        }
+        if (listId && !/^[A-Za-z0-9_-]+$/.test(listId)) throw new Error("ID playlist YouTube tidak dikenali.");
+        if (videoId && !/^[A-Za-z0-9_-]{6,}$/.test(videoId)) throw new Error("ID video YouTube tidak dikenali.");
+        if (!videoId && !listId) throw new Error("Link YouTube harus berupa video atau playlist.");
+        let embed = videoId ? "https://www.youtube-nocookie.com/embed/"+videoId : "https://www.youtube-nocookie.com/embed/videoseries?list="+encodeURIComponent(listId);
+        if (videoId && listId) embed += "?list="+encodeURIComponent(listId);
+        return { source:"YouTube", embed, external:url.href, track:false };
+      }
+      throw new Error("Sumber belum didukung. Gunakan link Spotify atau YouTube.");
+    }
+
+    function openMusicHub() {
+      musicHub.classList.add("open");
+      musicHub.setAttribute("aria-hidden","false");
+      setTimeout(() => musicHubUrl.focus({preventScroll:true}), 80);
+    }
+    function closeMusicHub() {
+      musicHub.classList.remove("open");
+      musicHub.setAttribute("aria-hidden","true");
+    }
+    document.getElementById("musicHubBtn").addEventListener("click", openMusicHub);
+    document.getElementById("musicHubClose").addEventListener("click", closeMusicHub);
+    musicHub.addEventListener("click", event => { if (event.target === musicHub) closeMusicHub(); });
+    document.getElementById("musicHubClear").addEventListener("click", () => {
+      musicHubPlayer.innerHTML = '<div class="music-hub-empty">♫<br>Player sudah dibersihkan. Tempel link baru untuk memutar musik.</div>';
+      musicHubStatus.textContent = "Player dibersihkan.";
+      musicHubExternal.hidden = true;
+      musicHubExternal.removeAttribute("href");
+      musicHubUrl.value = "";
+    });
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape" && musicHub.classList.contains("open")) closeMusicHub();
+    });
+    musicHubForm.addEventListener("submit", event => {
+      event.preventDefault();
+      try {
+        const media = parseMusicLink(musicHubUrl.value);
+        // Hentikan musik latar agar dua sumber audio tidak bertumpuk.
+        const backgroundAudio = document.getElementById("bgMusic");
+        if (backgroundAudio && !backgroundAudio.paused) backgroundAudio.pause();
+        const frame = document.createElement("iframe");
+        frame.src = media.embed;
+        frame.title = "LEXIAA Music Hub - "+media.source;
+        frame.allow = "autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture";
+        frame.allowFullscreen = true;
+        frame.loading = "lazy";
+        frame.referrerPolicy = "strict-origin-when-cross-origin";
+        if (media.track) frame.className = "spotify-track";
+        musicHubPlayer.replaceChildren(frame);
+        musicHubStatus.textContent = "Sumber terdeteksi: "+media.source+". Gunakan kontrol pada player untuk memutar musik.";
+        musicHubExternal.href = media.external;
+        musicHubExternal.hidden = false;
+      } catch (error) {
+        musicHubStatus.textContent = error.message || "Link tidak dapat diproses.";
+        musicHubExternal.hidden = true;
       }
     });
 
