@@ -1,5 +1,5 @@
-const CACHE_NAME = "lexiaa-shell-v1";
-const APP_SHELL = ["./", "./index.html", "./app-icon.svg", "./manifest.webmanifest"];
+const CACHE_NAME = "lexiaa-shell-v2";
+const APP_SHELL = ["./", "./index.html", "./app-icon.svg", "./manifest.webmanifest", "./welcome-mascot.webp"];
 
 self.addEventListener("install", event => {
   event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(APP_SHELL)).then(() => self.skipWaiting()));
