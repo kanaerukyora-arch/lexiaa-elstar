@@ -1150,6 +1150,10 @@
       welcomePopupAudio.currentTime = 0;
       welcomeAudioStarted = false;
     }
+    // Tampilkan popup juga saat pengunjung pertama kali membuka halaman utama.
+    if (document.getElementById("homeView")?.classList.contains("active")) {
+      window.setTimeout(openWelcomePopup, 250);
+    }
     // Jika autoplay diblokir browser, mulai audio pada interaksi pertama saat popup masih terbuka.
     ["pointerdown","keydown","touchstart"].forEach(eventName => {
       document.addEventListener(eventName, () => {
