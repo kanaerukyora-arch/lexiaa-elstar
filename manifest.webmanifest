@@ -10,9 +10,9 @@
   "theme_color": "#08090c",
   "icons": [
     {
-      "src": "./app-icon.svg",
+      "src": "./app-icon.webp",
       "sizes": "any",
-      "type": "image/svg+xml",
+      "type": "image/webp",
       "purpose": "any maskable"
     }
   ]
