@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#272d3d"/><stop offset="1" stop-color="#08090c"/></linearGradient><linearGradient id="t" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff"/><stop offset="1" stop-color="#9ba9c5"/></linearGradient></defs>
+<rect width="512" height="512" rx="112" fill="url(#g)"/><rect x="18" y="18" width="476" height="476" rx="98" fill="none" stroke="#b9c6df" stroke-opacity=".55" stroke-width="3"/>
+<path d="M256 75 294 206 425 256 294 306 256 437 218 306 87 256 218 206Z" fill="none" stroke="#dce6fa" stroke-opacity=".55" stroke-width="5"/>
+<text x="256" y="278" text-anchor="middle" font-family="Arial,sans-serif" font-size="104" font-weight="800" letter-spacing="-8" fill="url(#t)">LX</text>
+<text x="256" y="342" text-anchor="middle" font-family="Arial,sans-serif" font-size="22" font-weight="700" letter-spacing="7" fill="#dce4f2">LEXIAA</text>
+</svg>
