@@ -1035,12 +1035,16 @@
       return window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
     }
     function openWelcomePopup() {
+      const installed = isAppInstalled();
+      const stayWebsiteBtn = document.getElementById("stayWebsiteBtn");
       welcomeModal.classList.add("open");
       welcomeInstallStatus.textContent = "";
-      alreadyInstalledBtn.hidden = !isAppInstalled();
-      installAppBtn.hidden = isAppInstalled();
+      // Saat dibuka sebagai PWA terpasang, tampilkan hanya tombol konfirmasi.
+      stayWebsiteBtn.hidden = installed;
+      installAppBtn.hidden = installed;
+      alreadyInstalledBtn.hidden = !installed;
       welcomeTypedText.textContent = welcomeMessage;
-      document.getElementById("stayWebsiteBtn").focus({preventScroll:true});
+      (installed ? alreadyInstalledBtn : stayWebsiteBtn).focus({preventScroll:true});
     }
     function closeWelcomePopup() {
       welcomeModal.classList.remove("open");
@@ -1065,6 +1069,7 @@
       welcomeInstallStatus.textContent = "APP BERHASIL DITAMBAHKAN KE BERANDA.";
       alreadyInstalledBtn.hidden = false;
       installAppBtn.hidden = true;
+      document.getElementById("stayWebsiteBtn").hidden = true;
     });
     document.getElementById("stayWebsiteBtn").addEventListener("click", closeWelcomePopup);
     alreadyInstalledBtn.addEventListener("click", closeWelcomePopup);
