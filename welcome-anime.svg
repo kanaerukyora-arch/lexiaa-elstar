@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 560">
+<defs>
+ <linearGradient id="hair" x2="1" y2="1"><stop stop-color="#fff4ff"/><stop offset=".45" stop-color="#c7a7ff"/><stop offset="1" stop-color="#7254c9"/></linearGradient>
+ <linearGradient id="coat" x2="1" y2="1"><stop stop-color="#9e6aff"/><stop offset="1" stop-color="#24204b"/></linearGradient>
+ <radialGradient id="glow"><stop stop-color="#b98cff" stop-opacity=".6"/><stop offset="1" stop-color="#9a6bff" stop-opacity="0"/></radialGradient>
+</defs>
+<ellipse cx="225" cy="500" rx="190" ry="45" fill="url(#glow)"/>
+<path d="M82 535Q75 420 132 367L178 337 275 340 336 383Q385 435 380 550Z" fill="url(#coat)" stroke="#d7baff" stroke-width="5"/>
+<path d="M160 355L218 425 279 352 303 540H125Z" fill="#17152d" stroke="#bba0ff" stroke-width="4"/>
+<path d="M192 351L220 397 248 350 235 454 216 475 200 449Z" fill="#f7eaff"/>
+<path d="M108 211Q60 87 180 43Q305 -4 359 117Q405 218 338 358L308 403 114 390 83 320Z" fill="url(#hair)" stroke="#e9d9ff" stroke-width="5"/>
+<path d="M120 172Q84 73 192 39Q292 8 343 97Q281 69 254 106Q207 69 171 144L139 276Z" fill="#f5eaff"/>
+<path d="M115 177Q42 206 80 347L134 408 151 294Z" fill="#a989ef" stroke="#e9d9ff" stroke-width="4"/>
+<path d="M319 151Q409 220 350 388L309 421 292 282Z" fill="#9a7be4" stroke="#e9d9ff" stroke-width="4"/>
+<ellipse cx="226" cy="220" rx="103" ry="126" fill="#ffe1e9" stroke="#e9d9ff" stroke-width="5"/>
+<path d="M126 190Q111 77 222 64Q327 60 337 177Q293 128 261 135Q208 100 160 181L145 222Z" fill="url(#hair)" stroke="#e9d9ff" stroke-width="5"/>
+<path d="M135 195Q105 267 143 337L170 371 160 264Z" fill="url(#hair)"/>
+<path d="M316 180Q350 259 300 354L283 373 294 258Z" fill="url(#hair)"/>
+<path d="M165 218Q188 194 207 218Q191 247 165 218Z" fill="#fff"/>
+<path d="M245 218Q270 193 292 218Q269 248 245 218Z" fill="#fff"/>
+<ellipse cx="188" cy="220" rx="13" ry="20" fill="#8e54d9"/><ellipse cx="269" cy="220" rx="13" ry="20" fill="#8e54d9"/>
+<circle cx="192" cy="214" r="5" fill="#fff"/><circle cx="273" cy="214" r="5" fill="#fff"/>
+<path d="M220 267Q236 279 251 264" fill="none" stroke="#c45e83" stroke-width="5" stroke-linecap="round"/>
+<path d="M153 191Q184 174 207 190M248 190Q274 173 299 191" fill="none" stroke="#67458e" stroke-width="7" stroke-linecap="round"/>
+<path d="M153 139L173 113 194 139 173 160Z" fill="#382957" stroke="#e7d8ff" stroke-width="4"/>
+<path d="M292 126L313 101 335 126 313 147Z" fill="#382957" stroke="#e7d8ff" stroke-width="4"/>
+<path d="M91 394Q122 363 169 371L216 434 151 475Z" fill="#34265e" stroke="#d8baff" stroke-width="5"/>
+<path d="M347 397Q311 360 276 372L230 435 303 478Z" fill="#34265e" stroke="#d8baff" stroke-width="5"/>
+<path d="M130 428L174 458M312 427L270 459" stroke="#f4eaff" stroke-width="6" stroke-linecap="round"/>
+<path d="M204 493L221 514 239 493" fill="none" stroke="#d8baff" stroke-width="5"/>
+<circle cx="365" cy="120" r="9" fill="#fff"/><path d="M365 99V141M344 120H386" stroke="#fff" stroke-width="4"/>
+<path d="M56 248L64 266 82 274 64 282 56 300 48 282 30 274 48 266Z" fill="#d9c1ff"/>
+<text x="220" y="548" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="17" fill="#eee3ff" letter-spacing="5">LEXIAA</text>
+</svg>
