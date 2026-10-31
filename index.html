@@ -1691,7 +1691,7 @@ button, a, input, select, textarea { touch-action:manipulation; }
         if (session && !document.getElementById("dashboardView").classList.contains("active")) {
           showDashboard(session.user);
         } else if (!session && _event === "SIGNED_OUT") {
-          showView("login");
+          showView("home");
         }
       });
     }
