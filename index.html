@@ -384,9 +384,6 @@
     .social-card.wa{color:#4dff9b;border-color:#257b58}.social-card.ig{color:#ff9de0;border-color:#814d91}.social-card.dc{color:#a9b8ff;border-color:#535d9a}.social-card.tt{color:#e8faff;border-color:#477c88}
     .social-card .social-name{color:#f4f8ff;text-shadow:0 0 12px currentColor}
     .dash-utilities{display:flex;justify-content:flex-end;gap:9px;flex-wrap:wrap;margin-top:14px}
-/* Keep logout above decorative/animated dashboard layers and reliably tappable. */
-#logoutBtn{position:relative;z-index:1000;pointer-events:auto;touch-action: manipulation;cursor:pointer}
-.dash-utilities{position:relative;z-index:1000;isolation:isolate}
     @keyframes socialSweep{0%,65%,100%{transform:translateX(-65%) rotate(8deg)}35%{transform:translateX(65%) rotate(8deg)}}
     @media(max-width:620px){.social-hub{margin:24px 0 12px}.social-grid{gap:7px}.social-card{min-height:100px;padding:10px 3px;gap:7px;border-radius:10px}.social-icon{width:27px;height:27px}.social-name{font-size:clamp(7px,2vw,9px);letter-spacing:0}.social-handle{font-size:8px}.dash-utilities{margin-top:12px}}
     @media(max-width:350px){.social-grid{gap:5px}.social-card{min-height:92px}.social-icon{width:23px;height:23px}.social-name{font-size:7px}}
@@ -652,6 +649,20 @@ body:has(#dashboardView.active) .topbar{display:none}
 @media(max-width:850px){.dashboard-character-wrap{width:88%;height:112%;right:-3%;bottom:-5%}.dashboard-name-tag{top:7%;right:4%;font-size:clamp(25px,5.5vw,42px)}}
 @media(max-width:560px){.dashboard-character-wrap{width:118%;height:86%;right:-15%;bottom:-3%}.dashboard-name-tag{top:6%;right:5%;font-size:clamp(25px,8vw,38px)}.np-cover{height:130px;grid-column:1/-1}.np-cover img{max-width:180px}}
 
+
+/* Integrated dual character art and device battery */
+.now-playing-card{position:relative;overflow:visible;isolation:isolate;min-height:245px;padding-left:clamp(125px,18%,220px);padding-right:clamp(125px,18%,220px)}
+.np-content{display:block;position:relative;z-index:3;margin:12px auto 0;max-width:620px}
+.np-cover{display:none!important}.np-info{width:100%}
+.np-progress,.np-times,.np-controls{position:relative;z-index:2}.np-controls{max-width:300px;margin-left:auto;margin-right:auto}
+.np-character{position:absolute;z-index:1;bottom:-3%;height:118%;width:clamp(150px,25%,290px);object-fit:contain;object-position:center bottom;pointer-events:none;user-select:none;-webkit-user-select:none;-webkit-user-drag:none;-webkit-touch-callout:none;filter:drop-shadow(0 8px 14px #0009);animation:npCharacterFloat 5s ease-in-out infinite}
+.np-character-left{left:0}.np-character-right{right:0;animation-delay:-2.3s}
+@keyframes npCharacterFloat{0%,100%{translate:0 0}50%{translate:0 -7px}}
+.device-battery-icon{display:inline-block;position:relative;width:22px;height:11px;border:1.5px solid currentColor;border-radius:3px;padding:1px;vertical-align:middle;margin-right:4px}
+.device-battery-icon:after{content:"";position:absolute;right:-4px;top:3px;width:2px;height:4px;background:currentColor;border-radius:0 2px 2px 0}
+.device-battery-level{display:block;height:100%;width:100%;border-radius:1px;background:#d9a5ff;transition:width .3s}.battery-pill.is-charging .device-battery-level{background:#a8ffce}
+@media(max-width:700px){.now-playing-card{padding:14px 10px;min-height:220px}.np-content{width:66%;margin-top:12px}.np-info>strong{font-size:clamp(14px,4vw,20px)}.np-info>span{font-size:9px}.np-character{height:105%;width:31%;bottom:-2%}.np-character-left{left:-2%}.np-character-right{right:-2%}.np-controls{gap:1px}.np-controls button{width:29px;height:29px}}
+@media(max-width:390px){.np-content{width:64%}.np-character{width:34%;height:98%}.np-info>span{font-size:8px}}
 </style>
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="mobile-web-app-capable" content="yes">
@@ -750,7 +761,7 @@ body:has(#dashboardView.active) .topbar{display:none}
           <div class="dash-main">
             <div class="dash-statusbar">
               <div class="dash-brandline"><span class="brand-crown">♕</span><span>LEXIAA &amp; ELSTAR<small>THE DEVELOPER OTW</small></span></div>
-              <div class="device-status" aria-label="Status perangkat (indikator visual)"><span class="signal-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span>5G</span><span class="wifi-mark" aria-hidden="true">◔</span><span class="battery-pill">100% <b>ϟ</b></span></div>
+              <div class="device-status" aria-label="Status perangkat (indikator visual)"><span class="signal-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span>5G</span><span class="wifi-mark" aria-hidden="true">◔</span><span class="battery-pill" id="deviceBatteryPill"><span class="device-battery-icon" aria-hidden="true"><i class="device-battery-level" id="deviceBatteryLevel"></i></span><b id="deviceBatteryPercent">--%</b> <b id="deviceBatteryCharging" aria-label="Status pengisian"></b></span></div>
             </div>
             <div class="dashboard-stage">
               <div class="dashboard-character-wrap"><img class="dashboard-character-art" src="./dashboard-characters.png" alt="Lima karakter anime LEXIAA &amp; ELSTAR"></div>
@@ -768,7 +779,7 @@ body:has(#dashboardView.active) .topbar{display:none}
             </div>
             <section class="now-playing-card" aria-label="Akses pemutar musik">
               <div class="np-heading"><span>▥</span> NOW PLAYING <span class="np-dots">•••</span></div>
-              <div class="np-content"><div class="np-cover"><img src="./lexiaa-music-character.png" alt="Ilustrasi LEXIAA Music" draggable="false"></div><div class="np-info"><strong id="npTrackTitle">Chill Vibes</strong><span id="npTrackSubtitle">♫ &nbsp; Pilih playlist untuk mulai mendengarkan</span><div class="np-progress"><i id="npProgressFill"></i></div><div class="np-times"><small id="npCurrentTime">0:00</small><small id="npDuration">--:--</small></div><div class="np-controls"><button type="button" id="npShuffle" aria-label="Acak">⤨</button><button type="button" id="npPrevious" aria-label="Sebelumnya">◀</button><button type="button" id="npOpenPlayer" aria-label="Putar atau buka Lexiaa Music">▶</button><button type="button" id="npNext" aria-label="Berikutnya">▶</button><button type="button" id="npRepeat" aria-label="Ulangi">↻</button></div></div><div class="music-equalizer" id="dashboardEqualizer" aria-hidden="true"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i><i style="--i:5"></i><i style="--i:6"></i><i style="--i:7"></i><i style="--i:8"></i><i style="--i:9"></i><i style="--i:10"></i><i style="--i:11"></i><i style="--i:12"></i><i style="--i:13"></i><i style="--i:14"></i><i style="--i:15"></i><i style="--i:16"></i><i style="--i:17"></i><i style="--i:18"></i><i style="--i:19"></i><i style="--i:20"></i><i style="--i:21"></i><i style="--i:22"></i><i style="--i:23"></i><i style="--i:24"></i><i style="--i:25"></i><i style="--i:26"></i><i style="--i:27"></i></div></div>
+              <img class="np-character np-character-left" src="./lexiaa-music-character-left.png" alt="" draggable="false" aria-hidden="true"><img class="np-character np-character-right" src="./lexiaa-music-character-right.png" alt="" draggable="false" aria-hidden="true"><div class="np-content"><div class="np-info"><strong id="npTrackTitle">Chill Vibes</strong><span id="npTrackSubtitle">♫ &nbsp; Pilih playlist untuk mulai mendengarkan</span><div class="np-progress"><i id="npProgressFill"></i></div><div class="np-times"><small id="npCurrentTime">0:00</small><small id="npDuration">--:--</small></div><div class="np-controls"><button type="button" id="npShuffle" aria-label="Acak">⤨</button><button type="button" id="npPrevious" aria-label="Sebelumnya">◀</button><button type="button" id="npOpenPlayer" aria-label="Putar atau buka Lexiaa Music">▶</button><button type="button" id="npNext" aria-label="Berikutnya">▶</button><button type="button" id="npRepeat" aria-label="Ulangi">↻</button></div></div><div class="music-equalizer" id="dashboardEqualizer" aria-hidden="true"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i><i style="--i:5"></i><i style="--i:6"></i><i style="--i:7"></i><i style="--i:8"></i><i style="--i:9"></i><i style="--i:10"></i><i style="--i:11"></i><i style="--i:12"></i><i style="--i:13"></i><i style="--i:14"></i><i style="--i:15"></i><i style="--i:16"></i><i style="--i:17"></i><i style="--i:18"></i><i style="--i:19"></i><i style="--i:20"></i><i style="--i:21"></i><i style="--i:22"></i><i style="--i:23"></i><i style="--i:24"></i><i style="--i:25"></i><i style="--i:26"></i><i style="--i:27"></i></div></div>
             </section>
             <div class="menu-grid anime-quick-grid">
               <button id="musicHubBtn" class="menu-card wide music-menu-card" type="button" aria-label="Buka LEXIAA Music"><span class="menu-arrow" aria-hidden="true">♫</span><span class="menu-number">00 / MUSIC PLAYER</span><h3>LEXIAA MUSIC</h3><p>SPOTIFY &amp; YOUTUBE PLAYER</p></button>
@@ -1876,29 +1887,5 @@ body:has(#dashboardView.active) .topbar{display:none}
   window.setTimeout(paint, 250);
 })();
 </script>
-
-<script>
-// Fail-safe logout: works even if the module-based Supabase handler did not initialize.
-(function () {
-  document.addEventListener('click', function (event) {
-    const button = event.target && event.target.closest ? event.target.closest('#logoutBtn') : null;
-    if (!button) return;
-    event.preventDefault();
-    event.stopImmediatePropagation();
-    button.disabled = true;
-    button.textContent = 'LOGGING OUT…';
-    try {
-      Object.keys(localStorage).forEach(function (key) {
-        if (/^sb-.*-auth-token$/.test(key) || /supabase.*auth/i.test(key)) localStorage.removeItem(key);
-      });
-      Object.keys(sessionStorage).forEach(function (key) {
-        if (/^sb-.*-auth-token$/.test(key) || /supabase.*auth/i.test(key)) sessionStorage.removeItem(key);
-      });
-    } catch (_) {}
-    // Reload into the unauthenticated state; Supabase session persistence is cleared above.
-    window.location.reload();
-  }, true);
-})();
-</script>
-</body>
+<script>(function(){const pill=document.getElementById('deviceBatteryPill'),pct=document.getElementById('deviceBatteryPercent'),level=document.getElementById('deviceBatteryLevel'),charge=document.getElementById('deviceBatteryCharging');if(!pill||!pct||!level||!charge)return;function fallback(){pct.textContent='—';charge.textContent='';pill.title='Status baterai tidak didukung browser ini';}if(!navigator.getBattery){fallback();return;}navigator.getBattery().then(function(b){function update(){const n=Math.round(b.level*100);pct.textContent=n+'%';level.style.width=n+'%';pill.classList.toggle('is-charging',b.charging);charge.textContent=b.charging?'⚡':'';pill.title=b.charging?'Sedang mengisi daya':'Baterai '+n+'%';}['levelchange','chargingchange','chargingtimechange','dischargingtimechange'].forEach(e=>b.addEventListener(e,update));update();}).catch(fallback);})();document.querySelectorAll('.np-character').forEach(img=>{img.addEventListener('contextmenu',e=>e.preventDefault());img.addEventListener('dragstart',e=>e.preventDefault());});</script></body>
 </html>
