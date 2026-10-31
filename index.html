@@ -488,6 +488,84 @@
     @media(max-width:480px){.music-hub-intro{min-height:230px;padding:18px 12px}.music-hub-character{width:67%;height:112%;right:-3%;mask-image:linear-gradient(90deg,transparent 0%,#000 30%);-webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 30%)}.music-hub-intro .music-hub-sub{width:70%;font-size:10px;line-height:1.85}}
     @media(max-width:360px){.music-hub-intro{min-height:245px}.music-hub-intro .music-hub-sub{width:76%;font-size:9px}}
 
+
+    /* LEXIAA MUSIC — violet artwork redesign */
+    .music-hub-backdrop{padding:clamp(10px,2.5vw,28px);background:rgba(3,3,9,.78);backdrop-filter:blur(16px) saturate(.8)}
+    .music-hub-panel{width:min(1120px,100%);max-height:min(92svh,900px);padding:0;border:1px solid #c59bff;border-radius:27px;overflow:auto;overflow-x:hidden;
+      background:radial-gradient(ellipse at 77% 38%,#68428b38,transparent 43%),radial-gradient(ellipse at 5% 0%,#69428b30,transparent 42%),linear-gradient(135deg,#100d19 0%,#090911 54%,#171020 100%);
+      box-shadow:0 0 0 1px #fff1,0 0 28px #b77cff55,0 28px 100px #000e;transform:translateY(24px) scale(.975)}
+    .music-hub-backdrop.open .music-hub-panel{transform:translateY(0) scale(1)}
+    .music-hub-panel:before{content:"";position:absolute;inset:8px;border:1px solid #c59bff35;border-radius:20px;pointer-events:none;z-index:5}
+    .music-hub-close{position:absolute;z-index:10;right:18px;top:17px;width:43px;height:43px;border:1px solid #d9baff9c;border-radius:50%;background:#090811b8;color:#fff;font-size:29px;line-height:1;cursor:pointer;box-shadow:0 0 17px #b77cff35;transition:.2s}
+    .music-hub-close:hover{background:#bd91f2;color:#160d20;transform:rotate(90deg)}
+    .music-hub-art{position:relative;isolation:isolate;min-height:clamp(300px,38vw,430px);overflow:hidden;padding:42px clamp(24px,5vw,62px) 28px;
+      background:radial-gradient(ellipse at 76% 55%,#a77bd82b,transparent 43%),linear-gradient(110deg,#0b0913 0%,#100c1b 55%,#21142b 100%)}
+    .music-hub-art:before{content:"";position:absolute;inset:0;z-index:-1;opacity:.42;background-image:linear-gradient(125deg,transparent 0 36%,#b38bdb12 36.2%,transparent 52%),radial-gradient(circle at 12% 22%,#c9a3ff55 0 1px,transparent 2px),radial-gradient(circle at 57% 16%,#c9a3ff55 0 1px,transparent 2px);background-size:auto,75px 75px,110px 110px}
+    .music-hub-art:after{content:"";position:absolute;z-index:1;inset:auto 0 0;height:30%;pointer-events:none;background:linear-gradient(0deg,#0b0912 0%,transparent 100%)}
+    .music-hub-character{position:absolute;z-index:0;right:3%;bottom:-9%;height:118%;width:48%;object-fit:contain;object-position:center bottom;opacity:1;
+      filter:drop-shadow(0 0 12px #c59bff55) drop-shadow(0 12px 24px #000b);
+      mask-image:linear-gradient(90deg,transparent 0%,#000 14%);-webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 14%)}
+    .music-hub-brand{position:relative;z-index:2;width:58%;max-width:570px}
+    .music-crown{display:block;margin-left:100px;color:#d5aaff;font-size:25px;transform:rotate(-12deg)}
+    .music-hub-brand h2{margin:0;color:#c69aff;font:900 clamp(43px,8vw,86px)/.95 Inter,sans-serif;letter-spacing:-.075em;font-style:italic;text-shadow:0 0 26px #b783ff66}
+    .music-hub-brand h2 span{font-size:.65em;margin-left:10px}
+    .music-brand-stroke{width:64%;height:13px;margin:15px 0 19px;border-top:3px solid #b98af2;border-radius:50%;transform:rotate(-5deg);filter:drop-shadow(0 0 5px #b98af2)}
+    .music-hub-brand p{font-size:9px;letter-spacing:.3em;color:#bfa4dc}
+    .music-art-note{position:absolute;z-index:2;color:#c89aff;text-shadow:0 0 18px #bd83ff;font-size:35px}
+    .music-art-note.note-one{right:5%;top:36%}.music-art-note.note-two{left:47%;bottom:17%;font-size:27px}
+    .music-art-caption{position:absolute;z-index:3;left:clamp(24px,5vw,62px);bottom:27px;color:#c69ce9;font:italic 17px/1.5 Georgia,serif;transform:rotate(-5deg);text-shadow:0 0 12px #a56bd955}
+    .music-art-caption span{font-size:26px}
+    .music-mini-player{position:absolute;z-index:4;right:2%;bottom:13px;width:220px;padding:15px 17px;border:1px solid #c59bff9c;border-radius:20px;background:#171020c9;box-shadow:0 0 25px #b17ae833;transform:rotate(-12deg);backdrop-filter:blur(10px)}
+    .mini-spotify{color:#a8f0c0;font-size:20px}.mini-wave{display:inline-block;width:65%;height:15px;margin:0 8px;border-radius:50%;background:repeating-linear-gradient(90deg,#c99bff 0 2px,transparent 2px 5px);clip-path:polygon(0 42%,4% 15%,8% 70%,12% 25%,16% 90%,20% 20%,24% 68%,28% 5%,32% 85%,36% 22%,40% 70%,44% 10%,48% 90%,52% 28%,56% 75%,60% 15%,64% 80%,68% 30%,72% 65%,76% 8%,80% 90%,84% 22%,88% 70%,92% 15%,96% 75%,100% 40%)}
+    .mini-heart{color:#c99bff}.mini-controls{text-align:center;margin-top:10px;color:#d4b4ff;font-size:18px;letter-spacing:.25em}
+    .music-hub-content{position:relative;z-index:6;padding:0 clamp(22px,5vw,62px) 27px}
+    .music-intro-copy{max-width:600px;margin:0 0 18px;color:#f4edf9;font-size:clamp(13px,1.8vw,17px);line-height:1.65;letter-spacing:.035em}
+    .music-intro-copy b,.music-playlist-heading b{color:#c59bff}
+    .music-hub-inputrow{display:flex;align-items:stretch;gap:10px;max-width:660px;position:relative}
+    .music-link-icon{position:absolute;left:17px;top:50%;transform:translateY(-50%);z-index:1;color:#d5baff;font-size:22px}
+    .music-hub-input{min-height:56px;padding:14px 16px 14px 49px;border:1px solid #9075ad;border-radius:13px;background:#171321;color:#fff;box-shadow:inset 0 0 15px #0004}
+    .music-hub-input::placeholder{color:#a99ab8}.music-hub-input:focus{outline:2px solid #c69aff66;outline-offset:2px;border-color:#d4b0ff}
+    .music-hub-action{min-width:180px;border:1px solid #dfc6ff;border-radius:13px;background:linear-gradient(135deg,#e4caff,#a879e5);color:#241332;font-size:12px;font-weight:900;letter-spacing:.04em;box-shadow:0 0 22px #b782ff55;cursor:pointer;transition:transform .2s,box-shadow .2s}
+    .music-hub-action:hover{transform:translateY(-2px);box-shadow:0 0 30px #c18bff88}
+    .music-hub-status{margin:9px 0 14px;color:#c9b9d8;font-size:11px;min-height:17px}
+    .music-divider{display:flex;align-items:center;gap:20px;max-width:660px;margin:13px 0;color:#c8a8ee;font-size:11px;letter-spacing:.3em}
+    .music-divider span{height:1px;flex:1;background:linear-gradient(90deg,transparent,#b98be5)}
+    .music-divider span:last-child{background:linear-gradient(90deg,#b98be5,transparent)}
+    .music-playlist-heading{margin:0 0 13px;color:#eee5f7;font-size:13px;letter-spacing:.04em}
+    .music-hub-playlists{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;max-width:760px}
+    .music-playlist-card{display:flex;align-items:center;gap:12px;min-width:0;padding:10px 13px;border:1px solid #806c98;border-radius:15px;background:linear-gradient(120deg,#211a2b,#14111c);color:#fff;text-align:left;cursor:pointer;transition:.2s}
+    .music-playlist-card:hover{transform:translateY(-3px);border-color:#d0aaff;box-shadow:0 8px 24px #a56bd933}
+    .music-playlist-cover{width:54px;height:54px;flex:0 0 54px;border-radius:10px;object-fit:cover;background:linear-gradient(135deg,#65458a,#171020)}
+    .music-playlist-cover.placeholder{display:grid;place-items:center;color:#d8b8ff;font-size:23px}
+    .music-playlist-meta{min-width:0;flex:1}.music-playlist-meta strong{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px}.music-playlist-meta small{display:block;margin-top:5px;color:#b7a8c5;font-size:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .music-playlist-arrow{color:#d2aaff;font-size:22px}
+    .music-playlist-loading,.music-playlist-empty{grid-column:1/-1;padding:16px;border:1px dashed #755e8b;border-radius:13px;color:#b9a8c8;font-size:11px;line-height:1.7}
+    .music-player-label{margin:18px 0 8px;color:#c7a6ec;font-size:9px;font-weight:800;letter-spacing:.22em}
+    .music-hub-player{min-height:90px;border:1px solid #67547b;border-radius:14px;background:#08070d;overflow:hidden}
+    .music-hub-player iframe{min-height:352px}.music-hub-player iframe.spotify-track{min-height:152px}
+    .music-hub-empty{padding:20px;color:#a99bb7}
+    .music-hub-foot{margin-top:11px}.music-hub-foot a{color:#d9bdff}
+    .music-hub-secondary{border-color:#78628d;border-radius:10px;background:#ffffff08;color:#e9dafa}
+    .music-hub-note{margin:15px 0 0;color:#988ba5;font-size:10px;line-height:1.7}
+    @media(max-width:650px){
+      .music-hub-panel{border-radius:20px;max-height:94svh}
+      .music-hub-art{min-height:300px;padding:35px 20px 20px}
+      .music-hub-character{right:-5%;height:112%;width:62%;opacity:.96}
+      .music-hub-brand{width:66%}.music-hub-brand h2{font-size:clamp(40px,11vw,62px)}
+      .music-hub-brand p{font-size:7px;letter-spacing:.2em}
+      .music-art-caption{left:20px;bottom:21px;font-size:13px}
+      .music-mini-player{right:1%;bottom:8px;width:145px;padding:9px 10px}
+      .mini-wave{width:53%;margin:0 4px}.mini-controls{font-size:14px;margin-top:5px}
+      .music-hub-content{padding:0 20px 22px}
+      .music-hub-inputrow{display:grid;grid-template-columns:1fr;gap:9px}
+      .music-hub-input{min-height:51px}.music-hub-action{min-height:49px}
+      .music-hub-playlists{grid-template-columns:1fr}
+      .music-playlist-card{padding:9px 11px}
+      .music-hub-close{right:12px;top:12px;width:37px;height:37px}
+    }
+    @media(max-width:380px){.music-hub-art{min-height:275px}.music-hub-character{width:66%;right:-9%}.music-hub-brand{width:72%}.music-hub-brand h2{font-size:38px}.music-mini-player{width:125px}}
+    @media(prefers-reduced-motion:reduce){.music-hub-panel,.music-hub-close,.music-playlist-card,.music-hub-action{transition:none}}
+
   </style>
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="mobile-web-app-capable" content="yes">
@@ -629,27 +707,42 @@
 
           <div id="musicHub" class="music-hub-backdrop" aria-hidden="true">
             <section class="music-hub-panel" role="dialog" aria-modal="true" aria-labelledby="musicHubTitle">
-              <div class="music-hub-head">
-                <div><p class="modal-kicker">LEXIAA / ENTERTAINMENT</p><h2 id="musicHubTitle" class="music-hub-title">MUSIC HUB ♫</h2></div>
-                <button id="musicHubClose" class="music-hub-secondary" type="button" aria-label="Tutup Music Hub">✕</button>
-              </div>
-              <div class="music-hub-intro">
-                <img class="music-hub-character" src="./lexiaa-music-character.webp" alt="Karakter ilustrasi LEXIAA">
-                <p class="music-hub-sub">LEXIAA: TEMPEL LINK PLAYLIST/MUSIK SPOTIFY ANDA DISINI UNTUK MEMUTAR MUSIK. ATAU KAMU JUGA BISA PAKAI LINK YOUTUBE UNTUK MEMUTARNYA MENJADI MUSIK!!</p>
-              </div>
-              <form id="musicHubForm">
-                <div class="music-hub-inputrow">
-                  <input id="musicHubUrl" class="music-hub-input" type="url" inputmode="url" placeholder="https://open.spotify.com/... atau youtube.com/..." autocomplete="url" required aria-label="Link Spotify atau YouTube">
-                  <button class="music-hub-action" type="submit">BUKA MUSIK ↗</button>
+              <button id="musicHubClose" class="music-hub-close" type="button" aria-label="Tutup Music Hub">×</button>
+              <div class="music-hub-art">
+                <div class="music-hub-brand">
+                  <span class="music-crown">♕</span>
+                  <h2 id="musicHubTitle">LEXIAA<span>♡</span></h2>
+                  <div class="music-brand-stroke"></div>
+                  <p>YOUR PERSONAL MUSIC SPACE</p>
                 </div>
-              </form>
-              <p id="musicHubStatus" class="music-hub-status" role="status" aria-live="polite">Belum ada musik dipilih. Masukkan link untuk mulai.</p>
-              <div id="musicHubPlayer" class="music-hub-player"><div class="music-hub-empty">♫<br>Player Spotify atau YouTube akan muncul di sini.</div></div>
-              <div class="music-hub-foot">
-                <a id="musicHubExternal" href="#" target="_blank" rel="noopener noreferrer" hidden>Buka di platform asli ↗</a>
-                <button id="musicHubClear" class="music-hub-secondary" type="button">BERSIHKAN PLAYER</button>
+                <img class="music-hub-character" src="./lexiaa-music-character.png" alt="Karakter LEXIAA">
+                <div class="music-art-note note-one">♫</div><div class="music-art-note note-two">♪</div>
+                <div class="music-art-caption">Dengarkan musik,<br>rasakan suasananya... <span>♡</span></div>
+                <div class="music-mini-player" aria-hidden="true"><span class="mini-spotify">●</span><div class="mini-wave"></div><span class="mini-heart">♥</span><div class="mini-controls">‹　Ⅱ　›</div></div>
               </div>
-              <p class="music-hub-sub" style="margin:14px 0 0">Catatan: pemutaran mengikuti aturan platform. Spotify mungkin meminta login; beberapa video YouTube tidak mengizinkan pemutaran melalui embed.</p>
+              <div class="music-hub-content">
+                <p class="music-intro-copy">TEMPEL LINK PLAYLIST / MUSIK <b>SPOTIFY</b> DAN <b>YOUTUBE</b> DI SINI UNTUK MEMUTAR MUSIK.</p>
+                <form id="musicHubForm">
+                  <div class="music-hub-inputrow">
+                    <span class="music-link-icon" aria-hidden="true">↗</span>
+                    <input id="musicHubUrl" class="music-hub-input" type="url" inputmode="url" placeholder="Tempel link di sini..." autocomplete="url" required aria-label="Link Spotify atau YouTube">
+                    <button class="music-hub-action" type="submit">▶ <span>PUTAR MUSIK</span></button>
+                  </div>
+                </form>
+                <p id="musicHubStatus" class="music-hub-status" role="status" aria-live="polite">Belum ada musik dipilih. Tempel link Spotify atau YouTube untuk mulai.</p>
+                <div class="music-divider"><span></span>ATAU<span></span></div>
+                <p class="music-playlist-heading">PILIH MUSIK DARI <b>PLAYLIST LEXIAA</b> ♡</p>
+                <div id="musicHubPlaylists" class="music-hub-playlists">
+                  <div class="music-playlist-loading">Memuat playlist pilihan LEXIAA...</div>
+                </div>
+                <div class="music-player-label">NOW PLAYING</div>
+                <div id="musicHubPlayer" class="music-hub-player"><div class="music-hub-empty">♫<br>Player Spotify atau YouTube akan muncul di sini.</div></div>
+                <div class="music-hub-foot">
+                  <a id="musicHubExternal" href="#" target="_blank" rel="noopener noreferrer" hidden>Buka di platform asli ↗</a>
+                  <button id="musicHubClear" class="music-hub-secondary" type="button">BERSIHKAN PLAYER</button>
+                </div>
+                <p class="music-hub-note">Pemutaran mengikuti ketentuan Spotify dan YouTube. Beberapa konten mungkin memerlukan login atau tidak mengizinkan pemutaran melalui embed.</p>
+              </div>
             </section>
           </div>
         </div>
@@ -1180,7 +1273,73 @@
       throw new Error("Sumber belum didukung. Gunakan link Spotify atau YouTube.");
     }
 
+
+    // Playlist kurasi dari Supabase. Tabel: music_playlists.
+    const musicHubPlaylists = document.getElementById("musicHubPlaylists");
+    function safeMusicText(value) {
+      return String(value ?? "").replace(/[&<>"']/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
+    }
+    async function loadMusicPlaylists() {
+      if (!musicHubPlaylists) return;
+      if (!supabase) {
+        musicHubPlaylists.innerHTML = '<div class="music-playlist-empty">Playlist pilihan belum dapat dimuat. Coba lagi beberapa saat.</div>';
+        return;
+      }
+      musicHubPlaylists.innerHTML = '<div class="music-playlist-loading">Memuat playlist pilihan LEXIAA...</div>';
+      try {
+        const {data, error} = await supabase.from("music_playlists")
+          .select("id,title,description,spotify_url,cover_url")
+          .eq("is_active", true).order("created_at", {ascending:false});
+        if (error) throw error;
+        if (!data || !data.length) {
+          musicHubPlaylists.innerHTML = '<div class="music-playlist-empty">Belum ada playlist pilihan. Playlist yang ditambahkan admin akan muncul di sini. ♡</div>';
+          return;
+        }
+        musicHubPlaylists.innerHTML = data.map(item => {
+          const cover = item.cover_url
+            ? `<img class="music-playlist-cover" src="${safeMusicText(item.cover_url)}" alt="" loading="lazy" onerror="this.style.display='none'">`
+            : '<span class="music-playlist-cover placeholder">♫</span>';
+          return `<button class="music-playlist-card" type="button" data-music-playlist="${safeMusicText(item.id)}">
+            ${cover}<span class="music-playlist-meta"><strong>${safeMusicText(item.title)}</strong><small>${safeMusicText(item.description || "Playlist pilihan LEXIAA · Spotify")}</small></span><span class="music-playlist-arrow">→</span>
+          </button>`;
+        }).join("");
+        musicHubPlaylists.querySelectorAll("[data-music-playlist]").forEach(button => {
+          button.addEventListener("click", () => {
+            const item = data.find(row => String(row.id) === button.dataset.musicPlaylist);
+            if (item) playMusicLink(item.spotify_url, item.title);
+          });
+        });
+      } catch (error) {
+        console.warn("LEXIAA playlist:", error);
+        musicHubPlaylists.innerHTML = '<div class="music-playlist-empty">Playlist belum tersedia. Pastikan tabel music_playlists dan izin baca publik sudah disiapkan di Supabase.</div>';
+      }
+    }
+
+    function playMusicLink(raw, label="") {
+      try {
+        const media = parseMusicLink(raw);
+        const backgroundAudio = document.getElementById("bgMusic");
+        if (backgroundAudio && !backgroundAudio.paused) backgroundAudio.pause();
+        const frame = document.createElement("iframe");
+        frame.src = media.embed;
+        frame.title = "LEXIAA Music Hub - " + media.source;
+        frame.allow = "autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture";
+        frame.allowFullscreen = true;
+        frame.loading = "lazy";
+        frame.referrerPolicy = "strict-origin-when-cross-origin";
+        if (media.track) frame.className = "spotify-track";
+        musicHubPlayer.replaceChildren(frame);
+        musicHubStatus.textContent = (label ? label + " · " : "") + "Sumber terdeteksi: " + media.source + ". Gunakan kontrol player untuk memutar musik.";
+        musicHubExternal.href = media.external;
+        musicHubExternal.hidden = false;
+      } catch (error) {
+        musicHubStatus.textContent = error.message || "Link tidak dapat diproses.";
+        musicHubExternal.hidden = true;
+      }
+    }
+
     function openMusicHub() {
+      loadMusicPlaylists();
       musicHub.classList.add("open");
       musicHub.setAttribute("aria-hidden","false");
       setTimeout(() => musicHubUrl.focus({preventScroll:true}), 80);
@@ -1204,27 +1363,7 @@
     });
     musicHubForm.addEventListener("submit", event => {
       event.preventDefault();
-      try {
-        const media = parseMusicLink(musicHubUrl.value);
-        // Hentikan musik latar agar dua sumber audio tidak bertumpuk.
-        const backgroundAudio = document.getElementById("bgMusic");
-        if (backgroundAudio && !backgroundAudio.paused) backgroundAudio.pause();
-        const frame = document.createElement("iframe");
-        frame.src = media.embed;
-        frame.title = "LEXIAA Music Hub - "+media.source;
-        frame.allow = "autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture";
-        frame.allowFullscreen = true;
-        frame.loading = "lazy";
-        frame.referrerPolicy = "strict-origin-when-cross-origin";
-        if (media.track) frame.className = "spotify-track";
-        musicHubPlayer.replaceChildren(frame);
-        musicHubStatus.textContent = "Sumber terdeteksi: "+media.source+". Gunakan kontrol pada player untuk memutar musik.";
-        musicHubExternal.href = media.external;
-        musicHubExternal.hidden = false;
-      } catch (error) {
-        musicHubStatus.textContent = error.message || "Link tidak dapat diproses.";
-        musicHubExternal.hidden = true;
-      }
+      playMusicLink(musicHubUrl.value);
     });
 
     const music = document.getElementById("bgMusic");
