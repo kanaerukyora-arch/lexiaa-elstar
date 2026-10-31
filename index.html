@@ -663,6 +663,60 @@ body:has(#dashboardView.active) .topbar{display:none}
 .device-battery-level{display:block;height:100%;width:100%;border-radius:1px;background:#d9a5ff;transition:width .3s}.battery-pill.is-charging .device-battery-level{background:#a8ffce}
 @media(max-width:700px){.now-playing-card{padding:14px 10px;min-height:230px}.np-content{width:58%;margin-top:12px}.np-info>strong{font-size:clamp(14px,4vw,20px)}.np-info>span{font-size:9px}.np-character{height:118%;width:39%;bottom:-3%}.np-character-left{left:-4%}.np-character-right{right:-4%}.np-controls{gap:1px}.np-controls button{width:29px;height:29px}}
 @media(max-width:390px){.np-content{width:56%}.np-character{width:42%;height:108%}.np-info>span{font-size:8px}}
+
+/* Responsive hardening: adapt to viewport width and Android display scaling/DPI. */
+html, body { width:100%; max-width:100%; }
+body { overflow-x:clip; }
+img, video, iframe, canvas, svg { max-width:100%; }
+.shell, .anime-dashboard, .dashboard-stage, .now-playing-card, .np-content,
+.anime-dashboard * { min-width:0; }
+button, a, input, select, textarea { touch-action:manipulation; }
+#logoutBtn { position:relative; z-index:50; pointer-events:auto; }
+@media (max-width: 480px) {
+  .shell { width:calc(100% - 20px); }
+  .anime-dashboard { width:100%; max-width:100%; }
+  .dash-main, .dashboard-content, .dashboard-section { width:100%; max-width:100%; }
+  .now-playing-card { width:100%; max-width:100%; }
+  .np-content { grid-template-columns:clamp(54px,18vw,76px) minmax(0,1fr); }
+  .np-info, .np-controls { min-width:0; }
+  .np-info>strong { overflow-wrap:anywhere; }
+  .np-controls { width:100%; gap:2px; }
+  .np-controls button { flex:0 1 34px; }
+  .dashboard-stage { width:100%; max-width:100%; }
+  .side-link { max-width:42vw; }
+}
+@media (max-width: 360px) {
+  .now-playing-card { padding:10px; }
+  .np-content { gap:8px; }
+  .np-info>strong { font-size:15px; }
+  .np-info>span { overflow-wrap:anywhere; }
+}
+
+
+/* Responsive hardening for varying viewport widths and Android display scaling. */
+html, body { width:100%; max-width:100%; }
+body { overflow-x:clip; }
+img, video, iframe, canvas, svg { max-width:100%; }
+.shell, .anime-dashboard, .dashboard-stage, .now-playing-card, .np-content, .anime-dashboard * { min-width:0; }
+button, a, input, select, textarea { touch-action:manipulation; }
+#logoutBtn { position:relative; z-index:1000; pointer-events:auto; }
+@media (max-width:480px) {
+ .shell { width:calc(100% - 20px); }
+ .anime-dashboard, .dash-main, .dashboard-content, .dashboard-section, .now-playing-card, .dashboard-stage { width:100%; max-width:100%; }
+ .np-content { grid-template-columns:clamp(54px,18vw,76px) minmax(0,1fr); }
+ .np-info, .np-controls { min-width:0; }
+ .np-info>strong { overflow-wrap:anywhere; }
+ .np-controls { width:100%; gap:2px; }
+ .np-controls button { flex:0 1 34px; }
+ .side-link { max-width:42vw; }
+}
+@media (max-width:360px) {
+ .now-playing-card { padding:10px; }
+ .np-content { gap:8px; }
+ .np-info>strong { font-size:15px; }
+ .np-info>span { overflow-wrap:anywhere; }
+}
+
 </style>
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="mobile-web-app-capable" content="yes">
@@ -1266,13 +1320,22 @@ body:has(#dashboardView.active) .topbar{display:none}
       });
       try {
         if (supabase) {
-          const { error } = await supabase.auth.signOut();
+          const { error } = await supabase.auth.signOut({ scope: "local" });
           if (error) console.warn("Supabase signOut:", error);
         }
-      } finally {
+      } catch (err) { console.warn("Logout cleanup:", err); }
+      finally {
+        // Clear only Supabase auth session keys (never unrelated site preferences).
+        try {
+          for (const storage of [localStorage, sessionStorage]) {
+            for (let i = storage.length - 1; i >= 0; i--) {
+              const key = storage.key(i);
+              if (key && key.startsWith("sb-") && key.endsWith("-auth-token")) storage.removeItem(key);
+            }
+          }
+        } catch (_) {}
         document.getElementById("loginForm").reset();
         showView("home");
-        // showView(home) normally attempts autoplay; keep audio off after logout.
         if (backgroundAudio) backgroundAudio.pause();
         toast("Kamu sudah logout.");
       }

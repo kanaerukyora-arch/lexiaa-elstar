@@ -1,4 +1,4 @@
-const CACHE_NAME = "lexiaa-cache-v-user-weather-20261031";
+const CACHE_NAME = "lexiaa-responsive-logout-v4";
 const APP_SHELL = ["./", "./index.html", "./app-icon.webp", "./manifest.webmanifest", "./welcome-mascot.webp", "./mascot-member.png", "./welcome-character.png", "./lexiaa-music-character.webp", "./dashboard-characters.png"];
 
 self.addEventListener("install", event => {
