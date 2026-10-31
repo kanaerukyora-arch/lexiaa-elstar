@@ -527,6 +527,8 @@
     .music-hub-input::placeholder{color:#a99ab8}.music-hub-input:focus{outline:2px solid #c69aff66;outline-offset:2px;border-color:#d4b0ff}
     .music-hub-action{min-width:180px;border:1px solid #dfc6ff;border-radius:13px;background:linear-gradient(135deg,#e4caff,#a879e5);color:#241332;font-size:12px;font-weight:900;letter-spacing:.04em;box-shadow:0 0 22px #b782ff55;cursor:pointer;transition:transform .2s,box-shadow .2s}
     .music-hub-action:hover{transform:translateY(-2px);box-shadow:0 0 30px #c18bff88}
+    .music-hub-reveal{min-height:52px;padding:14px 22px;margin:2px 0 8px}
+    .music-hub-inputrow[hidden],#musicHubNowPlaying[hidden]{display:none!important}
     .music-hub-status{margin:9px 0 14px;color:#c9b9d8;font-size:11px;min-height:17px}
     .music-divider{display:flex;align-items:center;gap:20px;max-width:660px;margin:13px 0;color:#c8a8ee;font-size:11px;letter-spacing:.3em}
     .music-divider span{height:1px;flex:1;background:linear-gradient(90deg,transparent,#b98be5)}
@@ -722,8 +724,9 @@
               </div>
               <div class="music-hub-content">
                 <p class="music-intro-copy">TEMPEL LINK PLAYLIST / MUSIK <b>SPOTIFY</b> DAN <b>YOUTUBE</b> DI SINI UNTUK MEMUTAR MUSIK.</p>
+                <button id="musicHubRevealInput" class="music-hub-action music-hub-reveal" type="button">↗ <span>TEMPEL LINK DI SINI</span></button>
                 <form id="musicHubForm">
-                  <div class="music-hub-inputrow">
+                  <div id="musicHubInputRow" class="music-hub-inputrow" hidden>
                     <span class="music-link-icon" aria-hidden="true">↗</span>
                     <input id="musicHubUrl" class="music-hub-input" type="url" inputmode="url" placeholder="Tempel link di sini..." autocomplete="url" required aria-label="Link Spotify atau YouTube">
                     <button class="music-hub-action" type="submit">▶ <span>PUTAR MUSIK</span></button>
@@ -735,11 +738,13 @@
                 <div id="musicHubPlaylists" class="music-hub-playlists">
                   <div class="music-playlist-loading">Memuat playlist pilihan LEXIAA...</div>
                 </div>
-                <div class="music-player-label">NOW PLAYING</div>
-                <div id="musicHubPlayer" class="music-hub-player"><div class="music-hub-empty">♫<br>Player Spotify atau YouTube akan muncul di sini.</div></div>
-                <div class="music-hub-foot">
-                  <a id="musicHubExternal" href="#" target="_blank" rel="noopener noreferrer" hidden>Buka di platform asli ↗</a>
-                  <button id="musicHubClear" class="music-hub-secondary" type="button">BERSIHKAN PLAYER</button>
+                <div id="musicHubNowPlaying" hidden>
+                  <div class="music-player-label">NOW PLAYING</div>
+                  <div id="musicHubPlayer" class="music-hub-player"><div class="music-hub-empty">♫<br>Player Spotify atau YouTube akan muncul di sini.</div></div>
+                  <div class="music-hub-foot">
+                    <a id="musicHubExternal" href="#" target="_blank" rel="noopener noreferrer" hidden>Buka di platform asli ↗</a>
+                    <button id="musicHubClear" class="music-hub-secondary" type="button">BERSIHKAN PLAYER</button>
+                  </div>
                 </div>
                 <p class="music-hub-note">Pemutaran mengikuti ketentuan Spotify dan YouTube. Beberapa konten mungkin memerlukan login atau tidak mengizinkan pemutaran melalui embed.</p>
               </div>
@@ -1237,6 +1242,9 @@
     const musicHubStatus = document.getElementById("musicHubStatus");
     const musicHubPlayer = document.getElementById("musicHubPlayer");
     const musicHubExternal = document.getElementById("musicHubExternal");
+    const musicHubRevealInput = document.getElementById("musicHubRevealInput");
+    const musicHubInputRow = document.getElementById("musicHubInputRow");
+    const musicHubNowPlaying = document.getElementById("musicHubNowPlaying");
 
     function parseMusicLink(raw) {
       let url;
@@ -1329,6 +1337,7 @@
         frame.referrerPolicy = "strict-origin-when-cross-origin";
         if (media.track) frame.className = "spotify-track";
         musicHubPlayer.replaceChildren(frame);
+        musicHubNowPlaying.hidden = false;
         musicHubStatus.textContent = (label ? label + " · " : "") + "Sumber terdeteksi: " + media.source + ". Gunakan kontrol player untuk memutar musik.";
         musicHubExternal.href = media.external;
         musicHubExternal.hidden = false;
@@ -1339,27 +1348,36 @@
     }
 
     function openMusicHub() {
-      loadMusicPlaylists();
+      // Setiap popup dibuka ulang, tampilan lagu disembunyikan.
+      // Iframe tidak dihapus agar audio yang sedang berjalan tetap berlanjut.
+      musicHubNowPlaying.hidden = true;
+      musicHubInputRow.hidden = true;
+      musicHubRevealInput.hidden = false;
       musicHub.classList.add("open");
       musicHub.setAttribute("aria-hidden","false");
-      setTimeout(() => musicHubUrl.focus({preventScroll:true}), 80);
+      loadMusicPlaylists();
     }
     function closeMusicHub() {
+      // Jangan hapus iframe dan jangan pause: musik tetap berjalan di belakang popup.
+      musicHubNowPlaying.hidden = true;
       musicHub.classList.remove("open");
       musicHub.setAttribute("aria-hidden","true");
     }
     document.getElementById("musicHubBtn").addEventListener("click", openMusicHub);
     document.getElementById("musicHubClose").addEventListener("click", closeMusicHub);
-    musicHub.addEventListener("click", event => { if (event.target === musicHub) closeMusicHub(); });
+    // Klik backdrop dan tombol Escape sengaja tidak menutup popup.
+    musicHubRevealInput.addEventListener("click", () => {
+      musicHubInputRow.hidden = false;
+      musicHubRevealInput.hidden = true;
+      musicHubUrl.focus({preventScroll:true});
+    });
     document.getElementById("musicHubClear").addEventListener("click", () => {
       musicHubPlayer.innerHTML = '<div class="music-hub-empty">♫<br>Player sudah dibersihkan. Tempel link baru untuk memutar musik.</div>';
+      musicHubNowPlaying.hidden = true;
       musicHubStatus.textContent = "Player dibersihkan.";
       musicHubExternal.hidden = true;
       musicHubExternal.removeAttribute("href");
       musicHubUrl.value = "";
-    });
-    document.addEventListener("keydown", event => {
-      if (event.key === "Escape" && musicHub.classList.contains("open")) closeMusicHub();
     });
     musicHubForm.addEventListener("submit", event => {
       event.preventDefault();
