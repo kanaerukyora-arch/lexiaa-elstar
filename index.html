@@ -692,7 +692,7 @@ body:has(#dashboardView.active) .topbar{display:none}
           <div class="live-info" data-live-info>
             <div class="live-time" data-live-time>00:00:00</div>
             <div class="live-date" data-live-date>MEMUAT TANGGAL...</div>
-            <div class="live-location" data-live-location>LOKASI: MEMUAT...</div>
+            <div class="live-location" data-live-location>LOKASI: INDONESIA · WAKTU LOKAL</div>
           </div>
         </div>
       </section>
@@ -760,7 +760,7 @@ body:has(#dashboardView.active) .topbar{display:none}
               <section class="clock-card" aria-label="Jam dan tanggal">
                 <div class="clock-line"><strong data-live-time>00:00:00</strong><span>LOCAL TIME</span></div>
                 <div class="clock-date" data-live-date>MEMUAT TANGGAL...</div>
-                <div class="clock-location" data-live-location>LOKASI: MEMUAT...</div>
+                <div class="clock-location" data-live-location>LOKASI: INDONESIA · WAKTU LOKAL</div>
               </section>
             </div>
             <section class="now-playing-card" aria-label="Akses pemutar musik">
@@ -1828,6 +1828,32 @@ body:has(#dashboardView.active) .topbar{display:none}
   };
   renderClock();
   window.setInterval(renderClock, 1000);
+})();
+</script>
+<script>
+/* Independent location fallback: does not wait for auth, GPS, or external geocoding. */
+(function(){
+  function resolveLocation(){
+    let zone = "";
+    try { zone = Intl.DateTimeFormat().resolvedOptions().timeZone || ""; } catch(e) {}
+    const map = {
+      "Asia/Jakarta":"JAKARTA, INDONESIA · WIB",
+      "Asia/Pontianak":"PONTIANAK, INDONESIA · WIB",
+      "Asia/Makassar":"MAKASSAR, INDONESIA · WITA",
+      "Asia/Ujung_Pandang":"MAKASSAR, INDONESIA · WITA",
+      "Asia/Jayapura":"JAYAPURA, INDONESIA · WIT"
+    };
+    return map[zone] || (zone ? zone.replaceAll("_"," ").toUpperCase() : "INDONESIA · WAKTU LOKAL");
+  }
+  function paint(){
+    const value = "LOKASI: " + resolveLocation();
+    document.querySelectorAll("[data-live-location]").forEach(el => {
+      if (!el.textContent || /MEMUAT/i.test(el.textContent) || /LOKASI:/i.test(el.textContent)) el.textContent=value;
+    });
+  }
+  paint();
+  document.addEventListener("DOMContentLoaded", paint);
+  window.setTimeout(paint, 250);
 })();
 </script>
 </body>
