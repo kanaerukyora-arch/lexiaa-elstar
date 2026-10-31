@@ -1597,7 +1597,7 @@ body:has(#dashboardView.active) .topbar{display:none}
     }
 
 
-    // Jam berjalan mengikuti waktu perangkat; kota ditentukan dari lokasi perangkat setelah izin pengguna.
+    // Jam lokal selalu berjalan; lokasi memakai fallback timezone agar tidak stuck jika GPS/geocoder lambat.
     (function initLiveInfo(){
       const zone = Intl.DateTimeFormat().resolvedOptions().timeZone || "";
       const knownPlaces = {
@@ -1608,55 +1608,38 @@ body:has(#dashboardView.active) .topbar{display:none}
         "Asia/Jayapura":"JAYAPURA, INDONESIA · WIT"
       };
       const dateFormatter = new Intl.DateTimeFormat("id-ID",{weekday:"long",day:"2-digit",month:"long",year:"numeric"});
-      let place = knownPlaces[zone] || "IZINKAN AKSES LOKASI UNTUK MENAMPILKAN KOTA";
+      const fallbackPlace = knownPlaces[zone] || (zone ? zone.replaceAll("_"," ").toUpperCase() : "LOKASI TIDAK TERSEDIA");
       function updateLocation(value){
-        place = value;
-        document.querySelectorAll("[data-live-location]").forEach(el => {
-          el.textContent = "LOKASI: " + place;
-        });
+        document.querySelectorAll("[data-live-location]").forEach(el=>{el.textContent="LOKASI: "+value;});
       }
       function tick(){
-        const now = new Date();
-        const localTime = [now.getHours(),now.getMinutes(),now.getSeconds()]
-          .map(value=>String(value).padStart(2,"0")).join(":");
-        document.querySelectorAll("[data-live-time]").forEach(el=>{
-          el.textContent=localTime;
-        });
-        document.querySelectorAll("[data-live-date]").forEach(el=>{
-          el.textContent=dateFormatter.format(now).toUpperCase();
-        });
+        const now=new Date();
+        const localTime=[now.getHours(),now.getMinutes(),now.getSeconds()].map(v=>String(v).padStart(2,"0")).join(":");
+        document.querySelectorAll("[data-live-time]").forEach(el=>{el.textContent=localTime;});
+        document.querySelectorAll("[data-live-date]").forEach(el=>{el.textContent=dateFormatter.format(now).toUpperCase();});
       }
-      tick();
-      window.setInterval(tick,1000);
-
-      if (!("geolocation" in navigator)) {
-        updateLocation(knownPlaces[zone] || "LOKASI TIDAK DIDUKUNG PERANGKAT");
-        return;
-      }
-      navigator.geolocation.getCurrentPosition(async position => {
-        try {
-          const {latitude,longitude} = position.coords;
-          const url = "https://api.bigdatacloud.net/data/reverse-geocode-client?latitude="
-            + encodeURIComponent(latitude) + "&longitude=" + encodeURIComponent(longitude)
-            + "&localityLanguage=id";
-          const response = await fetch(url);
-          if (!response.ok) throw new Error("Reverse geocoding gagal");
-          const data = await response.json();
-          const city = data.city || data.locality || data.principalSubdivision || data.localityInfo?.administrative?.[0]?.name;
-          const country = data.countryName || "";
-          if (city) {
-            updateLocation((city + (country ? ", " + country : "")).toUpperCase());
-          } else {
-            updateLocation(knownPlaces[zone] || "KOTA TIDAK TERDETEKSI");
-          }
-        } catch (error) {
-          console.warn("Gagal menentukan kota dari koordinat:", error);
-          updateLocation(knownPlaces[zone] || "KOTA TIDAK TERDETEKSI");
-        }
-      }, error => {
-        console.info("Izin lokasi tidak diberikan atau lokasi tidak tersedia:", error.message);
-        updateLocation(knownPlaces[zone] || "IZIN LOKASI DITOLAK");
-      }, {enableHighAccuracy:true,timeout:15000,maximumAge:300000});
+      tick(); window.setInterval(tick,1000);
+      // Set a useful value immediately; reverse geocoding may improve it later.
+      updateLocation(fallbackPlace);
+      if(!navigator.geolocation)return;
+      let settled=false;
+      const settleFallback=()=>{if(!settled){settled=true;updateLocation(fallbackPlace);}};
+      const fallbackTimer=window.setTimeout(settleFallback,6500);
+      navigator.geolocation.getCurrentPosition(async position=>{
+        if(settled)return;
+        try{
+          const {latitude,longitude}=position.coords;
+          const controller=new AbortController();
+          const timer=window.setTimeout(()=>controller.abort(),4500);
+          const url="https://api.bigdatacloud.net/data/reverse-geocode-client?latitude="+encodeURIComponent(latitude)+"&longitude="+encodeURIComponent(longitude)+"&localityLanguage=id";
+          const response=await fetch(url,{signal:controller.signal});window.clearTimeout(timer);
+          if(!response.ok)throw new Error("Reverse geocoding gagal");
+          const data=await response.json();
+          const city=data.city||data.locality||data.principalSubdivision;
+          if(city&&!settled){settled=true;window.clearTimeout(fallbackTimer);updateLocation((city+(data.countryName?", "+data.countryName:"")).toUpperCase());}
+          else settleFallback();
+        }catch(error){console.info("Lokasi memakai fallback timezone:",error.message);settleFallback();}
+      },error=>{console.info("Lokasi memakai fallback timezone:",error.message);settleFallback();},{enableHighAccuracy:false,timeout:5000,maximumAge:600000});
     })();
 
     // PWA install prompt: browser tetap meminta persetujuan pengguna.
@@ -1794,9 +1777,9 @@ body:has(#dashboardView.active) .topbar{display:none}
  document.querySelector('[data-dash-member]')?.addEventListener('click',()=>click('.menu-grid [data-member]'));
  $('npOpenPlayer')?.addEventListener('click',()=>click('#musicHubBtn'));
  // Weather uses browser location permission and Open-Meteo; no API key is required.
- const weatherFallback=()=>{if($('weatherDesc'))$('weatherDesc').textContent='Izinkan lokasi untuk cuaca';if($('weatherPlace'))$('weatherPlace').textContent='Lokasi tidak tersedia'};
- async function loadWeather(lat,lon){try{const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code&daily=temperature_2m_max,temperature_2m_min&timezone=auto`);if(!r.ok)throw Error('weather');const d=await r.json();const code=d.current.weather_code;const map=code===0?['☀','Cerah']:code<=3?['⛅','Cerah berawan']:code<=48?['☁','Berawan']:code<=67?['🌧','Hujan']:code<=77?['❄','Salju']:['⛈','Hujan badai'];$('weatherIcon').textContent=map[0];$('weatherTemp').textContent=Math.round(d.current.temperature_2m)+'°C';$('weatherDesc').textContent=map[1];$('weatherRange').textContent=`Min ${Math.round(d.daily.temperature_2m_min[0])}° · Max ${Math.round(d.daily.temperature_2m_max[0])}°`;$('weatherPlace').textContent='Lokasi saat ini';}catch(e){weatherFallback()}}
- if(navigator.geolocation){navigator.geolocation.getCurrentPosition(pos=>loadWeather(pos.coords.latitude,pos.coords.longitude),weatherFallback,{timeout:9000,maximumAge:600000});}else weatherFallback();
+ const weatherFallback=()=>{if($('weatherDesc'))$('weatherDesc').textContent='Cuaca tidak tersedia';if($('weatherPlace'))$('weatherPlace').textContent='Lokasi tidak tersedia'};
+ async function loadWeather(lat,lon){const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),7000);try{const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code&daily=temperature_2m_max,temperature_2m_min&timezone=auto`,{signal:controller.signal});if(!r.ok)throw Error('weather');const d=await r.json();const code=d.current.weather_code;const map=code===0?['☀','Cerah']:code<=3?['⛅','Cerah berawan']:code<=48?['☁','Berawan']:code<=67?['🌧','Hujan']:code<=77?['❄','Salju']:['⛈','Hujan badai'];$('weatherIcon').textContent=map[0];$('weatherTemp').textContent=Math.round(d.current.temperature_2m)+'°C';$('weatherDesc').textContent=map[1];$('weatherRange').textContent=`Min ${Math.round(d.daily.temperature_2m_min[0])}° · Max ${Math.round(d.daily.temperature_2m_max[0])}°`;$('weatherPlace').textContent='Lokasi saat ini';}catch(e){weatherFallback()}finally{clearTimeout(timer)}}
+ if(navigator.geolocation){navigator.geolocation.getCurrentPosition(pos=>loadWeather(pos.coords.latitude,pos.coords.longitude),weatherFallback,{enableHighAccuracy:false,timeout:6000,maximumAge:600000});}else weatherFallback();
  // Local audio can be analysed. Spotify/YouTube embeds are cross-origin, so use a synchronized ambient pulse while an embed is mounted (not raw beat detection).
  const musicHost=$('musicHubPlayer');
  let embedPulseTimer=null, pulseSeed=0;
