@@ -765,7 +765,7 @@ body:has(#dashboardView.active) .topbar{display:none}
             </div>
             <section class="now-playing-card" aria-label="Akses pemutar musik">
               <div class="np-heading"><span>▥</span> NOW PLAYING <span class="np-dots">•••</span></div>
-              <div class="np-content"><div class="np-cover"><img src="./lexiaa-music-character.png" alt="Ilustrasi LEXIAA Music" draggable="false"></div><div class="np-info"><strong id="npTrackTitle">Chill Vibes</strong><span id="npTrackSubtitle">♫ &nbsp; Pilih playlist untuk mulai mendengarkan</span><div class="np-progress"><i id="npProgressFill"></i></div><div class="np-times"><small id="npCurrentTime">LEXIAA MUSIC</small><small id="npDuration">OPEN PLAYER</small></div><div class="np-controls"><button type="button" id="npShuffle" aria-label="Acak">⤨</button><button type="button" id="npPrevious" aria-label="Sebelumnya">◀</button><button type="button" id="npOpenPlayer" aria-label="Putar atau buka Lexiaa Music">▶</button><button type="button" id="npNext" aria-label="Berikutnya">▶</button><button type="button" id="npRepeat" aria-label="Ulangi">↻</button></div></div><div class="music-equalizer" id="dashboardEqualizer" aria-hidden="true"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i><i style="--i:5"></i><i style="--i:6"></i><i style="--i:7"></i><i style="--i:8"></i><i style="--i:9"></i><i style="--i:10"></i><i style="--i:11"></i><i style="--i:12"></i><i style="--i:13"></i><i style="--i:14"></i><i style="--i:15"></i><i style="--i:16"></i><i style="--i:17"></i><i style="--i:18"></i><i style="--i:19"></i><i style="--i:20"></i><i style="--i:21"></i><i style="--i:22"></i><i style="--i:23"></i><i style="--i:24"></i><i style="--i:25"></i><i style="--i:26"></i><i style="--i:27"></i></div></div>
+              <div class="np-content"><div class="np-cover"><img src="./lexiaa-music-character.png" alt="Ilustrasi LEXIAA Music" draggable="false"></div><div class="np-info"><strong id="npTrackTitle">Chill Vibes</strong><span id="npTrackSubtitle">♫ &nbsp; Pilih playlist untuk mulai mendengarkan</span><div class="np-progress"><i id="npProgressFill"></i></div><div class="np-times"><small id="npCurrentTime">0:00</small><small id="npDuration">--:--</small></div><div class="np-controls"><button type="button" id="npShuffle" aria-label="Acak">⤨</button><button type="button" id="npPrevious" aria-label="Sebelumnya">◀</button><button type="button" id="npOpenPlayer" aria-label="Putar atau buka Lexiaa Music">▶</button><button type="button" id="npNext" aria-label="Berikutnya">▶</button><button type="button" id="npRepeat" aria-label="Ulangi">↻</button></div></div><div class="music-equalizer" id="dashboardEqualizer" aria-hidden="true"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i><i style="--i:5"></i><i style="--i:6"></i><i style="--i:7"></i><i style="--i:8"></i><i style="--i:9"></i><i style="--i:10"></i><i style="--i:11"></i><i style="--i:12"></i><i style="--i:13"></i><i style="--i:14"></i><i style="--i:15"></i><i style="--i:16"></i><i style="--i:17"></i><i style="--i:18"></i><i style="--i:19"></i><i style="--i:20"></i><i style="--i:21"></i><i style="--i:22"></i><i style="--i:23"></i><i style="--i:24"></i><i style="--i:25"></i><i style="--i:26"></i><i style="--i:27"></i></div></div>
             </section>
             <div class="menu-grid anime-quick-grid">
               <button id="musicHubBtn" class="menu-card wide music-menu-card" type="button" aria-label="Buka LEXIAA Music"><span class="menu-arrow" aria-hidden="true">♫</span><span class="menu-number">00 / MUSIC PLAYER</span><h3>LEXIAA MUSIC</h3><p>SPOTIFY &amp; YOUTUBE PLAYER</p></button>
@@ -1474,7 +1474,7 @@ body:has(#dashboardView.active) .topbar{display:none}
         const media = parseMusicLink(raw);
         if(media.source === "YouTube") { playYouTube(media,label); pauseDashboardForLexiaa(); return; }
         currentMusicSource="spotify"; currentMusicLabel=label||"Spotify";
-        npTitle.textContent=currentMusicLabel;npSubtitle.textContent="♫  Spotify · gunakan kontrol player resmi";npProgress.style.width="0%";npCurrent.textContent="SPOTIFY";npDuration.textContent="OPEN PLAYER";
+        npTitle.textContent=currentMusicLabel;npSubtitle.textContent="♫  Spotify · kontrol pemutaran di player resmi";npProgress.style.width="0%";npCurrent.textContent="PLAYER";npDuration.textContent="SPOTIFY";
         pauseDashboardForLexiaa();
         const frame = document.createElement("iframe");
         frame.src = media.embed;
@@ -1550,8 +1550,19 @@ body:has(#dashboardView.active) .topbar{display:none}
       });
     }
     function formatMusicTime(value){if(!Number.isFinite(value)||value<0)return '0:00';const m=Math.floor(value/60),s=Math.floor(value%60);return m+':'+String(s).padStart(2,'0');}
-    function syncYtInfo(){if(!ytPlayer||!ytPlayer.getVideoData)return;try{const data=ytPlayer.getVideoData();if(data?.title)npTitle.textContent=data.title;const duration=ytPlayer.getDuration()||0,current=ytPlayer.getCurrentTime()||0;npCurrent.textContent=formatMusicTime(current);npDuration.textContent=formatMusicTime(duration);npProgress.style.width=(duration?Math.min(100,current/duration*100):0)+'%';}catch(_){}}
-    function startYtTimer(){clearInterval(ytTimer);ytTimer=setInterval(syncYtInfo,800);}
+    function syncYtInfo(){
+      if(!ytPlayer||!ytPlayer.getVideoData)return;
+      try{
+        const data=ytPlayer.getVideoData();
+        if(data?.title)npTitle.textContent=data.title;
+        const duration=Number(ytPlayer.getDuration())||0;
+        const current=Number(ytPlayer.getCurrentTime())||0;
+        npCurrent.textContent=formatMusicTime(current);
+        npDuration.textContent=duration>0?formatMusicTime(duration):'--:--';
+        npProgress.style.width=(duration>0?Math.min(100,(current/duration)*100):0)+'%';
+      }catch(_){}
+    }
+    function startYtTimer(){clearInterval(ytTimer);syncYtInfo();ytTimer=setInterval(syncYtInfo,500);}
     function stopYtTimer(){clearInterval(ytTimer);ytTimer=null;}
     async function playYouTube(media,label){
       await loadYouTubeApi();
@@ -1596,7 +1607,6 @@ body:has(#dashboardView.active) .topbar{display:none}
         "Asia/Ujung_Pandang":"MAKASSAR, INDONESIA · WITA",
         "Asia/Jayapura":"JAYAPURA, INDONESIA · WIT"
       };
-      const timeFormatter = new Intl.DateTimeFormat("id-ID",{hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:false});
       const dateFormatter = new Intl.DateTimeFormat("id-ID",{weekday:"long",day:"2-digit",month:"long",year:"numeric"});
       let place = knownPlaces[zone] || "IZINKAN AKSES LOKASI UNTUK MENAMPILKAN KOTA";
       function updateLocation(value){
@@ -1607,8 +1617,10 @@ body:has(#dashboardView.active) .topbar{display:none}
       }
       function tick(){
         const now = new Date();
+        const localTime = [now.getHours(),now.getMinutes(),now.getSeconds()]
+          .map(value=>String(value).padStart(2,"0")).join(":");
         document.querySelectorAll("[data-live-time]").forEach(el=>{
-          el.textContent=timeFormatter.format(now);
+          el.textContent=localTime;
         });
         document.querySelectorAll("[data-live-date]").forEach(el=>{
           el.textContent=dateFormatter.format(now).toUpperCase();
@@ -1815,5 +1827,22 @@ body:has(#dashboardView.active) .topbar{display:none}
 })();
 </script>
 
+<script>
+/* Clock fallback: keeps dashboard time alive independently of other app modules. */
+(function(){
+  const renderClock = () => {
+    const now = new Date();
+    const time = [now.getHours(), now.getMinutes(), now.getSeconds()]
+      .map(v => String(v).padStart(2, "0")).join(":");
+    document.querySelectorAll("[data-live-time]").forEach(el => { el.textContent = time; });
+    const date = new Intl.DateTimeFormat("id-ID", {
+      weekday: "long", day: "2-digit", month: "long", year: "numeric"
+    }).format(now).toUpperCase();
+    document.querySelectorAll("[data-live-date]").forEach(el => { el.textContent = date; });
+  };
+  renderClock();
+  window.setInterval(renderClock, 1000);
+})();
+</script>
 </body>
 </html>
