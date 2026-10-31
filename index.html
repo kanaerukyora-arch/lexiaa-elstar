@@ -1776,13 +1776,24 @@ body:has(#dashboardView.active) .topbar{display:none}
  document.querySelector('[data-dash-hidden]')?.addEventListener('click',()=>click('[data-content="secret"]'));
  document.querySelector('[data-dash-member]')?.addEventListener('click',()=>click('.menu-grid [data-member]'));
  $('npOpenPlayer')?.addEventListener('click',()=>click('#musicHubBtn'));
- // Weather uses browser location permission and Open-Meteo; no API key is required.
- const weatherFallback=()=>{if($('weatherDesc'))$('weatherDesc').textContent='Cuaca tidak tersedia';if($('weatherPlace'))$('weatherPlace').textContent='Lokasi tidak tersedia'};
- const weatherZone=Intl.DateTimeFormat().resolvedOptions().timeZone||'';
- const weatherZoneLabel=({'Asia/Jakarta':'Jakarta, Indonesia','Asia/Pontianak':'Pontianak, Indonesia','Asia/Makassar':'Makassar, Indonesia','Asia/Ujung_Pandang':'Makassar, Indonesia','Asia/Jayapura':'Jayapura, Indonesia'})[weatherZone]||weatherZone.replaceAll('_',' ')||'Lokasi perangkat';
- if($('weatherPlace'))$('weatherPlace').textContent=weatherZoneLabel;
- async function loadWeather(lat,lon){const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),7000);try{const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code&daily=temperature_2m_max,temperature_2m_min&timezone=auto`,{signal:controller.signal});if(!r.ok)throw Error('weather');const d=await r.json();const code=d.current.weather_code;const map=code===0?['☀','Cerah']:code<=3?['⛅','Cerah berawan']:code<=48?['☁','Berawan']:code<=67?['🌧','Hujan']:code<=77?['❄','Salju']:['⛈','Hujan badai'];$('weatherIcon').textContent=map[0];$('weatherTemp').textContent=Math.round(d.current.temperature_2m)+'°C';$('weatherDesc').textContent=map[1];$('weatherRange').textContent=`Min ${Math.round(d.daily.temperature_2m_min[0])}° · Max ${Math.round(d.daily.temperature_2m_max[0])}°`;$('weatherPlace').textContent='Lokasi saat ini';}catch(e){weatherFallback()}finally{clearTimeout(timer)}}
- if(navigator.geolocation){navigator.geolocation.getCurrentPosition(pos=>loadWeather(pos.coords.latitude,pos.coords.longitude),weatherFallback,{enableHighAccuracy:false,timeout:6000,maximumAge:600000});}else weatherFallback();
+ // Weather and place name use the visitor's own GPS coordinates (with permission).
+ const weatherFallback=()=>{if($('weatherDesc'))$('weatherDesc').textContent='Izinkan lokasi untuk cuaca lokal';if($('weatherPlace'))$('weatherPlace').textContent='Lokasi belum diizinkan';};
+ async function reversePlace(lat,lon){
+   const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),6500);
+   try{const r=await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${encodeURIComponent(lat)}&longitude=${encodeURIComponent(lon)}&localityLanguage=id`,{signal:controller.signal});if(!r.ok)throw Error('geocode');const d=await r.json();return [d.city||d.locality||d.localityInfo?.administrative?.[0]?.name,d.principalSubdivision,d.countryName].filter(Boolean).filter((v,i,a)=>a.indexOf(v)===i).slice(0,2).join(', ');}finally{clearTimeout(timer)}
+ }
+ async function loadWeather(lat,lon){
+   const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),8000);
+   try{
+     const [r,place]=await Promise.all([fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code&daily=temperature_2m_max,temperature_2m_min&timezone=auto`,{signal:controller.signal}),reversePlace(lat,lon).catch(()=> '')]);
+     if(!r.ok)throw Error('weather');const d=await r.json();const code=d.current.weather_code;
+     const map=code===0?['☀','Cerah']:code<=3?['⛅','Cerah berawan']:code<=48?['☁','Berawan']:code<=67?['🌧','Hujan']:code<=77?['❄','Salju']:['⛈','Hujan badai'];
+     $('weatherIcon').textContent=map[0];$('weatherTemp').textContent=Math.round(d.current.temperature_2m)+'°C';$('weatherDesc').textContent=map[1];$('weatherRange').textContent=`Min ${Math.round(d.daily.temperature_2m_min[0])}° · Max ${Math.round(d.daily.temperature_2m_max[0])}°`;
+     const label=place||`${lat.toFixed(2)}, ${lon.toFixed(2)}`;$('weatherPlace').textContent=label;$('weatherPlace').title='Berdasarkan lokasi perangkat';
+     document.querySelectorAll('[data-live-location]').forEach(el=>el.textContent='LOKASI: '+label.toUpperCase());
+   }catch(e){weatherFallback()}finally{clearTimeout(timer)}
+ }
+ if(navigator.geolocation){navigator.geolocation.getCurrentPosition(pos=>loadWeather(pos.coords.latitude,pos.coords.longitude),weatherFallback,{enableHighAccuracy:true,timeout:12000,maximumAge:300000});}else weatherFallback();
  // Local audio can be analysed. Spotify/YouTube embeds are cross-origin, so use a synchronized ambient pulse while an embed is mounted (not raw beat detection).
  const musicHost=$('musicHubPlayer');
  let embedPulseTimer=null, pulseSeed=0;
