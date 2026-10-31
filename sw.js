@@ -1,4 +1,4 @@
-const CACHE_NAME = "lexiaa-responsive-logout-v5";
+const CACHE_NAME = "lexiaa-responsive-logout-v6";
 const APP_SHELL = ["./", "./index.html", "./app-icon.webp", "./manifest.webmanifest", "./welcome-mascot.webp", "./mascot-member.png", "./welcome-character.png", "./lexiaa-music-character.webp", "./dashboard-characters.png"];
 
 self.addEventListener("install", event => {

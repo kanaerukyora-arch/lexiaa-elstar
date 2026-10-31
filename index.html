@@ -1325,7 +1325,7 @@ button, a, input, select, textarea { touch-action:manipulation; }
       button.disabled = true;
       button.textContent = "LOGGING OUT...";
 
-      // Return to the home view immediately; network sign-out must not block UI.
+      // Return to the login view immediately; network sign-out must not block UI.
       try {
         stopLexiaaMusic({ resumeDashboard: false });
         [tutorialPopupAudio, memberPopupAudio, welcomePopupAudio].forEach(audio => {
@@ -1333,7 +1333,7 @@ button, a, input, select, textarea { touch-action:manipulation; }
         });
         if (backgroundAudio) backgroundAudio.pause();
         document.getElementById("loginForm")?.reset();
-        showView("home");
+        showView("login");
         toast("Kamu sudah logout.");
       } catch (err) { console.warn("Logout UI cleanup:", err); }
 
@@ -1690,6 +1690,8 @@ button, a, input, select, textarea { touch-action:manipulation; }
       supabase.auth.onAuthStateChange((_event, session) => {
         if (session && !document.getElementById("dashboardView").classList.contains("active")) {
           showDashboard(session.user);
+        } else if (!session && _event === "SIGNED_OUT") {
+          showView("login");
         }
       });
     }
