@@ -1635,8 +1635,14 @@ body:has(#dashboardView.active) .topbar{display:none}
           const response=await fetch(url,{signal:controller.signal});window.clearTimeout(timer);
           if(!response.ok)throw new Error("Reverse geocoding gagal");
           const data=await response.json();
-          const city=data.city||data.locality||data.principalSubdivision;
-          if(city&&!settled){settled=true;window.clearTimeout(fallbackTimer);updateLocation((city+(data.countryName?", "+data.countryName:"")).toUpperCase());}
+          const city=data.city||data.locality||data.localityInfo?.administrative?.[2]?.name||data.principalSubdivision;
+          const province=data.principalSubdivision;
+          const country=data.countryName;
+          const zoneName=Intl.DateTimeFormat().resolvedOptions().timeZone||"";
+          const tzLabel=zoneName==="Asia/Jakarta"||zoneName==="Asia/Pontianak"?"WIB":zoneName==="Asia/Makassar"||zoneName==="Asia/Ujung_Pandang"?"WITA":zoneName==="Asia/Jayapura"?"WIT":"";
+          const parts=[city,province,country].filter((v,i,a)=>v&&a.indexOf(v)===i);
+          const locationLabel=parts.join(", ")+(tzLabel?" · "+tzLabel:"");
+          if(city&&!settled){settled=true;window.clearTimeout(fallbackTimer);updateLocation(locationLabel.toUpperCase());}
           else settleFallback();
         }catch(error){console.info("Lokasi memakai fallback timezone:",error.message);settleFallback();}
       },error=>{console.info("Lokasi memakai fallback timezone:",error.message);settleFallback();},{enableHighAccuracy:false,timeout:5000,maximumAge:600000});
@@ -1780,7 +1786,7 @@ body:has(#dashboardView.active) .topbar{display:none}
  const weatherFallback=()=>{if($('weatherDesc'))$('weatherDesc').textContent='Izinkan lokasi untuk cuaca lokal';if($('weatherPlace'))$('weatherPlace').textContent='Lokasi belum diizinkan';};
  async function reversePlace(lat,lon){
    const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),6500);
-   try{const r=await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${encodeURIComponent(lat)}&longitude=${encodeURIComponent(lon)}&localityLanguage=id`,{signal:controller.signal});if(!r.ok)throw Error('geocode');const d=await r.json();return [d.city||d.locality||d.localityInfo?.administrative?.[0]?.name,d.principalSubdivision,d.countryName].filter(Boolean).filter((v,i,a)=>a.indexOf(v)===i).slice(0,2).join(', ');}finally{clearTimeout(timer)}
+   try{const r=await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${encodeURIComponent(lat)}&longitude=${encodeURIComponent(lon)}&localityLanguage=id`,{signal:controller.signal});if(!r.ok)throw Error('geocode');const d=await r.json();const zone=Intl.DateTimeFormat().resolvedOptions().timeZone||'';const tz=zone==='Asia/Jakarta'||zone==='Asia/Pontianak'?'WIB':zone==='Asia/Makassar'||zone==='Asia/Ujung_Pandang'?'WITA':zone==='Asia/Jayapura'?'WIT':'';const parts=[d.city||d.locality||d.localityInfo?.administrative?.[0]?.name,d.principalSubdivision,d.countryName].filter(Boolean).filter((v,i,a)=>a.indexOf(v)===i);return parts.join(', ')+(tz?' · '+tz:'');}finally{clearTimeout(timer)}
  }
  async function loadWeather(lat,lon){
    const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),8000);
