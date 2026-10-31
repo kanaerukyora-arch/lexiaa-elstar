@@ -1876,5 +1876,29 @@ body:has(#dashboardView.active) .topbar{display:none}
   window.setTimeout(paint, 250);
 })();
 </script>
+
+<script>
+// Fail-safe logout: works even if the module-based Supabase handler did not initialize.
+(function () {
+  document.addEventListener('click', function (event) {
+    const button = event.target && event.target.closest ? event.target.closest('#logoutBtn') : null;
+    if (!button) return;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    button.disabled = true;
+    button.textContent = 'LOGGING OUT…';
+    try {
+      Object.keys(localStorage).forEach(function (key) {
+        if (/^sb-.*-auth-token$/.test(key) || /supabase.*auth/i.test(key)) localStorage.removeItem(key);
+      });
+      Object.keys(sessionStorage).forEach(function (key) {
+        if (/^sb-.*-auth-token$/.test(key) || /supabase.*auth/i.test(key)) sessionStorage.removeItem(key);
+      });
+    } catch (_) {}
+    // Reload into the unauthenticated state; Supabase session persistence is cleared above.
+    window.location.reload();
+  }, true);
+})();
+</script>
 </body>
 </html>
