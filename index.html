@@ -1312,20 +1312,42 @@ button, a, input, select, textarea { touch-action:manipulation; }
       } finally { submit.disabled = false; submit.textContent = "LOGIN"; }
     });
 
-    document.getElementById("logoutBtn").addEventListener("click", async () => {
-      // Hentikan semua audio milik sesi sebelum kembali ke halaman awal.
-      stopLexiaaMusic({ resumeDashboard: false });
-      [tutorialPopupAudio, memberPopupAudio, welcomePopupAudio].forEach(audio => {
-        if (audio) { audio.pause(); try { audio.currentTime = 0; } catch (_) {} }
-      });
+    // Logout handler uses capture-phase delegation so it still works if dashboard
+    // layers or later UI updates interfere with the button's own event listeners.
+    document.addEventListener("click", async event => {
+      const button = event.target && event.target.closest ? event.target.closest("#logoutBtn") : null;
+      if (!button) return;
+      event.preventDefault();
+      event.stopPropagation();
+      event.stopImmediatePropagation();
+      if (button.dataset.loggingOut === "1") return;
+      button.dataset.loggingOut = "1";
+      button.disabled = true;
+      button.textContent = "LOGGING OUT...";
+
+      // Return to the home view immediately; network sign-out must not block UI.
       try {
-        if (supabase) {
-          const { error } = await supabase.auth.signOut({ scope: "local" });
-          if (error) console.warn("Supabase signOut:", error);
+        stopLexiaaMusic({ resumeDashboard: false });
+        [tutorialPopupAudio, memberPopupAudio, welcomePopupAudio].forEach(audio => {
+          if (audio) { audio.pause(); try { audio.currentTime = 0; } catch (_) {} }
+        });
+        if (backgroundAudio) backgroundAudio.pause();
+        document.getElementById("loginForm")?.reset();
+        showView("home");
+        toast("Kamu sudah logout.");
+      } catch (err) { console.warn("Logout UI cleanup:", err); }
+
+      // Clear this browser's Supabase auth session even if the remote call fails.
+      try {
+        if (supabase?.auth) {
+          const result = await Promise.race([
+            supabase.auth.signOut({ scope: "local" }),
+            new Promise(resolve => window.setTimeout(() => resolve({ error: new Error("signOut timeout") }), 2500))
+          ]);
+          if (result?.error) console.warn("Supabase signOut:", result.error);
         }
-      } catch (err) { console.warn("Logout cleanup:", err); }
+      } catch (err) { console.warn("Supabase signOut:", err); }
       finally {
-        // Clear only Supabase auth session keys (never unrelated site preferences).
         try {
           for (const storage of [localStorage, sessionStorage]) {
             for (let i = storage.length - 1; i >= 0; i--) {
@@ -1334,12 +1356,11 @@ button, a, input, select, textarea { touch-action:manipulation; }
             }
           }
         } catch (_) {}
-        document.getElementById("loginForm").reset();
-        showView("home");
-        if (backgroundAudio) backgroundAudio.pause();
-        toast("Kamu sudah logout.");
+        button.disabled = false;
+        button.textContent = "LOGOUT ↗";
+        delete button.dataset.loggingOut;
       }
-    });
+    }, true);
 
     const portalTransition = document.getElementById("portalTransition");
     const portalLabel = document.getElementById("portalLabel");
