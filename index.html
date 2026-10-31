@@ -592,6 +592,50 @@ body:has(#dashboardView.active) .topbar{display:none}
 @media(max-width:360px){.side-link{padding:7px 8px;font-size:9px}.side-link>span{display:none}.device-status .wifi-mark{display:none}.dashboard-stage{min-height:500px}.weather-card{width:150px}.clock-line strong{font-size:17px}}
 @media(prefers-reduced-motion:reduce){.dashboard-character-art,.sidebar-flourish,.music-equalizer i{animation:none!important}}
 
+  
+/* LEXIAA dashboard refinement: character-first composition */
+.dashboard-stage{overflow:visible;isolation:isolate}
+.dashboard-character-wrap{width:min(78%,900px);height:116%;right:-5%;bottom:-7%;z-index:1;overflow:visible}
+.dashboard-character-art{width:100%;height:100%;object-fit:contain;object-position:center bottom;max-width:none}
+.weather-card{left:22px;right:auto;top:22px}
+.clock-card{left:22px;right:auto;bottom:22px;text-align:left}
+.clock-line{justify-content:flex-start}
+@media(max-width:850px){
+ .dashboard-stage{overflow:visible}
+ .dashboard-character-wrap{width:94%;height:92%;right:-8%;bottom:-5%}
+ .weather-card{left:14px;right:auto;top:14px;transform:scale(.84);transform-origin:top left}
+ .clock-card{left:14px;right:auto;bottom:14px;top:auto;transform:scale(.86);transform-origin:bottom left}
+}
+@media(max-width:560px){
+ .dashboard-stage{min-height:570px;padding:24px 17px 18px;overflow:visible}
+ .dashboard-copy{position:relative;z-index:2;width:53%;max-width:53%}
+ .dashboard-copy .eyebrow{font-size:8px;letter-spacing:.15em}
+ .dashboard-copy .logo{font-size:clamp(31px,8.8vw,45px)}
+ .dashboard-copy .slogan{font-size:9px;line-height:1.5;max-width:190px}
+ .dashboard-copy .dash-meta{font-size:7px;line-height:1.5;max-width:175px}
+ .dashboard-character-wrap{width:122%;height:88%;right:-17%;bottom:-5%;z-index:1}
+ .dashboard-character-art{object-fit:contain;object-position:center bottom}
+ .weather-card{left:12px;right:auto;top:auto;bottom:94px;width:158px;min-height:76px;padding:8px;grid-template-columns:34px 1fr;gap:4px;transform:none;z-index:4}
+ .weather-symbol{font-size:27px}
+ .weather-reading strong{font-size:19px}
+ .weather-reading span,.weather-reading small{font-size:8px}
+ .weather-place{font-size:7px;margin-top:2px}
+ .clock-card{left:12px;right:auto;top:auto;bottom:12px;min-width:0;padding:8px 10px;transform:none;z-index:4;text-align:left}
+ .clock-line{justify-content:flex-start;gap:6px}
+ .clock-line strong{font-size:18px}
+ .clock-line span{font-size:7px}
+ .clock-date{font-size:8px}
+ .clock-location{font-size:7px}
+ .music-equalizer{min-height:48px}
+}
+@media(max-width:380px){
+ .dashboard-stage{min-height:545px}
+ .dashboard-copy{width:51%;max-width:51%}
+ .dashboard-character-wrap{width:128%;right:-21%;height:86%}
+ .weather-card{width:145px;bottom:91px}
+ .clock-card{bottom:10px}
+}
+
   </style>
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="mobile-web-app-capable" content="yes">
@@ -1756,7 +1800,32 @@ body:has(#dashboardView.active) .topbar{display:none}
  const weatherFallback=()=>{if($('weatherDesc'))$('weatherDesc').textContent='Izinkan lokasi untuk cuaca';if($('weatherPlace'))$('weatherPlace').textContent='Lokasi tidak tersedia'};
  async function loadWeather(lat,lon){try{const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code&daily=temperature_2m_max,temperature_2m_min&timezone=auto`);if(!r.ok)throw Error('weather');const d=await r.json();const code=d.current.weather_code;const map=code===0?['☀','Cerah']:code<=3?['⛅','Cerah berawan']:code<=48?['☁','Berawan']:code<=67?['🌧','Hujan']:code<=77?['❄','Salju']:['⛈','Hujan badai'];$('weatherIcon').textContent=map[0];$('weatherTemp').textContent=Math.round(d.current.temperature_2m)+'°C';$('weatherDesc').textContent=map[1];$('weatherRange').textContent=`Min ${Math.round(d.daily.temperature_2m_min[0])}° · Max ${Math.round(d.daily.temperature_2m_max[0])}°`;$('weatherPlace').textContent='Lokasi saat ini';}catch(e){weatherFallback()}}
  if(navigator.geolocation){navigator.geolocation.getCurrentPosition(pos=>loadWeather(pos.coords.latitude,pos.coords.longitude),weatherFallback,{timeout:9000,maximumAge:600000});}else weatherFallback();
- // Local dashboard audio can be analysed. Cross-origin Spotify/YouTube iframe audio cannot be read by the page.
+ // Local audio can be analysed. Spotify/YouTube embeds are cross-origin, so use a synchronized ambient pulse while an embed is mounted (not raw beat detection).
+ const musicHost=$('musicHubPlayer');
+ let embedPulseTimer=null, pulseSeed=0;
+ function stopEmbedPulse(){if(embedPulseTimer){clearInterval(embedPulseTimer);embedPulseTimer=null}eq?.classList.remove('is-playing','is-embed-playing')}
+ function startEmbedPulse(){
+   if(!eq)return;
+   stopEmbedPulse();eq.classList.add('is-playing','is-embed-playing');
+   const bars=[...eq.children];
+   embedPulseTimer=setInterval(()=>{
+     pulseSeed+=1;
+     bars.forEach((bar,i)=>{
+       const wave=Math.abs(Math.sin((pulseSeed*.42)+(i*.62)));
+       const accent=Math.abs(Math.sin((pulseSeed*.17)+(i*.21)));
+       bar.style.height=(7+wave*(18+accent*36))+'px';
+     });
+   },110);
+ }
+ if(musicHost){
+   const syncEmbedPulse=()=>{
+     const hasEmbed=!!musicHost.querySelector('iframe');
+     if(hasEmbed)startEmbedPulse();else stopEmbedPulse();
+   };
+   new MutationObserver(syncEmbedPulse).observe(musicHost,{childList:true,subtree:true});
+   syncEmbedPulse();
+ }
+
  const audio=$('bgMusic'),eq=$('dashboardEqualizer');let ctx,analyser,source,raf;
  function animateEq(){if(!analyser||!eq)return;const data=new Uint8Array(analyser.frequencyBinCount);analyser.getByteFrequencyData(data);[...eq.children].forEach((bar,i)=>{const v=data[Math.floor(i*data.length/eq.children.length)]||0;bar.style.height=(7+v*.34)+'px'});raf=requestAnimationFrame(animateEq)}
  async function connectAudio(){if(!audio||!eq)return;try{const C=window.AudioContext||window.webkitAudioContext;if(!C)return;ctx=ctx||new C();if(ctx.state==='suspended')await ctx.resume();if(!source){source=ctx.createMediaElementSource(audio);analyser=ctx.createAnalyser();analyser.fftSize=128;source.connect(analyser);analyser.connect(ctx.destination)}cancelAnimationFrame(raf);eq.classList.add('is-playing');animateEq()}catch(e){eq.classList.add('is-playing')}}
