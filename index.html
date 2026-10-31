@@ -636,7 +636,20 @@ body:has(#dashboardView.active) .topbar{display:none}
  .clock-card{bottom:10px}
 }
 
-  </style>
+  
+/* Dashboard requested refinements */
+.dashboard-copy{display:none!important}
+.dashboard-stage{overflow:visible}
+.dashboard-character-wrap{z-index:1;width:min(78%,900px);height:116%;right:0;bottom:-7%}
+.dashboard-character-art{object-fit:contain;object-position:center bottom}
+.dashboard-name-tag{position:absolute;z-index:2;top:7%;right:5%;font:italic 700 clamp(28px,4.4vw,54px)/1 Georgia,serif;color:#f5dcff;text-shadow:0 0 10px #d78aff,0 0 26px #a34ce9,0 3px 12px #080313;letter-spacing:.01em;pointer-events:none;white-space:nowrap}
+.dashboard-name-tag span{color:#efb5ff;font-size:.72em}
+.np-cover{height:138px;display:flex;align-items:center;justify-content:center;background:transparent;overflow:visible}
+.np-cover img{width:100%;height:100%;object-fit:contain;object-position:center bottom;border-radius:15px;filter:drop-shadow(0 0 10px #b46aff22)}
+@media(max-width:850px){.dashboard-character-wrap{width:88%;height:112%;right:-3%;bottom:-5%}.dashboard-name-tag{top:7%;right:4%;font-size:clamp(25px,5.5vw,42px)}}
+@media(max-width:560px){.dashboard-character-wrap{width:118%;height:86%;right:-15%;bottom:-3%}.dashboard-name-tag{top:6%;right:5%;font-size:clamp(25px,8vw,38px)}.np-cover{height:130px;grid-column:1/-1}.np-cover img{max-width:180px}}
+
+</style>
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -737,13 +750,8 @@ body:has(#dashboardView.active) .topbar{display:none}
               <div class="device-status" aria-label="Status perangkat (indikator visual)"><span class="signal-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span>5G</span><span class="wifi-mark" aria-hidden="true">◔</span><span class="battery-pill">100% <b>ϟ</b></span></div>
             </div>
             <div class="dashboard-stage">
-              <div class="dashboard-copy">
-                <p class="eyebrow">YOUR PRIVATE DIGITAL SPACE</p>
-                <h1 class="logo">Lexiaa &amp;<br>Elstar <span class="title-heart">♡</span></h1>
-                <p class="slogan">A LITTLE WORLD, FULL OF STORIES.</p>
-                <div class="dash-meta">AKSES MEMBER AKTIF <span aria-hidden="true">·</span> OBSIDIAN EDITION</div>
-              </div>
               <div class="dashboard-character-wrap"><img class="dashboard-character-art" src="./dashboard-characters.png" alt="Lima karakter anime LEXIAA &amp; ELSTAR"></div>
+              <div class="dashboard-name-tag" aria-label="Lexiaa">Lexiaa <span>♡</span></div>
               <section class="weather-card" aria-label="Cuaca saat ini">
                 <div class="weather-symbol" id="weatherIcon" aria-hidden="true">☁</div>
                 <div class="weather-reading"><strong id="weatherTemp">--°C</strong><span id="weatherDesc">Memuat cuaca...</span><small id="weatherRange">Cuaca lokal</small></div>
@@ -1622,11 +1630,11 @@ body:has(#dashboardView.active) .topbar{display:none}
       }
       function tick(){
         const now = new Date();
-        document.querySelectorAll("[data-live-info]").forEach(el=>{
-          const time=el.querySelector("[data-live-time]");
-          const date=el.querySelector("[data-live-date]");
-          if(time) time.textContent=timeFormatter.format(now);
-          if(date) date.textContent=dateFormatter.format(now).toUpperCase();
+        document.querySelectorAll("[data-live-time]").forEach(el=>{
+          el.textContent=timeFormatter.format(now);
+        });
+        document.querySelectorAll("[data-live-date]").forEach(el=>{
+          el.textContent=dateFormatter.format(now).toUpperCase();
         });
       }
       tick();
