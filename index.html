@@ -1151,10 +1151,26 @@
     });
 
     document.getElementById("logoutBtn").addEventListener("click", async () => {
-      if (supabase) await supabase.auth.signOut();
-      document.getElementById("loginForm").reset();
-      showView("home");
-      toast("Kamu sudah logout.");
+      // Hentikan semua audio milik sesi sebelum kembali ke halaman awal.
+      stopLexiaaMusic({ resumeDashboard: false });
+      [tutorialPopupAudio, memberPopupAudio, welcomePopupAudio].forEach(audio => {
+        if (audio) { audio.pause(); try { audio.currentTime = 0; } catch (_) {} }
+      });
+      const backgroundAudio = document.getElementById("bgMusic");
+      if (backgroundAudio) backgroundAudio.pause();
+      musicManuallyDisabled = true;
+      try {
+        if (supabase) {
+          const { error } = await supabase.auth.signOut();
+          if (error) console.warn("Supabase signOut:", error);
+        }
+      } finally {
+        document.getElementById("loginForm").reset();
+        showView("home");
+        // showView(home) normally attempts autoplay; keep audio off after logout.
+        if (backgroundAudio) backgroundAudio.pause();
+        toast("Kamu sudah logout.");
+      }
     });
 
     const portalTransition = document.getElementById("portalTransition");
@@ -1290,6 +1306,35 @@
     // Simpan playlist yang dipilih selama halaman tetap terbuka.
     // Iframe tidak dibuat ulang saat playlist yang sama dibuka kembali.
     let selectedMusicPlaylistId = null;
+    let lexiaaMusicActive = false;
+    let dashboardWasPlayingBeforeLexiaa = false;
+
+    function pauseDashboardForLexiaa() {
+      const backgroundAudio = document.getElementById("bgMusic");
+      if (!lexiaaMusicActive) {
+        dashboardWasPlayingBeforeLexiaa = Boolean(backgroundAudio && !backgroundAudio.paused);
+      }
+      lexiaaMusicActive = true;
+      if (backgroundAudio && !backgroundAudio.paused) backgroundAudio.pause();
+    }
+
+    function stopLexiaaMusic({ resumeDashboard = true } = {}) {
+      // Menghapus iframe menghentikan playback Spotify/YouTube yang berjalan di dalamnya.
+      musicHubPlayer.querySelectorAll("iframe").forEach(frame => frame.src = "about:blank");
+      musicHubPlayer.innerHTML = '<div class="music-hub-empty">♫<br>Player sudah dihentikan. Pilih musik untuk memutar kembali.</div>';
+      musicHubNowPlaying.hidden = true;
+      selectedMusicPlaylistId = null;
+      musicHubExternal.hidden = true;
+      musicHubExternal.removeAttribute("href");
+      lexiaaMusicActive = false;
+      const backgroundAudio = document.getElementById("bgMusic");
+      const shouldResume = resumeDashboard && dashboardWasPlayingBeforeLexiaa && !musicManuallyDisabled;
+      dashboardWasPlayingBeforeLexiaa = false;
+      if (shouldResume && backgroundAudio) {
+        backgroundAudio.play().then(() => { musicBtn.textContent = "MUSIK: ON"; })
+          .catch(() => { musicBtn.textContent = "MUSIK: OFF"; });
+      }
+    }
 
     async function loadMusicPlaylists() {
       if (!musicHubPlaylists) return;
@@ -1343,14 +1388,15 @@
     function playMusicLink(raw, label="") {
       try {
         const media = parseMusicLink(raw);
-        const backgroundAudio = document.getElementById("bgMusic");
-        if (backgroundAudio && !backgroundAudio.paused) backgroundAudio.pause();
+        pauseDashboardForLexiaa();
         const frame = document.createElement("iframe");
         frame.src = media.embed;
         frame.title = "LEXIAA Music Hub - " + media.source;
         frame.allow = "autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture";
         frame.allowFullscreen = true;
-        frame.loading = "lazy";
+        // Jangan lazy-load player: pada beberapa browser mobile ini dapat
+        // menunda inisialisasi audio dan membuat playback terasa tidak stabil.
+        frame.loading = "eager";
         frame.referrerPolicy = "strict-origin-when-cross-origin";
         if (media.track) frame.className = "spotify-track";
         musicHubPlayer.replaceChildren(frame);
@@ -1389,12 +1435,8 @@
       musicHubUrl.focus({preventScroll:true});
     });
     document.getElementById("musicHubClear").addEventListener("click", () => {
-      musicHubPlayer.innerHTML = '<div class="music-hub-empty">♫<br>Player sudah dibersihkan. Tempel link baru untuk memutar musik.</div>';
-      selectedMusicPlaylistId = null;
-      musicHubNowPlaying.hidden = true;
-      musicHubStatus.textContent = "Player dibersihkan.";
-      musicHubExternal.hidden = true;
-      musicHubExternal.removeAttribute("href");
+      stopLexiaaMusic({ resumeDashboard: true });
+      musicHubStatus.textContent = "Player dihentikan. Musik Dashboard dilanjutkan jika sebelumnya sedang aktif.";
       musicHubUrl.value = "";
     });
     musicHubForm.addEventListener("submit", event => {
@@ -1423,6 +1465,10 @@
     music.addEventListener("pause", () => { musicBtn.textContent = "MUSIK: OFF"; });
 
     musicBtn.addEventListener("click", async () => {
+      if (lexiaaMusicActive && music.paused) {
+        toast("Musik Dashboard dijeda selama Lexiaa Music diputar.");
+        return;
+      }
       if (music.paused) {
         musicManuallyDisabled = false;
         try {
