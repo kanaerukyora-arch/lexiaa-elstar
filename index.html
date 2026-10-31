@@ -584,7 +584,7 @@ body:has(#dashboardView.active) .topbar{display:none}
 .dashboard-stage{min-height:480px;position:relative;isolation:isolate;display:flex;align-items:center;padding:34px 30px 34px 34px;border-radius:26px;overflow:hidden}.dashboard-stage:before{content:"";position:absolute;inset:0;z-index:-2;background:radial-gradient(ellipse at 70% 40%,#9d69c044,transparent 45%),linear-gradient(110deg,rgba(11,6,29,.82),rgba(15,7,33,.28) 62%,rgba(9,5,23,.55));border:1px solid var(--lx-border);border-radius:26px;box-shadow:0 0 30px #bd7bff20,inset 0 0 30px #b875ff0c}.dashboard-copy{position:relative;z-index:2;width:44%;max-width:430px}.dashboard-copy .eyebrow{color:#d8b3ff;letter-spacing:.24em;font-size:10px}.dashboard-copy .logo{font:italic 600 clamp(32px,5.4vw,68px)/1.08 Georgia,serif;letter-spacing:-.04em;color:#f1d9ff;background:none;-webkit-text-fill-color:#f1d9ff;filter:drop-shadow(0 0 16px #d08bff99);animation:none}.title-heart{color:#e4a5ff}.dashboard-copy .slogan{font:500 12px Inter,sans-serif;letter-spacing:.12em;color:#e8d7f9;margin:20px 0 0}.dashboard-copy .dash-meta{font-size:9px;letter-spacing:.12em;color:#c5a9dc;margin-top:18px}
 .dashboard-character-wrap{position:absolute;z-index:1;right:4%;bottom:-4%;width:min(62%,760px);height:108%;display:flex;align-items:end;justify-content:center;pointer-events:none}.dashboard-character-art{width:100%;height:100%;object-fit:contain;object-position:center bottom;filter:drop-shadow(0 8px 22px #000b) drop-shadow(0 0 20px #d5a3ff28);animation:lxFloat 7s ease-in-out infinite}
 .weather-card,.clock-card{position:absolute;z-index:3;border:1px solid #d6a5ff77;background:rgba(12,6,29,.72);backdrop-filter:blur(14px);box-shadow:0 0 25px #b96aff20;border-radius:20px}.weather-card{top:22px;right:22px;width:220px;min-height:116px;padding:16px;display:grid;grid-template-columns:54px 1fr;gap:8px;align-items:center}.weather-symbol{font-size:42px;color:#e5c5ff;text-shadow:0 0 16px #c77cff}.weather-reading strong{display:block;font-size:27px}.weather-reading span,.weather-reading small{display:block;font-size:10px;color:#e2cfff;margin-top:3px}.weather-reading small{color:#b99ed4}.weather-place{grid-column:1/-1;font-size:10px;color:#d6b6ef;margin-top:4px}.clock-card{right:22px;bottom:22px;padding:13px 18px;min-width:245px;text-align:right}.clock-line{display:flex;align-items:baseline;justify-content:flex-end;gap:10px}.clock-line strong{font:700 34px Orbitron,sans-serif;color:#d5a0ff;text-shadow:0 0 18px #bd69ff88}.clock-line span{font-size:9px;color:#c5a7e5}.clock-date{font-size:11px;color:#f4e9ff;margin-top:6px}.clock-location{font-size:9px;color:#c9a9e7;margin-top:6px}.live-info-dashboard{display:none}
-.now-playing-card{margin:16px 0;border:1px solid #d6a5ff88;border-radius:23px;padding:16px 20px;background:linear-gradient(110deg,rgba(17,8,37,.92),rgba(10,6,24,.82));backdrop-filter:blur(18px);box-shadow:0 0 28px #bd75ff25}.np-heading{font-size:12px;color:#ead7ff;font-weight:700;letter-spacing:.1em}.np-heading>span:first-child{font-size:20px;color:#d49aff;margin-right:8px}.np-dots{float:right;letter-spacing:.2em;color:#d8a5ff}.np-content{display:grid;grid-template-columns:108px minmax(150px,1fr) minmax(130px,28%);gap:18px;align-items:center;margin-top:12px}.np-cover{height:108px;border-radius:15px;overflow:hidden;background:#201232}.np-cover img{width:100%;height:100%;object-fit:cover}.np-info>strong{display:block;font-size:23px;color:#f5e8ff}.np-info>span{display:block;font-size:12px;color:#d7bce9;margin:6px 0 15px}.np-progress{height:5px;border-radius:8px;background:#4a3262;overflow:hidden}.np-progress i{display:block;width:42%;height:100%;border-radius:8px;background:#d3a0ff;box-shadow:0 0 12px #ce8aff}.np-times{display:flex;justify-content:space-between;color:#b99acb;margin-top:5px}.np-times small{font-size:9px}.np-controls{display:flex;align-items:center;justify-content:space-between;max-width:260px;margin-top:10px;color:#e5caff;font-size:17px}.np-controls button{width:38px;height:38px;border:0;border-radius:50%;background:#d6a1ff;color:#1c0b2b;font-weight:900;box-shadow:0 0 18px #c77cff88}.music-equalizer{height:100px;display:flex;align-items:end;justify-content:center;gap:3px;overflow:hidden}.music-equalizer i{width:5px;height:calc(10px + (var(--i) % 7)*8px);border-radius:5px 5px 0 0;background:linear-gradient(#f0caff,#9d53e9);box-shadow:0 0 8px #bd72ff66;transform-origin:bottom;animation:lxEq .72s ease-in-out infinite alternate;animation-delay:calc(var(--i)*-0.055s);animation-play-state:paused}.music-equalizer.is-playing i{animation-duration:calc(.28s + (var(--i) % 5)*.11s);animation-play-state:running}
+.now-playing-card{margin:16px 0;border:1px solid #d6a5ff88;border-radius:23px;padding:16px 20px;background:linear-gradient(110deg,rgba(17,8,37,.92),rgba(10,6,24,.82));backdrop-filter:blur(18px);box-shadow:0 0 28px #bd75ff25}.np-heading{font-size:12px;color:#ead7ff;font-weight:700;letter-spacing:.1em}.np-heading>span:first-child{font-size:20px;color:#d49aff;margin-right:8px}.np-dots{float:right;letter-spacing:.2em;color:#d8a5ff}.np-content{display:grid;grid-template-columns:108px minmax(150px,1fr) minmax(130px,28%);gap:18px;align-items:center;margin-top:12px}.np-cover{height:108px;border-radius:15px;overflow:hidden;background:#201232}.np-cover img{width:100%;height:100%;object-fit:cover}.np-info>strong{display:block;font-size:23px;color:#f5e8ff}.np-info>span{display:block;font-size:12px;color:#d7bce9;margin:6px 0 15px}.np-progress{height:5px;border-radius:8px;background:#4a3262;overflow:hidden}.np-progress i{display:block;width:42%;height:100%;border-radius:8px;background:#d3a0ff;box-shadow:0 0 12px #ce8aff}.np-times{display:flex;justify-content:space-between;color:#b99acb;margin-top:5px}.np-times small{font-size:9px}.np-controls{display:flex;align-items:center;justify-content:space-between;max-width:260px;margin-top:10px;color:#e5caff;font-size:17px}.np-controls button{width:38px;height:38px;border:0;border-radius:50%;background:transparent;color:#e5caff;font-weight:900;display:grid;place-items:center}.np-controls button#npOpenPlayer{background:#d6a1ff;color:#1c0b2b;box-shadow:0 0 18px #c77cff88}.np-controls button.active{color:#fff;background:#6e3b98}.music-equalizer{height:100px;display:flex;align-items:end;justify-content:center;gap:3px;overflow:hidden}.music-equalizer i{width:5px;height:calc(10px + (var(--i) % 7)*8px);border-radius:5px 5px 0 0;background:linear-gradient(#f0caff,#9d53e9);box-shadow:0 0 8px #bd72ff66;transform-origin:bottom;animation:lxEq .72s ease-in-out infinite alternate;animation-delay:calc(var(--i)*-0.055s);animation-play-state:paused}.music-equalizer.is-playing i{animation-duration:calc(.28s + (var(--i) % 5)*.11s);animation-play-state:running}
 .anime-quick-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:16px 0}.anime-quick-grid .menu-card{min-height:125px;padding:18px;border-color:#bd8de477;background:linear-gradient(145deg,rgba(31,17,54,.9),rgba(10,7,25,.94));border-radius:17px}.anime-quick-grid .menu-card h3{font:700 14px Inter,sans-serif;letter-spacing:.03em}.anime-quick-grid .menu-card p{font-size:9px;line-height:1.5;color:#c9b0df}.anime-quick-grid .menu-arrow{color:#d9a7ff}.anime-quick-grid .menu-card.wide{grid-column:span 1}.anime-quick-grid .menu-number{font-size:8px;color:#c9a8e6}.anime-dashboard .social-hub{margin-top:14px;border:1px solid #c28aff66;border-radius:22px;padding:18px;background:rgba(13,7,28,.75);backdrop-filter:blur(15px)}.anime-dashboard .social-heading{color:#e8d2ff}.anime-dashboard .social-card{border-color:#a879d977;background:linear-gradient(145deg,#28163eaa,#0d0919ee)}
 @keyframes lxFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}@keyframes lxEq{from{transform:scaleY(.24);opacity:.7}to{transform:scaleY(1);opacity:1}}
 @media(max-width:850px){.anime-dashboard{grid-template-columns:1fr;padding:8px 12px 30px;gap:10px}.dash-sidebar{position:sticky;top:5px;height:auto;min-height:0;padding:8px 10px;border-radius:17px;flex-direction:row;align-items:center;gap:10px}.sidebar-brand{margin:0 8px 0 0;white-space:nowrap}.sidebar-crown{font-size:23px}.sidebar-nav{display:flex;gap:5px;overflow-x:auto;scrollbar-width:none;flex:1}.sidebar-nav::-webkit-scrollbar{display:none}.side-link{flex:0 0 auto;min-height:40px;padding:8px 10px;font-size:10px}.side-link>span{font-size:16px;width:auto}.sidebar-flourish{display:none}.dashboard-stage{min-height:430px;padding:25px}.dashboard-copy{width:45%}.dashboard-character-wrap{width:68%;right:0}.weather-card{top:12px;right:12px;transform:scale(.88);transform-origin:top right}.clock-card{right:12px;bottom:12px;transform:scale(.9);transform-origin:bottom right}}
@@ -765,7 +765,7 @@ body:has(#dashboardView.active) .topbar{display:none}
             </div>
             <section class="now-playing-card" aria-label="Akses pemutar musik">
               <div class="np-heading"><span>▥</span> NOW PLAYING <span class="np-dots">•••</span></div>
-              <div class="np-content"><div class="np-cover"><img src="./lexiaa-music-character.png" alt="Ilustrasi LEXIAA Music" draggable="false"></div><div class="np-info"><strong>Chill Vibes</strong><span>♫ &nbsp; Spotify / YouTube Playlist</span><div class="np-progress"><i></i></div><div class="np-times"><small>LEXIAA MUSIC</small><small>OPEN PLAYER</small></div><div class="np-controls"><span>⤨</span><span>◀</span><button type="button" id="npOpenPlayer" aria-label="Buka Lexiaa Music">▶</button><span>▶</span><span>↻</span></div></div><div class="music-equalizer" id="dashboardEqualizer" aria-hidden="true"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i><i style="--i:5"></i><i style="--i:6"></i><i style="--i:7"></i><i style="--i:8"></i><i style="--i:9"></i><i style="--i:10"></i><i style="--i:11"></i><i style="--i:12"></i><i style="--i:13"></i><i style="--i:14"></i><i style="--i:15"></i><i style="--i:16"></i><i style="--i:17"></i><i style="--i:18"></i><i style="--i:19"></i><i style="--i:20"></i><i style="--i:21"></i><i style="--i:22"></i><i style="--i:23"></i><i style="--i:24"></i><i style="--i:25"></i><i style="--i:26"></i><i style="--i:27"></i></div></div>
+              <div class="np-content"><div class="np-cover"><img src="./lexiaa-music-character.png" alt="Ilustrasi LEXIAA Music" draggable="false"></div><div class="np-info"><strong id="npTrackTitle">Chill Vibes</strong><span id="npTrackSubtitle">♫ &nbsp; Pilih playlist untuk mulai mendengarkan</span><div class="np-progress"><i id="npProgressFill"></i></div><div class="np-times"><small id="npCurrentTime">LEXIAA MUSIC</small><small id="npDuration">OPEN PLAYER</small></div><div class="np-controls"><button type="button" id="npShuffle" aria-label="Acak">⤨</button><button type="button" id="npPrevious" aria-label="Sebelumnya">◀</button><button type="button" id="npOpenPlayer" aria-label="Putar atau buka Lexiaa Music">▶</button><button type="button" id="npNext" aria-label="Berikutnya">▶</button><button type="button" id="npRepeat" aria-label="Ulangi">↻</button></div></div><div class="music-equalizer" id="dashboardEqualizer" aria-hidden="true"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i><i style="--i:5"></i><i style="--i:6"></i><i style="--i:7"></i><i style="--i:8"></i><i style="--i:9"></i><i style="--i:10"></i><i style="--i:11"></i><i style="--i:12"></i><i style="--i:13"></i><i style="--i:14"></i><i style="--i:15"></i><i style="--i:16"></i><i style="--i:17"></i><i style="--i:18"></i><i style="--i:19"></i><i style="--i:20"></i><i style="--i:21"></i><i style="--i:22"></i><i style="--i:23"></i><i style="--i:24"></i><i style="--i:25"></i><i style="--i:26"></i><i style="--i:27"></i></div></div>
             </section>
             <div class="menu-grid anime-quick-grid">
               <button id="musicHubBtn" class="menu-card wide music-menu-card" type="button" aria-label="Buka LEXIAA Music"><span class="menu-arrow" aria-hidden="true">♫</span><span class="menu-number">00 / MUSIC PLAYER</span><h3>LEXIAA MUSIC</h3><p>SPOTIFY &amp; YOUTUBE PLAYER</p></button>
@@ -795,12 +795,11 @@ body:has(#dashboardView.active) .topbar{display:none}
             </div>
           </section>
           <div class="dash-utilities">
-            <button id="musicBtn" class="small-btn" type="button">MUSIK: OFF</button>
+            
             
             <button id="logoutBtn" class="small-btn" type="button">LOGOUT ↗</button>
           </div>
           <!-- Musik latar otomatis; file music.mp3 berada di folder utama repository. -->
-          <audio id="bgMusic" src="music.mp3" loop preload="auto"></audio>
 
           <div id="musicHub" class="music-hub-backdrop" aria-hidden="true">
             <section class="music-hub-panel" role="dialog" aria-modal="true" aria-labelledby="musicHubTitle">
@@ -1251,9 +1250,6 @@ body:has(#dashboardView.active) .topbar{display:none}
       [tutorialPopupAudio, memberPopupAudio, welcomePopupAudio].forEach(audio => {
         if (audio) { audio.pause(); try { audio.currentTime = 0; } catch (_) {} }
       });
-      const backgroundAudio = document.getElementById("bgMusic");
-      if (backgroundAudio) backgroundAudio.pause();
-      musicManuallyDisabled = true;
       try {
         if (supabase) {
           const { error } = await supabase.auth.signOut();
@@ -1387,7 +1383,7 @@ body:has(#dashboardView.active) .topbar{display:none}
         if (!videoId && !listId) throw new Error("Link YouTube harus berupa video atau playlist.");
         let embed = videoId ? "https://www.youtube-nocookie.com/embed/"+videoId : "https://www.youtube-nocookie.com/embed/videoseries?list="+encodeURIComponent(listId);
         if (videoId && listId) embed += "?list="+encodeURIComponent(listId);
-        return { source:"YouTube", embed, external:url.href, track:false };
+        return { source:"YouTube", embed, external:url.href, track:false, videoId:videoId||"", listId:listId||"" };
       }
       throw new Error("Sumber belum didukung. Gunakan link Spotify atau YouTube.");
     }
@@ -1405,17 +1401,14 @@ body:has(#dashboardView.active) .topbar{display:none}
     let dashboardWasPlayingBeforeLexiaa = false;
 
     function pauseDashboardForLexiaa() {
-      const backgroundAudio = document.getElementById("bgMusic");
-      if (!lexiaaMusicActive) {
-        dashboardWasPlayingBeforeLexiaa = Boolean(backgroundAudio && !backgroundAudio.paused);
-      }
       lexiaaMusicActive = true;
       document.getElementById("dashboardEqualizer")?.classList.add("is-playing");
-      if (backgroundAudio && !backgroundAudio.paused) backgroundAudio.pause();
     }
 
     function stopLexiaaMusic({ resumeDashboard = true } = {}) {
       // Menghapus iframe menghentikan playback Spotify/YouTube yang berjalan di dalamnya.
+      stopYtTimer();
+      if(ytPlayer){try{ytPlayer.destroy()}catch(_){} ytPlayer=null;}
       musicHubPlayer.querySelectorAll("iframe").forEach(frame => frame.src = "about:blank");
       musicHubPlayer.innerHTML = '<div class="music-hub-empty">♫<br>Player sudah dihentikan. Pilih musik untuk memutar kembali.</div>';
       musicHubNowPlaying.hidden = true;
@@ -1424,13 +1417,7 @@ body:has(#dashboardView.active) .topbar{display:none}
       musicHubExternal.removeAttribute("href");
       lexiaaMusicActive = false;
       document.getElementById("dashboardEqualizer")?.classList.remove("is-playing");
-      const backgroundAudio = document.getElementById("bgMusic");
-      const shouldResume = resumeDashboard && dashboardWasPlayingBeforeLexiaa && !musicManuallyDisabled;
       dashboardWasPlayingBeforeLexiaa = false;
-      if (shouldResume && backgroundAudio) {
-        backgroundAudio.play().then(() => { musicBtn.textContent = "MUSIK: ON"; })
-          .catch(() => { musicBtn.textContent = "MUSIK: OFF"; });
-      }
     }
 
     async function loadMusicPlaylists() {
@@ -1485,6 +1472,9 @@ body:has(#dashboardView.active) .topbar{display:none}
     function playMusicLink(raw, label="") {
       try {
         const media = parseMusicLink(raw);
+        if(media.source === "YouTube") { playYouTube(media,label); pauseDashboardForLexiaa(); return; }
+        currentMusicSource="spotify"; currentMusicLabel=label||"Spotify";
+        npTitle.textContent=currentMusicLabel;npSubtitle.textContent="♫  Spotify · gunakan kontrol player resmi";npProgress.style.width="0%";npCurrent.textContent="SPOTIFY";npDuration.textContent="OPEN PLAYER";
         pauseDashboardForLexiaa();
         const frame = document.createElement("iframe");
         frame.src = media.embed;
@@ -1542,61 +1532,48 @@ body:has(#dashboardView.active) .topbar{display:none}
       playMusicLink(musicHubUrl.value);
     });
 
-    const music = document.getElementById("bgMusic");
-    const musicBtn = document.getElementById("musicBtn");
-    let musicManuallyDisabled = false;
-    music.volume = 0.45;
-
-    async function startBackgroundMusic() {
-      if (musicManuallyDisabled || !music.paused) return;
-      try {
-        await music.play();
-        musicBtn.textContent = "MUSIK: ON";
-      } catch (_) {
-        // Browser HP dapat memblokir autoplay sampai ada interaksi pengguna.
-        musicBtn.textContent = "MUSIK: ON";
-      }
+    // Dashboard player controls: YouTube playlists support full external controls.
+    // Spotify remains in its official embed because its iframe does not expose next/previous control APIs.
+    const npTitle = document.getElementById("npTrackTitle");
+    const npSubtitle = document.getElementById("npTrackSubtitle");
+    const npProgress = document.getElementById("npProgressFill");
+    const npCurrent = document.getElementById("npCurrentTime");
+    const npDuration = document.getElementById("npDuration");
+    let ytPlayer = null, ytApiReady = false, ytTimer = null, currentMusicSource = "", currentMusicLabel = "Chill Vibes", ytShuffle = false, ytRepeat = false;
+    function loadYouTubeApi(){
+      if(window.YT && window.YT.Player){ytApiReady=true;return Promise.resolve();}
+      return new Promise(resolve=>{
+        const previous=window.onYouTubeIframeAPIReady;
+        window.onYouTubeIframeAPIReady=()=>{ytApiReady=true;try{previous?.()}catch(_){}resolve();};
+        if(!document.querySelector('script[data-yt-api]')){const script=document.createElement('script');script.src='https://www.youtube.com/iframe_api';script.dataset.ytApi='1';document.head.appendChild(script);}
+        else {const wait=setInterval(()=>{if(window.YT&&window.YT.Player){clearInterval(wait);ytApiReady=true;resolve();}},100);setTimeout(()=>{clearInterval(wait);resolve();},12000);}
+      });
     }
-
-    music.addEventListener("play", () => { musicBtn.textContent = "MUSIK: ON"; });
-    music.addEventListener("pause", () => { musicBtn.textContent = "MUSIK: OFF"; });
-
-    musicBtn.addEventListener("click", async () => {
-      if (lexiaaMusicActive && music.paused) {
-        toast("Musik Dashboard dijeda selama Lexiaa Music diputar.");
-        return;
-      }
-      if (music.paused) {
-        musicManuallyDisabled = false;
-        try {
-          await music.play();
-          musicBtn.textContent = "MUSIK: ON";
-        } catch (_) {
-          toast("Browser memblokir pemutaran. Coba tekan MUSIK: ON sekali lagi.");
-        }
-      } else {
-        musicManuallyDisabled = true;
-        music.pause();
-        musicBtn.textContent = "MUSIK: OFF";
-      }
-    });
-
-    // Coba lagi setelah interaksi pertama jika autoplay awal diblokir browser.
-    ["pointerdown", "keydown", "touchstart"].forEach(eventName => {
-      document.addEventListener(eventName, () => {
-        if (!musicManuallyDisabled && music.paused &&
-            (document.getElementById("homeView").classList.contains("active") ||
-             document.getElementById("dashboardView").classList.contains("active"))) {
-          startBackgroundMusic();
-        }
-      }, {passive:true});
-    });
-
-    // Putar otomatis saat halaman pertama kali dibuka jika home/dashboard sedang aktif.
-    if (document.getElementById("homeView").classList.contains("active") ||
-        document.getElementById("dashboardView").classList.contains("active")) {
-      window.setTimeout(startBackgroundMusic, 350);
+    function formatMusicTime(value){if(!Number.isFinite(value)||value<0)return '0:00';const m=Math.floor(value/60),s=Math.floor(value%60);return m+':'+String(s).padStart(2,'0');}
+    function syncYtInfo(){if(!ytPlayer||!ytPlayer.getVideoData)return;try{const data=ytPlayer.getVideoData();if(data?.title)npTitle.textContent=data.title;const duration=ytPlayer.getDuration()||0,current=ytPlayer.getCurrentTime()||0;npCurrent.textContent=formatMusicTime(current);npDuration.textContent=formatMusicTime(duration);npProgress.style.width=(duration?Math.min(100,current/duration*100):0)+'%';}catch(_){}}
+    function startYtTimer(){clearInterval(ytTimer);ytTimer=setInterval(syncYtInfo,800);}
+    function stopYtTimer(){clearInterval(ytTimer);ytTimer=null;}
+    async function playYouTube(media,label){
+      await loadYouTubeApi();
+      if(!window.YT||!window.YT.Player){musicHubStatus.textContent='YouTube Player gagal dimuat. Coba buka player dari popup.';return;}
+      currentMusicSource='youtube';currentMusicLabel=label||'YouTube Playlist';npTitle.textContent=currentMusicLabel;npSubtitle.textContent='♫  YouTube · LEXIAA MUSIC';npProgress.style.width='0%';npCurrent.textContent='0:00';npDuration.textContent='--:--';
+      musicHubPlayer.innerHTML='<div id="lexiaaYtPlayer"></div>';
+      musicHubNowPlaying.hidden=false;
+      const videoId=media.videoId||undefined;
+      const playerVars={autoplay:1,playsinline:1,controls:1,rel:0};
+      if(media.listId){playerVars.listType='playlist';playerVars.list=media.listId;if(videoId)playerVars.videoId=videoId;}
+      ytPlayer=new YT.Player('lexiaaYtPlayer',{width:'100%',height:'100%',videoId, playerVars, events:{onReady:e=>{if(media.listId&&!videoId)e.target.loadPlaylist({list:media.listId,listType:'playlist'});e.target.playVideo();startYtTimer();},onStateChange:e=>{syncYtInfo();const playing=e.data===YT.PlayerState.PLAYING;document.getElementById('npOpenPlayer').textContent=playing?'Ⅱ':'▶';if(e.data===YT.PlayerState.ENDED&&ytRepeat)e.target.playVideo();},onError:()=>{musicHubStatus.textContent='Video ini tidak dapat diputar melalui embed. Coba playlist/video lain.';}}});
+      musicHubStatus.textContent=(label?label+' · ':'')+'YouTube aktif. Kontrol dashboard terhubung ke player.';
+      musicHubExternal.href=media.external;musicHubExternal.hidden=false;
     }
+    document.getElementById('npOpenPlayer').addEventListener('click',()=>{
+      if(currentMusicSource==='youtube'&&ytPlayer){try{const state=ytPlayer.getPlayerState();if(state===YT.PlayerState.PLAYING)ytPlayer.pauseVideo();else ytPlayer.playVideo();return;}catch(_){}}
+      openMusicHub();
+    });
+    document.getElementById('npNext').addEventListener('click',()=>{if(currentMusicSource==='youtube'&&ytPlayer)ytPlayer.nextVideo();else openMusicHub();});
+    document.getElementById('npPrevious').addEventListener('click',()=>{if(currentMusicSource==='youtube'&&ytPlayer)ytPlayer.previousVideo();else openMusicHub();});
+    document.getElementById('npShuffle').addEventListener('click',()=>{if(currentMusicSource==='youtube'&&ytPlayer){ytShuffle=!ytShuffle;ytPlayer.setShuffle(ytShuffle);document.getElementById('npShuffle').classList.toggle('active',ytShuffle);}else openMusicHub();});
+    document.getElementById('npRepeat').addEventListener('click',()=>{ytRepeat=!ytRepeat;document.getElementById('npRepeat').classList.toggle('active',ytRepeat);if(currentMusicSource==='youtube'&&ytPlayer){if(ytPlayer.setLoop)ytPlayer.setLoop(ytRepeat); }else openMusicHub();});
 
     if (supabase) {
       const { data: { session } } = await supabase.auth.getSession();
@@ -1834,10 +1811,7 @@ body:has(#dashboardView.active) .topbar{display:none}
    syncEmbedPulse();
  }
 
- const audio=$('bgMusic'),eq=$('dashboardEqualizer');let ctx,analyser,source,raf;
- function animateEq(){if(!analyser||!eq)return;const data=new Uint8Array(analyser.frequencyBinCount);analyser.getByteFrequencyData(data);[...eq.children].forEach((bar,i)=>{const v=data[Math.floor(i*data.length/eq.children.length)]||0;bar.style.height=(7+v*.34)+'px'});raf=requestAnimationFrame(animateEq)}
- async function connectAudio(){if(!audio||!eq)return;try{const C=window.AudioContext||window.webkitAudioContext;if(!C)return;ctx=ctx||new C();if(ctx.state==='suspended')await ctx.resume();if(!source){source=ctx.createMediaElementSource(audio);analyser=ctx.createAnalyser();analyser.fftSize=128;source.connect(analyser);analyser.connect(ctx.destination)}cancelAnimationFrame(raf);eq.classList.add('is-playing');animateEq()}catch(e){eq.classList.add('is-playing')}}
- audio?.addEventListener('play',connectAudio);audio?.addEventListener('pause',()=>{eq?.classList.remove('is-playing');cancelAnimationFrame(raf)});audio?.addEventListener('ended',()=>{eq?.classList.remove('is-playing');cancelAnimationFrame(raf)});
+
 })();
 </script>
 
