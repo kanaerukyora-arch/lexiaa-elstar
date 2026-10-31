@@ -1287,6 +1287,10 @@
     function safeMusicText(value) {
       return String(value ?? "").replace(/[&<>"']/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
     }
+    // Simpan playlist yang dipilih selama halaman tetap terbuka.
+    // Iframe tidak dibuat ulang saat playlist yang sama dibuka kembali.
+    let selectedMusicPlaylistId = null;
+
     async function loadMusicPlaylists() {
       if (!musicHubPlaylists) return;
       if (!supabase) {
@@ -1314,7 +1318,20 @@
         musicHubPlaylists.querySelectorAll("[data-music-playlist]").forEach(button => {
           button.addEventListener("click", () => {
             const item = data.find(row => String(row.id) === button.dataset.musicPlaylist);
-            if (item) playMusicLink(item.spotify_url, item.title);
+            if (!item) return;
+
+            const samePlaylist = selectedMusicPlaylistId === String(item.id);
+            const playerHasContent = musicHubPlayer.querySelector("iframe");
+
+            if (samePlaylist && playerHasContent) {
+              // Tutup/buka tampilan saja. Iframe tetap hidup sehingga posisi lagu
+              // (misalnya track ke-3) tidak kembali ke awal.
+              musicHubNowPlaying.hidden = !musicHubNowPlaying.hidden;
+              return;
+            }
+
+            selectedMusicPlaylistId = String(item.id);
+            playMusicLink(item.spotify_url, item.title);
           });
         });
       } catch (error) {
@@ -1373,6 +1390,7 @@
     });
     document.getElementById("musicHubClear").addEventListener("click", () => {
       musicHubPlayer.innerHTML = '<div class="music-hub-empty">♫<br>Player sudah dibersihkan. Tempel link baru untuk memutar musik.</div>';
+      selectedMusicPlaylistId = null;
       musicHubNowPlaying.hidden = true;
       musicHubStatus.textContent = "Player dibersihkan.";
       musicHubExternal.hidden = true;
@@ -1381,6 +1399,7 @@
     });
     musicHubForm.addEventListener("submit", event => {
       event.preventDefault();
+      selectedMusicPlaylistId = null;
       playMusicLink(musicHubUrl.value);
     });
 
