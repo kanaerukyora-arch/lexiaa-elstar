@@ -724,7 +724,57 @@ button, a, input, select, textarea { touch-action:manipulation; }
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <link rel="icon" href="app-icon.webp" type="image/webp">
   <link rel="apple-touch-icon" href="app-icon.webp">
-  </head>
+  
+<style id="lexiaa-about-styles">
+/* LEXIAA ABOUT — isolated styles; existing dashboard components remain untouched. */
+.about-side-link{color:#e8c9ff!important}
+.about-side-link>span{color:#d99aff}
+.about-menu-card{position:relative;overflow:hidden;border-color:rgba(192,119,255,.48)!important;background:linear-gradient(125deg,rgba(70,24,103,.42),rgba(13,8,25,.94))!important}
+.about-menu-card:after{content:"✦  ·  ✧  ·  ♡";position:absolute;right:18px;bottom:13px;color:#d8a0ff;letter-spacing:8px;opacity:.72;pointer-events:none}
+.lex-about-overlay{position:fixed;inset:0;z-index:99990;display:none;align-items:center;justify-content:center;padding:clamp(8px,2vw,24px);background:rgba(3,1,10,.82);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.lex-about-overlay.is-open{display:flex;animation:lexAboutFade .22s ease both}
+.lex-about-shell{position:relative;width:min(1440px,100%);height:min(900px,94dvh);min-height:560px;overflow:hidden;border:1px solid rgba(207,145,255,.9);border-radius:26px;background:radial-gradient(ellipse at 78% 35%,rgba(91,32,133,.28),transparent 42%),radial-gradient(ellipse at 12% 0%,rgba(80,31,130,.25),transparent 42%),linear-gradient(135deg,#10091d 0%,#090611 58%,#13091f 100%);box-shadow:0 0 0 1px rgba(174,104,255,.2),0 0 35px rgba(161,72,255,.4),0 0 100px rgba(104,40,168,.25);color:#f7edff;isolation:isolate}
+.lex-about-shell:before{content:"";position:absolute;inset:10px;border:1px solid rgba(187,126,255,.35);border-radius:19px;pointer-events:none;z-index:5}
+.lex-about-shell:after{content:"✧      ♡        ✦       ♧        ✧";position:absolute;left:5%;right:5%;top:8px;text-align:center;color:#d7a0ff;letter-spacing:clamp(12px,4vw,48px);font-size:clamp(12px,1.5vw,20px);text-shadow:0 0 14px #b96cff;opacity:.8;pointer-events:none;z-index:2}
+.lex-about-close{position:absolute;right:25px;top:22px;z-index:20;width:48px;height:48px;border:1px solid #d8a3ff;border-radius:15px;background:rgba(24,9,40,.85);color:#f3dfff;font-size:28px;cursor:pointer;box-shadow:0 0 18px rgba(176,92,255,.45);transition:.2s}
+.lex-about-close:hover{transform:rotate(90deg);background:#6824a5}
+.lex-about-head{position:relative;z-index:3;padding:34px 76px 12px 42px}
+.lex-about-eyebrow{font-size:12px;letter-spacing:4px;color:#d8a9ff;text-transform:uppercase}
+.lex-about-title{margin:3px 0 0;font-family:Georgia,serif;font-size:clamp(34px,4.5vw,58px);font-style:italic;line-height:1.05;color:#e8c4ff;text-shadow:0 0 20px rgba(187,112,255,.65)}
+.lex-about-subtitle{margin:8px 0 0;color:#d8b5ec;font-family:Georgia,serif;font-style:italic;font-size:clamp(14px,1.6vw,20px)}
+.lex-about-layout{height:calc(100% - 135px);display:grid;grid-template-columns:minmax(190px,245px) minmax(300px,1fr) minmax(250px,34%);gap:20px;padding:10px 30px 30px;position:relative;z-index:3}
+.lex-about-tabs{display:flex;flex-direction:column;gap:10px;min-height:0;padding:8px 0}
+.lex-about-tab{display:flex;align-items:center;gap:13px;min-height:66px;padding:12px 14px;border:1px solid rgba(179,119,231,.5);border-radius:16px;background:linear-gradient(110deg,rgba(46,22,68,.84),rgba(16,10,27,.9));color:#e8d5f6;text-align:left;font-family:inherit;font-size:14px;font-weight:600;line-height:1.3;cursor:pointer;transition:transform .2s,border-color .2s,box-shadow .2s}
+.lex-about-tab .tab-icon{font-size:27px;color:#d9a5ff;text-shadow:0 0 12px #a64dff;flex:0 0 30px;text-align:center}
+.lex-about-tab small{display:block;font-size:11px;font-weight:400;opacity:.75;margin-top:3px}
+.lex-about-tab:hover{transform:translateX(4px);border-color:#d69cff}
+.lex-about-tab[aria-selected="true"]{background:linear-gradient(110deg,#7d32c2,#32104e);border-color:#e4baff;box-shadow:0 0 22px rgba(171,79,255,.48),inset 0 0 18px rgba(255,255,255,.1);color:#fff}
+.lex-about-note{align-self:end;margin:12px 8px 5px;color:#d8b0ee;font:italic 17px/1.5 Georgia,serif}
+.lex-about-copy{position:relative;z-index:4;overflow:auto;min-height:0;padding:16px 10px 18px 8px;scrollbar-width:thin;scrollbar-color:#9652c7 transparent}
+.lex-about-copy::-webkit-scrollbar{width:5px}.lex-about-copy::-webkit-scrollbar-thumb{background:#9652c7;border-radius:10px}
+.lex-about-section-kicker{color:#c98aff;letter-spacing:3px;font-size:10px;text-transform:uppercase}
+.lex-about-section-title{font:italic 700 clamp(25px,3vw,39px)/1.15 Georgia,serif;color:#e7c4ff;margin:8px 0 15px;text-shadow:0 0 14px rgba(185,105,255,.4)}
+.lex-about-copy p{font-size:clamp(13px,1.05vw,15px);line-height:1.8;color:#eadff2;margin:0 0 13px}
+.lex-about-copy strong{color:#d9a3ff}
+.lex-about-callout{display:flex;align-items:center;gap:14px;margin:18px 0;padding:15px 17px;border:1px solid rgba(202,140,255,.7);border-radius:16px;background:linear-gradient(110deg,rgba(103,43,151,.4),rgba(25,13,39,.9));box-shadow:0 0 20px rgba(161,75,255,.18);font:italic 16px/1.5 Georgia,serif;color:#f0d7ff}
+.lex-about-callout span{font-size:28px;color:#d8a0ff}
+.lex-about-list{list-style:none;padding:0;margin:12px 0;display:grid;gap:10px}
+.lex-about-list li{position:relative;padding-left:27px;color:#eee2f7;font-size:13px;line-height:1.65}
+.lex-about-list li:before{content:"✓";position:absolute;left:0;top:1px;width:19px;height:19px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#b65cff,#6622ba);color:white;font-size:12px;box-shadow:0 0 10px #9748df}
+.lex-about-char{position:relative;align-self:stretch;min-width:0;display:flex;align-items:flex-end;justify-content:center;overflow:visible;pointer-events:none}
+.lex-about-char:before{content:"";position:absolute;bottom:5%;left:8%;right:0;height:45%;background:radial-gradient(ellipse,rgba(160,73,255,.36),transparent 68%);filter:blur(18px)}
+.lex-about-char img{position:relative;z-index:2;display:block;width:100%;height:100%;max-height:690px;object-fit:contain;object-position:center bottom;filter:drop-shadow(0 0 17px rgba(179,105,255,.35));user-select:none;-webkit-user-drag:none;pointer-events:none}
+.lex-about-char .char-caption{position:absolute;right:0;top:12%;z-index:4;max-width:180px;padding:12px 15px;border:1px solid rgba(208,154,255,.75);border-radius:18px 18px 4px 18px;background:rgba(19,8,31,.8);color:#f0d5ff;font:italic 15px/1.45 Georgia,serif;box-shadow:0 0 18px rgba(170,83,255,.22)}
+.lex-about-footer{position:absolute;bottom:18px;left:30px;right:30px;z-index:8;display:flex;justify-content:space-between;align-items:center;pointer-events:none;color:#cda3e9;font:italic 13px Georgia,serif}
+.lex-about-footer span:last-child{font-style:normal;letter-spacing:2px;font-size:10px}
+.lex-about-overlay [hidden]{display:none!important}
+@keyframes lexAboutFade{from{opacity:0}to{opacity:1}}
+@media(max-width:900px){.lex-about-shell{height:min(900px,96dvh);min-height:520px}.lex-about-layout{grid-template-columns:180px minmax(250px,1fr);gap:15px;padding:8px 22px 26px}.lex-about-char{position:absolute;right:12px;bottom:0;width:34%;height:67%;opacity:.34;z-index:1}.lex-about-copy{padding-right:20px}.lex-about-tabs{z-index:4}.lex-about-copy{z-index:4}.lex-about-note{font-size:14px}}
+@media(max-width:600px){.lex-about-overlay{padding:5px;align-items:center}.lex-about-shell{height:96dvh;min-height:0;border-radius:18px;overflow:hidden}.lex-about-shell:before{inset:6px;border-radius:13px}.lex-about-head{padding:24px 58px 9px 22px}.lex-about-title{font-size:35px}.lex-about-subtitle{font-size:13px;max-width:280px}.lex-about-close{right:15px;top:13px;width:40px;height:40px;border-radius:12px;font-size:23px}.lex-about-layout{height:calc(100% - 110px);display:flex;flex-direction:column;gap:8px;padding:5px 17px 28px}.lex-about-tabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;padding:3px 0;flex:0 0 auto}.lex-about-tab{min-height:54px;padding:7px 8px;gap:7px;border-radius:12px;font-size:11px}.lex-about-tab .tab-icon{font-size:20px;flex-basis:23px}.lex-about-tab small{font-size:9px}.lex-about-note{display:none}.lex-about-copy{flex:1;padding:8px 5px 18px 2px;z-index:4}.lex-about-section-title{font-size:25px;margin:5px 0 10px}.lex-about-copy p{font-size:12px;line-height:1.7;max-width:88%}.lex-about-list{gap:7px}.lex-about-list li{font-size:11px;max-width:90%}.lex-about-callout{font-size:13px;padding:10px 12px;margin:12px 0;max-width:92%}.lex-about-char{position:absolute;right:-8px;bottom:0;width:48%;height:48%;opacity:.23;z-index:1}.lex-about-char img{object-position:right bottom}.lex-about-char .char-caption{display:none}.lex-about-footer{left:17px;right:17px;bottom:11px;font-size:10px}.lex-about-footer span:last-child{font-size:8px}}
+@media(prefers-reduced-motion:reduce){.lex-about-overlay.is-open{animation:none}.lex-about-tab,.lex-about-close{transition:none}}
+</style>
+
+</head>
 <body>
   <div id="appLoader" role="status" aria-label="Memuat LEXIAA">
     <div class="loader-inner">
@@ -809,6 +859,7 @@ button, a, input, select, textarea { touch-action:manipulation; }
               <button class="side-link" type="button" data-dash-explore><span>◉</span>Explore</button>
               <button class="side-link" type="button" data-dash-hidden><span>♧</span>Hidden</button>
               <button class="side-link" type="button" data-dash-member><span>☆</span>Member OTW</button>
+              <button class="side-link about-side-link" type="button" data-about-open><span>✧</span>Tentang Lexiaa?</button>
             </nav>
             <div class="sidebar-flourish" aria-hidden="true">✦</div>
           </aside>
@@ -840,6 +891,7 @@ button, a, input, select, textarea { touch-action:manipulation; }
               <button class="menu-card" type="button" data-content="penemuan"><span class="menu-arrow" aria-hidden="true">↗</span><span class="menu-number">01 / EXPLORE</span><h3>PENEMUAN</h3><p>LEXIAA &amp; ELSTAR</p></button>
               <button class="menu-card" type="button" data-content="secret"><span class="menu-arrow" aria-hidden="true">↗</span><span class="menu-number">02 / HIDDEN</span><h3>SECRET</h3><p>LEXIAA &amp; ELSTAR</p></button>
               <button class="menu-card wide" type="button" data-member><span class="menu-arrow" aria-hidden="true">↗</span><span class="menu-number">03 / MEMBER ACCESS</span><h3>SECRET ONLY MEMBER OTW!</h3><p>KHUSUS MEMBER OTW, KLIK UNTUK PENGAJUAN MENJADI MEMBER.</p></button>
+              <button class="menu-card wide about-menu-card" type="button" data-about-open><span class="menu-arrow" aria-hidden="true">✧</span><span class="menu-number">04 / LEXIAA GUIDE</span><h3>TENTANG LEXIAA?</h3><p>KENALI FITUR, PANDUAN, DAN RAHASIA KECIL LEXIAA.</p></button>
             </div>
           <section class="social-hub" aria-label="Akun resmi admin">
             <h2 class="social-heading">CONNECT WITH ADMIN</h2>
@@ -1973,5 +2025,91 @@ button, a, input, select, textarea { touch-action:manipulation; }
   window.setTimeout(paint, 250);
 })();
 </script>
-<script>(function(){const pill=document.getElementById('deviceBatteryPill'),pct=document.getElementById('deviceBatteryPercent'),level=document.getElementById('deviceBatteryLevel'),charge=document.getElementById('deviceBatteryCharging');if(!pill||!pct||!level||!charge)return;function fallback(){pct.textContent='—';charge.textContent='';pill.title='Status baterai tidak didukung browser ini';}if(!navigator.getBattery){fallback();return;}navigator.getBattery().then(function(b){function update(){const n=Math.round(b.level*100);pct.textContent=n+'%';level.style.width=n+'%';pill.classList.toggle('is-charging',b.charging);charge.textContent=b.charging?'⚡':'';pill.title=b.charging?'Sedang mengisi daya':'Baterai '+n+'%';}['levelchange','chargingchange','chargingtimechange','dischargingtimechange'].forEach(e=>b.addEventListener(e,update));update();}).catch(fallback);})();document.querySelectorAll('.np-character').forEach(img=>{img.addEventListener('contextmenu',e=>e.preventDefault());img.addEventListener('dragstart',e=>e.preventDefault());});</script></body>
+<script>(function(){const pill=document.getElementById('deviceBatteryPill'),pct=document.getElementById('deviceBatteryPercent'),level=document.getElementById('deviceBatteryLevel'),charge=document.getElementById('deviceBatteryCharging');if(!pill||!pct||!level||!charge)return;function fallback(){pct.textContent='—';charge.textContent='';pill.title='Status baterai tidak didukung browser ini';}if(!navigator.getBattery){fallback();return;}navigator.getBattery().then(function(b){function update(){const n=Math.round(b.level*100);pct.textContent=n+'%';level.style.width=n+'%';pill.classList.toggle('is-charging',b.charging);charge.textContent=b.charging?'⚡':'';pill.title=b.charging?'Sedang mengisi daya':'Baterai '+n+'%';}['levelchange','chargingchange','chargingtimechange','dischargingtimechange'].forEach(e=>b.addEventListener(e,update));update();}).catch(fallback);})();document.querySelectorAll('.np-character').forEach(img=>{img.addEventListener('contextmenu',e=>e.preventDefault());img.addEventListener('dragstart',e=>e.preventDefault());});</script>
+<div class="lex-about-overlay" id="lexAboutOverlay" aria-hidden="true">
+  <section class="lex-about-shell" role="dialog" aria-modal="true" aria-labelledby="lexAboutTitle">
+    <button class="lex-about-close" type="button" data-about-close aria-label="Tutup Tentang Lexiaa">×</button>
+    <header class="lex-about-head">
+      <div class="lex-about-eyebrow">A LITTLE GUIDE FOR YOU · LEXIAA</div>
+      <h2 class="lex-about-title" id="lexAboutTitle">Tentang Lexiaa</h2>
+      <p class="lex-about-subtitle">Kenali lebih dekat, yaa~ Onee-san temani ♡</p>
+    </header>
+    <div class="lex-about-layout">
+      <nav class="lex-about-tabs" aria-label="Kategori Tentang Lexiaa" role="tablist">
+        <button class="lex-about-tab" type="button" role="tab" aria-selected="false" data-about-tab="about"><span class="tab-icon">✦</span><span>About Lexiaa<small>Kenalan dulu, sayang~</small></span></button>
+        <button class="lex-about-tab" type="button" role="tab" aria-selected="false" data-about-tab="features"><span class="tab-icon">▦</span><span>Fitur-Fitur Lexiaa<small>Ada apa saja di sini?</small></span></button>
+        <button class="lex-about-tab" type="button" role="tab" aria-selected="false" data-about-tab="howto"><span class="tab-icon">♧</span><span>Cara Menjalankan<small>Onee-san tunjukkan~</small></span></button>
+        <button class="lex-about-tab" type="button" role="tab" aria-selected="false" data-about-tab="guide"><span class="tab-icon">➤</span><span>Panduan Pengguna<small>Mulai dari awal, yuk</small></span></button>
+        <button class="lex-about-tab" type="button" role="tab" aria-selected="false" data-about-tab="tips"><span class="tab-icon">☼</span><span>Tips &amp; Trik<small>Rahasia kecil kita ♡</small></span></button>
+        <p class="lex-about-note">“Jelajahi, nikmati, dan temukan sisi seru Lexiaa~ ♡”</p>
+      </nav>
+      <article class="lex-about-copy" id="lexAboutContent" role="tabpanel" tabindex="0">
+        <div class="lex-about-section-kicker" id="lexAboutKicker">WELCOME TO LEXIAA</div>
+        <h3 class="lex-about-section-title" id="lexAboutHeading">Apa itu Lexiaa?</h3>
+        <div id="lexAboutBody">
+          <p><strong>Lexiaa &amp; Elstar</strong> adalah ruang digital yang menggabungkan musik, penemuan, dan akses konten dalam satu website. Dibuat supaya kamu bisa menjelajah dengan nyaman tanpa perlu berpindah-pindah tempat.</p>
+          <div class="lex-about-callout"><span>♕</span>Lexiaa bukan cuma tempat mampir, lho. Ini ruang kecil untuk menemukan hal-hal menarik. Ara ara~ jangan langsung jatuh cinta, ya ♡</div>
+          <p>Gunakan menu di samping untuk mengenal setiap bagian. Onee-san sudah siapkan panduannya khusus buat kamu~</p>
+        </div>
+      </article>
+      <aside class="lex-about-char" aria-label="Pemandu anime Lexiaa">
+        <img id="lexAboutCharacter" src="./about-main-character.png" alt="Karakter pemandu utama Lexiaa" draggable="false" oncontextmenu="return false">
+        <div class="char-caption" id="lexAboutCaption">H a i i~<br>Selamat datang di Lexiaa ♡</div>
+      </aside>
+    </div>
+    <div class="lex-about-footer"><span>Lexiaa · Explore. Play. Enjoy. ♡</span><span>MADE FOR YOUR LITTLE ADVENTURE</span></div>
+  </section>
+</div>
+<script id="lexiaa-about-script">
+(()=>{
+ const overlay=document.getElementById('lexAboutOverlay');
+ if(!overlay)return;
+ const tabs=[...overlay.querySelectorAll('[data-about-tab]')];
+ const heading=document.getElementById('lexAboutHeading');
+ const kicker=document.getElementById('lexAboutKicker');
+ const body=document.getElementById('lexAboutBody');
+ const character=document.getElementById('lexAboutCharacter');
+ const caption=document.getElementById('lexAboutCaption');
+ const content=document.getElementById('lexAboutContent');
+ const mainImage='./about-main-character.png';
+ const pages={
+  about:{title:'Apa itu Lexiaa?',kicker:'WELCOME TO LEXIAA',image:'./about-welcome-character.png',alt:'Pemandu kategori About Lexiaa berambut hitam panjang',caption:'Hmm~ mau kenalan lebih dekat denganku? ♡',html:`<p><strong>Lexiaa &amp; Elstar</strong> adalah ruang digital yang menggabungkan musik, penemuan, dan akses konten dalam satu website. Dibuat supaya kamu bisa menjelajah dengan nyaman tanpa perlu berpindah-pindah tempat.</p><div class="lex-about-callout"><span>♕</span>Lexiaa bukan cuma tempat mampir, lho. Ini ruang kecil untuk menemukan hal-hal menarik. Ara ara~ jangan langsung jatuh cinta, ya ♡</div><p>Gunakan menu di samping untuk mengenal setiap bagian. Onee-san sudah siapkan panduannya khusus buat kamu~</p>`},
+  features:{title:'Apa saja yang ada di Lexiaa?',kicker:'EXPLORE THE FEATURES',image:'./about-feature-character.png',alt:'Pemandu kategori fitur berambut ungu',caption:'Ehehe~ banyak yang bisa kamu jelajahi. Mau mulai dari mana?',html:`<p>Hehe, penasaran juga kamu~ Ini dia bagian-bagian yang tersedia di website saat ini:</p><ul class="lex-about-list"><li><strong>Home / Dashboard</strong> — halaman utama untuk melihat tampilan dashboard, jam, cuaca, pemutar musik, dan pintasan menu.</li><li><strong>LEXIAA Music</strong> — area pemutar musik dengan dukungan Spotify dan YouTube. Pilih playlist atau sumber yang tersedia untuk mulai mendengarkan.</li><li><strong>Penemuan / Explore</strong> — bagian untuk menjelajahi konten penemuan yang disediakan di Lexiaa.</li><li><strong>Secret / Hidden</strong> — area konten tersembunyi yang tersedia melalui menu Hidden.</li><li><strong>Member OTW</strong> — akses pengajuan untuk menjadi member OTW dan membuka konten khusus member.</li><li><strong>Connect with Admin</strong> — pintasan untuk menghubungi admin melalui kanal sosial yang tersedia.</li></ul><div class="lex-about-callout"><span>✧</span>Setiap menu punya keseruannya sendiri. Jangan cuma lihat-lihat dari jauh, dong~ coba jelajahi satu per satu ♡</div>`},
+  howto:{title:'Cara menggunakan menu Lexiaa',kicker:'LET ME SHOW YOU HOW',image:'./about-howto-character.png',alt:'Pemandu tutorial berambut hitam',caption:'Santai saja~ ikuti langkah Onee-san, ya ♡',html:`<p>Nggak sulit kok, sayang. Ikuti langkah sederhana ini supaya nggak tersesat di dalam Lexiaa~</p><ul class="lex-about-list"><li><strong>Masuk ke website</strong> — buka alamat website Lexiaa melalui browser HP atau komputer.</li><li><strong>Login atau daftar</strong> — jika ingin menggunakan akses OTW, masuk dengan akun yang sudah ada atau buat akun melalui halaman pendaftaran.</li><li><strong>Buka Dashboard</strong> — setelah berhasil masuk, kamu akan melihat Home beserta pintasan fitur.</li><li><strong>Pilih menu</strong> — tekan LEXIAA Music, Penemuan, Secret, atau Member OTW sesuai yang ingin kamu buka.</li><li><strong>Gunakan navigasi</strong> — sidebar dashboard juga menyediakan pintasan ke Home, Music, Explore, Hidden, dan Member OTW.</li><li><strong>Kembali ke Home</strong> — gunakan menu Home pada navigasi dashboard untuk kembali ke halaman utama.</li></ul><div class="lex-about-callout"><span>♡</span>Kalau salah pencet, jangan panik. Coba kembali ke Home, lalu pilih menu yang benar. Onee-san nggak akan menertawakanmu… mungkin sedikit saja, hehe~</div>`},
+  guide:{title:'Panduan untuk pengguna baru',kicker:'YOUR FIRST STEPS',image:'./about-guide-character.png',alt:'Pemandu pengguna berambut hitam pendek',caption:'Pertama kali ke sini? Tenang, ada Onee-san~',html:`<p>Baru pertama kali mampir? Selamat datang, yaa~ Biar pengalamanmu lebih nyaman, perhatikan beberapa hal ini:</p><ul class="lex-about-list"><li><strong>Gunakan browser terbaru</strong> — Chrome atau browser modern lain akan memberi pengalaman yang lebih baik.</li><li><strong>Tambahkan ke layar utama</strong> — gunakan opsi instalasi / Add to Home Screen dari browser jika tersedia, agar Lexiaa lebih mudah dibuka seperti aplikasi.</li><li><strong>Jaga akunmu</strong> — jangan bagikan email, kata sandi, atau kode akses pribadi kepada orang lain.</li><li><strong>Pahami akses member</strong> — menu Member OTW digunakan untuk pengajuan menjadi member; konten khusus member mengikuti aturan akses yang berlaku.</li><li><strong>Gunakan koneksi internet</strong> — beberapa bagian seperti autentikasi, musik, dan konten online memerlukan koneksi aktif.</li><li><strong>Butuh bantuan?</strong> — gunakan tautan Connect with Admin yang tersedia pada dashboard.</li></ul><div class="lex-about-callout"><span>♧</span>Pelan-pelan saja, ya. Nggak perlu menguasai semuanya dalam satu malam. Nikmati proses menjelajahnya~ ♡</div>`},
+  tips:{title:'Tips kecil dari Onee-san~',kicker:'LITTLE SECRETS & SMART TIPS',image:'./about-tips-character.png',alt:'Pemandu tips berambut gelap panjang',caption:'Psst… sini, Onee-san bisikin beberapa trik~',html:`<p>Ara ara~ sudah sampai bagian rahasia? Baiklah, ini beberapa tips supaya kamu makin nyaman menggunakan Lexiaa.</p><ul class="lex-about-list"><li><strong>Pasang sebagai aplikasi</strong> — tambahkan Lexiaa ke layar utama HP agar aksesnya lebih praktis.</li><li><strong>Gunakan headphone</strong> — khususnya saat menikmati LEXIAA Music, supaya pengalaman mendengarkan lebih asyik.</li><li><strong>Periksa koneksi</strong> — jika konten tidak muncul atau musik tidak berjalan, cek jaringan lalu muat ulang halaman.</li><li><strong>Jangan tutup terlalu cepat</strong> — tunggu proses login atau pemuatan konten selesai sebelum menekan tombol lagi.</li><li><strong>Simpan akses admin</strong> — jika menemukan masalah, hubungi admin lewat kanal resmi yang tersedia dan jelaskan kendalanya.</li><li><strong>Jelajahi semua menu</strong> — beberapa bagian punya fungsi berbeda, jadi jangan berasumsi semua konten terbuka dengan cara yang sama.</li></ul><div class="lex-about-callout"><span>✦</span>Dan tips paling penting: jangan lupa bersenang-senang. Website ini dibuat untuk dinikmati, bukan bikin kamu pusing, ya~ ♡</div>`}
+ };
+ function showPage(key){
+  const page=pages[key]||pages.about;
+  tabs.forEach(tab=>tab.setAttribute('aria-selected',String(tab.dataset.aboutTab===key)));
+  heading.textContent=page.title;kicker.textContent=page.kicker;body.innerHTML=page.html;
+  character.src=page.image;character.alt=page.alt;caption.innerHTML=page.caption;
+  content.scrollTop=0;
+ }
+ function showIntro(){
+  tabs.forEach(tab=>tab.setAttribute('aria-selected','false'));
+  kicker.textContent='WELCOME TO LEXIAA';
+  heading.textContent='Senang kamu mampir~';
+  body.innerHTML='<p><strong>H a i i~</strong> Selamat datang di Lexiaa. Onee-san sudah menyiapkan sedikit cerita, panduan, dan rahasia kecil buat kamu.</p><div class="lex-about-callout"><span>♕</span>Lexiaa adalah ruang digital untuk menikmati musik, menjelajahi konten, dan menemukan pengalaman baru. Yuk, pilih salah satu kategori di samping. Aku temani, kok~ ♡</div><p>Jangan sungkan bertanya, ya. Klik kategori yang menarik perhatianmu… atau memang dari tadi cuma mau lihat Onee-san? Ara ara~</p>';
+  character.src=mainImage;character.alt='Karakter utama popup Lexiaa berambut pink';caption.innerHTML='H a i i~<br>Selamat datang di Lexiaa ♡';content.scrollTop=0;
+ }
+ function open(){
+  overlay.classList.add('is-open');overlay.setAttribute('aria-hidden','false');
+  document.body.style.overflow='hidden';showIntro();
+  overlay.querySelector('[data-about-close]').focus();
+ }
+ function close(){
+  overlay.classList.remove('is-open');overlay.setAttribute('aria-hidden','true');
+  document.body.style.overflow='';document.querySelector('[data-about-open]')?.focus();
+ }
+ document.querySelectorAll('[data-about-open]').forEach(btn=>btn.addEventListener('click',open));
+ overlay.querySelectorAll('[data-about-close]').forEach(btn=>btn.addEventListener('click',close));
+ tabs.forEach(tab=>tab.addEventListener('click',()=>showPage(tab.dataset.aboutTab)));
+ overlay.addEventListener('click',e=>{if(e.target===overlay)close()});
+ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&overlay.classList.contains('is-open'))close()});
+ [character].forEach(img=>{img.addEventListener('contextmenu',e=>e.preventDefault());img.addEventListener('dragstart',e=>e.preventDefault())});
+})();
+</script>
+
+</body>
 </html>
