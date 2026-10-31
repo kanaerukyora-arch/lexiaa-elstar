@@ -1,5 +1,5 @@
-const CACHE_NAME = "lexiaa-shell-v9";
-const APP_SHELL = ["./", "./index.html", "./app-icon.webp", "./manifest.webmanifest", "./welcome-mascot.webp", "./mascot-member.png", "./welcome-character.png", "./lexiaa-music-character.webp"];
+const CACHE_NAME = "lexiaa-cache-v-anime-dashboard-20261031";
+const APP_SHELL = ["./", "./index.html", "./app-icon.webp", "./manifest.webmanifest", "./welcome-mascot.webp", "./mascot-member.png", "./welcome-character.png", "./lexiaa-music-character.webp", "./dashboard-characters.png"];
 
 self.addEventListener("install", event => {
   event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(APP_SHELL)).then(() => self.skipWaiting()));

@@ -568,6 +568,30 @@
     @media(max-width:380px){.music-hub-art{min-height:275px}.music-hub-character{width:66%;right:-9%}.music-hub-brand{width:72%}.music-hub-brand h2{font-size:38px}.music-mini-player{width:125px}}
     @media(prefers-reduced-motion:reduce){.music-hub-panel,.music-hub-close,.music-playlist-card,.music-hub-action{transition:none}}
 
+
+/* LEXIAA anime dashboard redesign */
+:root{--lx-purple:#c58aff;--lx-pink:#f2a9e8;--lx-glass:rgba(12,8,29,.68);--lx-border:rgba(205,151,255,.52)}
+body:has(#dashboardView.active){background:#080515;color:#f7edff}
+body:has(#dashboardView.active):before{opacity:.16;background-image:radial-gradient(circle at 15% 22%,#d9a5ff 0 1px,transparent 1.6px),radial-gradient(circle at 80% 12%,#fff 0 1px,transparent 1.7px),radial-gradient(circle at 70% 80%,#dca2ff 0 1px,transparent 1.7px);background-size:130px 130px,170px 170px,210px 210px}
+body:has(#dashboardView.active) .topbar{display:none}
+#dashboardView.active{width:100%;max-width:none}
+.anime-dashboard{width:min(1500px,100%);margin:0 auto;padding:12px 18px 42px;display:grid;grid-template-columns:142px minmax(0,1fr);gap:18px;min-height:100vh;position:relative}
+.anime-dashboard:before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at 50% 15%,#633d9b55,transparent 42%),radial-gradient(ellipse at 8% 90%,#9a45b555,transparent 35%),linear-gradient(145deg,#080515,#11091f 55%,#080513)}
+.dash-sidebar{align-self:stretch;position:sticky;top:14px;height:calc(100svh - 28px);min-height:530px;border:1px solid var(--lx-border);border-radius:24px;background:linear-gradient(180deg,rgba(20,11,43,.88),rgba(7,5,21,.88));backdrop-filter:blur(18px);box-shadow:0 0 28px #b46aff20,inset 0 0 24px #bd82ff0b;padding:18px 10px;display:flex;flex-direction:column;z-index:4}
+.sidebar-brand{display:flex;align-items:center;justify-content:center;gap:7px;font:800 12px Orbitron,sans-serif;letter-spacing:.07em;color:#fff;text-align:left;margin:4px 0 30px}.sidebar-brand small{display:block;font:500 8px Inter,sans-serif;letter-spacing:.2em;color:#c9a8f3;margin-top:5px}.sidebar-crown{font-size:28px;color:#d7a3ff;text-shadow:0 0 14px #c47aff}
+.sidebar-nav{display:grid;gap:10px}.side-link{display:flex;align-items:center;gap:9px;text-align:left;border:1px solid transparent;border-radius:14px;background:transparent;color:#e8dafa;padding:12px 9px;font-size:11px;line-height:1.35;min-height:48px;transition:.2s}.side-link>span{font-size:20px;width:23px;text-align:center;color:#d7a4ff}.side-link:hover,.side-link.is-active{background:linear-gradient(110deg,#9e54f255,#5d2c9b22);border-color:#ce9bff88;box-shadow:0 0 18px #b66cff24;color:white}.sidebar-flourish{margin-top:auto;text-align:center;color:#d99cff;font-size:42px;text-shadow:0 0 24px #c77aff;animation:lxFloat 4s ease-in-out infinite}
+.dash-main{min-width:0}.dash-statusbar{height:66px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 8px}.dash-brandline{display:flex;align-items:center;gap:10px;font:800 14px Orbitron,sans-serif;letter-spacing:.08em}.dash-brandline small{display:block;font:500 9px Inter,sans-serif;letter-spacing:.22em;color:#c9a8e8;margin-top:5px}.brand-crown{font-size:34px;color:#d6a0ff;text-shadow:0 0 16px #bd6dff}.device-status{display:flex;align-items:center;gap:9px;color:#f1e4ff;font-weight:700;font-size:12px}.signal-bars{height:19px;display:flex;align-items:end;gap:2px}.signal-bars i{display:block;width:4px;border-radius:2px 2px 0 0;background:#e8d7ff;box-shadow:0 0 8px #c98bff}.signal-bars i:nth-child(1){height:6px}.signal-bars i:nth-child(2){height:10px}.signal-bars i:nth-child(3){height:14px}.signal-bars i:nth-child(4){height:18px}.wifi-mark{font-size:22px;transform:rotate(45deg)}.battery-pill{border:1px solid #c18bff;border-radius:30px;padding:7px 12px;box-shadow:0 0 13px #a956ff22}.battery-pill b{color:#e5b7ff}
+.dashboard-stage{min-height:480px;position:relative;isolation:isolate;display:flex;align-items:center;padding:34px 30px 34px 34px;border-radius:26px;overflow:hidden}.dashboard-stage:before{content:"";position:absolute;inset:0;z-index:-2;background:radial-gradient(ellipse at 70% 40%,#9d69c044,transparent 45%),linear-gradient(110deg,rgba(11,6,29,.82),rgba(15,7,33,.28) 62%,rgba(9,5,23,.55));border:1px solid var(--lx-border);border-radius:26px;box-shadow:0 0 30px #bd7bff20,inset 0 0 30px #b875ff0c}.dashboard-copy{position:relative;z-index:2;width:44%;max-width:430px}.dashboard-copy .eyebrow{color:#d8b3ff;letter-spacing:.24em;font-size:10px}.dashboard-copy .logo{font:italic 600 clamp(32px,5.4vw,68px)/1.08 Georgia,serif;letter-spacing:-.04em;color:#f1d9ff;background:none;-webkit-text-fill-color:#f1d9ff;filter:drop-shadow(0 0 16px #d08bff99);animation:none}.title-heart{color:#e4a5ff}.dashboard-copy .slogan{font:500 12px Inter,sans-serif;letter-spacing:.12em;color:#e8d7f9;margin:20px 0 0}.dashboard-copy .dash-meta{font-size:9px;letter-spacing:.12em;color:#c5a9dc;margin-top:18px}
+.dashboard-character-wrap{position:absolute;z-index:1;right:4%;bottom:-4%;width:min(62%,760px);height:108%;display:flex;align-items:end;justify-content:center;pointer-events:none}.dashboard-character-art{width:100%;height:100%;object-fit:contain;object-position:center bottom;filter:drop-shadow(0 8px 22px #000b) drop-shadow(0 0 20px #d5a3ff28);animation:lxFloat 7s ease-in-out infinite}
+.weather-card,.clock-card{position:absolute;z-index:3;border:1px solid #d6a5ff77;background:rgba(12,6,29,.72);backdrop-filter:blur(14px);box-shadow:0 0 25px #b96aff20;border-radius:20px}.weather-card{top:22px;right:22px;width:220px;min-height:116px;padding:16px;display:grid;grid-template-columns:54px 1fr;gap:8px;align-items:center}.weather-symbol{font-size:42px;color:#e5c5ff;text-shadow:0 0 16px #c77cff}.weather-reading strong{display:block;font-size:27px}.weather-reading span,.weather-reading small{display:block;font-size:10px;color:#e2cfff;margin-top:3px}.weather-reading small{color:#b99ed4}.weather-place{grid-column:1/-1;font-size:10px;color:#d6b6ef;margin-top:4px}.clock-card{right:22px;bottom:22px;padding:13px 18px;min-width:245px;text-align:right}.clock-line{display:flex;align-items:baseline;justify-content:flex-end;gap:10px}.clock-line strong{font:700 34px Orbitron,sans-serif;color:#d5a0ff;text-shadow:0 0 18px #bd69ff88}.clock-line span{font-size:9px;color:#c5a7e5}.clock-date{font-size:11px;color:#f4e9ff;margin-top:6px}.clock-location{font-size:9px;color:#c9a9e7;margin-top:6px}.live-info-dashboard{display:none}
+.now-playing-card{margin:16px 0;border:1px solid #d6a5ff88;border-radius:23px;padding:16px 20px;background:linear-gradient(110deg,rgba(17,8,37,.92),rgba(10,6,24,.82));backdrop-filter:blur(18px);box-shadow:0 0 28px #bd75ff25}.np-heading{font-size:12px;color:#ead7ff;font-weight:700;letter-spacing:.1em}.np-heading>span:first-child{font-size:20px;color:#d49aff;margin-right:8px}.np-dots{float:right;letter-spacing:.2em;color:#d8a5ff}.np-content{display:grid;grid-template-columns:108px minmax(150px,1fr) minmax(130px,28%);gap:18px;align-items:center;margin-top:12px}.np-cover{height:108px;border-radius:15px;overflow:hidden;background:#201232}.np-cover img{width:100%;height:100%;object-fit:cover}.np-info>strong{display:block;font-size:23px;color:#f5e8ff}.np-info>span{display:block;font-size:12px;color:#d7bce9;margin:6px 0 15px}.np-progress{height:5px;border-radius:8px;background:#4a3262;overflow:hidden}.np-progress i{display:block;width:42%;height:100%;border-radius:8px;background:#d3a0ff;box-shadow:0 0 12px #ce8aff}.np-times{display:flex;justify-content:space-between;color:#b99acb;margin-top:5px}.np-times small{font-size:9px}.np-controls{display:flex;align-items:center;justify-content:space-between;max-width:260px;margin-top:10px;color:#e5caff;font-size:17px}.np-controls button{width:38px;height:38px;border:0;border-radius:50%;background:#d6a1ff;color:#1c0b2b;font-weight:900;box-shadow:0 0 18px #c77cff88}.music-equalizer{height:100px;display:flex;align-items:end;justify-content:center;gap:3px;overflow:hidden}.music-equalizer i{width:5px;height:calc(10px + (var(--i) % 7)*8px);border-radius:5px 5px 0 0;background:linear-gradient(#f0caff,#9d53e9);box-shadow:0 0 8px #bd72ff66;transform-origin:bottom;animation:lxEq .72s ease-in-out infinite alternate;animation-delay:calc(var(--i)*-0.055s);animation-play-state:paused}.music-equalizer.is-playing i{animation-duration:calc(.28s + (var(--i) % 5)*.11s);animation-play-state:running}
+.anime-quick-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:16px 0}.anime-quick-grid .menu-card{min-height:125px;padding:18px;border-color:#bd8de477;background:linear-gradient(145deg,rgba(31,17,54,.9),rgba(10,7,25,.94));border-radius:17px}.anime-quick-grid .menu-card h3{font:700 14px Inter,sans-serif;letter-spacing:.03em}.anime-quick-grid .menu-card p{font-size:9px;line-height:1.5;color:#c9b0df}.anime-quick-grid .menu-arrow{color:#d9a7ff}.anime-quick-grid .menu-card.wide{grid-column:span 1}.anime-quick-grid .menu-number{font-size:8px;color:#c9a8e6}.anime-dashboard .social-hub{margin-top:14px;border:1px solid #c28aff66;border-radius:22px;padding:18px;background:rgba(13,7,28,.75);backdrop-filter:blur(15px)}.anime-dashboard .social-heading{color:#e8d2ff}.anime-dashboard .social-card{border-color:#a879d977;background:linear-gradient(145deg,#28163eaa,#0d0919ee)}
+@keyframes lxFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}@keyframes lxEq{from{transform:scaleY(.24);opacity:.7}to{transform:scaleY(1);opacity:1}}
+@media(max-width:850px){.anime-dashboard{grid-template-columns:1fr;padding:8px 12px 30px;gap:10px}.dash-sidebar{position:sticky;top:5px;height:auto;min-height:0;padding:8px 10px;border-radius:17px;flex-direction:row;align-items:center;gap:10px}.sidebar-brand{margin:0 8px 0 0;white-space:nowrap}.sidebar-crown{font-size:23px}.sidebar-nav{display:flex;gap:5px;overflow-x:auto;scrollbar-width:none;flex:1}.sidebar-nav::-webkit-scrollbar{display:none}.side-link{flex:0 0 auto;min-height:40px;padding:8px 10px;font-size:10px}.side-link>span{font-size:16px;width:auto}.sidebar-flourish{display:none}.dashboard-stage{min-height:430px;padding:25px}.dashboard-copy{width:45%}.dashboard-character-wrap{width:68%;right:0}.weather-card{top:12px;right:12px;transform:scale(.88);transform-origin:top right}.clock-card{right:12px;bottom:12px;transform:scale(.9);transform-origin:bottom right}}
+@media(max-width:560px){.anime-dashboard{padding:6px 8px 24px}.dash-statusbar{height:50px;padding:0 3px}.dash-brandline{font-size:11px}.dash-brandline small{font-size:7px}.brand-crown{font-size:26px}.device-status{gap:6px;font-size:10px}.battery-pill{padding:5px 8px}.wifi-mark{font-size:18px}.dashboard-stage{min-height:535px;align-items:flex-start;padding:24px 17px;border-radius:20px}.dashboard-copy{width:100%;max-width:none}.dashboard-copy .logo{font-size:clamp(34px,10vw,52px)}.dashboard-copy .slogan{font-size:10px;margin-top:10px}.dashboard-copy .dash-meta{font-size:8px;margin-top:8px}.dashboard-character-wrap{width:100%;height:66%;right:0;bottom:0;opacity:.98}.weather-card{top:auto;bottom:14px;left:12px;right:auto;width:168px;min-height:83px;padding:9px;grid-template-columns:38px 1fr;gap:5px;transform:none;border-radius:14px}.weather-symbol{font-size:30px}.weather-reading strong{font-size:20px}.weather-reading span,.weather-reading small{font-size:8px}.weather-place{font-size:8px}.clock-card{top:14px;bottom:auto;right:12px;min-width:0;padding:8px 10px;transform:none;border-radius:13px}.clock-line strong{font-size:19px}.clock-line span{font-size:7px}.clock-date{font-size:8px}.clock-location{font-size:7px}.now-playing-card{padding:12px;border-radius:18px}.np-content{grid-template-columns:70px minmax(0,1fr);gap:11px}.np-cover{height:70px}.np-info>strong{font-size:17px}.np-info>span{font-size:9px;margin:4px 0 9px}.np-controls{margin-top:6px;font-size:13px}.np-controls button{width:31px;height:31px}.music-equalizer{grid-column:1/-1;height:42px;justify-content:space-around}.music-equalizer i{width:4px}.anime-quick-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.anime-quick-grid .menu-card{min-height:112px;padding:14px}.anime-quick-grid .menu-card h3{font-size:12px}.anime-quick-grid .menu-card.wide{grid-column:span 2}.anime-dashboard .social-hub{padding:13px}.anime-dashboard .social-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:360px){.side-link{padding:7px 8px;font-size:9px}.side-link>span{display:none}.device-status .wifi-mark{display:none}.dashboard-stage{min-height:500px}.weather-card{width:150px}.clock-line strong{font-size:17px}}
+@media(prefers-reduced-motion:reduce){.dashboard-character-art,.sidebar-flourish,.music-equalizer i{animation:none!important}}
+
   </style>
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="mobile-web-app-capable" content="yes">
@@ -651,33 +675,52 @@
       </section>
 
       <section id="dashboardView" class="view">
-        <div class="dash">
-          <div class="spotlight">
-            <p class="eyebrow">YOUR PRIVATE DIGITAL SPACE</p>
-            <h1 class="logo">LEXIAA &amp; ELSTAR</h1>
-            <p class="slogan">TEMUKAN YANG TERSEMBUNYI,<br>SIMPAN YANG BERARTI.</p>
-            <div class="hero-line"></div>
-            <p class="dash-meta">AKSES MEMBER AKTIF <span aria-hidden="true">·</span> OBSIDIAN EDITION</p>
-            <div class="live-info live-info-dashboard" data-live-info>
-              <div class="live-time" data-live-time>00:00:00</div>
-              <div class="live-date" data-live-date>MEMUAT TANGGAL...</div>
-              <div class="live-location" data-live-location>LOKASI: MEMUAT...</div>
+        <div class="dash anime-dashboard">
+          <aside class="dash-sidebar" aria-label="Navigasi dashboard">
+            <div class="sidebar-brand"><span class="sidebar-crown">♕</span><span>LEXIAA<small>&amp; ELSTAR</small></span></div>
+            <nav class="sidebar-nav">
+              <button class="side-link is-active" type="button" data-dash-home><span>⌂</span>Home</button>
+              <button class="side-link" type="button" data-dash-music><span>♫</span>LEXIAA Music</button>
+              <button class="side-link" type="button" data-dash-explore><span>◉</span>Explore</button>
+              <button class="side-link" type="button" data-dash-hidden><span>♧</span>Hidden</button>
+              <button class="side-link" type="button" data-dash-member><span>☆</span>Member OTW</button>
+            </nav>
+            <div class="sidebar-flourish" aria-hidden="true">✦</div>
+          </aside>
+          <div class="dash-main">
+            <div class="dash-statusbar">
+              <div class="dash-brandline"><span class="brand-crown">♕</span><span>LEXIAA &amp; ELSTAR<small>THE DEVELOPER OTW</small></span></div>
+              <div class="device-status" aria-label="Status perangkat (indikator visual)"><span class="signal-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span>5G</span><span class="wifi-mark" aria-hidden="true">◔</span><span class="battery-pill">100% <b>ϟ</b></span></div>
             </div>
-          </div>
-          <div class="menu-grid">
-            <button id="musicHubBtn" class="menu-card wide music-menu-card" type="button" aria-label="Buka LEXIAA Music"><span class="menu-arrow" aria-hidden="true">♫</span>
-              <span class="menu-number">00 / MUSIC PLAYER</span><h3>LEXIAA MUSIC</h3><p>SPOTIFY &amp; YOUTUBE PLAYER</p>
-            </button>
-            <button class="menu-card" type="button" data-content="penemuan"><span class="menu-arrow" aria-hidden="true">↗</span>
-              <span class="menu-number">01 / EXPLORE</span><h3>PENEMUAN</h3><p>LEXIAA &amp; ELSTAR</p>
-            </button>
-            <button class="menu-card" type="button" data-content="secret"><span class="menu-arrow" aria-hidden="true">↗</span>
-              <span class="menu-number">02 / HIDDEN</span><h3>SECRET</h3><p>LEXIAA &amp; ELSTAR</p>
-            </button>
-            <button class="menu-card wide" type="button" data-member><span class="menu-arrow" aria-hidden="true">↗</span>
-              <span class="menu-number">03 / MEMBER ACCESS</span><h3>SECRET ONLY MEMBER OTW!</h3><p>KHUSUS MEMBER OTW, KLIK UNTUK PENGAJUAN MENJADI MEMBER.</p>
-            </button>
-          </div>
+            <div class="dashboard-stage">
+              <div class="dashboard-copy">
+                <p class="eyebrow">YOUR PRIVATE DIGITAL SPACE</p>
+                <h1 class="logo">Lexiaa &amp;<br>Elstar <span class="title-heart">♡</span></h1>
+                <p class="slogan">A LITTLE WORLD, FULL OF STORIES.</p>
+                <div class="dash-meta">AKSES MEMBER AKTIF <span aria-hidden="true">·</span> OBSIDIAN EDITION</div>
+              </div>
+              <div class="dashboard-character-wrap"><img class="dashboard-character-art" src="./dashboard-characters.png" alt="Lima karakter anime LEXIAA &amp; ELSTAR"></div>
+              <section class="weather-card" aria-label="Cuaca saat ini">
+                <div class="weather-symbol" id="weatherIcon" aria-hidden="true">☁</div>
+                <div class="weather-reading"><strong id="weatherTemp">--°C</strong><span id="weatherDesc">Memuat cuaca...</span><small id="weatherRange">Cuaca lokal</small></div>
+                <div class="weather-place"><span>⌖</span> <span id="weatherPlace">Menunggu lokasi</span></div>
+              </section>
+              <section class="clock-card" aria-label="Jam dan tanggal">
+                <div class="clock-line"><strong data-live-time>00:00:00</strong><span>LOCAL TIME</span></div>
+                <div class="clock-date" data-live-date>MEMUAT TANGGAL...</div>
+                <div class="clock-location" data-live-location>LOKASI: MEMUAT...</div>
+              </section>
+            </div>
+            <section class="now-playing-card" aria-label="Akses pemutar musik">
+              <div class="np-heading"><span>▥</span> NOW PLAYING <span class="np-dots">•••</span></div>
+              <div class="np-content"><div class="np-cover"><img src="./lexiaa-music-character.png" alt="Ilustrasi LEXIAA Music"></div><div class="np-info"><strong>Chill Vibes</strong><span>♫ &nbsp; Spotify / YouTube Playlist</span><div class="np-progress"><i></i></div><div class="np-times"><small>LEXIAA MUSIC</small><small>OPEN PLAYER</small></div><div class="np-controls"><span>⤨</span><span>◀</span><button type="button" id="npOpenPlayer" aria-label="Buka Lexiaa Music">▶</button><span>▶</span><span>↻</span></div></div><div class="music-equalizer" id="dashboardEqualizer" aria-hidden="true"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i><i style="--i:5"></i><i style="--i:6"></i><i style="--i:7"></i><i style="--i:8"></i><i style="--i:9"></i><i style="--i:10"></i><i style="--i:11"></i><i style="--i:12"></i><i style="--i:13"></i><i style="--i:14"></i><i style="--i:15"></i><i style="--i:16"></i><i style="--i:17"></i><i style="--i:18"></i><i style="--i:19"></i><i style="--i:20"></i><i style="--i:21"></i><i style="--i:22"></i><i style="--i:23"></i><i style="--i:24"></i><i style="--i:25"></i><i style="--i:26"></i><i style="--i:27"></i></div></div>
+            </section>
+            <div class="menu-grid anime-quick-grid">
+              <button id="musicHubBtn" class="menu-card wide music-menu-card" type="button" aria-label="Buka LEXIAA Music"><span class="menu-arrow" aria-hidden="true">♫</span><span class="menu-number">00 / MUSIC PLAYER</span><h3>LEXIAA MUSIC</h3><p>SPOTIFY &amp; YOUTUBE PLAYER</p></button>
+              <button class="menu-card" type="button" data-content="penemuan"><span class="menu-arrow" aria-hidden="true">↗</span><span class="menu-number">01 / EXPLORE</span><h3>PENEMUAN</h3><p>LEXIAA &amp; ELSTAR</p></button>
+              <button class="menu-card" type="button" data-content="secret"><span class="menu-arrow" aria-hidden="true">↗</span><span class="menu-number">02 / HIDDEN</span><h3>SECRET</h3><p>LEXIAA &amp; ELSTAR</p></button>
+              <button class="menu-card wide" type="button" data-member><span class="menu-arrow" aria-hidden="true">↗</span><span class="menu-number">03 / MEMBER ACCESS</span><h3>SECRET ONLY MEMBER OTW!</h3><p>KHUSUS MEMBER OTW, KLIK UNTUK PENGAJUAN MENJADI MEMBER.</p></button>
+            </div>
           <section class="social-hub" aria-label="Akun resmi admin">
             <h2 class="social-heading">CONNECT WITH ADMIN</h2>
             <div class="social-grid">
@@ -1315,6 +1358,7 @@
         dashboardWasPlayingBeforeLexiaa = Boolean(backgroundAudio && !backgroundAudio.paused);
       }
       lexiaaMusicActive = true;
+      document.getElementById("dashboardEqualizer")?.classList.add("is-playing");
       if (backgroundAudio && !backgroundAudio.paused) backgroundAudio.pause();
     }
 
@@ -1327,6 +1371,7 @@
       musicHubExternal.hidden = true;
       musicHubExternal.removeAttribute("href");
       lexiaaMusicActive = false;
+      document.getElementById("dashboardEqualizer")?.classList.remove("is-playing");
       const backgroundAudio = document.getElementById("bgMusic");
       const shouldResume = resumeDashboard && dashboardWasPlayingBeforeLexiaa && !musicManuallyDisabled;
       dashboardWasPlayingBeforeLexiaa = false;
@@ -1695,6 +1740,29 @@
   </script>
 
 
+
+
+<script>
+(()=>{
+ const $=id=>document.getElementById(id);
+ const click=(selector)=>document.querySelector(selector)?.click();
+ document.querySelector('[data-dash-home]')?.addEventListener('click',()=>{document.querySelectorAll('.side-link').forEach(x=>x.classList.remove('is-active'));document.querySelector('[data-dash-home]').classList.add('is-active');window.scrollTo({top:0,behavior:'smooth'});});
+ document.querySelector('[data-dash-music]')?.addEventListener('click',()=>click('#musicHubBtn'));
+ document.querySelector('[data-dash-explore]')?.addEventListener('click',()=>click('[data-content="penemuan"]'));
+ document.querySelector('[data-dash-hidden]')?.addEventListener('click',()=>click('[data-content="secret"]'));
+ document.querySelector('[data-dash-member]')?.addEventListener('click',()=>click('.menu-grid [data-member]'));
+ $('npOpenPlayer')?.addEventListener('click',()=>click('#musicHubBtn'));
+ // Weather uses browser location permission and Open-Meteo; no API key is required.
+ const weatherFallback=()=>{if($('weatherDesc'))$('weatherDesc').textContent='Izinkan lokasi untuk cuaca';if($('weatherPlace'))$('weatherPlace').textContent='Lokasi tidak tersedia'};
+ async function loadWeather(lat,lon){try{const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code&daily=temperature_2m_max,temperature_2m_min&timezone=auto`);if(!r.ok)throw Error('weather');const d=await r.json();const code=d.current.weather_code;const map=code===0?['☀','Cerah']:code<=3?['⛅','Cerah berawan']:code<=48?['☁','Berawan']:code<=67?['🌧','Hujan']:code<=77?['❄','Salju']:['⛈','Hujan badai'];$('weatherIcon').textContent=map[0];$('weatherTemp').textContent=Math.round(d.current.temperature_2m)+'°C';$('weatherDesc').textContent=map[1];$('weatherRange').textContent=`Min ${Math.round(d.daily.temperature_2m_min[0])}° · Max ${Math.round(d.daily.temperature_2m_max[0])}°`;$('weatherPlace').textContent='Lokasi saat ini';}catch(e){weatherFallback()}}
+ if(navigator.geolocation){navigator.geolocation.getCurrentPosition(pos=>loadWeather(pos.coords.latitude,pos.coords.longitude),weatherFallback,{timeout:9000,maximumAge:600000});}else weatherFallback();
+ // Local dashboard audio can be analysed. Cross-origin Spotify/YouTube iframe audio cannot be read by the page.
+ const audio=$('bgMusic'),eq=$('dashboardEqualizer');let ctx,analyser,source,raf;
+ function animateEq(){if(!analyser||!eq)return;const data=new Uint8Array(analyser.frequencyBinCount);analyser.getByteFrequencyData(data);[...eq.children].forEach((bar,i)=>{const v=data[Math.floor(i*data.length/eq.children.length)]||0;bar.style.height=(7+v*.34)+'px'});raf=requestAnimationFrame(animateEq)}
+ async function connectAudio(){if(!audio||!eq)return;try{const C=window.AudioContext||window.webkitAudioContext;if(!C)return;ctx=ctx||new C();if(ctx.state==='suspended')await ctx.resume();if(!source){source=ctx.createMediaElementSource(audio);analyser=ctx.createAnalyser();analyser.fftSize=128;source.connect(analyser);analyser.connect(ctx.destination)}cancelAnimationFrame(raf);eq.classList.add('is-playing');animateEq()}catch(e){eq.classList.add('is-playing')}}
+ audio?.addEventListener('play',connectAudio);audio?.addEventListener('pause',()=>{eq?.classList.remove('is-playing');cancelAnimationFrame(raf)});audio?.addEventListener('ended',()=>{eq?.classList.remove('is-playing');cancelAnimationFrame(raf)});
+})();
+</script>
 
 </body>
 </html>
