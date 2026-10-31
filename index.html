@@ -384,6 +384,9 @@
     .social-card.wa{color:#4dff9b;border-color:#257b58}.social-card.ig{color:#ff9de0;border-color:#814d91}.social-card.dc{color:#a9b8ff;border-color:#535d9a}.social-card.tt{color:#e8faff;border-color:#477c88}
     .social-card .social-name{color:#f4f8ff;text-shadow:0 0 12px currentColor}
     .dash-utilities{display:flex;justify-content:flex-end;gap:9px;flex-wrap:wrap;margin-top:14px}
+/* Keep logout above decorative/animated dashboard layers and reliably tappable. */
+#logoutBtn{position:relative;z-index:1000;pointer-events:auto;touch-action: manipulation;cursor:pointer}
+.dash-utilities{position:relative;z-index:1000;isolation:isolate}
     @keyframes socialSweep{0%,65%,100%{transform:translateX(-65%) rotate(8deg)}35%{transform:translateX(65%) rotate(8deg)}}
     @media(max-width:620px){.social-hub{margin:24px 0 12px}.social-grid{gap:7px}.social-card{min-height:100px;padding:10px 3px;gap:7px;border-radius:10px}.social-icon{width:27px;height:27px}.social-name{font-size:clamp(7px,2vw,9px);letter-spacing:0}.social-handle{font-size:8px}.dash-utilities{margin-top:12px}}
     @media(max-width:350px){.social-grid{gap:5px}.social-card{min-height:92px}.social-icon{width:23px;height:23px}.social-name{font-size:7px}}
