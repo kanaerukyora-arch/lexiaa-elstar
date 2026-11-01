@@ -2175,18 +2175,54 @@ button, a, input, select, textarea { touch-action:manipulation; }
   body.innerHTML='<p><strong>H a i i~</strong> Selamat datang di Lexiaa. Onee-san sudah menyiapkan sedikit cerita, panduan, dan rahasia kecil buat kamu.</p><div class="lex-about-callout"><span>♕</span>Lexiaa adalah ruang digital untuk menikmati musik, menjelajahi konten, dan menemukan pengalaman baru. Yuk, pilih salah satu kategori di samping. Aku temani, kok~ ♡</div><p>Jangan sungkan bertanya, ya. Klik kategori yang menarik perhatianmu… atau memang dari tadi cuma mau lihat Onee-san? Ara ara~</p>';
   character.src=mainImage;character.alt='Karakter utama popup Lexiaa berambut pink';caption.innerHTML='H a i i~<br>Selamat datang di Lexiaa ♡';content.scrollTop=0;
  }
+ // Satu audio aktif pada satu waktu: audio lama dihentikan sebelum audio baru dimulai.
+ const lexAboutSounds={
+  intro:new Audio('./lexiaa-about-intro.wav'),
+  tips:new Audio('./lexiaa-sound-tips.wav'),
+  about:new Audio('./lexiaa-sound-about.wav'),
+  features:new Audio('./lexiaa-sound-features.wav'),
+  howto:new Audio('./lexiaa-sound-howto.wav')
+ };
+ let activeLexAboutSound=null;
+ Object.values(lexAboutSounds).forEach(sound=>{
+  sound.preload='auto';sound.volume=0.68;
+ });
+ function playLexAboutSound(key){
+  const next=lexAboutSounds[key];
+  if(!next)return; // Kategori tanpa file audio tetap berfungsi normal.
+  if(activeLexAboutSound){
+   activeLexAboutSound.pause();
+   activeLexAboutSound.currentTime=0;
+  }
+  activeLexAboutSound=next;
+  next.currentTime=0;
+  const playback=next.play();
+  if(playback&&typeof playback.catch==='function')playback.catch(()=>{});
+ }
+ function stopLexAboutSound(){
+  if(!activeLexAboutSound)return;
+  activeLexAboutSound.pause();
+  activeLexAboutSound.currentTime=0;
+  activeLexAboutSound=null;
+ }
  function open(){
+  stopLexAboutSound();
   overlay.classList.add('is-open');overlay.setAttribute('aria-hidden','false');
-  document.body.style.overflow='hidden';showIntro();
+  document.body.style.overflow='hidden';showIntro();playLexAboutSound('intro');
   overlay.querySelector('[data-about-close]').focus();
  }
  function close(){
+  stopLexAboutSound();
   overlay.classList.remove('is-open');overlay.setAttribute('aria-hidden','true');
   document.body.style.overflow='';document.querySelector('[data-about-open]')?.focus();
  }
  document.querySelectorAll('[data-about-open]').forEach(btn=>btn.addEventListener('click',open));
  overlay.querySelectorAll('[data-about-close]').forEach(btn=>btn.addEventListener('click',close));
- tabs.forEach(tab=>tab.addEventListener('click',()=>showPage(tab.dataset.aboutTab)));
+ tabs.forEach(tab=>tab.addEventListener('click',()=>{
+  const key=tab.dataset.aboutTab;
+  showPage(key);
+  playLexAboutSound(key);
+ }));
  overlay.addEventListener('click',e=>{if(e.target===overlay)close()});
  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&overlay.classList.contains('is-open'))close()});
  [character].forEach(img=>{img.addEventListener('contextmenu',e=>e.preventDefault());img.addEventListener('dragstart',e=>e.preventDefault())});
