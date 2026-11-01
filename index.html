@@ -795,6 +795,65 @@ button, a, input, select, textarea { touch-action:manipulation; }
  .lex-about-footer{z-index:7}
 }
 @media(prefers-reduced-motion:reduce){.lex-about-overlay.is-open{animation:none}.lex-about-tab,.lex-about-close{transition:none}}
+
+/* LEXIAA ABOUT — karakter hidup, glow, dan sparkle */
+.lex-about-char{
+  isolation:isolate;
+}
+.lex-about-char img{
+  transform-origin:50% 88%;
+  animation:lexAboutCharacterFloat 6.2s ease-in-out infinite,
+            lexAboutCharacterGlow 4.8s ease-in-out infinite;
+  will-change:transform,filter;
+}
+.lex-about-char::after{
+  content:"";
+  position:absolute;
+  z-index:3;
+  inset:5% -3% 8% 0;
+  pointer-events:none;
+  opacity:.78;
+  background:
+    radial-gradient(circle at 17% 28%,rgba(255,235,255,.98) 0 1.3px,rgba(205,145,255,.65) 2px,transparent 7px),
+    radial-gradient(circle at 78% 18%,rgba(255,255,255,.95) 0 1.2px,rgba(190,125,255,.55) 2px,transparent 8px),
+    radial-gradient(circle at 88% 56%,rgba(255,235,255,.9) 0 1px,rgba(190,125,255,.55) 2px,transparent 7px),
+    radial-gradient(circle at 28% 72%,rgba(255,255,255,.9) 0 1px,rgba(190,125,255,.5) 2px,transparent 7px),
+    radial-gradient(circle at 60% 39%,rgba(255,255,255,.85) 0 1px,transparent 5px);
+  background-size:100% 100%;
+  filter:drop-shadow(0 0 7px rgba(218,165,255,.9));
+  animation:lexAboutSparkleDrift 7s ease-in-out infinite;
+}
+.lex-about-char:before{
+  animation:lexAboutAuraPulse 5.2s ease-in-out infinite;
+}
+@keyframes lexAboutCharacterFloat{
+  0%,100%{translate:0 0; rotate:0deg}
+  25%{translate:0 -7px; rotate:-.35deg}
+  50%{translate:0 -11px; rotate:0deg}
+  75%{translate:0 -5px; rotate:.35deg}
+}
+@keyframes lexAboutCharacterGlow{
+  0%,100%{filter:drop-shadow(0 0 20px rgba(190,112,255,.48)) drop-shadow(0 12px 24px rgba(0,0,0,.38))}
+  50%{filter:drop-shadow(0 0 31px rgba(215,160,255,.78)) drop-shadow(0 0 48px rgba(145,75,255,.28)) drop-shadow(0 12px 24px rgba(0,0,0,.38))}
+}
+@keyframes lexAboutSparkleDrift{
+  0%,100%{opacity:.38;transform:translate3d(0,5px,0) scale(.96)}
+  35%{opacity:.9;transform:translate3d(-3px,-5px,0) scale(1.02)}
+  70%{opacity:.58;transform:translate3d(3px,-9px,0) scale(.98)}
+}
+@keyframes lexAboutAuraPulse{
+  0%,100%{opacity:.72;transform:scale(.96)}
+  50%{opacity:1;transform:scale(1.06)}
+}
+/* Teks dan navigasi selalu berada di lapisan depan karakter. */
+.lex-about-copy,.lex-about-tabs{position:relative;z-index:5}
+.lex-about-footer{z-index:8}
+@media(prefers-reduced-motion:reduce){
+  .lex-about-char img,.lex-about-char::after,.lex-about-char:before{
+    animation:none!important;will-change:auto
+  }
+}
+
 </style>
 
 </head>
