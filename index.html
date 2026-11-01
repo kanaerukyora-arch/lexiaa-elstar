@@ -771,6 +771,29 @@ button, a, input, select, textarea { touch-action:manipulation; }
 @keyframes lexAboutFade{from{opacity:0}to{opacity:1}}
 @media(max-width:900px){.lex-about-shell{height:min(900px,96dvh);min-height:520px}.lex-about-layout{grid-template-columns:180px minmax(250px,1fr);gap:15px;padding:8px 22px 26px}.lex-about-char{position:absolute;right:12px;bottom:0;width:34%;height:67%;opacity:.34;z-index:1}.lex-about-copy{padding-right:20px}.lex-about-tabs{z-index:4}.lex-about-copy{z-index:4}.lex-about-note{font-size:14px}}
 @media(max-width:600px){.lex-about-overlay{padding:5px;align-items:center}.lex-about-shell{height:96dvh;min-height:0;border-radius:18px;overflow:hidden}.lex-about-shell:before{inset:6px;border-radius:13px}.lex-about-head{padding:24px 58px 9px 22px}.lex-about-title{font-size:35px}.lex-about-subtitle{font-size:13px;max-width:280px}.lex-about-close{right:15px;top:13px;width:40px;height:40px;border-radius:12px;font-size:23px}.lex-about-layout{height:calc(100% - 110px);display:flex;flex-direction:column;gap:8px;padding:5px 17px 28px}.lex-about-tabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;padding:3px 0;flex:0 0 auto}.lex-about-tab{min-height:54px;padding:7px 8px;gap:7px;border-radius:12px;font-size:11px}.lex-about-tab .tab-icon{font-size:20px;flex-basis:23px}.lex-about-tab small{font-size:9px}.lex-about-note{display:none}.lex-about-copy{flex:1;padding:8px 5px 18px 2px;z-index:4}.lex-about-section-title{font-size:25px;margin:5px 0 10px}.lex-about-copy p{font-size:12px;line-height:1.7;max-width:88%}.lex-about-list{gap:7px}.lex-about-list li{font-size:11px;max-width:90%}.lex-about-callout{font-size:13px;padding:10px 12px;margin:12px 0;max-width:92%}.lex-about-char{position:absolute;right:-8px;bottom:0;width:48%;height:48%;opacity:.23;z-index:1}.lex-about-char img{object-position:right bottom}.lex-about-char .char-caption{display:none}.lex-about-footer{left:17px;right:17px;bottom:11px;font-size:10px}.lex-about-footer span:last-child{font-size:8px}}
+/* LEXIAA ABOUT POPUP — foreground character enhancement */
+.lex-about-shell{overflow:visible}
+.lex-about-char{opacity:1!important;z-index:2!important}
+.lex-about-char img{width:145%;height:112%;max-width:none;max-height:none;object-fit:contain;object-position:right bottom;transform:translateX(10%);filter:drop-shadow(0 0 24px rgba(190,112,255,.55)) drop-shadow(0 12px 24px rgba(0,0,0,.35))}
+.lex-about-char:before{background:radial-gradient(ellipse,rgba(171,83,255,.42),transparent 68%);filter:blur(24px)}
+@media(max-width:900px){
+ .lex-about-shell{overflow:visible}
+ .lex-about-char{right:-5%;bottom:-1%;width:54%;height:76%;opacity:1!important;z-index:2!important}
+ .lex-about-char img{width:145%;height:112%;object-position:right bottom;transform:translateX(10%)}
+ .lex-about-copy,.lex-about-tabs{position:relative;z-index:5}
+ .lex-about-copy{padding-right:8px}
+}
+@media(max-width:600px){
+ .lex-about-overlay{padding:7px;overflow:visible}
+ .lex-about-shell{height:96dvh;overflow:visible}
+ .lex-about-layout{position:relative;isolation:isolate}
+ .lex-about-char{right:-7%;bottom:-1%;width:78%;height:67%;opacity:1!important;z-index:2!important}
+ .lex-about-char img{width:132%;height:112%;object-fit:contain;object-position:right bottom;transform:translateX(8%);filter:drop-shadow(0 0 25px rgba(190,112,255,.55)) drop-shadow(0 12px 24px rgba(0,0,0,.4))}
+ .lex-about-copy{z-index:5;padding-right:0}
+ .lex-about-copy p,.lex-about-list li{max-width:82%;text-shadow:0 1px 8px rgba(8,3,15,.95)}
+ .lex-about-callout{max-width:86%;position:relative;z-index:5;background:rgba(25,9,39,.88)}
+ .lex-about-footer{z-index:7}
+}
 @media(prefers-reduced-motion:reduce){.lex-about-overlay.is-open{animation:none}.lex-about-tab,.lex-about-close{transition:none}}
 </style>
 
