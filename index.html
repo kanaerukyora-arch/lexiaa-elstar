@@ -2197,7 +2197,7 @@ button, a, input, select, textarea { touch-action:manipulation; }
   kicker.textContent='WELCOME TO LEXIAA';
   heading.textContent='Senang kamu mampir~';
   body.innerHTML='<p><strong>H a i i~</strong> Selamat datang di Lexiaa. Onee-san sudah menyiapkan sedikit cerita, panduan, dan rahasia kecil buat kamu.</p><div class="lex-about-callout"><span>♕</span>Lexiaa adalah ruang digital untuk menikmati musik, menjelajahi konten, dan menemukan pengalaman baru. Yuk, pilih salah satu kategori di samping. Aku temani, kok~ ♡</div><p>Jangan sungkan bertanya, ya. Klik kategori yang menarik perhatianmu… atau memang dari tadi cuma mau lihat Onee-san? Ara ara~</p>';
-  characterVideo.pause();characterVideo.removeAttribute('src');characterVideo.load();characterVideo.hidden=true;character.hidden=false;character.src=mainImage;character.alt='Karakter utama popup Lexiaa berambut pink';caption.innerHTML='H a i i~<br>Selamat datang di Lexiaa ♡';content.scrollTop=0;
+  character.hidden=true;characterVideo.hidden=false;characterVideo.src='./about-intro-character.webm';characterVideo.load();characterVideo.setAttribute('aria-label','Video karakter utama popup Lexiaa');const introPlayback=characterVideo.play();if(introPlayback&&typeof introPlayback.catch==='function')introPlayback.catch(()=>{});caption.innerHTML='H a i i~<br>Selamat datang di Lexiaa ♡';content.scrollTop=0;
  }
  // Satu audio aktif pada satu waktu: audio lama dihentikan sebelum audio baru dimulai.
  const lexAboutSounds={

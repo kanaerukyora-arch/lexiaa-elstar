@@ -1,5 +1,5 @@
-const CACHE_NAME = "lexiaa-responsive-logout-v8";
-const APP_SHELL = ["./", "./index.html", "./app-icon.webp", "./manifest.webmanifest", "./welcome-mascot.webp", "./mascot-member.png", "./welcome-character.png", "./lexiaa-music-character.webp", "./dashboard-characters.png", "./about-main-character.png", "./about-feature-character.png", "./about-howto-character.png", "./about-guide-character.png", "./about-tips-character.png", "./about-welcome-character.png"];
+const CACHE_NAME = "lexiaa-responsive-logout-v9";
+const APP_SHELL = ["./", "./index.html", "./app-icon.webp", "./manifest.webmanifest", "./welcome-mascot.webp", "./mascot-member.png", "./welcome-character.png", "./lexiaa-music-character.webp", "./dashboard-characters.png", "./about-main-character.png", "./about-intro-character.webm", "./about-feature-character.png", "./about-howto-character.png", "./about-guide-character.png", "./about-tips-character.png", "./about-welcome-character.png"];
 
 self.addEventListener("install", event => {
   event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(APP_SHELL)).then(() => self.skipWaiting()));
