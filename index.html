@@ -897,35 +897,26 @@ button, a, input, select, textarea { touch-action:manipulation; }
 
 <style id="lexiaa-story-display-fix">
 
-/* STORY FIX: show the actual transparent character video (the old canvas-only
-   rule accidentally made the video invisible because no canvas was created). */
-#lexOriginStory{overflow:hidden!important;overscroll-behavior:none;}
-#lexOriginStory.open{height:100vh;height:100dvh;}
-#lexOriginStory .lex-story-top{height:44px;min-height:44px;padding:0 14px;}
-#lexOriginStory .lex-story-layout{height:calc(100% - 44px);min-height:0;box-sizing:border-box;grid-template-columns:minmax(0,1.32fr) minmax(120px,.68fr);gap:1.2vw;padding:1vh 2vw;overflow:hidden;}
-#lexOriginStory .lex-story-dialog{min-width:0;min-height:0;display:flex;flex-direction:column;justify-content:center;}
-#lexOriginStory .lex-story-bubble{box-sizing:border-box;min-height:0;max-height:100%;overflow:hidden;padding:clamp(12px,2vh,24px) clamp(14px,2vw,28px);font-size:clamp(13px,1.55vw,19px);line-height:1.42;}
-#lexOriginStory .lex-story-bubble p{margin:0;overflow-wrap:anywhere;}
-#lexOriginStory .lex-story-character-live{height:100%;min-height:0;max-height:100%;display:flex;align-items:flex-end;justify-content:center;overflow:visible;}
-#lexOriginStory #lexStoryCharacterVideo{display:block!important;position:relative!important;inset:auto!important;z-index:3!important;width:auto!important;height:100%!important;max-width:100%!important;max-height:100%!important;opacity:1!important;visibility:visible!important;object-fit:contain!important;object-position:center bottom!important;pointer-events:none;filter:drop-shadow(0 8px 24px #d7a0ff66);}
-#lexOriginStory .lex-story-character-live canvas{display:none!important;}
-#lexOriginStory .lex-story-controls{flex:none;gap:8px;margin-top:12px;}
-#lexOriginStory .lex-story-controls .btn{padding:9px 13px;font-size:10px;}
+/* STORY RESPONSIVE REBUILD: full-width dialogue, visible keyed character, no page scroll */
+#lexOriginStory{position:fixed!important;inset:0!important;width:100vw!important;height:100vh!important;height:100dvh!important;overflow:hidden!important;overscroll-behavior:none!important;touch-action:pan-x pan-y;}
+#lexOriginStory.open{display:flex!important;flex-direction:column!important;}
+#lexOriginStory .lex-story-top{height:clamp(36px,6vh,48px)!important;min-height:clamp(36px,6vh,48px)!important;flex:0 0 auto!important;padding:0 clamp(9px,2vw,22px)!important;}
+#lexOriginStory .lex-story-layout{position:relative!important;display:block!important;flex:1 1 auto!important;width:100%!important;height:auto!important;min-height:0!important;box-sizing:border-box!important;padding:clamp(8px,2vh,20px) clamp(8px,2vw,24px)!important;overflow:hidden!important;}
+#lexOriginStory .lex-story-dialog{position:relative!important;z-index:3!important;width:100%!important;height:100%!important;min-width:0!important;min-height:0!important;display:flex!important;flex-direction:column!important;justify-content:center!important;align-items:stretch!important;}
+#lexOriginStory .lex-story-label{font-size:clamp(9px,1.6vh,13px)!important;margin:0 0 clamp(5px,1vh,12px)!important;}
+#lexOriginStory .lex-story-bubble{position:relative!important;box-sizing:border-box!important;width:100%!important;max-width:none!important;min-height:0!important;max-height:calc(100% - 56px)!important;overflow:hidden!important;padding:clamp(12px,2.4vh,25px) clamp(13px,2.5vw,30px)!important;padding-right:clamp(100px,27vw,360px)!important;border-radius:clamp(14px,2.2vw,25px)!important;background:linear-gradient(105deg,rgba(18,9,31,.97) 0%,rgba(24,11,39,.92) 72%,rgba(24,11,39,.72) 100%)!important;box-shadow:0 0 32px #b46be533!important;font-size:clamp(15px,2.45vh,25px)!important;line-height:1.32!important;}
+#lexOriginStory .lex-story-bubble p{margin:0!important;overflow-wrap:normal!important;word-break:normal!important;white-space:pre-line!important;}
+#lexOriginStory .lex-story-character-live{position:absolute!important;z-index:2!important;right:0!important;bottom:0!important;width:clamp(145px,34vw,440px)!important;height:100%!important;max-height:100%!important;min-height:0!important;display:flex!important;align-items:flex-end!important;justify-content:center!important;overflow:visible!important;pointer-events:none!important;}
+#lexOriginStory #lexStoryCharacterVideo{position:absolute!important;width:1px!important;height:1px!important;opacity:0!important;pointer-events:none!important;}
+#lexOriginStory #lexStoryCharacterCanvas{display:block!important;position:absolute!important;right:0!important;bottom:0!important;width:100%!important;height:100%!important;object-fit:contain!important;object-position:center bottom!important;z-index:3!important;filter:drop-shadow(0 5px 20px #d7a0ff66)!important;}
+#lexOriginStory .lex-story-controls{position:relative!important;z-index:4!important;flex:none!important;gap:clamp(6px,1vw,12px)!important;margin-top:clamp(7px,1.4vh,14px)!important;}
+#lexOriginStory .lex-story-controls .btn{font-size:clamp(9px,1.5vh,13px)!important;padding:clamp(7px,1.2vh,12px) clamp(10px,1.8vw,18px)!important;min-height:32px!important;}
 #lexOriginStory .lex-story-hint{display:none!important;}
-@media (orientation:landscape) and (max-height:600px){
-  #lexOriginStory .lex-story-top{height:38px;min-height:38px;padding:0 10px;font-size:9px;}
-  #lexOriginStory .lex-story-layout{height:calc(100% - 38px);grid-template-columns:minmax(0,1.42fr) minmax(112px,.58fr);gap:1vw;padding:5px 1.5vw;}
-  #lexOriginStory .lex-story-label{font-size:9px;letter-spacing:.13em;margin-bottom:6px;}
-  #lexOriginStory .lex-story-bubble{padding:8px 12px;font-size:clamp(11px,2.2vh,14px);line-height:1.28;border-radius:16px 16px 16px 4px;}
-  #lexOriginStory .lex-story-controls{margin-top:7px;gap:6px;}
-  #lexOriginStory .lex-story-controls .btn{padding:6px 9px;font-size:8px;min-height:28px;}
-  #lexOriginStory .lex-story-character-live{height:100%;}
-  #lexOriginStory #lexStoryCharacterVideo{height:100%!important;width:auto!important;max-width:100%!important;}
-}
-@media (orientation:portrait) and (max-width:800px){
-  #lexOriginStory .lex-story-layout{grid-template-columns:minmax(0,1.25fr) minmax(100px,.75fr);padding:8px;gap:6px;}
-  #lexOriginStory .lex-story-bubble{font-size:12px;line-height:1.35;padding:10px;}
-}
+#lexOriginStory .lex-name-lexiaa{font-family:Georgia,serif!important;font-weight:800!important;font-style:italic!important;color:#f5d5ff!important;text-shadow:0 0 12px #d58cff!important;letter-spacing:.04em!important;}
+#lexOriginStory .lex-name-lea{font-family:Georgia,serif!important;font-weight:800!important;font-style:italic!important;color:#ffd9e9!important;text-shadow:0 0 12px #ff8fc2!important;}
+@media (max-height:430px){#lexOriginStory .lex-story-bubble{font-size:clamp(13px,2.35vh,18px)!important;line-height:1.22!important;padding-top:8px!important;padding-bottom:8px!important;}#lexOriginStory .lex-story-label{display:none!important;}}
+@media (orientation:portrait){#lexOriginStory .lex-story-bubble{padding-right:clamp(95px,30vw,170px)!important;font-size:clamp(14px,2vh,20px)!important;}#lexOriginStory .lex-story-character-live{width:38vw!important;}}
+
 
 </style>
 </head>
@@ -1167,7 +1158,7 @@ button, a, input, select, textarea { touch-action:manipulation; }
   </div>
   <div id="lexOriginStory" class="lex-origin-story" aria-hidden="true">
     <div class="lex-story-top"><span>♕ LEXIAA ARCHIVE</span><span id="lexStoryCounter">01 / 06</span><button type="button" id="lexStoryExit">KELUAR ✕</button></div>
-    <div class="lex-story-layout"><div class="lex-story-dialog"><div class="lex-story-label">A STORY ABOUT A NAME</div><div id="lexStoryBubble" class="lex-story-bubble"><p id="lexStoryText">Naskah cerita akan ditambahkan di sini.</p></div><div class="lex-story-controls"><button type="button" id="lexStoryPrev" class="btn secondary">← SEBELUMNYA</button><button type="button" id="lexStoryNext" class="btn">BERIKUTNYA →</button></div><p class="lex-story-hint">Putar perangkat ke posisi landscape untuk pengalaman terbaik.</p></div><div class="lex-story-character lex-story-character-live"><video id="lexStoryCharacterVideo" src="assets/lexiaa-story-character-alpha.webm" type="video/webm" autoplay muted loop playsinline preload="auto" disablepictureinpicture aria-hidden="true"></video><div class="lex-character-aura" aria-hidden="true"></div></div></div>
+    <div class="lex-story-layout"><div class="lex-story-dialog"><div class="lex-story-label">A STORY ABOUT A NAME</div><div id="lexStoryBubble" class="lex-story-bubble"><p id="lexStoryText">Naskah cerita akan ditambahkan di sini.</p></div><div class="lex-story-controls"><button type="button" id="lexStoryPrev" class="btn secondary">← SEBELUMNYA</button><button type="button" id="lexStoryNext" class="btn">BERIKUTNYA →</button></div><p class="lex-story-hint">Putar perangkat ke posisi landscape untuk pengalaman terbaik.</p></div><div class="lex-story-character lex-story-character-live"><video id="lexStoryCharacterVideo" src="assets/lexiaa-story-character.mp4" type="video/mp4" autoplay muted loop playsinline preload="auto" disablepictureinpicture aria-hidden="true"></video><canvas id="lexStoryCharacterCanvas" aria-hidden="true"></canvas><div class="lex-character-aura" aria-hidden="true"></div></div></div>
     <audio id="lexStoryAudio" preload="none"></audio>
   </div>
 
@@ -2369,7 +2360,26 @@ button, a, input, select, textarea { touch-action:manipulation; }
     `Dan suatu hari, aku ingin menciptakan sesuatu yang baru.\nSaat sedang memikirkan sebuah nama, aku tiba-tiba teringat pada nama yang sudah lama kugunakan.\nLexiaa.\nSebuah nama yang telah menemaniku melewati begitu banyak waktu.\nSebuah nama yang menyimpan banyak kenangan.\nKarena itulah, aku memilih nama tersebut.\nSekarang, nama itu juga digunakan untuk tempat yang telah kubangun ini.\nDulu, nama itu hanya lahir dari sebuah kenangan.\nNamun sekarang, nama itu telah menjadi salah satu hal yang berharga bagiku.\nInilah kisah di balik nama Lexiaa.`,
     `Setiap kali mengingatnya, rasa sakit dan kesepian kembali datang.\nMeski begitu, aku tidak pernah membencinya.\nJustru, aku benar-benar berterima kasih kepadanya.\nKarena bertemu dengannya, aku belajar mencintai dan merindukan seseorang.\nSekarang, aku tak lagi berharap dia kembali.\nAku hanya berdoa agar dia bahagia.\nMeski mungkin, kami takkan pernah bertemu lagi.\nSemoga kau selalu bahagia.\nUntukmu, Lea.`
   ];
-  let page=0, active=false;
+  let page=0, active=false, keyFrame=0, keyCanvas=null, keyCtx=null, keyLoop=false;
+  function setupCharacterKeyer(){
+    const video=$('lexStoryCharacterVideo'),canvas=$('lexStoryCharacterCanvas');
+    if(!video||!canvas||keyLoop)return;
+    keyCanvas=canvas;keyCtx=canvas.getContext('2d',{alpha:true,willReadFrequently:true});
+    const W=480,H=854;canvas.width=W;canvas.height=H;keyLoop=true;
+    const draw=()=>{
+      if(!keyLoop||!active)return;
+      if(video.readyState>=2){
+        keyCtx.drawImage(video,0,0,W,H);
+        const frame=keyCtx.getImageData(0,0,W,H),d=frame.data;
+        for(let i=0;i<d.length;i+=4){const r=d[i],g=d[i+1],b=d[i+2];const green=g-Math.max(r,b);if(g>65&&green>18){const a=Math.max(0,Math.min(255,255-(green-18)*5));d[i+3]=Math.min(d[i+3],a);}}
+        keyCtx.putImageData(frame,0,0);
+      }
+      keyFrame=requestAnimationFrame(draw);
+    };
+    video.addEventListener('loadeddata',()=>{if(active&&!keyFrame)draw();},{once:true});
+    if(video.readyState>=2)draw();
+  }
+  function stopCharacterKeyer(){keyLoop=false;if(keyFrame)cancelAnimationFrame(keyFrame);keyFrame=0;}
   function status(msg){const el=$('lexOriginStatus'); if(el)el.textContent=msg;}
   function render(){
     const textEl=$('lexStoryText');
@@ -2387,8 +2397,8 @@ button, a, input, select, textarea { touch-action:manipulation; }
     $('lexStoryNext').textContent=page===5?'SELESAI ✓':'BERIKUTNYA →';
     const a=$('lexStoryAudio'); a.pause(); a.removeAttribute('src'); a.load();
   }
-  function openStory(){page=0;active=true;$('lexOriginGate').classList.remove('open');$('lexOriginGate').setAttribute('aria-hidden','true');$('lexOriginStory').classList.add('open');$('lexOriginStory').setAttribute('aria-hidden','false');document.body.style.overflow='hidden';render();const v=$('lexStoryCharacterVideo');if(v){v.muted=true;v.currentTime=0;v.play().catch(()=>{});}try{document.documentElement.requestFullscreen?.().catch(()=>{});screen.orientation?.lock?.('landscape').catch(()=>{});}catch(e){}}
-  function closeStory(){const a=$('lexStoryAudio');a.pause();a.removeAttribute('src');a.load();const v=$('lexStoryCharacterVideo');if(v){v.pause();v.currentTime=0;}active=false;$('lexOriginStory').classList.remove('open');$('lexOriginStory').setAttribute('aria-hidden','true');document.body.style.overflow='';try{screen.orientation?.unlock?.();if(document.fullscreenElement)document.exitFullscreen?.().catch(()=>{});}catch(e){}}
+  function openStory(){page=0;active=true;$('lexOriginGate').classList.remove('open');$('lexOriginGate').setAttribute('aria-hidden','true');$('lexOriginStory').classList.add('open');$('lexOriginStory').setAttribute('aria-hidden','false');document.body.style.overflow='hidden';render();const v=$('lexStoryCharacterVideo');if(v){v.muted=true;v.loop=true;v.currentTime=0;v.play().then(()=>setupCharacterKeyer()).catch(()=>{setupCharacterKeyer();});}try{document.documentElement.requestFullscreen?.().catch(()=>{});screen.orientation?.lock?.('landscape').catch(()=>{});}catch(e){}}
+  function closeStory(){const a=$('lexStoryAudio');a.pause();a.removeAttribute('src');a.load();const v=$('lexStoryCharacterVideo');stopCharacterKeyer();if(v){v.pause();v.currentTime=0;}active=false;$('lexOriginStory').classList.remove('open');$('lexOriginStory').setAttribute('aria-hidden','true');document.body.style.overflow='';try{screen.orientation?.unlock?.();if(document.fullscreenElement)document.exitFullscreen?.().catch(()=>{});}catch(e){}}
   function init(){
     const form=$('lexOriginForm'); if(!form || form.dataset.standaloneReady==='1')return;
     form.dataset.standaloneReady='1'; form.dataset.handlerReady='1';
