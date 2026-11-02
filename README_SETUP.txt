@@ -38,3 +38,11 @@ SECURITY
 - The SQL policies use the admin email as an allowlist. Replace the placeholder before running SQL.
 - Supabase sessions are per-device/browser. Accounts and uploaded media are shared via Supabase, but each device usually logs in separately.
 - Email/password signup across devices requires internet and the same Supabase project. Existing users can log in on other devices; signup creates a shared account in Supabase.
+
+LEXIAA ORIGIN STORY (NEW)
+- Run the updated full supabase_setup.sql in Supabase SQL Editor (or run only the final section beginning “LEXIAA origin story”).
+- The dashboard menu “ASAL USUL NAMA LEXIAA” issues an 8-character code bound to the currently signed-in Supabase user.
+- Codes expire after 10 minutes. Requesting a new code expires any previous unused code for that account. A code is consumed atomically once and cannot be reused or redeemed by another account.
+- No service_role key is used in the browser. The feature uses the existing Supabase publishable key and authenticated RPC functions.
+- The story interface currently contains six editable placeholder dialogue entries. Replace their text and audio paths in the `storyPages` array in index.html after supplying the final script and six voice files.
+- Story access is held only in page memory. Leaving the story, refreshing, or closing the page ends access; a new code is required.

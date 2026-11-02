@@ -135,3 +135,73 @@ with check (
   bucket_id = 'lexiaa-media'
   and (auth.jwt() ->> 'email') = 'fathanmufadhil04@gmail.com'
 );
+
+-- LEXIAA origin story: one-time code, bound to the authenticated Supabase user.
+create table if not exists public.lexiaa_origin_codes (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references auth.users(id) on delete cascade,
+  code_hash text not null unique,
+  status text not null default 'issued' check (status in ('issued','used','expired')),
+  created_at timestamptz not null default now(),
+  expires_at timestamptz not null default (now() + interval '10 minutes'),
+  used_at timestamptz
+);
+alter table public.lexiaa_origin_codes enable row level security;
+revoke all on public.lexiaa_origin_codes from anon, authenticated;
+
+create or replace function public.lexiaa_issue_origin_code()
+returns text
+language plpgsql
+security definer
+set search_path = public, extensions
+as $$
+declare
+  v_uid uuid := auth.uid();
+  v_code text;
+  v_hash text;
+begin
+  if v_uid is null then raise exception 'Login diperlukan.'; end if;
+  update public.lexiaa_origin_codes
+    set status='expired'
+    where user_id=v_uid and status='issued';
+  loop
+    v_code := upper(substr(encode(gen_random_bytes(8),'hex'),1,8));
+    v_hash := encode(digest(v_code,'sha256'),'hex');
+    begin
+      insert into public.lexiaa_origin_codes(user_id,code_hash,expires_at)
+      values(v_uid,v_hash,now()+interval '10 minutes');
+      exit;
+    exception when unique_violation then
+      -- Generate another code if the random value ever collides.
+    end;
+  end loop;
+  return v_code;
+end;
+$$;
+
+create or replace function public.lexiaa_consume_origin_code(p_code text)
+returns boolean
+language plpgsql
+security definer
+set search_path = public, extensions
+as $$
+declare
+  v_uid uuid := auth.uid();
+  v_hash text;
+  v_rows integer;
+begin
+  if v_uid is null then raise exception 'Login diperlukan.'; end if;
+  if p_code is null or length(trim(p_code)) <> 8 then return false; end if;
+  v_hash := encode(digest(upper(trim(p_code)),'sha256'),'hex');
+  update public.lexiaa_origin_codes
+    set status='used', used_at=now()
+    where user_id=v_uid and code_hash=v_hash
+      and status='issued' and expires_at>now();
+  get diagnostics v_rows = row_count;
+  return v_rows = 1;
+end;
+$$;
+revoke all on function public.lexiaa_issue_origin_code() from public;
+revoke all on function public.lexiaa_consume_origin_code(text) from public;
+grant execute on function public.lexiaa_issue_origin_code() to authenticated;
+grant execute on function public.lexiaa_consume_origin_code(text) to authenticated;
