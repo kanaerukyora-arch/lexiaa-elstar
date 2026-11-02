@@ -747,6 +747,7 @@ button, a, input, select, textarea { touch-action:manipulation; }
 .lex-story-bubble .lex-name-lea{font-family:'Palatino Linotype',Georgia,serif;font-weight:700;font-style:italic;letter-spacing:.07em;color:#ffd7e8;text-shadow:0 0 13px #ff8fbd99}
 .lex-story-character-live{position:relative;height:min(88vh,900px);align-items:end;overflow:visible;isolation:isolate}
 .lex-story-character-live video{position:relative;z-index:2;height:100%;width:100%;object-fit:contain;object-position:center bottom;filter:drop-shadow(0 8px 28px #d7a0ff55);}
+.lex-story-character-live video{position:absolute!important;width:1px!important;height:1px!important;opacity:0!important;pointer-events:none!important}.lex-story-character-live canvas{position:relative;z-index:2;height:100%;width:100%;object-fit:contain;filter:drop-shadow(0 8px 28px #d7a0ff55)}
 .lex-character-aura{position:absolute;z-index:1;bottom:2%;left:12%;width:76%;height:50%;border-radius:50%;background:radial-gradient(ellipse,#bd76f044,transparent 68%);filter:blur(18px)}
 .lex-story-controls .btn{border-radius:12px;letter-spacing:.07em;box-shadow:0 6px 20px #05020b55}
 .lex-story-hint{opacity:.72;letter-spacing:.04em}
@@ -1133,7 +1134,7 @@ button, a, input, select, textarea { touch-action:manipulation; }
   </div>
   <div id="lexOriginStory" class="lex-origin-story" aria-hidden="true">
     <div class="lex-story-top"><span>♕ LEXIAA ARCHIVE</span><span id="lexStoryCounter">01 / 06</span><button type="button" id="lexStoryExit">KELUAR ✕</button></div>
-    <div class="lex-story-layout"><div class="lex-story-dialog"><div class="lex-story-label">A STORY ABOUT A NAME</div><div id="lexStoryBubble" class="lex-story-bubble"><p id="lexStoryText">Naskah cerita akan ditambahkan di sini.</p></div><div class="lex-story-controls"><button type="button" id="lexStoryPrev" class="btn secondary">← SEBELUMNYA</button><button type="button" id="lexStoryNext" class="btn">BERIKUTNYA →</button></div><p class="lex-story-hint">Putar perangkat ke posisi landscape untuk pengalaman terbaik.</p></div><div class="lex-story-character lex-story-character-live"><video id="lexStoryCharacterVideo" src="assets/lexiaa-story-character.webm" autoplay muted loop playsinline preload="auto" disablepictureinpicture></video><div class="lex-character-aura" aria-hidden="true"></div></div></div>
+    <div class="lex-story-layout"><div class="lex-story-dialog"><div class="lex-story-label">A STORY ABOUT A NAME</div><div id="lexStoryBubble" class="lex-story-bubble"><p id="lexStoryText">Naskah cerita akan ditambahkan di sini.</p></div><div class="lex-story-controls"><button type="button" id="lexStoryPrev" class="btn secondary">← SEBELUMNYA</button><button type="button" id="lexStoryNext" class="btn">BERIKUTNYA →</button></div><p class="lex-story-hint">Putar perangkat ke posisi landscape untuk pengalaman terbaik.</p></div><div class="lex-story-character lex-story-character-live"><video id="lexStoryCharacterVideo" src="assets/lexiaa-story-character-alpha.webm" type="video/webm" autoplay muted loop playsinline preload="auto" disablepictureinpicture aria-hidden="true"></video><div class="lex-character-aura" aria-hidden="true"></div></div></div>
     <audio id="lexStoryAudio" preload="none"></audio>
   </div>
 
@@ -2384,6 +2385,8 @@ button, a, input, select, textarea { touch-action:manipulation; }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 })();
 </script>
+
+\n
 
 </body>
 </html>
