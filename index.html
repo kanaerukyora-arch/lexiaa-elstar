@@ -734,6 +734,24 @@ button, a, input, select, textarea { touch-action:manipulation; }
 }
 @media(prefers-reduced-motion:reduce){.lex-about-char video.lex-about-character-video{animation:none!important;will-change:auto}}
 
+
+/* LEXIAA origin story: character-led visual treatment */
+.lex-origin-story{background:radial-gradient(ellipse at 78% 48%,#a85ce52b,transparent 38%),radial-gradient(ellipse at 18% 5%,#54317a35,transparent 42%),linear-gradient(125deg,#090611 0%,#170d25 52%,#0c0916 100%)}
+.lex-story-layout{grid-template-columns:minmax(0,1.12fr) minmax(260px,.88fr);gap:1.5vw;padding:2vh 4vw}
+.lex-story-dialog{max-width:900px}
+.lex-story-label{font-family:Georgia,serif;font-size:12px;letter-spacing:.28em;color:#e2b9ff;text-shadow:0 0 18px #c77bff77}
+.lex-story-bubble{position:relative;min-height:210px;padding:clamp(22px,3.2vw,40px);border:1px solid #e7c7ff99;border-radius:26px 26px 26px 7px;background:linear-gradient(145deg,#21132feF,#100b1ceF);box-shadow:0 18px 55px #05020b88,0 0 34px #c27aff22,inset 0 1px #ffffff16;font-family:Georgia,'Times New Roman',serif;font-size:clamp(17px,2vw,24px);line-height:1.72;letter-spacing:.012em;color:#fff4ff;white-space:pre-line}
+.lex-story-bubble:before{content:'“';position:absolute;left:14px;top:-20px;font:italic 74px Georgia,serif;color:#d7a0ff55;pointer-events:none}
+.lex-story-bubble p{white-space:pre-line;text-wrap:pretty}
+.lex-story-bubble .lex-name-lexiaa{font-family:'Palatino Linotype',Georgia,serif;font-weight:700;font-style:italic;letter-spacing:.035em;color:#f4d6ff;text-shadow:0 0 12px #d48cff99,0 0 25px #a95aff55}
+.lex-story-bubble .lex-name-lea{font-family:'Palatino Linotype',Georgia,serif;font-weight:700;font-style:italic;letter-spacing:.07em;color:#ffd7e8;text-shadow:0 0 13px #ff8fbd99}
+.lex-story-character-live{position:relative;height:min(88vh,900px);align-items:end;overflow:visible;isolation:isolate}
+.lex-story-character-live video{position:relative;z-index:2;height:100%;width:100%;object-fit:contain;object-position:center bottom;filter:drop-shadow(0 8px 28px #d7a0ff55);}
+.lex-character-aura{position:absolute;z-index:1;bottom:2%;left:12%;width:76%;height:50%;border-radius:50%;background:radial-gradient(ellipse,#bd76f044,transparent 68%);filter:blur(18px)}
+.lex-story-controls .btn{border-radius:12px;letter-spacing:.07em;box-shadow:0 6px 20px #05020b55}
+.lex-story-hint{opacity:.72;letter-spacing:.04em}
+@media(orientation:portrait) and (max-width:800px){.lex-story-layout{grid-template-columns:minmax(0,1fr) minmax(120px,.72fr);gap:1vw;padding:2vh 3vw}.lex-story-character-live{height:62vh}.lex-story-bubble{font-size:clamp(14px,2.2vw,17px);line-height:1.55;padding:16px}.lex-story-label{margin-bottom:10px}.lex-story-controls{gap:8px}}
+@media(min-width:1000px){.lex-story-bubble{max-width:850px}.lex-story-character-live video{max-width:100%}}
 </style>
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="mobile-web-app-capable" content="yes">
@@ -1115,7 +1133,7 @@ button, a, input, select, textarea { touch-action:manipulation; }
   </div>
   <div id="lexOriginStory" class="lex-origin-story" aria-hidden="true">
     <div class="lex-story-top"><span>♕ LEXIAA ARCHIVE</span><span id="lexStoryCounter">01 / 06</span><button type="button" id="lexStoryExit">KELUAR ✕</button></div>
-    <div class="lex-story-layout"><div class="lex-story-dialog"><div class="lex-story-label">A STORY ABOUT A NAME</div><div id="lexStoryBubble" class="lex-story-bubble"><p id="lexStoryText">Naskah cerita akan ditambahkan di sini.</p></div><div class="lex-story-controls"><button type="button" id="lexStoryPrev" class="btn secondary">← SEBELUMNYA</button><button type="button" id="lexStoryNext" class="btn">BERIKUTNYA →</button></div><p class="lex-story-hint">Putar perangkat ke posisi landscape untuk pengalaman terbaik.</p></div><div class="lex-story-character lex-story-character-placeholder"><div><span>✧</span><strong>LEXIAA</strong><small>KARAKTER AKAN HADIR DI SINI</small></div></div></div>
+    <div class="lex-story-layout"><div class="lex-story-dialog"><div class="lex-story-label">A STORY ABOUT A NAME</div><div id="lexStoryBubble" class="lex-story-bubble"><p id="lexStoryText">Naskah cerita akan ditambahkan di sini.</p></div><div class="lex-story-controls"><button type="button" id="lexStoryPrev" class="btn secondary">← SEBELUMNYA</button><button type="button" id="lexStoryNext" class="btn">BERIKUTNYA →</button></div><p class="lex-story-hint">Putar perangkat ke posisi landscape untuk pengalaman terbaik.</p></div><div class="lex-story-character lex-story-character-live"><video id="lexStoryCharacterVideo" src="assets/lexiaa-story-character.webm" autoplay muted loop playsinline preload="auto" disablepictureinpicture></video><div class="lex-character-aura" aria-hidden="true"></div></div></div>
     <audio id="lexStoryAudio" preload="none"></audio>
   </div>
 
@@ -2320,14 +2338,23 @@ button, a, input, select, textarea { touch-action:manipulation; }
   let page=0, active=false;
   function status(msg){const el=$('lexOriginStatus'); if(el)el.textContent=msg;}
   function render(){
-    $('lexStoryText').textContent=pages[page];
+    const textEl=$('lexStoryText');
+    textEl.replaceChildren();
+    const parts=pages[page].split(/(Lexiaa|Lea)/g);
+    parts.forEach(part=>{
+      if(part==='Lexiaa'||part==='Lea'){
+        const span=document.createElement('span');
+        span.className=part==='Lexiaa'?'lex-name-lexiaa':'lex-name-lea';
+        span.textContent=part;textEl.appendChild(span);
+      }else{textEl.appendChild(document.createTextNode(part));}
+    });
     $('lexStoryCounter').textContent=String(page+1).padStart(2,'0')+' / 06';
     $('lexStoryPrev').disabled=page===0;
     $('lexStoryNext').textContent=page===5?'SELESAI ✓':'BERIKUTNYA →';
     const a=$('lexStoryAudio'); a.pause(); a.removeAttribute('src'); a.load();
   }
-  function openStory(){page=0;active=true;$('lexOriginGate').classList.remove('open');$('lexOriginGate').setAttribute('aria-hidden','true');$('lexOriginStory').classList.add('open');$('lexOriginStory').setAttribute('aria-hidden','false');document.body.style.overflow='hidden';render();try{document.documentElement.requestFullscreen?.().catch(()=>{});screen.orientation?.lock?.('landscape').catch(()=>{});}catch(e){}}
-  function closeStory(){const a=$('lexStoryAudio');a.pause();a.removeAttribute('src');a.load();active=false;$('lexOriginStory').classList.remove('open');$('lexOriginStory').setAttribute('aria-hidden','true');document.body.style.overflow='';try{screen.orientation?.unlock?.();if(document.fullscreenElement)document.exitFullscreen?.().catch(()=>{});}catch(e){}}
+  function openStory(){page=0;active=true;$('lexOriginGate').classList.remove('open');$('lexOriginGate').setAttribute('aria-hidden','true');$('lexOriginStory').classList.add('open');$('lexOriginStory').setAttribute('aria-hidden','false');document.body.style.overflow='hidden';render();const v=$('lexStoryCharacterVideo');if(v){v.muted=true;v.currentTime=0;v.play().catch(()=>{});}try{document.documentElement.requestFullscreen?.().catch(()=>{});screen.orientation?.lock?.('landscape').catch(()=>{});}catch(e){}}
+  function closeStory(){const a=$('lexStoryAudio');a.pause();a.removeAttribute('src');a.load();const v=$('lexStoryCharacterVideo');if(v){v.pause();v.currentTime=0;}active=false;$('lexOriginStory').classList.remove('open');$('lexOriginStory').setAttribute('aria-hidden','true');document.body.style.overflow='';try{screen.orientation?.unlock?.();if(document.fullscreenElement)document.exitFullscreen?.().catch(()=>{});}catch(e){}}
   function init(){
     const form=$('lexOriginForm'); if(!form || form.dataset.standaloneReady==='1')return;
     form.dataset.standaloneReady='1'; form.dataset.handlerReady='1';
