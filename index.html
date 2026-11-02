@@ -1109,7 +1109,7 @@ button, a, input, select, textarea { touch-action:manipulation; }
       <p class="lex-origin-desc">Buat kode akses pribadi untuk membuka kisah ini. Setiap kode hanya dapat digunakan satu kali.</p>
       <button type="button" class="btn" id="lexGetCode" onclick="if(window.lexIssueOriginCode){window.lexIssueOriginCode()}else{var s=document.getElementById('lexOriginStatus');if(s)s.textContent='Sistem belum siap. Muat ulang halaman dan coba lagi.';}">DAPATKAN KODE</button>
       <div class="lex-issued-code" id="lexIssuedCode" aria-live="polite">KODE AKAN MUNCUL DI SINI</div>
-      <form id="lexOriginForm" onsubmit="event.preventDefault(); if(!this.dataset.handlerReady){document.getElementById('lexOriginStatus').textContent='Sistem cerita belum aktif. Muat ulang halaman lalu coba lagi.';}"><label for="lexOriginCode">MASUKKAN KODE</label><input id="lexOriginCode" autocomplete="one-time-code" maxlength="8" placeholder="8 KARAKTER" required><button class="btn" type="submit" id="lexContinue">LANJUTKAN</button></form>
+      <form id="lexOriginForm"><label for="lexOriginCode">MASUKKAN KODE</label><input id="lexOriginCode" autocomplete="one-time-code" maxlength="8" placeholder="8 KARAKTER" required><button class="btn" type="submit" id="lexContinue">LANJUTKAN</button></form>
       <p id="lexOriginStatus" class="lex-origin-status" aria-live="polite"></p>
     </section>
   </div>
@@ -1234,6 +1234,9 @@ button, a, input, select, textarea { touch-action:manipulation; }
         console.error(e);
       }
     }
+
+    // Expose client for the independent story controller below.
+    window.lexSupabaseClient = supabase;
 
     // Daftarkan handler kode sedini mungkin setelah Supabase siap. Dengan begitu
     // tombol tidak bergantung pada seluruh inisialisasi dashboard yang berjalan sesudahnya.
@@ -1895,76 +1898,7 @@ button, a, input, select, textarea { touch-action:manipulation; }
     }
 
 
-    // LEXIAA origin story: codes are issued/consumed atomically by Supabase RPC.
-    const originGate=document.getElementById('lexOriginGate'), originStory=document.getElementById('lexOriginStory');
-    const originStatus=document.getElementById('lexOriginStatus'), issuedCode=document.getElementById('lexIssuedCode');
-    const storyPages=[
-      {text:`Akhirnya kamu datang juga.
-Ada sesuatu yang sejak lama ingin kuceritakan padamu.
-Apa kamu tahu arti dari nama ini?
-Lexiaa…
-Sekarang, nama ini telah menjadi sesuatu yang berharga bagiku.
-Tapi, sejak awal nama ini tidaklah istimewa.
-Di balik nama ini, ada sebuah kisah kecil yang belum pernah kuceritakan kepada siapa pun.`,audio:''},
-      {text:`Semuanya berawal dari seorang gadis.
-Namanya Lea.
-Saat itu, aku benar-benar menyayanginya.
-Waktu yang kami habiskan bersama, bahkan percakapan sederhana kami, semuanya adalah hal yang sangat berharga bagiku.
-Namun, hari-hari seperti itu tidak berlangsung lama.
-Dia akhirnya pergi meninggalkanku.
-Meski begitu, namanya tetap tertinggal di dalam hatiku.`,audio:''},
-      {text:`Meski dia sudah tidak ada, perasaanku tidak bisa begitu saja menghilang.
-Aku masih menyayanginya.
-Di suatu tempat dalam hatiku, aku masih ingin bertemu dengannya.
-Tapi, aku tidak ingin orang lain mengetahui perasaan itu.
-Karena hanya dengan melihat namanya, seolah-olah semua orang bisa tahu bahwa aku belum bisa melupakannya.
-Jadi, aku mulai berpikir.
-Daripada menggunakan nama aslinya begitu saja, bagaimana kalau aku mengubahnya sedikit?
-Dan dari nama Lea, lahirlah…
-Lexia.`,audio:''},
-      {text:`Aku mulai menggunakan nama itu di Mobile Legends.
-Awalnya, itu hanyalah nama dalam sebuah game.
-Aku juga tidak berniat memberinya makna yang istimewa.
-Namun, meski musim terus berganti, aku tetap menggunakan nama itu berulang kali.
-Lexiaa.
-Terkadang aku hanya menyebut diriku Lexia, dan terkadang juga menggunakan nama I'm Lexia.
-Tanpa kusadari, nama itu bukan lagi sekadar nama dalam game.
-Entah sejak kapan, nama itu telah menjadi nama yang menggambarkan diriku sendiri.`,audio:''},
-      {text:`Dan suatu hari, aku ingin menciptakan sesuatu yang baru.
-Saat sedang memikirkan sebuah nama, aku tiba-tiba teringat pada nama yang sudah lama kugunakan.
-Lexiaa.
-Sebuah nama yang telah menemaniku melewati begitu banyak waktu.
-Sebuah nama yang menyimpan banyak kenangan.
-Karena itulah, aku memilih nama tersebut.
-Sekarang, nama itu juga digunakan untuk tempat yang telah kubangun ini.
-Dulu, nama itu hanya lahir dari sebuah kenangan.
-Namun sekarang, nama itu telah menjadi salah satu hal yang berharga bagiku.
-Inilah kisah di balik nama Lexiaa.`,audio:''},
-      {text:`Setiap kali mengingatnya, rasa sakit dan kesepian kembali datang.
-Meski begitu, aku tidak pernah membencinya.
-Justru, aku benar-benar berterima kasih kepadanya.
-Karena bertemu dengannya, aku belajar mencintai dan merindukan seseorang.
-Sekarang, aku tak lagi berharap dia kembali.
-Aku hanya berdoa agar dia bahagia.
-Meski mungkin, kami takkan pernah bertemu lagi.
-Semoga kau selalu bahagia.
-Untukmu, Lea.`,audio:''}
-    ];
-    let storyPage=0, storyActive=false;
-    function openOriginGate(){originStatus.textContent='';issuedCode.textContent='KODE AKAN MUNCUL DI SINI';document.getElementById('lexOriginCode').value='';originGate.classList.add('open');originGate.setAttribute('aria-hidden','false');}
-    function closeOriginGate(){originGate.classList.remove('open');originGate.setAttribute('aria-hidden','true');}
-    function stopOriginStory(){const a=document.getElementById('lexStoryAudio');a.pause();a.removeAttribute('src');a.load();storyActive=false;originStory.classList.remove('open');originStory.setAttribute('aria-hidden','true');document.body.style.overflow='';try{if(screen.orientation?.unlock)screen.orientation.unlock();if(document.fullscreenElement)document.exitFullscreen().catch(()=>{});}catch(_){}}
-    function renderOriginStory(){const page=storyPages[storyPage],a=document.getElementById('lexStoryAudio');document.getElementById('lexStoryText').textContent=page.text;document.getElementById('lexStoryCounter').textContent=String(storyPage+1).padStart(2,'0')+' / 06';document.getElementById('lexStoryPrev').disabled=storyPage===0;document.getElementById('lexStoryNext').textContent=storyPage===5?'SELESAI ✓':'BERIKUTNYA →';a.pause();a.removeAttribute('src');a.load();if(page.audio){a.src=page.audio;a.currentTime=0;a.play().catch(()=>{});}}
-    function enterOriginStory(){storyPage=0;storyActive=true;closeOriginGate();originStory.classList.add('open');originStory.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';renderOriginStory();try{if(document.documentElement.requestFullscreen)document.documentElement.requestFullscreen().catch(()=>{});if(screen.orientation?.lock)screen.orientation.lock('landscape').catch(()=>{});}catch(_){}}
-    document.getElementById('lexOriginOpen').addEventListener('click',openOriginGate);
-    document.getElementById('lexOriginClose').addEventListener('click',closeOriginGate);
-    const originForm=document.getElementById('lexOriginForm');originForm.dataset.handlerReady='1';originForm.addEventListener('submit',async e=>{e.preventDefault();if(!requireSupabase())return;const b=document.getElementById('lexContinue'),code=document.getElementById('lexOriginCode').value.trim().toUpperCase();b.disabled=true;b.textContent='MEMERIKSA...';originStatus.textContent='Memeriksa kode dan sesi akun...';try{const {data:{session},error:sessionError}=await supabase.auth.getSession();if(sessionError)throw sessionError;if(!session)throw new Error('Sesi login tidak ditemukan. Silakan login kembali.');const {data,error}=await supabase.rpc('lexiaa_consume_origin_code',{p_code:code});if(error)throw error;const accepted=data===true||data==='true'||data?.success===true||data?.valid===true;if(!accepted)throw new Error(typeof data==='string'&&data?data:'Kode tidak valid, sudah digunakan, atau kedaluwarsa.');enterOriginStory();}catch(err){console.error('LEXIAA consume code:',err);originStatus.textContent=err?.message||'Kode tidak dapat digunakan. Periksa fungsi SQL Supabase.';}finally{b.disabled=false;b.textContent='LANJUTKAN';}});
-    document.getElementById('lexStoryPrev').addEventListener('click',()=>{if(storyPage>0){storyPage--;renderOriginStory();}});
-    document.getElementById('lexStoryNext').addEventListener('click',()=>{if(storyPage<5){storyPage++;renderOriginStory();}else stopOriginStory();});
-    document.getElementById('lexStoryExit').addEventListener('click',stopOriginStory);
-    document.querySelectorAll('[data-back-dashboard]').forEach(b=>b.addEventListener('click',()=>{if(storyActive)stopOriginStory();}));
-    window.addEventListener('pagehide',()=>{if(storyActive)stopOriginStory();});
-    document.addEventListener('keydown',e=>{if(e.key==='Escape'&&storyActive)stopOriginStory();});
+    // Story controls are initialized by the standalone controller after this module.
 
     // Jam lokal selalu berjalan; lokasi memakai fallback timezone agar tidak stuck jika GPS/geocoder lambat.
     (function initLiveInfo(){
@@ -2368,6 +2302,59 @@ Untukmu, Lea.`,audio:''}
  overlay.addEventListener('click',e=>{if(e.target===overlay)close()});
  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&overlay.classList.contains('is-open'))close()});
  [character,characterVideo].forEach(img=>{img.addEventListener('contextmenu',e=>e.preventDefault());img.addEventListener('dragstart',e=>e.preventDefault())});
+})();
+</script>
+<script>
+/* LEXIAA story controller: isolated from the dashboard module so unrelated
+   dashboard errors cannot leave the Continue button unbound. */
+(function(){
+  const $ = id => document.getElementById(id);
+  const pages = [
+    `Akhirnya kamu datang juga.\nAda sesuatu yang sejak lama ingin kuceritakan padamu.\nApa kamu tahu arti dari nama ini?\nLexiaa…\nSekarang, nama ini telah menjadi sesuatu yang berharga bagiku.\nTapi, sejak awal nama ini tidaklah istimewa.\nDi balik nama ini, ada sebuah kisah kecil yang belum pernah kuceritakan kepada siapa pun.`,
+    `Semuanya berawal dari seorang gadis.\nNamanya Lea.\nSaat itu, aku benar-benar menyayanginya.\nWaktu yang kami habiskan bersama, bahkan percakapan sederhana kami, semuanya adalah hal yang sangat berharga bagiku.\nNamun, hari-hari seperti itu tidak berlangsung lama.\nDia akhirnya pergi meninggalkanku.\nMeski begitu, namanya tetap tertinggal di dalam hatiku.`,
+    `Meski dia sudah tidak ada, perasaanku tidak bisa begitu saja menghilang.\nAku masih menyayanginya.\nDi suatu tempat dalam hatiku, aku masih ingin bertemu dengannya.\nTapi, aku tidak ingin orang lain mengetahui perasaan itu.\nKarena hanya dengan melihat namanya, seolah-olah semua orang bisa tahu bahwa aku belum bisa melupakannya.\nJadi, aku mulai berpikir.\nDaripada menggunakan nama aslinya begitu saja, bagaimana kalau aku mengubahnya sedikit?\nDan dari nama Lea, lahirlah…\nLexia.`,
+    `Aku mulai menggunakan nama itu di Mobile Legends.\nAwalnya, itu hanyalah nama dalam sebuah game.\nAku juga tidak berniat memberinya makna yang istimewa.\nNamun, meski musim terus berganti, aku tetap menggunakan nama itu berulang kali.\nLexiaa.\nTerkadang aku hanya menyebut diriku Lexia, dan terkadang juga menggunakan nama I'm Lexia.\nTanpa kusadari, nama itu bukan lagi sekadar nama dalam game.\nEntah sejak kapan, nama itu telah menjadi nama yang menggambarkan diriku sendiri.`,
+    `Dan suatu hari, aku ingin menciptakan sesuatu yang baru.\nSaat sedang memikirkan sebuah nama, aku tiba-tiba teringat pada nama yang sudah lama kugunakan.\nLexiaa.\nSebuah nama yang telah menemaniku melewati begitu banyak waktu.\nSebuah nama yang menyimpan banyak kenangan.\nKarena itulah, aku memilih nama tersebut.\nSekarang, nama itu juga digunakan untuk tempat yang telah kubangun ini.\nDulu, nama itu hanya lahir dari sebuah kenangan.\nNamun sekarang, nama itu telah menjadi salah satu hal yang berharga bagiku.\nInilah kisah di balik nama Lexiaa.`,
+    `Setiap kali mengingatnya, rasa sakit dan kesepian kembali datang.\nMeski begitu, aku tidak pernah membencinya.\nJustru, aku benar-benar berterima kasih kepadanya.\nKarena bertemu dengannya, aku belajar mencintai dan merindukan seseorang.\nSekarang, aku tak lagi berharap dia kembali.\nAku hanya berdoa agar dia bahagia.\nMeski mungkin, kami takkan pernah bertemu lagi.\nSemoga kau selalu bahagia.\nUntukmu, Lea.`
+  ];
+  let page=0, active=false;
+  function status(msg){const el=$('lexOriginStatus'); if(el)el.textContent=msg;}
+  function render(){
+    $('lexStoryText').textContent=pages[page];
+    $('lexStoryCounter').textContent=String(page+1).padStart(2,'0')+' / 06';
+    $('lexStoryPrev').disabled=page===0;
+    $('lexStoryNext').textContent=page===5?'SELESAI ✓':'BERIKUTNYA →';
+    const a=$('lexStoryAudio'); a.pause(); a.removeAttribute('src'); a.load();
+  }
+  function openStory(){page=0;active=true;$('lexOriginGate').classList.remove('open');$('lexOriginGate').setAttribute('aria-hidden','true');$('lexOriginStory').classList.add('open');$('lexOriginStory').setAttribute('aria-hidden','false');document.body.style.overflow='hidden';render();try{document.documentElement.requestFullscreen?.().catch(()=>{});screen.orientation?.lock?.('landscape').catch(()=>{});}catch(e){}}
+  function closeStory(){const a=$('lexStoryAudio');a.pause();a.removeAttribute('src');a.load();active=false;$('lexOriginStory').classList.remove('open');$('lexOriginStory').setAttribute('aria-hidden','true');document.body.style.overflow='';try{screen.orientation?.unlock?.();if(document.fullscreenElement)document.exitFullscreen?.().catch(()=>{});}catch(e){}}
+  function init(){
+    const form=$('lexOriginForm'); if(!form || form.dataset.standaloneReady==='1')return;
+    form.dataset.standaloneReady='1'; form.dataset.handlerReady='1';
+    $('lexOriginOpen')?.addEventListener('click',()=>{$('lexOriginGate').classList.add('open');$('lexOriginGate').setAttribute('aria-hidden','false');status('');$('lexIssuedCode').textContent='KODE AKAN MUNCUL DI SINI';$('lexOriginCode').value='';});
+    $('lexOriginClose')?.addEventListener('click',()=>{$('lexOriginGate').classList.remove('open');$('lexOriginGate').setAttribute('aria-hidden','true');});
+    $('lexGetCode')?.addEventListener('click',async()=>{
+      const b=$('lexGetCode'),out=$('lexIssuedCode'),input=$('lexOriginCode'),client=window.lexSupabaseClient;
+      if(!client){status('Koneksi Supabase belum siap. Muat ulang halaman.');return;}
+      b.disabled=true;b.textContent='MEMBUAT KODE...';status('Menghubungi Supabase...');
+      try{const {data:{session},error:se}=await client.auth.getSession();if(se)throw se;if(!session)throw new Error('Silakan login terlebih dahulu.');const {data,error}=await client.rpc('lexiaa_issue_origin_code');if(error)throw error;const code=typeof data==='string'?data:(data?.code||data?.token||'');if(!code)throw new Error('RPC tidak mengembalikan kode. Periksa fungsi lexiaa_issue_origin_code.');out.textContent=code;input.value=code;status('Kode berhasil dibuat.');}
+      catch(e){console.error('LEXIAA issue:',e);status(e.message||'Gagal membuat kode.');}finally{b.disabled=false;b.textContent='DAPATKAN KODE';}
+    });
+    form.addEventListener('submit',async e=>{
+      e.preventDefault();e.stopPropagation();
+      const b=$('lexContinue'),code=$('lexOriginCode').value.trim().toUpperCase(),client=window.lexSupabaseClient;
+      if(!client){status('Koneksi Supabase belum siap. Muat ulang halaman.');return;}
+      b.disabled=true;b.textContent='MEMERIKSA...';status('Memeriksa kode...');
+      try{const {data:{session},error:se}=await client.auth.getSession();if(se)throw se;if(!session)throw new Error('Sesi login tidak ditemukan. Silakan login kembali.');const {data,error}=await client.rpc('lexiaa_consume_origin_code',{p_code:code});if(error)throw error;const ok=data===true||data==='true'||data?.success===true||data?.valid===true||data?.consumed===true;if(!ok)throw new Error(typeof data==='string'&&data?data:'Kode tidak valid, sudah dipakai, atau kedaluwarsa.');openStory();}
+      catch(err){console.error('LEXIAA consume:',err);status(err.message||'Kode tidak dapat digunakan.');}finally{b.disabled=false;b.textContent='LANJUTKAN';}
+    });
+    $('lexStoryPrev')?.addEventListener('click',()=>{if(page>0){page--;render();}});
+    $('lexStoryNext')?.addEventListener('click',()=>{if(page<5){page++;render();}else closeStory();});
+    $('lexStoryExit')?.addEventListener('click',closeStory);
+    document.addEventListener('keydown',e=>{if(e.key==='Escape'&&active)closeStory();});
+    window.addEventListener('pagehide',()=>{if(active)closeStory();});
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 })();
 </script>
 
