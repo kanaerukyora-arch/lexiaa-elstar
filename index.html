@@ -753,6 +753,7 @@ button, a, input, select, textarea { touch-action:manipulation; }
 .lex-story-hint{opacity:.72;letter-spacing:.04em}
 @media(orientation:portrait) and (max-width:800px){.lex-story-layout{grid-template-columns:minmax(0,1fr) minmax(120px,.72fr);gap:1vw;padding:2vh 3vw}.lex-story-character-live{height:62vh}.lex-story-bubble{font-size:clamp(14px,2.2vw,17px);line-height:1.55;padding:16px}.lex-story-label{margin-bottom:10px}.lex-story-controls{gap:8px}}
 @media(min-width:1000px){.lex-story-bubble{max-width:850px}.lex-story-character-live video{max-width:100%}}
+
 </style>
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="mobile-web-app-capable" content="yes">
@@ -935,6 +936,27 @@ button, a, input, select, textarea { touch-action:manipulation; }
 @media (orientation:landscape){#lexOriginStory .lex-story-layout{padding:clamp(6px,1.2vh,14px) clamp(8px,1.2vw,18px)!important;}#lexOriginStory .lex-story-bubble{font-size:clamp(18px,3.1vh,32px)!important;line-height:1.34!important;padding-right:clamp(140px,30vw,410px)!important;}}
 @media (orientation:portrait){#lexOriginStory .lex-story-character-live{width:34vw!important;}#lexOriginStory .lex-story-bubble{font-size:clamp(15px,2.1vh,22px)!important;padding-right:clamp(105px,33vw,190px)!important;}}
 @media (max-height:420px){#lexOriginStory .lex-story-top{height:34px!important;min-height:34px!important;}#lexOriginStory .lex-story-bubble{font-size:clamp(16px,3.2vh,24px)!important;line-height:1.27!important;}}
+/* LEXIAA STORY: dialogue layout, character glow and no-scroll fullscreen */
+#lexOriginStory,#lexOriginStory *{box-sizing:border-box}
+#lexOriginStory{overflow:hidden!important;height:100vh!important;height:100dvh!important;overscroll-behavior:none!important}
+#lexOriginStory.open{display:flex!important;flex-direction:column!important}
+#lexOriginStory .lex-story-top{flex:0 0 clamp(38px,6vh,54px)!important;height:clamp(38px,6vh,54px)!important}
+#lexOriginStory .lex-story-layout{flex:1 1 0!important;min-height:0!important;height:0!important;position:relative!important;overflow:hidden!important;padding:clamp(8px,1.8vh,20px) clamp(10px,2vw,28px)!important}
+#lexOriginStory .lex-story-dialog{position:relative!important;z-index:4!important;width:100%!important;height:100%!important;display:flex!important;flex-direction:column!important;justify-content:center!important;min-height:0!important;padding-right:clamp(112px,27vw,370px)!important}
+#lexOriginStory .lex-story-label{margin:0 0 clamp(6px,1.3vh,14px)!important;font-size:clamp(9px,1.5vh,13px)!important}
+#lexOriginStory .lex-story-bubble{width:100%!important;max-width:none!important;min-height:0!important;max-height:min(70vh,100%)!important;overflow:hidden!important;padding:clamp(16px,3vh,38px)!important;border-radius:24px 24px 24px 7px!important;font-size:clamp(17px,2.7vh,31px)!important;line-height:1.48!important;background:linear-gradient(115deg,rgba(18,9,31,.97),rgba(27,12,43,.91))!important}
+#lexOriginStory .lex-story-bubble p{margin:0!important;white-space:pre-line!important;overflow-wrap:anywhere!important}
+#lexOriginStory .lex-story-character-live{position:absolute!important;z-index:5!important;right:0!important;bottom:0!important;width:clamp(165px,32vw,430px)!important;height:100%!important;max-height:100%!important;display:block!important;overflow:hidden!important;pointer-events:none!important;background:transparent!important;isolation:isolate!important}
+#lexOriginStory #lexStoryCharacterVideo{position:absolute!important;left:-10px!important;bottom:0!important;width:2px!important;height:2px!important;opacity:0!important;pointer-events:none!important}
+#lexOriginStory #lexStoryCharacterCanvas{position:absolute!important;right:0!important;bottom:0!important;width:100%!important;height:100%!important;display:block!important;object-fit:contain!important;object-position:center bottom!important;filter:drop-shadow(0 0 7px rgba(255,255,255,.82)) drop-shadow(0 0 22px rgba(224,205,255,.62))!important;pointer-events:none!important}
+#lexOriginStory .lex-story-controls{position:relative!important;z-index:7!important;flex:0 0 auto!important;margin-top:clamp(9px,1.8vh,18px)!important}
+#lexOriginStory .lex-story-controls .btn{font-size:clamp(10px,1.6vh,14px)!important;padding:clamp(9px,1.5vh,14px) clamp(12px,2vw,22px)!important}
+#lexOriginStory .lex-story-hint{display:none!important}
+@media(orientation:landscape){#lexOriginStory .lex-story-dialog{padding-right:clamp(150px,29vw,410px)!important}#lexOriginStory .lex-story-bubble{font-size:clamp(19px,3.15vh,34px)!important;line-height:1.42!important}}
+@media(orientation:portrait){#lexOriginStory .lex-story-dialog{padding-right:clamp(100px,31vw,185px)!important}#lexOriginStory .lex-story-character-live{width:clamp(135px,38vw,230px)!important}#lexOriginStory .lex-story-bubble{font-size:clamp(15px,2.15vh,22px)!important;line-height:1.38!important;padding:clamp(12px,2vh,20px)!important}}
+@media(max-height:430px){#lexOriginStory .lex-story-top{flex-basis:34px!important;height:34px!important}#lexOriginStory .lex-story-bubble{font-size:clamp(16px,3.2vh,25px)!important;line-height:1.28!important}#lexOriginStory .lex-story-controls{margin-top:6px!important}}
+
+
 </style>
 
 </head>
@@ -1168,16 +1190,16 @@ button, a, input, select, textarea { touch-action:manipulation; }
       <button type="button" class="lex-origin-close" id="lexOriginClose" aria-label="Tutup" onclick="(function(){var g=document.getElementById('lexOriginGate');if(g){g.classList.remove('open');g.setAttribute('aria-hidden','true');}})()">×</button>
       <p class="modal-kicker">LEXIAA / SECRET ARCHIVE</p><h2 id="lexOriginTitle">ASAL USUL NAMA "LEXIAA"</h2>
       <p class="lex-origin-desc">Buat kode akses pribadi untuk membuka kisah ini. Setiap kode hanya dapat digunakan satu kali.</p>
-      <button type="button" class="btn" id="lexGetCode" onclick="if(window.lexIssueOriginCode){window.lexIssueOriginCode()}else{var s=document.getElementById('lexOriginStatus');if(s)s.textContent='Sistem belum siap. Muat ulang halaman dan coba lagi.';}">DAPATKAN KODE</button>
+      <button type="button" class="btn" id="lexGetCode">DAPATKAN KODE</button>
       <div class="lex-issued-code" id="lexIssuedCode" aria-live="polite">KODE AKAN MUNCUL DI SINI</div>
       <form id="lexOriginForm"><label for="lexOriginCode">MASUKKAN KODE</label><input id="lexOriginCode" autocomplete="one-time-code" maxlength="8" placeholder="8 KARAKTER" required><button class="btn" type="submit" id="lexContinue">LANJUTKAN</button></form>
       <p id="lexOriginStatus" class="lex-origin-status" aria-live="polite"></p>
     </section>
   </div>
   <div id="lexOriginStory" class="lex-origin-story" aria-hidden="true">
-    <div class="lex-story-top"><span>♕ LEXIAA ARCHIVE</span><span id="lexStoryCounter">01 / 06</span><button type="button" id="lexStoryExit">KELUAR ✕</button></div>
-    <div class="lex-story-layout"><div class="lex-story-dialog"><div class="lex-story-label">A STORY ABOUT A NAME</div><div id="lexStoryBubble" class="lex-story-bubble"><p id="lexStoryText">Naskah cerita akan ditambahkan di sini.</p></div><div class="lex-story-controls"><button type="button" id="lexStoryPrev" class="btn secondary">← SEBELUMNYA</button><button type="button" id="lexStoryNext" class="btn">BERIKUTNYA →</button></div><p class="lex-story-hint">Putar perangkat ke posisi landscape untuk pengalaman terbaik.</p></div><div class="lex-story-character lex-story-character-live"><video id="lexStoryCharacterVideo" src="assets/lexiaa-story-character.mp4" type="video/mp4" autoplay muted loop playsinline preload="auto" disablepictureinpicture aria-hidden="true"></video><canvas id="lexStoryCharacterCanvas" aria-hidden="true"></canvas><div class="lex-character-aura" aria-hidden="true"></div></div></div>
-    <audio id="lexStoryAudio" preload="none"></audio>
+    <div class="lex-story-top"><span>♕ LEXIAA ARCHIVE</span><span id="lexStoryCounter">01 / 06</span><button type="button" id="lexStoryFullscreen">⛶ FULLSCREEN</button><button type="button" id="lexStoryExit">KELUAR ✕</button></div>
+    <div class="lex-story-layout"><div class="lex-story-dialog"><div class="lex-story-label">A STORY ABOUT A NAME</div><div id="lexStoryBubble" class="lex-story-bubble"><p id="lexStoryText">Naskah cerita akan ditambahkan di sini.</p></div><div class="lex-story-controls"><button type="button" id="lexStoryPrev" class="btn secondary">← SEBELUMNYA</button><button type="button" id="lexStoryNext" class="btn">BERIKUTNYA →</button></div><p class="lex-story-hint">Putar perangkat ke posisi landscape untuk pengalaman terbaik.</p></div><div class="lex-story-character lex-story-character-live"><video id="lexStoryCharacterVideo" src="./lexiaa-story-character-alpha.webm" type="video/webm" autoplay muted loop playsinline preload="auto" disablepictureinpicture controlslist="nodownload noplaybackrate noremoteplayback" tabindex="-1" draggable="false" aria-hidden="true"></video><canvas id="lexStoryCharacterCanvas" aria-hidden="true"></canvas><div class="lex-character-aura" aria-hidden="true"></div></div></div>
+    <audio id="lexStoryAudio" preload="auto"></audio>
   </div>
 
   <div id="imageLightbox" class="image-lightbox" role="dialog" aria-modal="true" aria-label="Tampilan gambar penuh">
@@ -2392,10 +2414,14 @@ button, a, input, select, textarea { touch-action:manipulation; }
         const frame=keyCtx.getImageData(0,0,w,h),d=frame.data;
         for(let i=0;i<d.length;i+=4){
           const r=d[i],g=d[i+1],b=d[i+2];
-          const green=g-Math.max(r,b);
-          if(g>72 && green>22){
-            const alpha=Math.max(0,Math.min(255,255-(green-22)*7));
-            d[i+3]=Math.min(d[i+3],alpha);
+          const greenExcess=g-Math.max(r,b);
+          const chroma=Math.max(0,greenExcess-10);
+          const key=Math.max(0,Math.min(1,(chroma-5)/42));
+          const alpha=(d[i+3]/255)*(1-key);
+          d[i+3]=Math.round(alpha*255);
+          if(alpha>0.02 && key>0){
+            const spill=Math.min(1,key*0.85);
+            d[i+1]=Math.round(g*(1-spill)+Math.max(r,b)*spill);
           }
         }
         keyCtx.putImageData(frame,0,0);
@@ -2424,22 +2450,45 @@ button, a, input, select, textarea { touch-action:manipulation; }
     $('lexStoryCounter').textContent=String(page+1).padStart(2,'0')+' / 06';
     $('lexStoryPrev').disabled=page===0;
     $('lexStoryNext').textContent=page===5?'SELESAI ✓':'BERIKUTNYA →';
-    const a=$('lexStoryAudio'); a.pause(); a.removeAttribute('src'); a.load();
+    const a=$('lexStoryAudio');
+    if(a){
+      a.pause(); a.currentTime=0;
+      const nextSrc=`./lexiaa-story-audio-${page+1}.wav`;
+      if(a.getAttribute('src')!==nextSrc){a.src=nextSrc;a.load();}
+      a.play().catch(err=>console.warn('LEXIAA story audio:',err));
+    }
   }
   function openStory(){page=0;active=true;$('lexOriginGate').classList.remove('open');$('lexOriginGate').setAttribute('aria-hidden','true');$('lexOriginStory').classList.add('open');$('lexOriginStory').setAttribute('aria-hidden','false');document.body.style.overflow='hidden';render();const v=$('lexStoryCharacterVideo');if(v){v.muted=true;v.defaultMuted=true;v.loop=true;v.playsInline=true;v.currentTime=0;setupCharacterKeyer();const playAttempt=v.play();if(playAttempt&&playAttempt.catch)playAttempt.catch(()=>{status('Video karakter belum dapat diputar. Ketuk layar sekali lalu coba lagi.');});}try{document.documentElement.requestFullscreen?.().catch(()=>{});screen.orientation?.lock?.('landscape').catch(()=>{});}catch(e){}}
   function closeStory(){const a=$('lexStoryAudio');a.pause();a.removeAttribute('src');a.load();const v=$('lexStoryCharacterVideo');stopCharacterKeyer();if(v){v.pause();v.currentTime=0;}active=false;$('lexOriginStory').classList.remove('open');$('lexOriginStory').setAttribute('aria-hidden','true');document.body.style.overflow='';try{screen.orientation?.unlock?.();if(document.fullscreenElement)document.exitFullscreen?.().catch(()=>{});}catch(e){}}
   function init(){
     const form=$('lexOriginForm'); if(!form || form.dataset.standaloneReady==='1')return;
     form.dataset.standaloneReady='1'; form.dataset.handlerReady='1';
+    const characterVideo=$('lexStoryCharacterVideo');
+    if(characterVideo){
+      characterVideo.addEventListener('contextmenu',e=>e.preventDefault());
+      characterVideo.addEventListener('dragstart',e=>e.preventDefault());
+    }
+
     $('lexOriginOpen')?.addEventListener('click',()=>{$('lexOriginGate').classList.add('open');$('lexOriginGate').setAttribute('aria-hidden','false');status('');$('lexIssuedCode').textContent='KODE AKAN MUNCUL DI SINI';$('lexOriginCode').value='';});
     $('lexOriginClose')?.addEventListener('click',()=>{$('lexOriginGate').classList.remove('open');$('lexOriginGate').setAttribute('aria-hidden','true');});
-    $('lexGetCode')?.addEventListener('click',async()=>{
-      const b=$('lexGetCode'),out=$('lexIssuedCode'),input=$('lexOriginCode'),client=window.lexSupabaseClient;
-      if(!client){status('Koneksi Supabase belum siap. Muat ulang halaman.');return;}
-      b.disabled=true;b.textContent='MEMBUAT KODE...';status('Menghubungi Supabase...');
-      try{const {data:{session},error:se}=await client.auth.getSession();if(se)throw se;if(!session)throw new Error('Silakan login terlebih dahulu.');const {data,error}=await client.rpc('lexiaa_issue_origin_code');if(error)throw error;const code=typeof data==='string'?data:(data?.code||data?.token||'');if(!code)throw new Error('RPC tidak mengembalikan kode. Periksa fungsi lexiaa_issue_origin_code.');out.textContent=code;input.value=code;status('Kode berhasil dibuat.');}
-      catch(e){console.error('LEXIAA issue:',e);status(e.message||'Gagal membuat kode.');}finally{b.disabled=false;b.textContent='DAPATKAN KODE';}
+    $('lexGetCode')?.addEventListener('click',()=>{
+      if(typeof window.lexIssueOriginCode==='function') window.lexIssueOriginCode();
+      else status('Sistem kode belum siap. Muat ulang halaman dan coba lagi.');
     });
+
+    $('lexStoryFullscreen')?.addEventListener('click',async()=>{
+      const story=$('lexOriginStory');
+      try{
+        if(!document.fullscreenElement && story.requestFullscreen) await story.requestFullscreen();
+        else if(document.fullscreenElement) await document.exitFullscreen();
+        screen.orientation?.lock?.('landscape').catch(()=>{});
+      }catch(err){status('Mode fullscreen tidak didukung browser ini. Tampilan tetap memenuhi layar.');}
+    });
+    $('lexOriginStory')?.addEventListener('pointerdown',()=>{
+      const a=$('lexStoryAudio');
+      if(active && a && a.paused) a.play().catch(err=>console.warn('LEXIAA story audio:',err));
+    },{passive:true});
+
     form.addEventListener('submit',async e=>{
       e.preventDefault();e.stopPropagation();
       const b=$('lexContinue'),code=$('lexOriginCode').value.trim().toUpperCase(),client=window.lexSupabaseClient;
