@@ -1235,6 +1235,32 @@ button, a, input, select, textarea { touch-action:manipulation; }
       }
     }
 
+    // Daftarkan handler kode sedini mungkin setelah Supabase siap. Dengan begitu
+    // tombol tidak bergantung pada seluruh inisialisasi dashboard yang berjalan sesudahnya.
+    window.lexIssueOriginCode = async function () {
+      const button = document.getElementById("lexGetCode");
+      const status = document.getElementById("lexOriginStatus");
+      const output = document.getElementById("lexIssuedCode");
+      const input = document.getElementById("lexOriginCode");
+      if (!button || !status || !output || !input) return;
+      if (!supabase) { status.textContent = "Koneksi Supabase belum siap. Periksa koneksi internet lalu muat ulang halaman."; return; }
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+      if (sessionError || !session) { status.textContent = "Silakan login terlebih dahulu untuk meminta kode."; return; }
+      button.disabled = true; button.textContent = "MEMBUAT KODE...";
+      status.textContent = "Menghubungi Supabase..."; output.textContent = "MEMBUAT KODE...";
+      try {
+        const { data, error } = await supabase.rpc("lexiaa_issue_origin_code");
+        if (error) throw error;
+        if (!data) throw new Error("Supabase tidak mengembalikan kode. Pastikan SQL fitur cerita sudah dijalankan.");
+        output.textContent = data; input.value = data;
+        status.textContent = "Kode pribadi berhasil dibuat. Berlaku selama 10 menit.";
+      } catch (error) {
+        console.error("LEXIAA issue code:", error);
+        output.textContent = "KODE GAGAL DIBUAT";
+        status.textContent = error?.message || "Gagal membuat kode. Periksa fungsi Supabase.";
+      } finally { button.disabled = false; button.textContent = "DAPATKAN KODE"; }
+    };
+
     const views = ["home","login","signup","dashboard","penemuan","secret","memberContent"];
 
     // Ganti email ini dengan email akun yang menjadi admin website.
