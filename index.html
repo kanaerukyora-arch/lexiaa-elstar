@@ -717,6 +717,23 @@ button, a, input, select, textarea { touch-action:manipulation; }
  .np-info>span { overflow-wrap:anywhere; }
 }
 
+
+/* About Lexiaa: video transparan mengikuti ukuran karakter gambar di kategori lain */
+.lex-about-char video.lex-about-character-video{
+  width:145%;height:112%;max-width:none;max-height:none;object-fit:contain;
+  object-position:right bottom;transform:translateX(10%);
+  filter:drop-shadow(0 0 24px rgba(190,112,255,.55)) drop-shadow(0 12px 24px rgba(0,0,0,.35));
+  transform-origin:50% 88%;
+  animation:lexAboutCharacterFloat 6.2s ease-in-out infinite,lexAboutCharacterGlow 4.8s ease-in-out infinite;
+}
+@media(max-width:900px){
+ .lex-about-char video.lex-about-character-video{width:145%;height:112%;object-position:right bottom;transform:translateX(10%)}
+}
+@media(max-width:600px){
+ .lex-about-char video.lex-about-character-video{width:132%;height:112%;object-fit:contain;object-position:right bottom;transform:translateX(8%);filter:drop-shadow(0 0 25px rgba(190,112,255,.55)) drop-shadow(0 12px 24px rgba(0,0,0,.4))}
+}
+@media(prefers-reduced-motion:reduce){.lex-about-char video.lex-about-character-video{animation:none!important;will-change:auto}}
+
 </style>
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="mobile-web-app-capable" content="yes">
@@ -2238,3 +2255,8 @@ button, a, input, select, textarea { touch-action:manipulation; }
 
 </body>
 </html>
+
+/* ABOUT character video: match the other category guides, larger but behind text */
+.lex-about-char video{width:145%;height:112%;max-width:none;max-height:none;object-fit:contain;object-position:right bottom;transform:translateX(10%);filter:drop-shadow(0 0 24px rgba(190,112,255,.55)) drop-shadow(0 12px 24px rgba(0,0,0,.35));}
+@media(max-width:900px){.lex-about-char video{width:145%;height:112%;object-position:right bottom;transform:translateX(10%)} }
+@media(max-width:600px){.lex-about-char video{width:132%;height:112%;object-fit:contain;object-position:right bottom;transform:translateX(8%);filter:drop-shadow(0 0 25px rgba(190,112,255,.55)) drop-shadow(0 12px 24px rgba(0,0,0,.4))}.lex-about-copy,.lex-about-tabs{position:relative;z-index:5}.lex-about-copy p,.lex-about-list li{max-width:82%}.lex-about-callout{max-width:86%;position:relative;z-index:5}}
