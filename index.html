@@ -959,6 +959,12 @@ button, a, input, select, textarea { touch-action:manipulation; }
 
 </style>
 
+<style id="lexiaa-story-character-chroma-fix">
+/* Final character rendering override: transparent keyed canvas, hidden source video. */
+#lexOriginStory .lex-story-character-live{background:transparent!important;overflow:hidden!important;pointer-events:none!important;}
+#lexOriginStory #lexStoryCharacterVideo{position:absolute!important;left:0!important;bottom:0!important;width:2px!important;height:2px!important;opacity:0!important;pointer-events:none!important;}
+#lexOriginStory #lexStoryCharacterCanvas{position:absolute!important;right:0!important;bottom:0!important;width:100%!important;height:100%!important;display:block!important;object-fit:contain!important;object-position:center bottom!important;filter:drop-shadow(0 0 5px rgba(255,255,255,.48)) drop-shadow(0 0 17px rgba(225,205,255,.48))!important;pointer-events:none!important;}
+</style>
 </head>
 <body>
   <div id="appLoader" role="status" aria-label="Memuat LEXIAA">
@@ -2414,14 +2420,19 @@ button, a, input, select, textarea { touch-action:manipulation; }
         const frame=keyCtx.getImageData(0,0,w,h),d=frame.data;
         for(let i=0;i<d.length;i+=4){
           const r=d[i],g=d[i+1],b=d[i+2];
+          // Conservative green-screen matte: protect neutral/pale silver hair,
+          // skin and white highlights from being mistaken for the green backdrop.
           const greenExcess=g-Math.max(r,b);
-          const chroma=Math.max(0,greenExcess-10);
-          const key=Math.max(0,Math.min(1,(chroma-5)/42));
+          const raw=Math.max(0,Math.min(1,(greenExcess-25)/30));
+          // Smooth the matte to avoid a hard, jagged cut around fine hair strands.
+          const key=raw*raw*(3-2*raw);
           const alpha=(d[i+3]/255)*(1-key);
           d[i+3]=Math.round(alpha*255);
-          if(alpha>0.02 && key>0){
-            const spill=Math.min(1,key*0.85);
-            d[i+1]=Math.round(g*(1-spill)+Math.max(r,b)*spill);
+          // De-spill green only where the matte identifies green-screen pixels.
+          if(alpha>0.01 && key>0){
+            const spill=Math.min(1,key*0.9);
+            const neutral=Math.max(r,b);
+            d[i+1]=Math.round(g*(1-spill)+Math.min(g,neutral+5)*spill);
           }
         }
         keyCtx.putImageData(frame,0,0);
