@@ -993,7 +993,7 @@ button, a, input, select, textarea { touch-action:manipulation; }
               <button class="menu-card" type="button" data-content="penemuan"><span class="menu-arrow" aria-hidden="true">↗</span><span class="menu-number">01 / EXPLORE</span><h3>PENEMUAN</h3><p>LEXIAA &amp; ELSTAR</p></button>
               <button class="menu-card" type="button" data-content="secret"><span class="menu-arrow" aria-hidden="true">↗</span><span class="menu-number">02 / HIDDEN</span><h3>SECRET</h3><p>LEXIAA &amp; ELSTAR</p></button>
               <button class="menu-card wide" type="button" data-member><span class="menu-arrow" aria-hidden="true">↗</span><span class="menu-number">03 / MEMBER ACCESS</span><h3>SECRET ONLY MEMBER OTW!</h3><p>KHUSUS MEMBER OTW, KLIK UNTUK PENGAJUAN MENJADI MEMBER.</p></button>
-              <button class="menu-card wide lex-origin-menu" type="button" id="lexOriginOpen"><span class="menu-arrow" aria-hidden="true">✧</span><span class="menu-number">05 / LEXIAA SECRET STORY</span><h3>ASAL USUL NAMA "LEXIAA"</h3><p>BUKA CERITA RAHASIA DI BALIK NAMA LEXIAA.</p></button>
+              <button class="menu-card wide lex-origin-menu" type="button" id="lexOriginOpen" onclick="(function(){var g=document.getElementById('lexOriginGate');if(g){g.classList.add('open');g.setAttribute('aria-hidden','false');var st=document.getElementById('lexOriginStatus'),cd=document.getElementById('lexIssuedCode'),inp=document.getElementById('lexOriginCode');if(st)st.textContent='';if(cd)cd.textContent='KODE AKAN MUNCUL DI SINI';if(inp)inp.value='';}})()"><span class="menu-arrow" aria-hidden="true">✧</span><span class="menu-number">05 / LEXIAA SECRET STORY</span><h3>ASAL USUL NAMA "LEXIAA"</h3><p>BUKA CERITA RAHASIA DI BALIK NAMA LEXIAA.</p></button>
               <button class="menu-card wide about-menu-card" type="button" data-about-open><span class="menu-arrow" aria-hidden="true">✧</span><span class="menu-number">04 / LEXIAA GUIDE</span><h3>TENTANG LEXIAA?</h3><p>KENALI FITUR, PANDUAN, DAN RAHASIA KECIL LEXIAA.</p></button>
             </div>
           <section class="social-hub" aria-label="Akun resmi admin">
@@ -1104,7 +1104,7 @@ button, a, input, select, textarea { touch-action:manipulation; }
 
   <div id="lexOriginGate" class="lex-origin-gate" role="dialog" aria-modal="true" aria-labelledby="lexOriginTitle" aria-hidden="true">
     <section class="lex-origin-gate-panel">
-      <button type="button" class="lex-origin-close" id="lexOriginClose" aria-label="Tutup">×</button>
+      <button type="button" class="lex-origin-close" id="lexOriginClose" aria-label="Tutup" onclick="(function(){var g=document.getElementById('lexOriginGate');if(g){g.classList.remove('open');g.setAttribute('aria-hidden','true');}})()">×</button>
       <p class="modal-kicker">LEXIAA / SECRET ARCHIVE</p><h2 id="lexOriginTitle">ASAL USUL NAMA "LEXIAA"</h2>
       <p class="lex-origin-desc">Buat kode akses pribadi untuk membuka kisah ini. Setiap kode hanya dapat digunakan satu kali.</p>
       <button type="button" class="btn" id="lexGetCode">DAPATKAN KODE</button>
