@@ -965,6 +965,58 @@ button, a, input, select, textarea { touch-action:manipulation; }
 #lexOriginStory #lexStoryCharacterVideo{position:absolute!important;left:0!important;bottom:0!important;width:2px!important;height:2px!important;opacity:0!important;pointer-events:none!important;}
 #lexOriginStory #lexStoryCharacterCanvas{position:absolute!important;right:0!important;bottom:0!important;width:100%!important;height:100%!important;display:block!important;object-fit:contain!important;object-position:center bottom!important;filter:drop-shadow(0 0 5px rgba(255,255,255,.48)) drop-shadow(0 0 17px rgba(225,205,255,.48))!important;pointer-events:none!important;}
 </style>
+
+<style id="lexiaa-story-full-chat-redesign">
+/* Full-width dialogue: remove the character column completely. */
+#lexOriginStory .lex-story-layout{
+  display:flex!important; width:100%!important; max-width:none!important;
+  padding:clamp(12px,2.2vh,28px) clamp(12px,3vw,52px)!important;
+}
+#lexOriginStory .lex-story-dialog{
+  width:100%!important; max-width:none!important; height:100%!important;
+  padding:0!important; margin:0!important; justify-content:center!important;
+  align-items:stretch!important;
+}
+#lexOriginStory .lex-story-label{
+  font-family:Inter,"Segoe UI",Arial,sans-serif!important;
+  font-size:clamp(11px,1.45vw,15px)!important; letter-spacing:.22em!important;
+  color:#e8c9ff!important; text-shadow:0 0 12px #c88aff99!important;
+}
+#lexOriginStory .lex-story-bubble{
+  width:100%!important; max-width:none!important; min-height:0!important;
+  max-height:min(72vh,100%)!important; overflow-y:auto!important;
+  padding:clamp(22px,4.2vh,52px) clamp(22px,5vw,76px)!important;
+  border:1px solid rgba(224,190,255,.42)!important;
+  border-radius:28px!important;
+  background:linear-gradient(135deg,rgba(19,12,34,.97),rgba(39,19,58,.96))!important;
+  box-shadow:0 18px 65px rgba(0,0,0,.36), inset 0 0 35px rgba(194,132,255,.07),
+             0 0 calc(8px + var(--voice-glow,0)*30px) rgba(197,139,255,calc(.12 + var(--voice-glow,0)*.38))!important;
+  transition:box-shadow .08s linear,border-color .08s linear!important;
+}
+#lexOriginStory .lex-story-bubble p{
+  font-family:"Inter","Segoe UI",system-ui,sans-serif!important;
+  font-size:clamp(18px,2.25vw,29px)!important;
+  line-height:1.72!important; letter-spacing:.012em!important;
+  color:#fff7ff!important; text-shadow:0 0 calc(var(--voice-glow,0)*15px) rgba(239,206,255,.95)!important;
+  transition:text-shadow .08s linear!important;
+}
+#lexOriginStory .lex-story-bubble.voice-speaking{
+  border-color:rgba(239,207,255,calc(.45 + var(--voice-glow,0)*.5))!important;
+}
+#lexOriginStory .lex-story-controls{width:100%!important;justify-content:space-between!important;margin-top:clamp(12px,2vh,24px)!important}
+#lexOriginStory .lex-story-hint{margin-top:8px!important;text-align:center!important;opacity:.65!important}
+#lexOriginStory .lex-story-character-live{display:none!important}
+@media(orientation:portrait){
+ #lexOriginStory .lex-story-layout{padding:12px!important}
+ #lexOriginStory .lex-story-bubble{max-height:70vh!important;padding:22px!important}
+ #lexOriginStory .lex-story-bubble p{font-size:clamp(17px,2.05vh,23px)!important;line-height:1.65!important}
+ #lexOriginStory .lex-story-controls .btn{font-size:10px!important;padding:11px 13px!important}
+}
+@media(prefers-reduced-motion:reduce){
+ #lexOriginStory .lex-story-bubble,#lexOriginStory .lex-story-bubble p{transition:none!important}
+}
+</style>
+
 </head>
 <body>
   <div id="appLoader" role="status" aria-label="Memuat LEXIAA">
@@ -1204,7 +1256,7 @@ button, a, input, select, textarea { touch-action:manipulation; }
   </div>
   <div id="lexOriginStory" class="lex-origin-story" aria-hidden="true">
     <div class="lex-story-top"><span>♕ LEXIAA ARCHIVE</span><span id="lexStoryCounter">01 / 06</span><button type="button" id="lexStoryFullscreen">⛶ FULLSCREEN</button><button type="button" id="lexStoryExit">KELUAR ✕</button></div>
-    <div class="lex-story-layout"><div class="lex-story-dialog"><div class="lex-story-label">A STORY ABOUT A NAME</div><div id="lexStoryBubble" class="lex-story-bubble"><p id="lexStoryText">Naskah cerita akan ditambahkan di sini.</p></div><div class="lex-story-controls"><button type="button" id="lexStoryPrev" class="btn secondary">← SEBELUMNYA</button><button type="button" id="lexStoryNext" class="btn">BERIKUTNYA →</button></div><p class="lex-story-hint">Putar perangkat ke posisi landscape untuk pengalaman terbaik.</p></div><div class="lex-story-character lex-story-character-live"><video id="lexStoryCharacterVideo" src="./lexiaa-story-character-alpha.webm" type="video/webm" autoplay muted loop playsinline preload="auto" disablepictureinpicture controlslist="nodownload noplaybackrate noremoteplayback" tabindex="-1" draggable="false" aria-hidden="true"></video><canvas id="lexStoryCharacterCanvas" aria-hidden="true"></canvas><div class="lex-character-aura" aria-hidden="true"></div></div></div>
+    <div class="lex-story-layout"><div class="lex-story-dialog"><div class="lex-story-label">A STORY ABOUT A NAME</div><div id="lexStoryBubble" class="lex-story-bubble"><p id="lexStoryText">Naskah cerita akan ditambahkan di sini.</p></div><div class="lex-story-controls"><button type="button" id="lexStoryPrev" class="btn secondary">← SEBELUMNYA</button><button type="button" id="lexStoryNext" class="btn">BERIKUTNYA →</button></div><p class="lex-story-hint">Putar perangkat ke posisi landscape untuk pengalaman terbaik.</p></div></div>
     <audio id="lexStoryAudio" preload="auto"></audio>
   </div>
 
@@ -2447,6 +2499,50 @@ button, a, input, select, textarea { touch-action:manipulation; }
   }
   function stopCharacterKeyer(){keyLoop=false;if(keyFrame)cancelAnimationFrame(keyFrame);keyFrame=0;}
   function status(msg){const el=$('lexOriginStatus'); if(el)el.textContent=msg;}
+
+  // Audio-reactive dialogue glow. The analyser follows the actual voice energy
+  // in the current narration track (not a guessed timer).
+  let storyAudioContext=null, storyAnalyser=null, storyAudioSource=null, storyGlowFrame=0;
+  function startStoryVoiceGlow(){
+    const audio=$('lexStoryAudio'), bubble=$('lexStoryBubble');
+    if(!audio||!bubble)return;
+    try{
+      const AudioCtx=window.AudioContext||window.webkitAudioContext;
+      if(!AudioCtx)return;
+      if(!storyAudioContext){
+        storyAudioContext=new AudioCtx();
+        storyAnalyser=storyAudioContext.createAnalyser();
+        storyAnalyser.fftSize=256;
+        storyAnalyser.smoothingTimeConstant=.78;
+        storyAudioSource=storyAudioContext.createMediaElementSource(audio);
+        storyAudioSource.connect(storyAnalyser);
+        storyAnalyser.connect(storyAudioContext.destination);
+      }
+      storyAudioContext.resume().catch(()=>{});
+      if(storyGlowFrame)cancelAnimationFrame(storyGlowFrame);
+      const bins=new Uint8Array(storyAnalyser.frequencyBinCount);
+      const tick=()=>{
+        if(!active||audio.paused||audio.ended){
+          bubble.classList.remove('voice-speaking');
+          bubble.style.setProperty('--voice-glow','0');
+          storyGlowFrame=0;return;
+        }
+        storyAnalyser.getByteFrequencyData(bins);
+        let sum=0;for(let i=2;i<Math.min(22,bins.length);i++)sum+=bins[i];
+        const energy=Math.min(1,(sum/20)/105);
+        bubble.style.setProperty('--voice-glow',energy.toFixed(3));
+        bubble.classList.toggle('voice-speaking',energy>.055);
+        storyGlowFrame=requestAnimationFrame(tick);
+      };
+      storyGlowFrame=requestAnimationFrame(tick);
+    }catch(err){console.warn('LEXIAA audio glow unavailable:',err);}
+  }
+  function stopStoryVoiceGlow(){
+    if(storyGlowFrame)cancelAnimationFrame(storyGlowFrame);
+    storyGlowFrame=0;
+    const bubble=$('lexStoryBubble');
+    if(bubble){bubble.classList.remove('voice-speaking');bubble.style.setProperty('--voice-glow','0');}
+  }
   function render(){
     const textEl=$('lexStoryText');
     textEl.replaceChildren();
@@ -2466,11 +2562,11 @@ button, a, input, select, textarea { touch-action:manipulation; }
       a.pause(); a.currentTime=0;
       const nextSrc=`./lexiaa-story-audio-${page+1}.wav`;
       if(a.getAttribute('src')!==nextSrc){a.src=nextSrc;a.load();}
-      a.play().catch(err=>console.warn('LEXIAA story audio:',err));
+      a.play().then(()=>startStoryVoiceGlow()).catch(err=>console.warn('LEXIAA story audio:',err));
     }
   }
-  function openStory(){page=0;active=true;$('lexOriginGate').classList.remove('open');$('lexOriginGate').setAttribute('aria-hidden','true');$('lexOriginStory').classList.add('open');$('lexOriginStory').setAttribute('aria-hidden','false');document.body.style.overflow='hidden';render();const v=$('lexStoryCharacterVideo');if(v){v.muted=true;v.defaultMuted=true;v.loop=true;v.playsInline=true;v.currentTime=0;setupCharacterKeyer();const playAttempt=v.play();if(playAttempt&&playAttempt.catch)playAttempt.catch(()=>{status('Video karakter belum dapat diputar. Ketuk layar sekali lalu coba lagi.');});}try{document.documentElement.requestFullscreen?.().catch(()=>{});screen.orientation?.lock?.('landscape').catch(()=>{});}catch(e){}}
-  function closeStory(){const a=$('lexStoryAudio');a.pause();a.removeAttribute('src');a.load();const v=$('lexStoryCharacterVideo');stopCharacterKeyer();if(v){v.pause();v.currentTime=0;}active=false;$('lexOriginStory').classList.remove('open');$('lexOriginStory').setAttribute('aria-hidden','true');document.body.style.overflow='';try{screen.orientation?.unlock?.();if(document.fullscreenElement)document.exitFullscreen?.().catch(()=>{});}catch(e){}}
+  function openStory(){page=0;active=true;$('lexOriginGate').classList.remove('open');$('lexOriginGate').setAttribute('aria-hidden','true');$('lexOriginStory').classList.add('open');$('lexOriginStory').setAttribute('aria-hidden','false');document.body.style.overflow='hidden';render();startStoryVoiceGlow();try{document.documentElement.requestFullscreen?.().catch(()=>{});screen.orientation?.lock?.('landscape').catch(()=>{});}catch(e){}}
+  function closeStory(){stopStoryVoiceGlow();const a=$('lexStoryAudio');a.pause();a.removeAttribute('src');a.load();const v=$('lexStoryCharacterVideo');stopCharacterKeyer();if(v){v.pause();v.currentTime=0;}active=false;$('lexOriginStory').classList.remove('open');$('lexOriginStory').setAttribute('aria-hidden','true');document.body.style.overflow='';try{screen.orientation?.unlock?.();if(document.fullscreenElement)document.exitFullscreen?.().catch(()=>{});}catch(e){}}
   function init(){
     const form=$('lexOriginForm'); if(!form || form.dataset.standaloneReady==='1')return;
     form.dataset.standaloneReady='1'; form.dataset.handlerReady='1';
@@ -2495,6 +2591,9 @@ button, a, input, select, textarea { touch-action:manipulation; }
         screen.orientation?.lock?.('landscape').catch(()=>{});
       }catch(err){status('Mode fullscreen tidak didukung browser ini. Tampilan tetap memenuhi layar.');}
     });
+    $('lexStoryAudio')?.addEventListener('play',startStoryVoiceGlow);
+    $('lexStoryAudio')?.addEventListener('pause',stopStoryVoiceGlow);
+    $('lexStoryAudio')?.addEventListener('ended',stopStoryVoiceGlow);
     $('lexOriginStory')?.addEventListener('pointerdown',()=>{
       const a=$('lexStoryAudio');
       if(active && a && a.paused) a.play().catch(err=>console.warn('LEXIAA story audio:',err));
