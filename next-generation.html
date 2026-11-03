@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#070910">
+<title>LEXIAA — Next Generation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:dark;--bg:#070910;--cyan:#51efff;--purple:#a78bfa;--text:#f4f7ff;--muted:#929bad;--glass:rgba(17,22,37,.62);--line:rgba(163,181,220,.18)}
+*{box-sizing:border-box}html{min-height:100%;background:var(--bg)}body{margin:0;min-height:100vh;color:var(--text);font-family:Inter,system-ui,sans-serif;background:radial-gradient(ellipse at 16% 12%,rgba(81,239,255,.12),transparent 32%),radial-gradient(ellipse at 85% 82%,rgba(167,139,250,.16),transparent 35%),#070910;overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;background-image:linear-gradient(rgba(160,183,225,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(160,183,225,.055) 1px,transparent 1px);background-size:42px 42px;mask-image:linear-gradient(to bottom,#000,transparent 95%)}
+body:after{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(circle at 50% 50%,transparent 20%,rgba(2,4,10,.62) 100%)}
+button,input{font:inherit}.page{position:relative;z-index:1;min-height:100vh;display:grid;place-items:center;padding:34px 20px}.layout{width:min(1060px,100%);display:grid;grid-template-columns:1fr  minmax(320px,430px);gap:22px;align-items:stretch}
+.brand-panel,.login-panel,.mini-panel{border:1px solid var(--line);background:linear-gradient(145deg,rgba(27,34,54,.66),rgba(10,14,26,.58));backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);box-shadow:inset 0 1px rgba(255,255,255,.07),0 25px 80px rgba(0,0,0,.34);border-radius:26px}
+.brand-panel{padding:clamp(28px,5vw,58px);display:flex;flex-direction:column;justify-content:space-between;min-height:620px;position:relative;overflow:hidden}
+.brand-panel:before,.login-panel:before,.mini-panel:before{content:"";position:absolute;inset:1px;border-radius:inherit;pointer-events:none;background:linear-gradient(135deg,rgba(81,239,255,.12),transparent 34%,transparent 70%,rgba(167,139,250,.12))}
+.brand-top,.brand-bottom,.login-panel>*{position:relative}.wordmark{font:700 13px Orbitron,sans-serif;letter-spacing:.24em}.wordmark span{color:var(--cyan)}.edition{margin-top:10px;color:var(--muted);font-size:10px;letter-spacing:.24em;text-transform:uppercase}
+.hero{padding:65px 0 50px}.eyebrow{font-size:10px;letter-spacing:.32em;color:var(--cyan);text-transform:uppercase;margin:0 0 22px}.hero h1{font:800 clamp(35px,6vw,66px)/1.08 Orbitron,sans-serif;letter-spacing:-.045em;margin:0;max-width:600px}.hero h1 span{display:block;color:transparent;background:linear-gradient(100deg,#fff 8%,var(--cyan) 52%,var(--purple) 100%);background-clip:text;-webkit-background-clip:text}.hero-copy{color:#aab3c5;font-size:14px;line-height:1.9;max-width:440px;margin:24px 0 0}
+.panel-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.mini-panel{position:relative;padding:17px 18px;border-radius:17px;overflow:hidden}.mini-label{font-size:9px;letter-spacing:.19em;color:var(--muted);text-transform:uppercase}.mini-value{font:600 12px Orbitron,sans-serif;margin-top:10px;letter-spacing:.05em}.dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:0 0 12px var(--cyan);margin-right:8px}
+.login-panel{position:relative;padding:clamp(27px,4vw,42px);display:flex;flex-direction:column;justify-content:center;overflow:hidden}.login-panel h2{font:700 24px Orbitron,sans-serif;letter-spacing:.04em;margin:0 0 10px}.intro{color:var(--muted);font-size:12px;line-height:1.8;margin:0 0 30px}.field{margin:18px 0}.field label{display:block;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:#d8deeb;margin-bottom:10px}.field input{width:100%;border:1px solid rgba(160,181,220,.22);background:rgba(4,8,17,.62);border-radius:13px;padding:15px 16px;color:#fff;outline:none;transition:.25s}.field input::placeholder{color:#657086}.field input:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(81,239,255,.09),0 0 24px rgba(81,239,255,.08)}
+.password-wrap{display:flex;gap:8px}.password-wrap input{min-width:0;flex:1}.reveal{border:1px solid var(--line);background:rgba(255,255,255,.04);color:#cbd5e8;border-radius:12px;padding:0 13px;font-size:10px;cursor:pointer}
+.submit{width:100%;margin-top:10px;padding:16px;border:1px solid rgba(81,239,255,.6);border-radius:13px;color:#061018;font-weight:800;font-size:11px;letter-spacing:.16em;background:linear-gradient(105deg,#8df7ff,var(--cyan) 55%,#c2a7ff);box-shadow:0 8px 30px rgba(81,239,255,.15);cursor:pointer;transition:transform .2s,box-shadow .2s}.submit:hover{transform:translateY(-2px);box-shadow:0 12px 36px rgba(81,239,255,.24)}.submit:disabled{opacity:.6;cursor:wait;transform:none}
+.status{min-height:20px;margin:14px 0 0;font-size:11px;line-height:1.6;color:var(--muted);overflow-wrap:anywhere}.status.error{color:#ff9aa9}.status.success{color:#8df7c5}.footnote{text-align:center;color:#667187;font-size:9px;letter-spacing:.12em;margin-top:28px}
+.access-state{display:none;text-align:center}.access-state.show{display:block}.access-state h2{margin:0 0 12px}.access-state p{color:var(--muted);font-size:13px;line-height:1.8}.logout{margin-top:18px;background:transparent;border:1px solid var(--line);border-radius:11px;padding:12px 18px;color:#dbe5f6;cursor:pointer}
+@media(max-width:800px){.layout{max-width:520px;grid-template-columns:1fr}.brand-panel{min-height:auto;padding:27px}.hero{padding:44px 0 30px}.hero h1{font-size:clamp(34px,10vw,52px)}.brand-bottom{margin-top:24px}.login-panel{min-height:480px}}
+@media(max-width:420px){.page{padding:16px 12px}.brand-panel,.login-panel{border-radius:20px}.panel-grid{gap:8px}.mini-panel{padding:14px}.login-panel{padding:25px 20px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<main class="page">
+ <div class="layout">
+  <section class="brand-panel">
+   <div class="brand-top"><div class="wordmark">LEXIAA<span> / </span>ELSTAR</div><div class="edition">Next Generation Interface</div></div>
+   <div class="hero"><p class="eyebrow">A new digital dimension</p><h1>WELCOME TO <span>NEXT GEN.</span></h1><p class="hero-copy">A private gateway to the next LEXIAA experience. Clean architecture, focused access, and a new visual dimension.</p></div>
+   <div class="brand-bottom"><div class="panel-grid">
+    <div class="mini-panel"><div class="mini-label">Environment</div><div class="mini-value"><span class="dot"></span>SECURE SPACE</div></div>
+    <div class="mini-panel"><div class="mini-label">Interface</div><div class="mini-value">GLASS / GRID</div></div>
+   </div></div>
+  </section>
+  <section class="login-panel">
+   <form id="loginForm">
+    <p class="eyebrow">Authorized access</p><h2>Sign in.</h2><p class="intro">Masuk menggunakan akun LEXIAA yang sudah terdaftar. Pendaftaran akun baru tidak tersedia di halaman ini.</p>
+    <div class="field"><label for="email">Email address</label><input id="email" type="email" autocomplete="username" placeholder="nama@email.com" required></div>
+    <div class="field"><label for="password">Password</label><div class="password-wrap"><input id="password" type="password" autocomplete="current-password" placeholder="Masukkan password" required><button class="reveal" id="reveal" type="button">SHOW</button></div></div>
+    <button class="submit" id="submit" type="submit">ENTER NEXT GENERATION</button><p class="status" id="status" role="status" aria-live="polite"></p>
+   </form>
+   <div class="access-state" id="accessState"><p class="eyebrow">Authentication complete</p><h2>Access granted.</h2><p id="welcome"></p><button class="logout" id="logout" type="button">SIGN OUT</button></div>
+   <div class="footnote">LEXIAA ELSTAR · NEXT GENERATION</div>
+  </section>
+ </div>
+</main>
+<script type="module">
+const SUPABASE_URL="https://sudvolmlzunzofzwjbfn.supabase.co";
+const SUPABASE_ANON_KEY="sb_publishable_OOUKks8e7IfILH7TsOit0g_8qK0hNiL";
+const form=document.getElementById("loginForm"),submit=document.getElementById("submit"),status=document.getElementById("status"),accessState=document.getElementById("accessState"),welcome=document.getElementById("welcome");
+let supabase=null;
+try{const{createClient}=await import("https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm");supabase=createClient(SUPABASE_URL,SUPABASE_ANON_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}})}catch(error){console.error(error);status.textContent="Library autentikasi gagal dimuat. Periksa koneksi internet.";status.className="status error"}
+function showAccess(user){form.style.display="none";accessState.classList.add("show");welcome.textContent="Login berhasil sebagai "+(user?.email||"pengguna LEXIAA")+". Sesi autentikasi tersimpan dengan aman melalui Supabase."}
+if(supabase){const{data:{session}}=await supabase.auth.getSession();if(session)showAccess(session.user)}
+form.addEventListener("submit",async event=>{event.preventDefault();if(!supabase){status.textContent="Koneksi Supabase belum siap.";status.className="status error";return}submit.disabled=true;submit.textContent="AUTHENTICATING...";status.textContent="Memverifikasi akun melalui Supabase...";status.className="status";try{const{data,error}=await supabase.auth.signInWithPassword({email:document.getElementById("email").value.trim(),password:document.getElementById("password").value});if(error)throw error;status.textContent="";showAccess(data.user)}catch(error){status.textContent=error.message||"Login gagal. Periksa email dan password.";status.className="status error"}finally{submit.disabled=false;submit.textContent="ENTER NEXT GENERATION"}});
+document.getElementById("reveal").addEventListener("click",()=>{const input=document.getElementById("password"),button=document.getElementById("reveal");const visible=input.type==="password";input.type=visible?"text":"password";button.textContent=visible?"HIDE":"SHOW"});
+document.getElementById("logout").addEventListener("click",async()=>{if(supabase)await supabase.auth.signOut({scope:"local"});accessState.classList.remove("show");form.style.display="block";form.reset();status.textContent="Kamu sudah logout.";status.className="status success"});
+</script>
+</body>
+</html>
