@@ -834,7 +834,7 @@ html[data-lexiaa-theme="sakura"]{--lx-live-accent:#ffb5d2;--lx-live-glow:rgba(25
 html[data-lexiaa-theme="ocean"]{--lx-live-accent:#83dcff;--lx-live-glow:rgba(65,180,255,.22)}
 html[data-lexiaa-theme="emerald"]{--lx-live-accent:#8ef0c0;--lx-live-glow:rgba(63,220,151,.2)}
 html[data-lexiaa-theme="midnight"]{--lx-live-accent:#c9a7ff;--lx-live-glow:rgba(176,119,255,.2)}
-.live-greeting{margin-top:10px;color:var(--lx-live-accent);font-size:10px;letter-spacing:.16em;font-weight:800;text-shadow:0 0 16px var(--lx-live-glow)}
+.sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}\n.live-greeting{margin-top:10px;color:var(--lx-live-accent);font-size:10px;letter-spacing:.16em;font-weight:800;text-shadow:0 0 16px var(--lx-live-glow)}
 .lexiaa-tools{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
 .lexiaa-tool-select,.lexiaa-tool-btn{min-height:34px;border:1px solid #77718b;border-radius:9px;background:#14131c;color:#f3efff;padding:7px 10px;font-size:10px;font-weight:700;letter-spacing:.04em}
 .lexiaa-tool-select:focus-visible,.lexiaa-tool-btn:focus-visible{outline:2px solid var(--lx-live-accent);outline-offset:2px}
@@ -3410,7 +3410,19 @@ html[data-lexiaa-theme] .live-time,html[data-lexiaa-theme] .live-greeting{color:
  const overlay=document.getElementById('lexiaaChangelogOverlay');
  const openBtn=document.getElementById('lexiaaChangelogBtn');
  const closeBtn=document.getElementById('lexiaaChangelogClose');
- const themeKey='lexiaa-theme-v1';
+ const changelogCopy={
+ id:['Pembaruan Terbaru','Pengalaman LEXIAA yang lebih personal.',['Living Interface: sapaan dinamis dan tampilan waktu yang lebih jelas.','Kustomisasi Tema: Midnight, Sakura, Ocean, dan Emerald.','Riwayat Update: lihat peningkatan terbaru kapan saja.']],
+ en:['What’s New','Fresh details for a more personal LEXIAA experience.',['Living Interface: live greeting and a clearer time display.','Theme Customization: Midnight, Sakura, Ocean, and Emerald.','Update Changelog: review the latest improvements anytime.']],
+ ja:['新着情報','よりパーソナルなLEXIAA体験のための新機能。',['Living Interface：時間に合わせた挨拶と見やすい時計。','テーマ設定：Midnight、Sakura、Ocean、Emerald。','更新履歴：最新の改善内容をいつでも確認できます。']],
+ ko:['새로운 소식','더욱 개인화된 LEXIAA 경험을 위한 업데이트입니다.',['Living Interface: 시간대별 인사말과 개선된 시계.','테마 설정: Midnight, Sakura, Ocean, Emerald.','업데이트 기록: 최신 개선 사항을 언제든 확인하세요.']],
+ zh:['最新更新','让 LEXIAA 体验更加个性化。',['Living Interface：实时问候和清晰的时间显示。','主题自定义：Midnight、Sakura、Ocean 和 Emerald。','更新日志：随时查看最新改进。']],
+ th:['มีอะไรใหม่','เพิ่มรายละเอียดเพื่อประสบการณ์ LEXIAA ที่เป็นส่วนตัวยิ่งขึ้น',['Living Interface: คำทักทายตามเวลาและนาฬิกาที่อ่านง่ายขึ้น','ปรับแต่งธีม: Midnight, Sakura, Ocean และ Emerald','บันทึกการอัปเดต: ดูการปรับปรุงล่าสุดได้ทุกเมื่อ']],
+ fr:['Nouveautés','De nouvelles options pour une expérience LEXIAA plus personnelle.',['Living Interface : accueil selon l’heure et horloge plus lisible.','Personnalisation du thème : Midnight, Sakura, Ocean et Emerald.','Journal des mises à jour : consultez les dernières améliorations.']],
+ de:['Neuigkeiten','Neue Details für ein persönlicheres LEXIAA-Erlebnis.',['Living Interface: zeitabhängige Begrüßung und besser lesbare Uhr.','Design-Anpassung: Midnight, Sakura, Ocean und Emerald.','Änderungsprotokoll: Sieh dir jederzeit die neuesten Verbesserungen an.']],
+ es:['Novedades','Nuevas opciones para una experiencia LEXIAA más personal.',['Living Interface: saludo según la hora y reloj más claro.','Personalización del tema: Midnight, Sakura, Ocean y Emerald.','Registro de cambios: consulta las mejoras más recientes.']],
+ pt:['Novidades','Novidades para uma experiência LEXIAA mais pessoal.',['Living Interface: saudação conforme o horário e relógio mais claro.','Personalização de tema: Midnight, Sakura, Ocean e Emerald.','Histórico de atualizações: consulte as melhorias mais recentes.']]
+};
+const themeKey='lexiaa-theme-v1';
  const themeNames={id:['Pilih tema','Terbaru','Ruangmu siap digunakan','Selamat pagi','Selamat siang','Selamat sore','Selamat malam','Tutup'],en:['Choose theme','What’s New','Your space is ready','Good morning','Good afternoon','Good evening','Good night','Got it'],ja:['テーマを選択','新着情報','あなたの空間を準備しました','おはようございます','こんにちは','こんばんは','おやすみなさい','閉じる'],ko:['테마 선택','새로운 소식','공간이 준비되었습니다','좋은 아침','좋은 오후','좋은 저녁','안녕히 주무세요','확인'],zh:['选择主题','最新更新','你的空间已准备就绪','早上好','下午好','晚上好','夜间好','知道了'],th:['เลือกธีม','มีอะไรใหม่','พื้นที่ของคุณพร้อมแล้ว','สวัสดีตอนเช้า','สวัสดีตอนบ่าย','สวัสดีตอนเย็น','ราตรีสวัสดิ์','รับทราบ'],fr:['Choisir un thème','Nouveautés','Votre espace est prêt','Bonjour','Bon après-midi','Bonsoir','Bonne nuit','Compris'],de:['Design wählen','Neuigkeiten','Dein Bereich ist bereit','Guten Morgen','Guten Tag','Guten Abend','Gute Nacht','Verstanden'],es:['Elegir tema','Novedades','Tu espacio está listo','Buenos días','Buenas tardes','Buenas tardes','Buenas noches','Entendido'],pt:['Escolher tema','Novidades','Seu espaço está pronto','Bom dia','Boa tarde','Boa tarde','Boa noite','Entendi']};
  const getLang=()=>window.LEXIAA_LANGUAGE?.current||'id';
  const t=()=>themeNames[getLang()]||themeNames.en;
@@ -3423,7 +3435,7 @@ html[data-lexiaa-theme] .live-time,html[data-lexiaa-theme] .live-greeting{color:
  openBtn?.addEventListener('click',openChangelog);closeBtn?.addEventListener('click',closeChangelog);
  overlay?.addEventListener('click',event=>{if(event.target===overlay)closeChangelog()});
  document.addEventListener('keydown',event=>{if(event.key==='Escape'&&overlay?.classList.contains('is-open'))closeChangelog()});
- function updateLabels(){if(!themeSelect||!openBtn||!closeBtn)return;const words=t();themeSelect.setAttribute('aria-label',words[0]);openBtn.textContent=words[1];closeBtn.textContent=words[7];updateGreeting();}
+ function updateLabels(){if(!themeSelect||!openBtn||!closeBtn)return;const words=t();const copy=changelogCopy[getLang()]||changelogCopy.en;themeSelect.setAttribute('aria-label',words[0]);openBtn.textContent=words[1];closeBtn.textContent=words[7];const title=document.getElementById('lexiaaChangelogTitle');const intro=overlay?.querySelector('.lex-changelog-card>p');const items=overlay?.querySelectorAll('.lex-changelog-card li');if(title)title.textContent=copy[0];if(intro)intro.textContent=copy[1];if(items)items.forEach((item,index)=>{if(copy[2][index])item.textContent=copy[2][index]});updateGreeting();}
  document.addEventListener('lexiaa:languagechange',updateLabels);
  updateLabels();setInterval(updateGreeting,60000);
  let seen='';try{seen=localStorage.getItem('lexiaa-last-seen-version')||''}catch(e){}
