@@ -754,6 +754,66 @@ button, a, input, select, textarea { touch-action:manipulation; }
 @media(orientation:portrait) and (max-width:800px){.lex-story-layout{grid-template-columns:minmax(0,1fr) minmax(120px,.72fr);gap:1vw;padding:2vh 3vw}.lex-story-character-live{height:62vh}.lex-story-bubble{font-size:clamp(14px,2.2vw,17px);line-height:1.55;padding:16px}.lex-story-label{margin-bottom:10px}.lex-story-controls{gap:8px}}
 @media(min-width:1000px){.lex-story-bubble{max-width:850px}.lex-story-character-live video{max-width:100%}}
 
+
+    /* LEXIAA MLBB Win Rate menu and calculator */
+    .lex-wr-menu-card{border-color:#8c7440!important;background:radial-gradient(ellipse at 50% 0%,#f6cf6720,transparent 58%),linear-gradient(145deg,#211d15,#100f0d 62%,#090a0d)!important;box-shadow:inset 0 0 0 1px #f7d77a18,0 0 26px #e7b94a14,0 12px 35px #0009!important}
+    .lex-wr-menu-card:after{border-color:#f5d77a30!important}
+    .lex-wr-menu-card .menu-number{color:#f4d991!important;text-shadow:0 0 12px #f2ca664f}
+    .lex-wr-menu-card h3{color:#fff5d9;text-shadow:0 0 10px #f0c45c66,0 0 25px #e6b84c55;animation:lexWrTitleGlow 2.8s ease-in-out infinite}
+    .lex-wr-menu-card .mlbb-neon{display:inline-block;color:#ffe28a;text-shadow:0 0 5px #fff1b5,0 0 12px #ffd45c,0 0 25px #ffb52d,0 0 42px #ff9e1b;animation:lexMlbbPulse 1.9s ease-in-out infinite}
+    .lex-wr-menu-card p{color:#e8d7ad!important}
+    .lex-wr-menu-card:hover,.lex-wr-menu-card:focus-visible{border-color:#ffe39b!important;box-shadow:inset 0 0 0 1px #fff2c655,0 0 0 1px #ffd66a55,0 0 38px #ffca4938,0 14px 48px #000b!important}
+    @keyframes lexWrTitleGlow{0%,100%{filter:drop-shadow(0 0 2px #f5d77a33)}50%{filter:drop-shadow(0 0 9px #f5d77a99)}}
+    @keyframes lexMlbbPulse{0%,100%{filter:brightness(1);transform:translateY(0)}50%{filter:brightness(1.25);transform:translateY(-1px)}}
+    #lexiaaWrApp{position:fixed;inset:0;z-index:75;display:none;overflow-y:auto;background:radial-gradient(ellipse at 50% -10%,#6e54252b,transparent 48%),#080a0f;color:#f7f5ef;padding:22px 14px 40px}
+    #lexiaaWrApp.is-open{display:block;animation:rise .35s ease both}
+    .lex-wr-shell{width:min(760px,100%);margin:0 auto}
+    .lex-wr-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 24px}
+    .lex-wr-back,.lex-wr-tip,.lex-wr-action,.lex-wr-close{border:1px solid #6d5a32;background:#17150f;color:#f8e6b5;border-radius:11px;padding:12px 15px;font-weight:800;letter-spacing:.06em}
+    .lex-wr-back{font-size:11px}
+    .lex-wr-brand{text-align:right;font:700 10px Orbitron,sans-serif;letter-spacing:.2em;color:#c9b47e}
+    .lex-wr-brand strong{display:block;color:#ffe08a;font-size:15px;text-shadow:0 0 15px #f4c95c88;margin-top:5px}
+    .lex-wr-heading{text-align:center;padding:22px 8px 28px}
+    .lex-wr-heading small{font:600 10px Orbitron,sans-serif;letter-spacing:.3em;color:#c8b47d}
+    .lex-wr-heading h2{font:800 clamp(25px,6vw,42px)/1.25 Orbitron,sans-serif;margin:13px 0 8px;color:#fff8e8;text-shadow:0 0 18px #eac66b55}
+    .lex-wr-heading h2 span{color:#ffdf78;text-shadow:0 0 8px #ffe9a1,0 0 22px #f2bd43,0 0 40px #f0a923}
+    .lex-wr-heading p{font-size:12px;color:#aeb4c0;letter-spacing:.08em}
+    .lex-wr-card{position:relative;overflow:hidden;border:1px solid #65532f;border-radius:19px;padding:clamp(20px,4vw,30px);margin:16px 0;background:linear-gradient(145deg,#1b1a17,#101116 70%);box-shadow:0 14px 45px #0007,0 0 25px #e5bd5810}
+    .lex-wr-card:before{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(115deg,transparent 20%,#ffe7a008 50%,transparent 80%)}
+    .lex-wr-card>*{position:relative}
+    .lex-wr-card-head{display:flex;align-items:flex-start;gap:13px;margin-bottom:21px}
+    .lex-wr-index{flex:0 0 38px;height:38px;border-radius:11px;display:grid;place-items:center;background:#4a391b;color:#ffe08a;font:700 13px Orbitron,sans-serif;box-shadow:0 0 18px #f0c45c22}
+    .lex-wr-card h3{font:700 clamp(15px,3.2vw,20px)/1.5 Orbitron,sans-serif;color:#fff1cb;margin:0}
+    .lex-wr-card-head p{font-size:11px;line-height:1.7;color:#aeb4c0;margin:6px 0 0}
+    .lex-wr-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+    .lex-wr-field{display:block;min-width:0}
+    .lex-wr-field span{display:block;font-size:11px;font-weight:700;color:#d8d0bd;margin:0 0 8px}
+    .lex-wr-field input{width:100%;min-width:0;border:1px solid #514a3c;background:#090b10;color:#fff;border-radius:10px;padding:14px;font-size:16px;outline:none}
+    .lex-wr-field input:focus{border-color:#e8c96e;box-shadow:0 0 0 3px #e8c96e1c,0 0 20px #e8c96e18}
+    .lex-wr-action{width:100%;margin-top:17px;padding:15px;background:linear-gradient(120deg,#f6e3a8,#c99a3b);color:#19140a;border:0;box-shadow:0 7px 22px #d5a63a24;font-size:11px}
+    .lex-wr-action:active,.lex-wr-tip:active,.lex-wr-back:active{transform:scale(.99)}
+    .lex-wr-result{display:none;margin-top:16px;padding:17px;border:1px solid #786337;border-radius:13px;background:#090b10}
+    .lex-wr-result.show{display:block;animation:rise .3s ease both}
+    .lex-wr-result-label{font-size:10px;letter-spacing:.18em;color:#b5a77f;font-weight:800}
+    .lex-wr-result-values{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px}
+    .lex-wr-stat{padding:15px;border-radius:11px;background:#171a20;text-align:center}
+    .lex-wr-stat b{display:block;font:800 clamp(25px,6vw,34px) Orbitron,sans-serif;margin-bottom:5px}
+    .lex-wr-stat.win b{color:#77e2a4;text-shadow:0 0 15px #50d98c55}
+    .lex-wr-stat.lose b{color:#ff8992;text-shadow:0 0 15px #ff657355}
+    .lex-wr-result-note{font-size:11px;line-height:1.7;color:#aeb4c0;margin:12px 0 0}
+    .lex-wr-tip-row{text-align:center;margin:22px 0 0}
+    .lex-wr-tip{background:#151821;border-color:#555d6c;color:#f1e5c7;padding:14px 20px}
+    #lexiaaWrTips{position:fixed;inset:0;z-index:90;display:none;place-items:center;padding:18px;background:#03050bd9;backdrop-filter:blur(13px)}
+    #lexiaaWrTips.is-open{display:grid;animation:rise .25s ease both}
+    .lex-wr-tips-panel{width:min(570px,100%);max-height:88vh;overflow:auto;border:1px solid #b39a5c;border-radius:22px;padding:clamp(23px,5vw,36px);background:radial-gradient(ellipse at 50% 0%,#d2a84c18,transparent 55%),linear-gradient(145deg,#1c1c20,#090b10);box-shadow:0 0 55px #d8b45b25,0 25px 90px #000c}
+    .lex-wr-tips-kicker{font:600 10px Orbitron,sans-serif;letter-spacing:.25em;color:#d4bd80}
+    .lex-wr-tips-panel h2{font:800 clamp(22px,5vw,29px) Orbitron,sans-serif;color:#fff1c9;margin:12px 0 22px;text-shadow:0 0 18px #e6c36c44}
+    .lex-wr-tips-panel h3{font:700 13px/1.6 Orbitron,sans-serif;color:#f5d889;margin:19px 0 8px}
+    .lex-wr-tips-panel p{font-size:14px;line-height:1.85;color:#e1e4eb;margin:0}
+    .lex-wr-tips-panel .lex-wr-close{width:100%;margin-top:26px;background:linear-gradient(120deg,#f6e3a8,#c99a3b);color:#19140a;border:0;padding:15px}
+    @media(max-width:560px){.lex-wr-fields{grid-template-columns:1fr}.lex-wr-top{align-items:flex-start}.lex-wr-heading{padding-top:12px}.lex-wr-tips-panel{max-height:90vh}}
+    @media(prefers-reduced-motion:reduce){.lex-wr-menu-card h3,.lex-wr-menu-card .mlbb-neon{animation:none}}
+
 </style>
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="mobile-web-app-capable" content="yes">
@@ -1149,6 +1209,7 @@ button, a, input, select, textarea { touch-action:manipulation; }
               <button class="menu-card wide" type="button" data-member><span class="menu-arrow" aria-hidden="true">↗</span><span class="menu-number">03 / MEMBER ACCESS</span><h3>SECRET ONLY MEMBER OTW!</h3><p>KHUSUS MEMBER OTW, KLIK UNTUK PENGAJUAN MENJADI MEMBER.</p></button>
               <button class="menu-card wide lex-origin-menu" type="button" id="lexOriginOpen" onclick="(function(){var g=document.getElementById('lexOriginGate');if(g){g.classList.add('open');g.setAttribute('aria-hidden','false');var st=document.getElementById('lexOriginStatus'),cd=document.getElementById('lexIssuedCode'),inp=document.getElementById('lexOriginCode');if(st)st.textContent='';if(cd)cd.textContent='KODE AKAN MUNCUL DI SINI';if(inp)inp.value='';}})()"><span class="menu-arrow" aria-hidden="true">✧</span><span class="menu-number">05 / LEXIAA SECRET STORY</span><h3>ASAL USUL NAMA "LEXIAA"</h3><p>BUKA CERITA RAHASIA DI BALIK NAMA LEXIAA.</p></button>
               <button class="menu-card wide about-menu-card" type="button" data-about-open><span class="menu-arrow" aria-hidden="true">✧</span><span class="menu-number">04 / LEXIAA GUIDE</span><h3>TENTANG LEXIAA?</h3><p>KENALI FITUR, PANDUAN, DAN RAHASIA KECIL LEXIAA.</p></button>
+              <button class="menu-card wide lex-wr-menu-card" type="button" id="lexiaaWrMenuCard" aria-label="Buka Hitung Jumlah Win Rate MLBB"><span class="menu-arrow" aria-hidden="true">✦</span><span class="menu-number">06 / MLBB WIN RATE CENTER</span><h3>HITUNG JUMLAH WIN RATE <span class="mlbb-neon">MLBB</span></h3><p>HERO WIN &amp; LOSE · TARGET WIN RATE CALCULATOR</p></button>
             </div>
           <section class="social-hub" aria-label="Akun resmi admin">
             <h2 class="social-heading">CONNECT WITH ADMIN</h2>
@@ -2706,6 +2767,112 @@ button, a, input, select, textarea { touch-action:manipulation; }
    console.error('LEXIAA access request:',err);
    status.textContent=err?.message||'Pesan gagal dikirim. Coba lagi.';
   }finally{send.disabled=false;send.textContent='MINTA BANTUAN ADMIN';}
+ });
+})();
+</script>
+
+
+<div id="lexiaaWrApp" aria-hidden="true">
+ <div class="lex-wr-shell">
+  <div class="lex-wr-top">
+   <button class="lex-wr-back" type="button" id="lexiaaWrBack">← KEMBALI</button>
+   <div class="lex-wr-brand">LEXIAA EXCLUSIVE<strong>MLBB WIN RATE</strong></div>
+  </div>
+  <header class="lex-wr-heading">
+   <small>HERO STATISTICS TOOL</small>
+   <h2>HITUNG JUMLAH WIN RATE <span>MLBB</span></h2>
+   <p>CALCULATE YOUR HERO · REACH YOUR TARGET</p>
+  </header>
+  <section class="lex-wr-card">
+   <div class="lex-wr-card-head"><span class="lex-wr-index">01</span><div><h3>SHOW WIN AND LOSE YOUR HERO</h3><p>Lihat perkiraan jumlah kemenangan dan kekalahan hero Anda.</p></div></div>
+   <div class="lex-wr-fields">
+    <label class="lex-wr-field"><span>Total pertandingan</span><input id="lexiaaWrMatches1" type="number" min="1" step="1" inputmode="numeric" placeholder="Contoh: 120"></label>
+    <label class="lex-wr-field"><span>WR hero saat ini (%)</span><input id="lexiaaWrRate1" type="number" min="0" max="100" step="0.1" inputmode="decimal" placeholder="Contoh: 65.5"></label>
+   </div>
+   <button class="lex-wr-action" type="button" id="lexiaaWrShowWL">SHOW WIN AND LOSE</button>
+   <div class="lex-wr-result" id="lexiaaWrResult1" aria-live="polite">
+    <div class="lex-wr-result-label">HASIL STATISTIK HERO</div>
+    <div class="lex-wr-result-values">
+     <div class="lex-wr-stat win"><b id="lexiaaWrWins">0</b><span>TOTAL WIN</span></div>
+     <div class="lex-wr-stat lose"><b id="lexiaaWrLosses">0</b><span>TOTAL LOSE</span></div>
+    </div>
+    <p class="lex-wr-result-note" id="lexiaaWrEstimateNote">Hasil merupakan perkiraan berdasarkan WR yang dimasukkan.</p>
+   </div>
+  </section>
+  <section class="lex-wr-card">
+   <div class="lex-wr-card-head"><span class="lex-wr-index">02</span><div><h3>HITUNG JUMLAH WIN UNTUK WR TUJUAN ANDA</h3><p>Hitung kemenangan tambahan yang dibutuhkan untuk mencapai target WR.</p></div></div>
+   <div class="lex-wr-fields">
+    <label class="lex-wr-field"><span>Total pertandingan</span><input id="lexiaaWrMatches2" type="number" min="1" step="1" inputmode="numeric" placeholder="Contoh: 120"></label>
+    <label class="lex-wr-field"><span>WR hero saat ini (%)</span><input id="lexiaaWrRate2" type="number" min="0" max="100" step="0.1" inputmode="decimal" placeholder="Contoh: 65.5"></label>
+    <label class="lex-wr-field" style="grid-column:1/-1"><span>WR tujuan (%)</span><input id="lexiaaWrTarget" type="number" min="0" max="100" step="0.1" inputmode="decimal" placeholder="Contoh: 70"></label>
+   </div>
+   <button class="lex-wr-action" type="button" id="lexiaaWrCalcTarget">HITUNG JUMLAH WIN YANG DIBUTUHKAN</button>
+   <div class="lex-wr-result" id="lexiaaWrResult2" aria-live="polite">
+    <div class="lex-wr-result-label">WIN TAMBAHAN YANG DIBUTUHKAN</div>
+    <div class="lex-wr-result-values" style="grid-template-columns:1fr">
+     <div class="lex-wr-stat win"><b id="lexiaaWrNeeded">0</b><span>WIN BERTURUT-TURUT</span></div>
+    </div>
+    <p class="lex-wr-result-note" id="lexiaaWrTargetNote">Dengan asumsi seluruh pertandingan berikutnya berakhir WIN tanpa LOSE.</p>
+   </div>
+  </section>
+  <div class="lex-wr-tip-row"><button class="lex-wr-tip" type="button" id="lexiaaWrTipsOpen">TIPS MENJALANKAN? 💡</button></div>
+ </div>
+</div>
+<div id="lexiaaWrTips" aria-hidden="true">
+ <section class="lex-wr-tips-panel" role="dialog" aria-modal="true" aria-labelledby="lexiaaWrTipsTitle">
+  <div class="lex-wr-tips-kicker">LEXIAA · USER GUIDE</div>
+  <h2 id="lexiaaWrTipsTitle">TIPS MENJALANKAN? 💡</h2>
+  <h3>01. SHOW WIN AND LOSE YOUR HERO</h3>
+  <p>Lihat jumlah WIN dan LOSE hero Anda. Masukkan total pertandingan serta WR hero Anda saat ini untuk mendapatkan hasilnya.</p>
+  <h3>02. HITUNG JUMLAH WIN UNTUK WR TUJUAN ANDA</h3>
+  <p>Cari tahu jumlah WIN yang dibutuhkan untuk mencapai target WR. Masukkan total pertandingan, WR Anda saat ini, dan WR tujuan Anda.</p>
+  <button class="lex-wr-close" type="button" id="lexiaaWrTipsClose">TUTUP</button>
+ </section>
+</div>
+<script id="lexiaa-wr-calculator-script">
+(()=> {
+ const app=document.getElementById('lexiaaWrApp');
+ const tips=document.getElementById('lexiaaWrTips');
+ const openApp=()=>{app.classList.add('is-open');app.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';};
+ const closeApp=()=>{app.classList.remove('is-open');app.setAttribute('aria-hidden','true');document.body.style.overflow='';};
+ document.getElementById('lexiaaWrMenuCard')?.addEventListener('click',openApp);
+ document.getElementById('lexiaaWrBack')?.addEventListener('click',closeApp);
+ document.getElementById('lexiaaWrTipsOpen')?.addEventListener('click',()=>{tips.classList.add('is-open');tips.setAttribute('aria-hidden','false');});
+ document.getElementById('lexiaaWrTipsClose')?.addEventListener('click',()=>{tips.classList.remove('is-open');tips.setAttribute('aria-hidden','true');});
+ // Deliberately no backdrop-click or Escape handler: the guide closes only via TUTUP.
+ function readStats(matchesId,rateId){
+  const m=Number(document.getElementById(matchesId).value);
+  const r=Number(document.getElementById(rateId).value);
+  if(!Number.isInteger(m)||m<1)throw new Error('Masukkan total pertandingan berupa bilangan bulat minimal 1.');
+  if(!Number.isFinite(r)||r<0||r>100)throw new Error('Masukkan WR antara 0 sampai 100%.');
+  const wins=Math.round(m*r/100);
+  return {matches:m,rate:r,wins,losses:m-wins};
+ }
+ document.getElementById('lexiaaWrShowWL')?.addEventListener('click',()=>{
+  const out=document.getElementById('lexiaaWrResult1');
+  try{
+   const x=readStats('lexiaaWrMatches1','lexiaaWrRate1');
+   document.getElementById('lexiaaWrWins').textContent=x.wins.toLocaleString('id-ID');
+   document.getElementById('lexiaaWrLosses').textContent=x.losses.toLocaleString('id-ID');
+   document.getElementById('lexiaaWrEstimateNote').textContent='Perkiraan dari WR '+x.rate+'% × '+x.matches+' pertandingan. Karena WR MLBB dapat dibulatkan, angka WIN/LOSE bisa berbeda dari data asli.';
+   out.classList.add('show');
+  }catch(e){out.classList.remove('show');alert(e.message);}
+ });
+ document.getElementById('lexiaaWrCalcTarget')?.addEventListener('click',()=>{
+  const out=document.getElementById('lexiaaWrResult2');
+  try{
+   const x=readStats('lexiaaWrMatches2','lexiaaWrRate2');
+   const target=Number(document.getElementById('lexiaaWrTarget').value);
+   if(!Number.isFinite(target)||target<0||target>100)throw new Error('Masukkan WR tujuan antara 0 sampai 100%.');
+   if(target<=x.wins/x.matches*100){document.getElementById('lexiaaWrNeeded').textContent='0';document.getElementById('lexiaaWrTargetNote').textContent='WR saat ini berdasarkan perkiraan sudah mencapai atau melebihi target '+target+'%.';}
+   else if(target===100){document.getElementById('lexiaaWrNeeded').textContent='—';document.getElementById('lexiaaWrTargetNote').textContent='Target 100% hanya dapat dicapai jika seluruh pertandingan sebelumnya juga WIN.';}
+   else{
+    const needed=Math.max(0,Math.ceil((target*x.matches-x.wins)/(1-target/100)-1e-10));
+    document.getElementById('lexiaaWrNeeded').textContent=needed.toLocaleString('id-ID');
+    document.getElementById('lexiaaWrTargetNote').textContent='Dengan asumsi seluruh pertandingan berikutnya berakhir WIN tanpa LOSE. Perhitungan memakai perkiraan WIN dari WR yang dimasukkan.';
+   }
+   out.classList.add('show');
+  }catch(e){out.classList.remove('show');alert(e.message);}
  });
 })();
 </script>
