@@ -3018,6 +3018,37 @@ button, a, input, select, textarea { touch-action:manipulation; }
  const langKeys=['id','en','ja','ko','zh','th','fr','de','es','pt'];
  for(const row of phrasebook){for(let n=0;n<langKeys.length;n++){const code=langKeys[n];languages[code].dict[row[0]]=row[n];}}
 
+
+ const extendedPhrases=[
+ ['KOLEKSI FOTO DAN JUDUL PILIHAN LEXIAA.','KOLEKSI FOTO DAN JUDUL PILIHAN LEXIAA.','LEXIAA が選んだ写真とタイトルのコレクション。','LEXIAA가 선택한 사진과 제목 모음입니다.','LEXIAA 精选的图片和标题合集。','คอลเลกชันภาพถ่ายและชื่อเรื่องที่ LEXIAA คัดสรร','COLLECTION DE PHOTOS ET DE TITRES SÉLECTIONNÉS PAR LEXIAA.','SAMMLUNG AUSGEWÄHLTER FOTOS UND TITEL VON LEXIAA.','COLECCIÓN DE FOTOS Y TÍTULOS SELECCIONADOS POR LEXIAA.','COLEÇÃO DE FOTOS E TÍTULOS SELECIONADOS PELA LEXIAA.'],
+ ['MEMUAT KOLEKSI PENEMUAN...','MEMUAT KOLEKSI PENEMUAN...','探索コレクションを読み込み中…','탐색 컬렉션 불러오는 중…','正在加载发现合集…','กำลังโหลดคอลเลกชันค้นพบ…','Chargement de la collection découverte…','Entdeckersammlung wird geladen…','Cargando colección de descubrimientos…','Carregando coleção de descobertas…'],
+ ['MEMUAT KOLEKSI SECRET...','MEMUAT KOLEKSI SECRET...','シークレットコレクションを読み込み中…','시크릿 컬렉션 불러오는 중…','正在加载秘密合集…','กำลังโหลดคอลเลกชันลับ…','Chargement de la collection secrète…','Geheime Sammlung wird geladen…','Cargando colección secreta…','Carregando coleção secreta…'],
+ ['AREA KHUSUS MEMBER TERDAFTAR.','AREA KHUSUS MEMBER TERDAFTAR.','登録メンバー専用エリア。','등록 회원 전용 영역입니다.','注册会员专属区域。','พื้นที่เฉพาะสมาชิกที่ลงทะเบียน','ESPACE RÉSERVÉ AUX MEMBRES INSCRITS.','BEREICH FÜR REGISTRIERTE MITGLIEDER.','ÁREA EXCLUSIVA PARA MIEMBROS REGISTRADOS.','ÁREA EXCLUSIVA PARA MEMBROS CADASTRADOS.'],
+ ['Buat kode akses pribadi untuk membuka kisah ini. Setiap kode hanya dapat digunakan satu kali.','Buat kode akses pribadi untuk membuka kisah ini. Setiap kode hanya dapat digunakan satu kali.','この物語を開くための個人用アクセスコードを作成します。各コードは一度だけ使用できます。','이 이야기를 열 개인 액세스 코드를 만드세요. 각 코드는 한 번만 사용할 수 있습니다.','创建个人访问码以打开这个故事。每个代码只能使用一次。','สร้างรหัสเข้าถึงส่วนตัวเพื่อเปิดเรื่องนี้ แต่ละรหัสใช้ได้เพียงครั้งเดียว','Créez un code d’accès personnel pour ouvrir cette histoire. Chaque code ne peut être utilisé qu’une seule fois.','Erstelle einen persönlichen Zugangscode, um diese Geschichte zu öffnen. Jeder Code kann nur einmal verwendet werden.','Crea un código de acceso personal para abrir esta historia. Cada código solo se puede usar una vez.','Crie um código de acesso pessoal para abrir esta história. Cada código só pode ser usado uma vez.'],
+ ['DAPATKAN KODE','DAPATKAN KODE','コードを取得','코드 받기','获取代码','รับรหัส','OBTENIR UN CODE','CODE ERHALTEN','OBTENER CÓDIGO','OBTER CÓDIGO'],
+ ['MASUKKAN KODE','MASUKKAN KODE','コードを入力','코드 입력','输入代码','ใส่รหัส','SAISIR LE CODE','CODE EINGEBEN','INTRODUCIR CÓDIGO','INSERIR CÓDIGO'],
+ ['LANJUTKAN','LANJUTKAN','続ける','계속','继续','ดำเนินการต่อ','CONTINUER','WEITER','CONTINUAR','CONTINUAR'],
+ ['SEBELUMNYA','SEBELUMNYA','前へ','이전','上一步','ก่อนหน้า','PRÉCÉDENT','ZURÜCK','ANTERIOR','ANTERIOR'],
+ ['BERIKUTNYA','BERIKUTNYA','次へ','다음','下一步','ถัดไป','SUIVANT','WEITER','SIGUIENTE','PRÓXIMO'],
+ ['Putar perangkat ke posisi landscape untuk pengalaman terbaik.','Putar perangkat ke posisi landscape untuk pengalaman terbaik.','最高の体験のために、端末を横向きにしてください。','최상의 경험을 위해 기기를 가로 모드로 전환하세요.','为获得最佳体验，请将设备旋转至横屏。','หมุนอุปกรณ์เป็นแนวนอนเพื่อประสบการณ์ที่ดีที่สุด','Tournez votre appareil en mode paysage pour une meilleure expérience.','Drehe dein Gerät für das beste Erlebnis ins Querformat.','Gira tu dispositivo a horizontal para disfrutar de la mejor experiencia.','Gire o dispositivo para o modo paisagem para uma melhor experiência.'],
+ ['HAI, SAYA LEXIAA.','HAI, SAYA LEXIAA.','こんにちは、LEXIAA です。','안녕하세요, LEXIAA입니다.','嗨，我是 LEXIAA。','สวัสดี ฉันคือ LEXIAA','BONJOUR, JE SUIS LEXIAA.','HALLO, ICH BIN LEXIAA.','HOLA, SOY LEXIAA.','OLÁ, EU SOU A LEXIAA.'],
+ ['Apa itu Lexiaa?','Apa itu Lexiaa?','LEXIAA とは？','LEXIAA란 무엇인가요?','什么是 LEXIAA？','LEXIAA คืออะไร?','Qu’est-ce que Lexiaa ?','Was ist Lexiaa?','¿Qué es Lexiaa?','O que é a Lexiaa?'],
+ ['Kenali lebih dekat, yaa~ Onee-san temani ♡','Kenali lebih dekat, yaa~ Onee-san temani ♡','もっと詳しく知ってね〜 Onee-san が案内するよ ♡','더 자세히 알아봐요~ Onee-san이 함께할게요 ♡','更深入地了解吧～Onee-san 陪着你 ♡','มาทำความรู้จักกันให้มากขึ้นนะ~ Onee-san จะพาไป ♡','Apprenons à mieux nous connaître~ Onee-san vous accompagne ♡','Lerne mich besser kennen~ Onee-san begleitet dich ♡','Conozcámonos mejor~ Onee-san te acompaña ♡','Vamos nos conhecer melhor~ Onee-san acompanha você ♡'],
+ ['Fitur-Fitur Lexiaa','Fitur-Fitur Lexiaa','LEXIAA の機能','LEXIAA 기능','LEXIAA 功能','ฟีเจอร์ของ LEXIAA','Fonctionnalités de Lexiaa','Lexiaa-Funktionen','Funciones de Lexiaa','Recursos da Lexiaa'],
+ ['Cara Menjalankan','Cara Menjalankan','使い方','사용 방법','使用方法','วิธีใช้งาน','Comment utiliser','Bedienung','Cómo usar','Como usar'],
+ ['Panduan Pengguna','Panduan Pengguna','ユーザーガイド','사용자 가이드','用户指南','คู่มือผู้ใช้','Guide utilisateur','Benutzerhandbuch','Guía del usuario','Guia do usuário'],
+ ['Tips & Trik','Tips & Trik','ヒントとコツ','팁과 요령','提示与技巧','เคล็ดลับและเทคนิค','Conseils et astuces','Tipps & Tricks','Consejos y trucos','Dicas e truques'],
+ ['Jelajahi, nikmati, dan temukan sisi seru Lexiaa~ ♡','Jelajahi, nikmati, dan temukan sisi seru Lexiaa~ ♡','探索して、楽しんで、Lexiaa の魅力を見つけてね〜 ♡','탐험하고 즐기며 Lexiaa의 매력을 발견하세요~ ♡','探索、享受并发现 Lexiaa 有趣的一面～ ♡','สำรวจ เพลิดเพลิน และค้นพบความสนุกของ Lexiaa~ ♡','Explorez, profitez et découvrez le côté amusant de Lexiaa~ ♡','Erkunde, genieße und entdecke die spannende Seite von Lexiaa~ ♡','Explora, disfruta y descubre el lado divertido de Lexiaa~ ♡','Explore, aproveite e descubra o lado divertido da Lexiaa~ ♡'],
+ ['MADE FOR YOUR LITTLE ADVENTURE','DIBUAT UNTUK PETUALANGAN KECILMU','あなたの小さな冒険のために','당신의 작은 모험을 위해','为你的小小冒险而打造','สร้างมาเพื่อการผจญภัยเล็ก ๆ ของคุณ','CONÇU POUR VOTRE PETITE AVENTURE','FÜR DEIN KLEINES ABENTEUER GEMACHT','HECHO PARA TU PEQUEÑA AVENTURA','FEITO PARA SUA PEQUENA AVENTURA'],
+ ['Butuh bantuan?','Butuh bantuan?','サポートが必要ですか？','도움이 필요하신가요?','需要帮助吗？','ต้องการความช่วยเหลือไหม?','Besoin d’aide ?','Brauchst du Hilfe?','¿Necesitas ayuda?','Precisa de ajuda?'],
+ ['Gunakan koneksi internet','Gunakan koneksi internet','インターネット接続を使用','인터넷 연결 사용','使用互联网连接','ใช้งานการเชื่อมต่ออินเทอร์เน็ต','Utilisez une connexion Internet','Internetverbindung verwenden','Usa una conexión a Internet','Use uma conexão com a internet'],
+ ['Pasang sebagai aplikasi','Pasang sebagai aplikasi','アプリとしてインストール','앱으로 설치','安装为应用','ติดตั้งเป็นแอป','Installer comme application','Als App installieren','Instalar como aplicación','Instalar como aplicativo'],
+ ['Gunakan headphone','Gunakan headphone','ヘッドホンを使用','헤드폰 사용','使用耳机','ใช้หูฟัง','Utilisez un casque','Kopfhörer verwenden','Usa auriculares','Use fones de ouvido'],
+ ['Periksa koneksi','Periksa koneksi','接続を確認','연결 확인','检查网络连接','ตรวจสอบการเชื่อมต่อ','Vérifiez la connexion','Verbindung prüfen','Comprueba la conexión','Verifique a conexão'],
+ ['Jelajahi semua menu','Jelajahi semua menu','すべてのメニューを探索','모든 메뉴 둘러보기','探索所有菜单','สำรวจทุกเมนู','Explorez tous les menus','Alle Menüs erkunden','Explora todos los menús','Explore todos os menus']
+ ];
+ for(const row of extendedPhrases){for(let n=0;n<langKeys.length;n++){languages[langKeys[n]].dict[row[0]]=row[n];}}
+
  const translations=new WeakMap();
  let current='id',observer=null;
  const normalize=s=>s.replace(/\s+/g,' ').trim();
