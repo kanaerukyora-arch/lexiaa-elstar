@@ -63,6 +63,52 @@ button,input{font:inherit}button{cursor:pointer}#particles{position:fixed;inset:
 @media(orientation:landscape) and (max-height:480px){.fantasy-top-brand{top:1%}.fantasy-brand-name{font-size:clamp(25px,5vw,42px)}.fantasy-brand-sub{font-size:clamp(9px,1.5vw,14px)}.battery-panel{top:8%;height:21%}.time-panel{height:24%}.location-panel,.weather-panel{height:20%;bottom:4%}}
 @media(prefers-reduced-motion:reduce){.fantasy-bg-video{display:none}}
 </style>
+<style id="lexiaa-immersive-fix">
+html,body{width:100%;height:100%;min-height:100%;margin:0;overflow:hidden;overscroll-behavior:none}
+body:has(#dashboardView.active) .topline{display:none!important}
+body:has(#dashboardView.active) .wrap{width:100%;max-width:none;margin:0}
+#dashboardView{inset:0!important;width:100vw!important;height:100vh!important;height:100dvh!important;min-height:100vh!important;min-height:100dvh!important;padding:0!important;margin:0!important;overflow:hidden!important}
+.fantasy-dashboard{width:100vw!important;height:100vh!important;height:100dvh!important;min-height:100vh!important;min-height:100dvh!important;inset:0!important}
+.fantasy-bg-video{object-fit:cover!important;object-position:center center!important}
+.fantasy-panel{height:auto!important;min-height:clamp(78px,17vh,132px)!important;padding:clamp(7px,1.3vh,14px) clamp(10px,1.6vw,20px)!important}
+.battery-panel{top:4.5%!important;left:2.2%!important;width:23.5%!important}
+.time-panel{top:4%!important;right:2.2%!important;width:23.5%!important;min-height:clamp(88px,19vh,145px)!important}
+.location-panel{bottom:4.5%!important;left:3%!important;width:28%!important;min-height:clamp(76px,16vh,125px)!important}
+.weather-panel{bottom:4.5%!important;right:2.7%!important;width:25%!important;min-height:clamp(76px,16vh,125px)!important}
+.fantasy-clock{font-size:clamp(21px,4.1vw,50px)!important;line-height:1.15!important;margin-top:5px;white-space:nowrap}
+.fantasy-date{font-size:clamp(8px,1.2vw,14px)!important;line-height:1.3;margin-top:3px}
+.fantasy-panel-heading{font-size:clamp(10px,1.3vw,16px)!important}
+.fantasy-panel-main{font-size:clamp(14px,2.1vw,25px)!important;line-height:1.2}
+.fantasy-location{font-size:clamp(10px,1.6vw,19px)!important;line-height:1.2!important;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.fantasy-panel-foot{font-size:clamp(7px,.82vw,10px)!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.weather-row{gap:clamp(5px,1vw,12px)}
+.fantasy-weather-main{font-size:clamp(20px,3.1vw,38px)!important}
+.fantasy-weather-desc{font-size:clamp(8px,.95vw,11px)!important;max-width:18vw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.weather-glyph{font-size:clamp(23px,4.2vw,50px)!important}
+.fantasy-top-brand{top:1.5%!important;width:40vw!important}
+.fantasy-brand-name{font-size:clamp(26px,4.9vw,58px)!important}
+.fantasy-brand-sub{font-size:clamp(9px,1.45vw,16px)!important}
+.fantasy-bottom-brand{bottom:1.2%!important;font-size:clamp(7px,.8vw,10px)!important}
+.fantasy-logout{opacity:.2;transition:opacity .2s}
+.fantasy-logout:focus,.fantasy-logout:active{opacity:1}
+@media(orientation:landscape) and (max-height:500px){
+ .battery-panel{top:4%!important;min-height:72px!important}
+ .time-panel{top:3%!important;min-height:82px!important}
+ .location-panel,.weather-panel{bottom:4%!important;min-height:68px!important}
+ .fantasy-top-brand{top:.8%!important}
+ .fantasy-brand-name{font-size:clamp(22px,4.3vw,38px)!important}
+ .fantasy-brand-sub{font-size:clamp(8px,1.2vw,12px)!important}
+ .fantasy-panel{padding:6px 11px!important}
+ .fantasy-panel-main{margin-top:2px!important}
+ .battery-panel .fantasy-panel-main{padding-left:clamp(30px,4vw,46px)!important}
+ .fantasy-panel-heading .fantasy-symbol{font-size:clamp(14px,2vw,22px)!important}
+ .fantasy-clock{font-size:clamp(19px,3.5vw,35px)!important}
+ .fantasy-location{font-size:clamp(10px,1.4vw,16px)!important}
+ .weather-glyph{font-size:clamp(19px,3.3vw,35px)!important}
+ .fantasy-weather-main{font-size:clamp(17px,2.6vw,29px)!important}
+}
+@media(orientation:portrait){#dashboardView.active .fantasy-dashboard{display:none!important}}
+</style>
 </head>
 <body><div id="particles" aria-hidden="true"></div><div class="wrap">
 <header class="topline"><div class="brand">LEXIAA <small>THE NEXT GENERATION</small></div><div class="system-pill" id="systemPill">● SECURE ACCESS</div></header>
