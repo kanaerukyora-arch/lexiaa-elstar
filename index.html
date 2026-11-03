@@ -1110,6 +1110,7 @@ button, a, input, select, textarea { touch-action:manipulation; }
 @media(prefers-reduced-motion:reduce){#lexiaaAccessRequestModal .lex-access-lock{animation:none}}
 </style>
 
+<style>
 /* LEXIAA V9 global language selector */
 .lex-language-control{display:flex;align-items:center;gap:7px;border:1px solid rgba(197,138,255,.42);border-radius:999px;padding:6px 10px;background:rgba(20,12,36,.78);color:#f4eaff;box-shadow:0 0 14px #b66cff18}
 .lex-language-control label{font:700 9px Inter,sans-serif;letter-spacing:.12em;color:#cda9f2;white-space:nowrap}
@@ -1118,6 +1119,7 @@ button, a, input, select, textarea { touch-action:manipulation; }
 .lex-version-tag{font:700 9px Inter,sans-serif;letter-spacing:.08em;color:#d9b8ff;border:1px solid #b66cff55;border-radius:999px;padding:7px 9px;white-space:nowrap}
 .dash-statusbar .lex-language-control{margin-left:auto}
 @media(max-width:600px){.topbar{flex-wrap:wrap}.lex-language-control{order:3}.dash-statusbar{height:auto;min-height:66px;flex-wrap:wrap;padding:10px 4px}.dash-statusbar .lex-language-control{margin-left:0}.dash-statusbar .device-status{margin-left:auto}}
+</style>
 
 </head>
 <body>
@@ -2963,6 +2965,59 @@ button, a, input, select, textarea { touch-action:manipulation; }
   es:{label:'Español',region:'España',dict:{'SELAMAT DATANG DI':'BIENVENIDO A','DAFTAR':'REGISTRARSE','KEMBALI':'VOLVER','Home':'Inicio','Explore':'Explorar','Hidden':'Oculto','Member OTW':'Miembros OTW','Tentang Lexiaa?':'Acerca de Lexiaa','NOW PLAYING':'REPRODUCIENDO','PENEMUAN':'DESCUBRIR','SECRET':'SECRETO','LOGOUT ↗':'CERRAR SESIÓN ↗'}},
   pt:{label:'Português',region:'Brasil',dict:{'SELAMAT DATANG DI':'BEM-VINDO AO','DAFTAR':'CADASTRAR','KEMBALI':'VOLTAR','Home':'Início','Explore':'Explorar','Hidden':'Oculto','Member OTW':'Membros OTW','Tentang Lexiaa?':'Sobre a Lexiaa','NOW PLAYING':'TOCANDO AGORA','PENEMUAN':'DESCOBRIR','SECRET':'SEGREDO','LOGOUT ↗':'SAIR ↗'}}
  };
+
+ // Shared interface phrasebook. LEXIAA remains a brand name in every language.
+ const phrasebook=[
+ ['LOGIN','LOGIN','ログイン','로그인','登录','เข้าสู่ระบบ','CONNEXION','ANMELDEN','INICIAR SESIÓN','ENTRAR'],
+ ['CREATE YOUR ACCESS','BUAT AKSES','アクセスを作成','접근 권한 만들기','创建访问','สร้างการเข้าถึง','CRÉER VOTRE ACCÈS','ZUGANG ERSTELLEN','CREAR ACCESO','CRIAR ACESSO'],
+ ['BUAT AKUN OTW MENGGUNAKAN EMAIL DAN SANDI.','BUAT AKUN OTW MENGGUNAKAN EMAIL DAN SANDI.','メールとパスワードで OTW アカウントを作成','이메일과 비밀번호로 OTW 계정 만들기','使用邮箱和密码创建 OTW 账户','สร้างบัญชี OTW ด้วยอีเมลและรหัสผ่าน','CRÉEZ UN COMPTE OTW AVEC VOTRE E-MAIL ET MOT DE PASSE.','ERSTELLE EIN OTW-KONTO MIT E-MAIL UND PASSWORT.','CREA UNA CUENTA OTW CON TU CORREO Y CONTRASEÑA.','CRIE UMA CONTA OTW COM E-MAIL E SENHA.'],
+ ['BUAT SANDI','BUAT SANDI','パスワードを作成','비밀번호 만들기','创建密码','สร้างรหัสผ่าน','CRÉER UN MOT DE PASSE','PASSWORT ERSTELLEN','CREAR CONTRASEÑA','CRIAR SENHA'],
+ ['BUAT AKUN','BUAT AKUN','アカウント作成','계정 만들기','创建账户','สร้างบัญชี','CRÉER UN COMPTE','KONTO ERSTELLEN','CREAR CUENTA','CRIAR CONTA'],
+ ['SUDAH PUNYA AKUN?','SUDAH PUNYA AKUN?','すでにアカウントをお持ちですか？','이미 계정이 있으신가요?','已有账户？','มีบัญชีอยู่แล้วหรือไม่?','VOUS AVEZ DÉJÀ UN COMPTE ?','HAST DU BEREITS EIN KONTO?','¿YA TIENES UNA CUENTA?','JÁ TEM UMA CONTA?'],
+ ['TUTORIAL MASUK OTW?','TUTORIAL MASUK OTW?','OTW ログインガイド','OTW 로그인 안내','OTW 登录教程','คู่มือเข้าสู่ระบบ OTW','GUIDE DE CONNEXION OTW','OTW-ANMELDEANLEITUNG','GUÍA DE ACCESO OTW','GUIA DE LOGIN OTW'],
+ ['LEXIAA Music','LEXIAA Music','LEXIAA ミュージック','LEXIAA 음악','LEXIAA 音乐','LEXIAA เพลง','Musique LEXIAA','LEXIAA Musik','Música LEXIAA','Música LEXIAA'],
+ ['LOCAL TIME','WAKTU LOKAL','現地時間','현지 시간','当地时间','เวลาท้องถิ่น','HEURE LOCALE','ORTSZEIT','HORA LOCAL','HORA LOCAL'],
+ ['Memuat cuaca...','Memuat cuaca...','天気を読み込み中…','날씨 불러오는 중…','正在加载天气…','กำลังโหลดสภาพอากาศ…','Chargement météo…','Wetter wird geladen…','Cargando clima…','Carregando clima…'],
+ ['Cuaca lokal','Cuaca lokal','現地の天気','현지 날씨','当地天气','สภาพอากาศในพื้นที่','Météo locale','Lokales Wetter','Clima local','Clima local'],
+ ['Menunggu lokasi','Menunggu lokasi','位置情報を待っています','위치 정보를 기다리는 중','正在等待位置','กำลังรอตำแหน่ง','En attente de la position','Warte auf Standort','Esperando ubicación','Aguardando localização'],
+ ['NOW PLAYING','SEDANG DIPUTAR','再生中','현재 재생 중','正在播放','กำลังเล่น','EN COURS DE LECTURE','JETZT LÄUFT','REPRODUCIENDO','TOCANDO AGORA'],
+ ['♫   Pilih playlist untuk mulai mendengarkan','♫   Pilih playlist untuk mulai mendengarkan','♫ プレイリストを選んで再生','♫ 재생할 플레이리스트 선택','♫ 选择播放列表开始收听','♫ เลือกเพลย์ลิสต์เพื่อเริ่มฟัง','♫ Choisissez une playlist pour écouter','♫ Playlist zum Anhören auswählen','♫ Elige una lista para escuchar','♫ Escolha uma playlist para ouvir'],
+ ['SPOTIFY & YOUTUBE PLAYER','SPOTIFY & YOUTUBE PLAYER','SPOTIFY & YOUTUBE プレーヤー','SPOTIFY 및 YOUTUBE 플레이어','SPOTIFY 和 YOUTUBE 播放器','เครื่องเล่น SPOTIFY และ YOUTUBE','LECTEUR SPOTIFY ET YOUTUBE','SPOTIFY- & YOUTUBE-PLAYER','REPRODUCTOR DE SPOTIFY Y YOUTUBE','PLAYER DE SPOTIFY E YOUTUBE'],
+ ['KHUSUS MEMBER OTW, KLIK UNTUK PENGAJUAN MENJADI MEMBER.','KHUSUS MEMBER OTW, KLIK UNTUK PENGAJUAN MENJADI MEMBER.','OTW メンバー限定。クリックしてメンバー申請','OTW 회원 전용. 클릭하여 회원 신청','仅限 OTW 会员。点击申请加入','สำหรับสมาชิก OTW เท่านั้น คลิกเพื่อสมัครสมาชิก','RÉSERVÉ AUX MEMBRES OTW. CLIQUEZ POUR FAIRE UNE DEMANDE.','NUR FÜR OTW-MITGLIEDER. KLICKEN, UM EINE MITGLIEDSCHAFT ZU BEANTRAGEN.','SOLO PARA MIEMBROS OTW. HAZ CLIC PARA SOLICITAR MEMBRESÍA.','EXCLUSIVO PARA MEMBROS OTW. CLIQUE PARA SOLICITAR PARTICIPAÇÃO.'],
+ ['ASAL USUL NAMA "LEXIAA"','ASAL USUL NAMA "LEXIAA"','「LEXIAA」という名前の由来','LEXIAA라는 이름의 유래','“LEXIAA”名称的由来','ที่มาของชื่อ “LEXIAA”','ORIGINE DU NOM « LEXIAA »','URSPRUNG DES NAMENS „LEXIAA“','ORIGEN DEL NOMBRE «LEXIAA»','ORIGEM DO NOME “LEXIAA”'],
+ ['BUKA CERITA RAHASIA DI BALIK NAMA LEXIAA.','BUKA CERITA RAHASIA DI BALIK NAMA LEXIAA.','LEXIAA という名前に隠された物語を開く','LEXIAA 이름에 숨겨진 이야기를 열어보세요','揭开 LEXIAA 名字背后的故事','เปิดเรื่องราวลับเบื้องหลังชื่อ LEXIAA','DÉCOUVREZ L’HISTOIRE SECRÈTE DU NOM LEXIAA.','ÖFFNE DIE GEHEIME GESCHICHTE HINTER DEM NAMEN LEXIAA.','DESCUBRE LA HISTORIA SECRETA DETRÁS DEL NOMBRE LEXIAA.','ABRA A HISTÓRIA SECRETA POR TRÁS DO NOME LEXIAA.'],
+ ['KENALI FITUR, PANDUAN, DAN RAHASIA KECIL LEXIAA.','KENALI FITUR, PANDUAN, DAN RAHASIA KECIL LEXIAA.','LEXIAA の機能、ガイド、小さな秘密を知ろう','LEXIAA의 기능, 가이드, 작은 비밀을 알아보세요','了解 LEXIAA 的功能、指南和小秘密','ทำความรู้จักฟีเจอร์ คู่มือ และความลับเล็ก ๆ ของ LEXIAA','DÉCOUVREZ LES FONCTIONNALITÉS, LES GUIDES ET LES PETITS SECRETS DE LEXIAA.','ENTDECKE DIE FUNKTIONEN, ANLEITUNGEN UND KLEINEN GEHEIMNISSE VON LEXIAA.','CONOCE LAS FUNCIONES, GUÍAS Y PEQUEÑOS SECRETOS DE LEXIAA.','CONHEÇA OS RECURSOS, GUIAS E PEQUENOS SEGREDOS DA LEXIAA.'],
+ ['CONNECT WITH ADMIN','HUBUNGI ADMIN','管理者に連絡','관리자에게 문의','联系管理员','ติดต่อผู้ดูแล','CONTACTER L’ADMINISTRATEUR','ADMIN KONTAKTIEREN','CONTACTAR CON ADMIN','FALAR COM O ADMIN'],
+ ['KEMBALI KE DASHBOARD','KEMBALI KE DASHBOARD','ダッシュボードに戻る','대시보드로 돌아가기','返回仪表板','กลับไปที่แดชบอร์ด','RETOUR AU TABLEAU DE BORD','ZURÜCK ZUM DASHBOARD','VOLVER AL PANEL','VOLTAR AO PAINEL'],
+ ['MEMUAT KOLEKSI...','MEMUAT KOLEKSI...','コレクションを読み込み中…','컬렉션 불러오는 중…','正在加载合集…','กำลังโหลดคอลเลกชัน…','Chargement de la collection…','Sammlung wird geladen…','Cargando colección…','Carregando coleção…'],
+ ['BELUM ADA KONTEN DI SINI.','BELUM ADA KONTEN DI SINI.','ここにはまだコンテンツがありません。','아직 콘텐츠가 없습니다.','这里还没有内容。','ยังไม่มีเนื้อหาที่นี่','IL N’Y A PAS ENCORE DE CONTENU ICI.','HIER GIBT ES NOCH KEINE INHALTE.','AÚN NO HAY CONTENIDO AQUÍ.','AINDA NÃO HÁ CONTEÚDO AQUI.'],
+ ['KEMBALI KE DASHBOARD','KEMBALI KE DASHBOARD','ダッシュボードに戻る','대시보드로 돌아가기','返回仪表板','กลับไปที่แดชบอร์ด','RETOUR AU TABLEAU DE BORD','ZURÜCK ZUM DASHBOARD','VOLVER AL PANEL','VOLTAR AO PAINEL'],
+ ['MENU SEMENTARA DIKUNCI','MENU SEMENTARA DIKUNCI','メニューは一時的にロックされています','메뉴가 일시적으로 잠겨 있습니다','菜单暂时锁定','เมนูถูกล็อกชั่วคราว','MENU TEMPORAIREMENT VERROUILLÉ','MENÜ VORÜBERGEHEND GESPERRT','MENÚ BLOQUEADO TEMPORALMENTE','MENU TEMPORARIAMENTE BLOQUEADO'],
+ ['Untuk sementara, menu','Untuk sementara, menu','現在、このメニューは','현재 이 메뉴는','目前，此菜单','ขณะนี้เมนูนี้','Pour le moment, ce menu','Dieses Menü ist derzeit','Por ahora, este menú','No momento, este menu'],
+ ['hanya dapat diakses oleh Tim ADMIN.','hanya dapat diakses oleh Tim ADMIN.','ADMIN チームのみアクセスできます。','ADMIN 팀만 접근할 수 있습니다.','仅限 ADMIN 团队访问。','เข้าถึงได้เฉพาะทีม ADMIN เท่านั้น','est accessible uniquement à l’équipe ADMIN.','ist nur für das ADMIN-Team zugänglich.','solo está disponible para el equipo ADMIN.','só pode ser acessado pela equipe ADMIN.'],
+ ['✉ KLIK DI SINI UNTUK MENGHUBUNGI ADMIN','✉ KLIK DI SINI UNTUK MENGHUBUNGI ADMIN','✉ ここをクリックして管理者に連絡','✉ 여기를 눌러 관리자에게 문의','✉ 点击此处联系管理员','✉ คลิกที่นี่เพื่อติดต่อผู้ดูแล','✉ CLIQUEZ ICI POUR CONTACTER L’ADMIN','✉ HIER KLICKEN, UM DEN ADMIN ZU KONTAKTIEREN','✉ HAZ CLIC AQUÍ PARA CONTACTAR CON ADMIN','✉ CLIQUE AQUI PARA FALAR COM O ADMIN'],
+ ['KIRIM PESAN','KIRIM PESAN','メッセージを送信','메시지 보내기','发送消息','ส่งข้อความ','ENVOYER LE MESSAGE','NACHRICHT SENDEN','ENVIAR MENSAJE','ENVIAR MENSAGEM'],
+ ['TUTUP','TUTUP','閉じる','닫기','关闭','ปิด','FERMER','SCHLIESSEN','CERRAR','FECHAR'],
+ ['SHOW WIN AND LOSE YOUR HERO','SHOW WIN AND LOSE YOUR HERO','ヒーローの勝敗を表示','영웅 승패 보기','查看英雄胜负','แสดงผลชนะและแพ้ของฮีโร่','AFFICHER LES VICTOIRES ET DÉFAITES DU HÉROS','SIEGE UND NIEDERLAGEN DEINES HELDEN ANZEIGEN','MOSTRAR VICTORIAS Y DERROTAS DE TU HÉROE','MOSTRAR VITÓRIAS E DERROTAS DO HERÓI'],
+ ['Lihat perkiraan jumlah kemenangan dan kekalahan hero Anda.','Lihat perkiraan jumlah kemenangan dan kekalahan hero Anda.','ヒーローの勝利数と敗北数の予測を表示します。','영웅의 예상 승리 및 패배 횟수를 확인하세요.','查看英雄预计胜场和败场数。','ดูจำนวนครั้งที่คาดว่าจะชนะและแพ้ของฮีโร่','Consultez le nombre estimé de victoires et de défaites de votre héros.','Sieh dir die geschätzte Anzahl der Siege und Niederlagen deines Helden an.','Consulta la cantidad estimada de victorias y derrotas de tu héroe.','Veja a estimativa de vitórias e derrotas do seu herói.'],
+ ['Total pertandingan','Total pertandingan','試合数','총 경기 수','总场次','จำนวนแมตช์ทั้งหมด','Nombre total de matchs','Gesamtzahl der Spiele','Partidas totales','Total de partidas'],
+ ['WR hero saat ini (%)','WR hero saat ini (%)','現在のヒーロー勝率 (%)','현재 영웅 승률 (%)','当前英雄胜率 (%)','อัตราชนะฮีโร่ปัจจุบัน (%)','WR actuel du héros (%)','Aktuelle Helden-Siegquote (%)','WR actual del héroe (%)','WR atual do herói (%)'],
+ ['SHOW WIN AND LOSE','HITUNG WIN DAN LOSE','勝敗を表示','승패 계산','计算胜负','คำนวณชนะและแพ้','CALCULER VICTOIRES ET DÉFAITES','SIEGE UND NIEDERLAGEN BERECHNEN','CALCULAR VICTORIAS Y DERROTAS','CALCULAR VITÓRIAS E DERROTAS'],
+ ['HASIL STATISTIK HERO','HASIL STATISTIK HERO','ヒーロー統計結果','영웅 통계 결과','英雄统计结果','ผลสถิติฮีโร่','RÉSULTATS DES STATISTIQUES DU HÉROS','HELDENSTATISTIK-ERGEBNISSE','RESULTADOS DE ESTADÍSTICAS DEL HÉROE','RESULTADOS DAS ESTATÍSTICAS DO HERÓI'],
+ ['TOTAL WIN','TOTAL WIN','総勝利数','총 승리','总胜场','ชนะทั้งหมด','TOTAL DES VICTOIRES','SIEGE GESAMT','VICTORIAS TOTALES','TOTAL DE VITÓRIAS'],
+ ['TOTAL LOSE','TOTAL LOSE','総敗北数','총 패배','总败场','แพ้ทั้งหมด','TOTAL DES DÉFAITES','NIEDERLAGEN GESAMT','DERROTAS TOTALES','TOTAL DE DERROTAS'],
+ ['HITUNG JUMLAH WIN UNTUK WR TUJUAN ANDA','HITUNG JUMLAH WIN UNTUK WR TUJUAN ANDA','目標勝率に必要な勝利数を計算','목표 승률에 필요한 승리 횟수 계산','计算达到目标胜率所需的胜场','คำนวณจำนวนชนะเพื่อไปถึง WR เป้าหมาย','CALCULER LES VICTOIRES NÉCESSAIRES POUR VOTRE WR CIBLE','BENÖTIGTE SIEGE FÜR DEINE ZIEL-SIEGQUOTE BERECHNEN','CALCULAR LAS VICTORIAS NECESARIAS PARA TU WR OBJETIVO','CALCULAR VITÓRIAS NECESSÁRIAS PARA A WR DESEJADA'],
+ ['Hitung kemenangan tambahan yang dibutuhkan untuk mencapai target WR.','Hitung kemenangan tambahan yang dibutuhkan untuk mencapai target WR.','目標 WR に到達するために必要な追加勝利数を計算します。','목표 WR 달성에 필요한 추가 승리 횟수를 계산합니다.','计算达到目标 WR 所需的额外胜场。','คำนวณจำนวนชนะเพิ่มเติมเพื่อให้ถึง WR เป้าหมาย','Calculez les victoires supplémentaires nécessaires pour atteindre le WR cible.','Berechne zusätzliche Siege, um deine Ziel-WR zu erreichen.','Calcula las victorias adicionales necesarias para alcanzar el WR objetivo.','Calcule as vitórias adicionais necessárias para atingir a WR desejada.'],
+ ['WR tujuan (%)','WR tujuan (%)','目標 WR (%)','목표 WR (%)','目标 WR (%)','WR เป้าหมาย (%)','WR cible (%)','Ziel-WR (%)','WR objetivo (%)','WR desejada (%)'],
+ ['WIN TAMBAHAN YANG DIBUTUHKAN','WIN TAMBAHAN YANG DIBUTUHKAN','必要な追加勝利数','필요한 추가 승리','所需额外胜场','จำนวนชนะเพิ่มเติมที่ต้องการ','VICTOIRES SUPPLÉMENTAIRES NÉCESSAIRES','BENÖTIGTE ZUSÄTZLICHE SIEGE','VICTORIAS ADICIONALES NECESARIAS','VITÓRIAS ADICIONAIS NECESSÁRIAS'],
+ ['WIN BERTURUT-TURUT','WIN BERTURUT-TURUT','連続勝利数','연속 승리','连胜场次','ชนะติดต่อกัน','VICTOIRES CONSÉCUTIVES','SIEGE IN FOLGE','VICTORIAS CONSECUTIVAS','VITÓRIAS CONSECUTIVAS'],
+ ['Dengan asumsi seluruh pertandingan berikutnya berakhir WIN tanpa LOSE.','Dengan asumsi seluruh pertandingan berikutnya berakhir WIN tanpa LOSE.','今後の試合がすべて敗北なしの勝利になると仮定しています。','앞으로 모든 경기가 패배 없이 승리한다고 가정합니다.','假设之后所有比赛均获胜且没有失败。','สมมติว่าแมตช์ถัดไปชนะทั้งหมดโดยไม่มีแพ้','En supposant que tous les prochains matchs soient gagnés sans défaite.','Unter der Annahme, dass alle kommenden Spiele ohne Niederlage gewonnen werden.','Suponiendo que todas las próximas partidas sean victorias sin derrotas.','Considerando que todas as próximas partidas serão vitórias, sem derrotas.'],
+ ['Lexiaa sedang menghitung..','Lexiaa sedang menghitung..','Lexiaa が計算中です…','Lexiaa 계산 중…','Lexiaa 正在计算…','Lexiaa กำลังคำนวณ…','Lexiaa calcule…','Lexiaa rechnet…','Lexiaa está calculando…','Lexiaa calculando…'],
+ ['Sebentar ya, hasil terbaik sedang disiapkan ✨','Sebentar ya, hasil terbaik sedang disiapkan ✨','少々お待ちください。結果を準備しています ✨','잠시만요. 결과를 준비하고 있어요 ✨','请稍等，正在准备最佳结果 ✨','รอสักครู่ กำลังเตรียมผลลัพธ์ ✨','Un instant, préparation du résultat ✨','Einen Moment, das Ergebnis wird vorbereitet ✨','Un momento, preparando el mejor resultado ✨','Só um instante, preparando o resultado ✨']
+ ];
+ const langKeys=['id','en','ja','ko','zh','th','fr','de','es','pt'];
+ for(const row of phrasebook){for(let n=0;n<langKeys.length;n++){const code=langKeys[n];languages[code].dict[row[0]]=row[n];}}
+
  const translations=new WeakMap();
  let current='id',observer=null;
  const normalize=s=>s.replace(/\s+/g,' ').trim();
