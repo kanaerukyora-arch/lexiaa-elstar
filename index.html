@@ -3006,7 +3006,6 @@ button, a, input, select, textarea { touch-action:manipulation; }
   document.querySelectorAll('.lex-language-control select').forEach(select=>select.value=lang);
   document.querySelectorAll('body').forEach(body=>applyNode(body,lang));
   const region=languages[lang].region;
-  document.querySelectorAll('[data-live-location]').forEach(el=>{el.textContent='REGION: '+region;});
   try{localStorage.setItem(STORAGE_KEY,lang);}catch(e){}
   document.dispatchEvent(new CustomEvent('lexiaa:languagechange',{detail:{language:lang,region}}));
  }
