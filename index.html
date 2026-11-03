@@ -1101,7 +1101,6 @@ button, a, input, select, textarea { touch-action:manipulation; }
 #lexiaaAccessRequestModal .lex-access-lock{width:116px;height:116px;margin:22px auto 18px;display:grid;place-items:center;border:1px solid rgba(198,154,255,.42);border-radius:50%;background:radial-gradient(circle,rgba(172,113,255,.24),rgba(20,13,35,.8) 68%);box-shadow:0 0 28px rgba(177,111,255,.3),inset 0 0 24px rgba(177,111,255,.12);font-size:64px;line-height:1;animation:lexAccessLockPulse 2.4s ease-in-out infinite}
 @keyframes lexAccessLockPulse{0%,100%{transform:scale(1);box-shadow:0 0 24px rgba(177,111,255,.24),inset 0 0 24px rgba(177,111,255,.1)}50%{transform:scale(1.045);box-shadow:0 0 38px rgba(177,111,255,.48),inset 0 0 28px rgba(177,111,255,.18)}}
 #lexiaaAccessRequestModal .lex-access-contact{display:inline-flex;align-items:center;justify-content:center;gap:9px;margin-top:10px;padding:13px 20px;border:1px solid rgba(210,178,255,.55);border-radius:999px;background:linear-gradient(110deg,#8b5cf6,#c084fc);color:#fff;font-weight:850;letter-spacing:.035em;cursor:pointer;box-shadow:0 8px 28px rgba(139,92,246,.28)}
-#lexiaaAccessRequestModal .lex-access-contact:active{transform:scale(.98)}
 #lexiaaAccessChatModal textarea{display:block;width:100%;min-height:132px;resize:vertical;margin:18px 0 12px;padding:14px;border:1px solid #555064;border-radius:12px;background:#090c12;color:#fff;font:inherit;text-align:left}
 #lexiaaAccessChatModal .lex-access-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
 #lexiaaAccessChatModal button{padding:12px 18px;border:1px solid #c5a4ff;border-radius:999px;background:#9b6af5;color:#fff;font-weight:850;cursor:pointer}
@@ -1110,85 +1109,1649 @@ button, a, input, select, textarea { touch-action:manipulation; }
 @media(max-width:480px){#lexiaaAccessRequestModal .lex-access-lock{width:102px;height:102px;font-size:56px}}
 @media(prefers-reduced-motion:reduce){#lexiaaAccessRequestModal .lex-access-lock{animation:none}}
 </style>
+</head>
+<body>
+  <div id="appLoader" role="status" aria-label="Memuat LEXIAA">
+    <div class="loader-inner">
+      <div class="loader-mark"><span>LX</span></div>
+      <div class="loader-title">LEXIAA</div>
+      <div class="loader-sub">PREPARING YOUR EXPERIENCE</div>
+      <div class="loader-track"><div class="loader-progress"></div></div>
+      <button class="loader-skip" id="skipLoader" type="button">SKIP LOADING</button>
+    </div>
+  </div>
+  <div class="shell">
+    <header class="topbar">
+      <div class="brand-mini">LEXIAA & ELSTAR<span>THE DEVELOPER OTW</span></div>
+      <div class="status">OBSIDIAN / 001</div>
+    </header>
+
+    <main>
+      <section id="homeView" class="view active">
+        <div class="hero home-hero">
+          <div class="home-copy-block">
+            <p class="eyebrow home-welcome">SELAMAT DATANG DI</p>
+            <h1 class="logo home-logo">LEXIAA &amp;<br>ELSTAR</h1>
+            <p class="subtitle home-subtitle">THE DEVELOPER OTW</p>
+            <p class="hero-copy home-description">Temukan dunia baru,<br>yang penuh dengan kreativitas,<br>inovasi, dan pengalaman terbaik.</p>
+          </div>
+          <div class="home-action-panel">
+            <div class="panel-heading"><span></span><p>MULAI PERJALANANMU BERSAMA KAMI</p><span></span></div>
+            <button class="home-action primary-action" data-go="login"><span class="action-icon" aria-hidden="true">♙</span><span class="action-divider"></span><span class="action-label">LOGIN</span><span class="action-arrow" aria-hidden="true">›</span></button>
+            <button class="home-action" data-go="signup"><span class="action-icon" aria-hidden="true">♧</span><span class="action-divider"></span><span class="action-label">DAFTAR</span><span class="action-arrow" aria-hidden="true">›</span></button>
+            <button id="tutorialBtn" class="home-action"><span class="action-icon book-icon" aria-hidden="true">▤</span><span class="action-divider"></span><span class="action-label">TUTORIAL DAFTAR OTW</span><span class="action-arrow" aria-hidden="true">›</span></button>
+            <div class="panel-spark" aria-hidden="true">✦</div>
+          </div>
+          <div class="live-info" data-live-info>
+            <div class="live-time" data-live-time>00:00:00</div>
+            <div class="live-date" data-live-date>MEMUAT TANGGAL...</div>
+            <div class="live-location" data-live-location>LOKASI: INDONESIA · WAKTU LOKAL</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="loginView" class="view">
+        <div class="auth-wrap">
+          <form class="auth-card" id="loginForm">
+            <p class="eyebrow" style="text-align:center">MEMBER ACCESS</p>
+            <h2>LOGIN</h2>
+            <p class="auth-intro">SELAMAT DATANG DI RUANG DIGITAL LEXIAA &amp; ELSTAR.</p>
+            <div class="field"><label for="loginEmail">EMAIL</label><input id="loginEmail" type="email" autocomplete="email" placeholder="Masukkan email lu" required></div>
+            <div class="field"><label for="loginPassword">SANDI</label><div class="password-row"><input id="loginPassword" type="password" autocomplete="current-password" minlength="6" placeholder="Masukkan sandi" required><button class="show-pass" type="button" data-toggle="loginPassword">LIHAT</button></div></div>
+            <button class="btn full" type="submit">LOGIN</button>
+            <div id="loginNotice" class="notice" role="status" aria-live="polite"></div>
+            <p class="auth-switch">BELUM PUNYA AKUN? <button type="button" class="inline-link" data-go="signup">DAFTAR</button></p>
+            <p style="text-align:center;margin:10px 0 0"><button type="button" class="text-button" data-tutorial>TUTORIAL MASUK OTW?</button></p>
+            <p style="text-align:center;margin:0"><button type="button" class="text-button" data-go="home">KEMBALI</button></p>
+          </form>
+        </div>
+      </section>
+
+      <section id="signupView" class="view">
+        <div class="auth-wrap">
+          <form class="auth-card" id="signupForm">
+            <p class="eyebrow" style="text-align:center">CREATE YOUR ACCESS</p>
+            <h2>DAFTAR</h2>
+            <p class="auth-intro">BUAT AKUN OTW MENGGUNAKAN EMAIL DAN SANDI.</p>
+            <div class="field"><label for="signupEmail">EMAIL</label><input id="signupEmail" type="email" autocomplete="email" placeholder="Masukkan email lu" required></div>
+            <div class="field"><label for="signupPassword">BUAT SANDI</label><div class="password-row"><input id="signupPassword" type="password" autocomplete="new-password" minlength="6" placeholder="Minimal 6 karakter" required><button class="show-pass" type="button" data-toggle="signupPassword">LIHAT</button></div></div>
+            <button class="btn full" type="submit">BUAT AKUN</button>
+            <div id="signupNotice" class="notice" role="status" aria-live="polite"></div>
+            <p class="auth-switch">SUDAH PUNYA AKUN? <button type="button" class="inline-link" data-go="login">LOGIN</button></p>
+            <p style="text-align:center;margin:10px 0 0"><button type="button" class="text-button" data-tutorial>TUTORIAL MASUK OTW?</button></p>
+            <p style="text-align:center;margin:0"><button type="button" class="text-button" data-go="home">KEMBALI</button></p>
+          </form>
+        </div>
+      </section>
+
+      <section id="dashboardView" class="view">
+        <div class="dash anime-dashboard">
+          <aside class="dash-sidebar" aria-label="Navigasi dashboard">
+            <div class="sidebar-brand"><span class="sidebar-crown">♕</span><span>LEXIAA<small>&amp; ELSTAR</small></span></div>
+            <nav class="sidebar-nav">
+              <button class="side-link is-active" type="button" data-dash-home><span>⌂</span>Home</button>
+              <button class="side-link" type="button" data-dash-music><span>♫</span>LEXIAA Music</button>
+              <button class="side-link" type="button" data-dash-explore><span>◉</span>Explore</button>
+              <button class="side-link" type="button" data-dash-hidden><span>♧</span>Hidden</button>
+              <button class="side-link" type="button" data-dash-member><span>☆</span>Member OTW</button>
+              <button class="side-link about-side-link" type="button" data-about-open><span>✧</span>Tentang Lexiaa?</button>
+            </nav>
+            <div class="sidebar-flourish" aria-hidden="true">✦</div>
+          </aside>
+          <div class="dash-main">
+            <div class="dash-statusbar">
+              <div class="dash-brandline"><span class="brand-crown">♕</span><span>LEXIAA &amp; ELSTAR<small>THE DEVELOPER OTW</small></span></div>
+              <div class="device-status" aria-label="Status perangkat (indikator visual)"><span class="signal-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span>5G</span><span class="wifi-mark" aria-hidden="true">◔</span><span class="battery-pill" id="deviceBatteryPill"><span class="device-battery-icon" aria-hidden="true"><i class="device-battery-level" id="deviceBatteryLevel"></i></span><b id="deviceBatteryPercent">--%</b> <b id="deviceBatteryCharging" aria-label="Status pengisian"></b></span></div>
+            </div>
+            <div class="dashboard-stage">
+              <div class="dashboard-character-wrap"><img class="dashboard-character-art" src="./dashboard-characters.png" alt="Lima karakter anime LEXIAA &amp; ELSTAR"></div>
+              <div class="dashboard-name-tag" aria-label="Lexiaa">Lexiaa <span>♡</span></div>
+              <section class="weather-card" aria-label="Cuaca saat ini">
+                <div class="weather-symbol" id="weatherIcon" aria-hidden="true">☁</div>
+                <div class="weather-reading"><strong id="weatherTemp">--°C</strong><span id="weatherDesc">Memuat cuaca...</span><small id="weatherRange">Cuaca lokal</small></div>
+                <div class="weather-place"><span>⌖</span> <span id="weatherPlace">Menunggu lokasi</span></div>
+              </section>
+              <section class="clock-card" aria-label="Jam dan tanggal">
+                <div class="clock-line"><strong data-live-time>00:00:00</strong><span>LOCAL TIME</span></div>
+                <div class="clock-date" data-live-date>MEMUAT TANGGAL...</div>
+                <div class="clock-location" data-live-location>LOKASI: INDONESIA · WAKTU LOKAL</div>
+              </section>
+            </div>
+            <section class="now-playing-card" aria-label="Akses pemutar musik">
+              <div class="np-heading"><span>▥</span> NOW PLAYING <span class="np-dots">•••</span></div>
+              <img class="np-character np-character-left" src="./lexiaa-music-character-left.png" alt="" draggable="false" aria-hidden="true"><img class="np-character np-character-right" src="./lexiaa-music-character-right.png" alt="" draggable="false" aria-hidden="true"><div class="np-content"><div class="np-info"><strong id="npTrackTitle">Chill Vibes</strong><span id="npTrackSubtitle">♫ &nbsp; Pilih playlist untuk mulai mendengarkan</span><div class="np-progress"><i id="npProgressFill"></i></div><div class="np-times"><small id="npCurrentTime">0:00</small><small id="npDuration">--:--</small></div><div class="np-controls"><button type="button" id="npShuffle" aria-label="Acak">⤨</button><button type="button" id="npPrevious" aria-label="Sebelumnya">◀</button><button type="button" id="npOpenPlayer" aria-label="Putar atau buka Lexiaa Music">▶</button><button type="button" id="npNext" aria-label="Berikutnya">▶</button><button type="button" id="npRepeat" aria-label="Ulangi">↻</button></div></div><div class="music-equalizer" id="dashboardEqualizer" aria-hidden="true"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i><i style="--i:5"></i><i style="--i:6"></i><i style="--i:7"></i><i style="--i:8"></i><i style="--i:9"></i><i style="--i:10"></i><i style="--i:11"></i><i style="--i:12"></i><i style="--i:13"></i><i style="--i:14"></i><i style="--i:15"></i><i style="--i:16"></i><i style="--i:17"></i><i style="--i:18"></i><i style="--i:19"></i><i style="--i:20"></i><i style="--i:21"></i><i style="--i:22"></i><i style="--i:23"></i><i style="--i:24"></i><i style="--i:25"></i><i style="--i:26"></i><i style="--i:27"></i></div></div>
+            </section>
+            <div class="menu-grid anime-quick-grid">
+              <button id="musicHubBtn" class="menu-card wide music-menu-card" type="button" aria-label="Buka LEXIAA Music"><span class="menu-arrow" aria-hidden="true">♫</span><span class="menu-number">00 / MUSIC PLAYER</span><h3>LEXIAA MUSIC</h3><p>SPOTIFY &amp; YOUTUBE PLAYER</p></button>
+              <button class="menu-card" type="button" data-content="penemuan"><span class="menu-arrow" aria-hidden="true">↗</span><span class="menu-number">01 / EXPLORE</span><h3>PENEMUAN</h3><p>LEXIAA &amp; ELSTAR</p></button>
+              <button class="menu-card" type="button" data-content="secret"><span class="menu-arrow" aria-hidden="true">↗</span><span class="menu-number">02 / HIDDEN</span><h3>SECRET</h3><p>LEXIAA &amp; ELSTAR</p></button>
+              <button class="menu-card wide" type="button" data-member><span class="menu-arrow" aria-hidden="true">↗</span><span class="menu-number">03 / MEMBER ACCESS</span><h3>SECRET ONLY MEMBER OTW!</h3><p>KHUSUS MEMBER OTW, KLIK UNTUK PENGAJUAN MENJADI MEMBER.</p></button>
+              <button class="menu-card wide lex-origin-menu" type="button" id="lexOriginOpen" onclick="(function(){var g=document.getElementById('lexOriginGate');if(g){g.classList.add('open');g.setAttribute('aria-hidden','false');var st=document.getElementById('lexOriginStatus'),cd=document.getElementById('lexIssuedCode'),inp=document.getElementById('lexOriginCode');if(st)st.textContent='';if(cd)cd.textContent='KODE AKAN MUNCUL DI SINI';if(inp)inp.value='';}})()"><span class="menu-arrow" aria-hidden="true">✧</span><span class="menu-number">05 / LEXIAA SECRET STORY</span><h3>ASAL USUL NAMA "LEXIAA"</h3><p>BUKA CERITA RAHASIA DI BALIK NAMA LEXIAA.</p></button>
+              <button class="menu-card wide about-menu-card" type="button" data-about-open><span class="menu-arrow" aria-hidden="true">✧</span><span class="menu-number">04 / LEXIAA GUIDE</span><h3>TENTANG LEXIAA?</h3><p>KENALI FITUR, PANDUAN, DAN RAHASIA KECIL LEXIAA.</p></button>
+              <button class="menu-card wide lex-wr-menu-card" type="button" id="lexiaaWrMenuCard" aria-label="Buka Hitung Jumlah Win Rate MLBB"><span class="menu-arrow" aria-hidden="true">✦</span><span class="menu-number">06 / MLBB WIN RATE CENTER</span><h3>HITUNG JUMLAH WIN RATE <span class="mlbb-neon">MLBB</span></h3><p>HERO WIN &amp; LOSE · TARGET WIN RATE CALCULATOR</p></button>
+            </div>
+          <section class="social-hub" aria-label="Akun resmi admin">
+            <h2 class="social-heading">CONNECT WITH ADMIN</h2>
+            <div class="social-grid">
+              <a class="social-card wa" href="https://wa.me/6287769954501?text=Haii%20Admin!!" target="_blank" rel="noopener noreferrer" aria-label="Hubungi WhatsApp Admin">
+                <span class="social-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12.04 2a9.8 9.8 0 0 0-8.42 14.82L2.3 22l5.31-1.39A9.98 9.98 0 0 0 12.04 21a9.5 9.5 0 0 0 9.8-9.5A9.55 9.55 0 0 0 12.04 2Zm0 17.2a8.1 8.1 0 0 1-4.12-1.13l-.3-.18-3.15.82.84-3.06-.2-.32A7.8 7.8 0 1 1 12.04 19.2Zm4.3-5.85c-.24-.12-1.42-.7-1.64-.78-.22-.08-.38-.12-.54.12-.16.24-.62.78-.76.94-.14.16-.28.18-.52.06-.24-.12-1.02-.37-1.94-1.18-.72-.63-1.2-1.42-1.34-1.66-.14-.24-.02-.37.1-.49.1-.1.24-.28.36-.42.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.54-1.3-.74-1.78-.2-.46-.4-.4-.54-.4h-.46c-.16 0-.42.06-.64.3-.22.24-.84.82-.84 2s.86 2.32.98 2.48c.12.16 1.7 2.6 4.12 3.64.58.25 1.03.4 1.38.51.58.18 1.1.16 1.52.1.46-.07 1.42-.58 1.62-1.14.2-.56.2-1.04.14-1.14-.06-.1-.22-.16-.46-.28Z"/></svg></span>
+                <span class="social-name">WHATSAPP ADMIN</span><span class="social-handle">CHAT ADMIN</span>
+              </a>
+              <a class="social-card ig" href="https://www.instagram.com/fathanmufadhil1/" target="_blank" rel="noopener noreferrer" aria-label="Buka Instagram Admin">
+                <span class="social-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7.2 2h9.6A5.2 5.2 0 0 1 22 7.2v9.6a5.2 5.2 0 0 1-5.2 5.2H7.2A5.2 5.2 0 0 1 2 16.8V7.2A5.2 5.2 0 0 1 7.2 2Zm0 2A3.2 3.2 0 0 0 4 7.2v9.6A3.2 3.2 0 0 0 7.2 20h9.6a3.2 3.2 0 0 0 3.2-3.2V7.2A3.2 3.2 0 0 0 16.8 4H7.2Zm4.8 3a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6Zm5.3-3.5a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4Z"/></svg></span>
+                <span class="social-name">INSTAGRAM ADMIN</span><span class="social-handle">@fathanmufadhil1</span>
+              </a>
+              <a class="social-card dc" href="https://discord.com/app" target="_blank" rel="noopener noreferrer" aria-label="Buka Discord, username akane087004" title="Username Discord: akane087004">
+                <span class="social-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M19.7 5.1A18.2 18.2 0 0 0 15.2 3.7l-.55 1.12a16.6 16.6 0 0 0-5.3 0L8.8 3.7a18.2 18.2 0 0 0-4.5 1.4C1.45 9.3.68 13.4 1.06 17.45a18.3 18.3 0 0 0 5.52 2.8l1.2-1.95c-.66-.24-1.3-.55-1.9-.9l.47-.36c3.66 1.7 7.63 1.7 11.25 0l.48.36c-.6.35-1.24.66-1.9.9l1.2 1.95a18.2 18.2 0 0 0 5.52-2.8c.45-4.7-.77-8.75-3.2-12.35ZM8.7 14.6c-1.08 0-1.96-.98-1.96-2.18s.86-2.18 1.96-2.18 1.98.99 1.96 2.18c0 1.2-.86 2.18-1.96 2.18Zm6.6 0c-1.08 0-1.96-.98-1.96-2.18s.86-2.18 1.96-2.18 1.98.99 1.96 2.18c0 1.2-.86 2.18-1.96 2.18Z"/></svg></span>
+                <span class="social-name">DISCORD ADMIN</span><span class="social-handle">@akane087004</span>
+              </a>
+              <a class="social-card tt" href="https://www.tiktok.com/@mufadhil4" target="_blank" rel="noopener noreferrer" aria-label="Buka TikTok Admin">
+                <span class="social-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M19.6 6.2a5.6 5.6 0 0 1-3.7-4.8h-3.7v14.1a3.1 3.1 0 1 1-2.7-3.07V8.7a6.8 6.8 0 1 0 6.4 6.8V8.3a9.2 9.2 0 0 0 5.4 1.75V6.4c-.6 0-1.15-.06-1.7-.2Z"/></svg></span>
+                <span class="social-name">TIKTOK ADMIN</span><span class="social-handle">@mufadhil4</span>
+              </a>
+            </div>
+          </section>
+          <div class="dash-utilities">
+            
+            
+            <button id="logoutBtn" class="small-btn" type="button">LOGOUT ↗</button>
+          </div>
+          <!-- Musik latar otomatis; file music.mp3 berada di folder utama repository. -->
+
+          <div id="musicHub" class="music-hub-backdrop" aria-hidden="true">
+            <section class="music-hub-panel" role="dialog" aria-modal="true" aria-labelledby="musicHubTitle">
+              <button id="musicHubClose" class="music-hub-close" type="button" aria-label="Tutup Music Hub">×</button>
+              <div class="music-hub-art">
+                <div class="music-hub-brand">
+                  <span class="music-crown">♕</span>
+                  <h2 id="musicHubTitle">LEXIAA<span>♡</span></h2>
+                  <div class="music-brand-stroke"></div>
+                  <p>YOUR PERSONAL MUSIC SPACE</p>
+                </div>
+                <img class="music-hub-character" src="./lexiaa-music-character.png" alt="Karakter LEXIAA">
+                <div class="music-art-note note-one">♫</div><div class="music-art-note note-two">♪</div>
+                <div class="music-art-caption">Dengarkan musik,<br>rasakan suasananya... <span>♡</span></div>
+                <div class="music-mini-player" aria-hidden="true"><span class="mini-spotify">●</span><div class="mini-wave"></div><span class="mini-heart">♥</span><div class="mini-controls">‹　Ⅱ　›</div></div>
+              </div>
+              <div class="music-hub-content">
+                <p class="music-intro-copy">TEMPEL LINK PLAYLIST / MUSIK <b>SPOTIFY</b> DAN <b>YOUTUBE</b> DI SINI UNTUK MEMUTAR MUSIK.</p>
+                <button id="musicHubRevealInput" class="music-hub-action music-hub-reveal" type="button">↗ <span>TEMPEL LINK DI SINI</span></button>
+                <form id="musicHubForm">
+                  <div id="musicHubInputRow" class="music-hub-inputrow" hidden>
+                    <span class="music-link-icon" aria-hidden="true">↗</span>
+                    <input id="musicHubUrl" class="music-hub-input" type="url" inputmode="url" placeholder="Tempel link di sini..." autocomplete="url" required aria-label="Link Spotify atau YouTube">
+                    <button class="music-hub-action" type="submit">▶ <span>PUTAR MUSIK</span></button>
+                  </div>
+                </form>
+                <p id="musicHubStatus" class="music-hub-status" role="status" aria-live="polite">Belum ada musik dipilih. Tempel link Spotify atau YouTube untuk mulai.</p>
+                <div class="music-divider"><span></span>ATAU<span></span></div>
+                <p class="music-playlist-heading">PILIH MUSIK DARI <b>PLAYLIST LEXIAA</b> ♡</p>
+                <div id="musicHubPlaylists" class="music-hub-playlists">
+                  <div class="music-playlist-loading">Memuat playlist pilihan LEXIAA...</div>
+                </div>
+                <div id="musicHubNowPlaying" hidden>
+                  <div class="music-player-label">NOW PLAYING</div>
+                  <div id="musicHubPlayer" class="music-hub-player"><div class="music-hub-empty">♫<br>Player Spotify atau YouTube akan muncul di sini.</div></div>
+                  <div class="music-hub-foot">
+                    <a id="musicHubExternal" href="#" target="_blank" rel="noopener noreferrer" hidden>Buka di platform asli ↗</a>
+                    <button id="musicHubClear" class="music-hub-secondary" type="button">BERSIHKAN PLAYER</button>
+                  </div>
+                </div>
+                <p class="music-hub-note">Pemutaran mengikuti ketentuan Spotify dan YouTube. Beberapa konten mungkin memerlukan login atau tidak mengizinkan pemutaran melalui embed.</p>
+              </div>
+            </section>
+          </div>
+        </div>
+      </section>
+
+      <section id="penemuanView" class="view">
+        <div class="content-view">
+          <div class="content-head">
+            <div><p class="eyebrow">01 / EXPLORE</p><h2>PENEMUAN</h2><p>KOLEKSI FOTO DAN JUDUL PILIHAN LEXIAA &amp; ELSTAR.</p></div>
+            <button class="btn secondary" type="button" data-back-dashboard>KEMBALI KE DASHBOARD</button>
+          </div>
+          <div id="penemuanGallery" class="gallery"><div class="empty-state">MEMUAT KOLEKSI PENEMUAN...</div></div>
+        </div>
+      </section>
+      <section id="secretView" class="view">
+        <div class="content-view">
+          <div class="content-head">
+            <div><p class="eyebrow">02 / HIDDEN</p><h2>SECRET</h2><p>KOLEKSI TERPILIH LEXIAA &amp; ELSTAR.</p></div>
+            <button class="btn secondary" type="button" data-back-dashboard>KEMBALI KE DASHBOARD</button>
+          </div>
+          <div id="secretGallery" class="gallery"><div class="empty-state">MEMUAT KOLEKSI SECRET...</div></div>
+        </div>
+      </section>
+      <section id="memberContentView" class="view">
+        <div class="content-view">
+          <div class="content-head">
+            <div><p class="eyebrow">03 / MEMBER ACCESS</p><h2>SECRET ONLY MEMBER OTW!</h2><p>AREA KHUSUS MEMBER TERDAFTAR.</p></div>
+            <button class="btn secondary" type="button" data-back-dashboard>KEMBALI KE DASHBOARD</button>
+          </div>
+          <div id="memberGallery" class="gallery"><div class="empty-state">MEMUAT KOLEKSI MEMBER...</div></div>
+        </div>
+      </section>
+
+    </main>
+    
+  </div>
+
+  <div id="lexOriginGate" class="lex-origin-gate" role="dialog" aria-modal="true" aria-labelledby="lexOriginTitle" aria-hidden="true">
+    <section class="lex-origin-gate-panel">
+      <button type="button" class="lex-origin-close" id="lexOriginClose" aria-label="Tutup" onclick="(function(){var g=document.getElementById('lexOriginGate');if(g){g.classList.remove('open');g.setAttribute('aria-hidden','true');}})()">×</button>
+      <p class="modal-kicker">LEXIAA / SECRET ARCHIVE</p><h2 id="lexOriginTitle">ASAL USUL NAMA "LEXIAA"</h2>
+      <p class="lex-origin-desc">Buat kode akses pribadi untuk membuka kisah ini. Setiap kode hanya dapat digunakan satu kali.</p>
+      <button type="button" class="btn" id="lexGetCode">DAPATKAN KODE</button>
+      <div class="lex-issued-code" id="lexIssuedCode" aria-live="polite">KODE AKAN MUNCUL DI SINI</div>
+      <form id="lexOriginForm"><label for="lexOriginCode">MASUKKAN KODE</label><input id="lexOriginCode" autocomplete="one-time-code" maxlength="8" placeholder="8 KARAKTER" required><button class="btn" type="submit" id="lexContinue">LANJUTKAN</button></form>
+      <p id="lexOriginStatus" class="lex-origin-status" aria-live="polite"></p>
+    </section>
+  </div>
+  <div id="lexOriginStory" class="lex-origin-story" aria-hidden="true">
+    <div class="lex-story-top"><span>♕ LEXIAA ARCHIVE</span><span id="lexStoryCounter">01 / 06</span><button type="button" id="lexStoryFullscreen">⛶ FULLSCREEN</button><button type="button" id="lexStoryExit">KELUAR ✕</button></div>
+    <div class="lex-story-layout"><div class="lex-story-dialog"><div class="lex-story-label">A STORY ABOUT A NAME</div><div id="lexStoryBubble" class="lex-story-bubble"><p id="lexStoryText">Naskah cerita akan ditambahkan di sini.</p></div><div class="lex-story-controls"><button type="button" id="lexStoryPrev" class="btn secondary">← SEBELUMNYA</button><button type="button" id="lexStoryNext" class="btn">BERIKUTNYA →</button></div><p class="lex-story-hint">Putar perangkat ke posisi landscape untuk pengalaman terbaik.</p></div></div>
+    <audio id="lexStoryAudio" preload="auto"></audio>
+  </div>
+
+  <div id="imageLightbox" class="image-lightbox" role="dialog" aria-modal="true" aria-label="Tampilan gambar penuh">
+    <button class="lightbox-close" id="lightboxClose" type="button" aria-label="Tutup gambar">×</button>
+    <img id="lightboxImage" class="lightbox-image" alt="Gambar ukuran penuh">
+    <div id="lightboxCaption" class="lightbox-caption"></div>
+  </div>
+
+  <div id="videoLightbox" class="video-lightbox" role="dialog" aria-modal="true" aria-label="Pemutar video ukuran penuh">
+    <button class="video-lightbox-close" id="videoLightboxClose" type="button" aria-label="Tutup video">×</button>
+    <video id="lightboxVideo" controls playsinline preload="none"></video>
+    <div id="videoLightboxCaption" class="video-lightbox-caption"></div>
+  </div>
+
+  <div id="tutorialModal" class="modal-backdrop tutorial-backdrop" role="dialog" aria-modal="true" aria-labelledby="tutorialTitle">
+    <div class="modal tutorial-modal">
+      <button id="closeTutorial" class="tutorial-x" type="button" aria-label="Tutup tutorial">×</button>
+      <div class="tutorial-content">
+        <p class="modal-kicker">LEXIAA &amp; ELSTAR / TUTORIAL</p>
+        <h2 id="tutorialTitle">HAI, SAYA LEXIAA.</h2>
+        <p class="tutorial-intro">Login menggunakan akun <strong>OTW</strong> yang sudah terdaftar. Jika belum daftar, klik daftar dulu, lalu masukkan email dan buat sandi.</p>
+        <div class="tutorial-divider"><span>✦</span></div>
+        <div class="tutorial-steps">
+          <div class="tutorial-step"><span class="step-number">01</span><span class="step-icon" aria-hidden="true">♙</span><div><h3>Masukkan Email / Username</h3><p>Ketik email atau username yang sudah terdaftar.</p></div></div>
+          <div class="tutorial-step"><span class="step-number">02</span><span class="step-icon" aria-hidden="true">♙</span><div><h3>Masukkan Password</h3><p>Ketik password akun kamu dengan benar.</p></div></div>
+          <div class="tutorial-step"><span class="step-number">03</span><span class="step-icon" aria-hidden="true">↪</span><div><h3>Klik Login</h3><p>Setelah semua data benar, klik tombol Login.</p></div></div>
+        </div>
+        <div class="tutorial-bubble"><span class="bubble-heart">♡</span>Gampang kan?<br>Kalau ada kendala, langsung hubungi admin ya! <span class="bubble-smile">☺</span></div>
+        <div class="tutorial-sign">— Lexiaa ♡</div>
+        <div class="tutorial-security">NOTE: KAMI TIDAK MEMINTA OTP ATAU EMAIL GOOGLE ANDA!</div>
+      </div>
+      <img class="modal-mascot tutorial-mascot" src="mascot-login.png" alt="" aria-hidden="true">
+    </div>
+  </div>
+
+  <div id="memberModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="memberTitle">
+    <div class="modal member-modal mascot-member-modal">
+      <img class="modal-mascot member-mascot" src="mascot-member.png" alt="" aria-hidden="true">
+      <p class="modal-kicker">LEXIAA &amp; ELSTAR / MEMBER GATE</p>
+      <h2 id="memberTitle">KHUSUS PENGGUNA YANG SUDAH TERDAFTAR MEMBER</h2>
+      <p class="modal-copy">MASUKKAN KODE MEMBER UNTUK MEMBUKA AREA KHUSUS.</p>
+      <form id="memberForm" class="member-form">
+        <label for="memberCode">KODE MEMBER</label>
+        <input id="memberCode" type="password" inputmode="numeric" autocomplete="off" placeholder="Masukan Kode MEMBER" required>
+        <button class="btn full" type="submit">BUKA AKSES MEMBER</button>
+        <div id="memberStatus" class="member-status" role="status" aria-live="polite"></div>
+      </form>
+      <div class="member-links">
+        <a class="request-member-link" href="https://wa.me/6287769954501?text=Haii%20Admin!!" target="_blank" rel="noopener noreferrer">KLIK DISINI UNTUK MEMINTA KODE MEMBER</a>
+      </div>
+      <button id="closeMemberModal" class="btn secondary modal-close" type="button">TUTUP</button>
+    </div>
+  </div>
+  <div id="portalTransition" class="portal-transition" aria-hidden="true">
+    <div class="portal-core"><div class="portal-ring"></div><div class="portal-ring r2"></div><div class="portal-ring r3"></div><div class="portal-flare"></div></div>
+    <div id="portalLabel" class="portal-label">ENTERING PORTAL</div>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+    <div id="welcomeInstallModal" class="modal-backdrop welcome-backdrop" role="dialog" aria-modal="true" aria-labelledby="welcomeTitle">
+    <div class="welcome-card">
+      <div class="welcome-copy">
+        <p class="welcome-kicker">LEXIAA / MEMBER ACCESS</p>
+        <h2 id="welcomeTitle" class="welcome-title">LEXIAA:</h2>
+        <p class="welcome-message"><span id="welcomeTypedText">UNTUK PENGALAMAN YANG LEBIH BAIK, AYO UNDUH/TAMBAHKAN APP DI BERANDA HP ANDA.</span></p>
+        <div class="welcome-actions">
+          <button id="stayWebsiteBtn" class="btn secondary" type="button">◉ &nbsp; TETAP DI WEBSITE</button>
+          <button id="installAppBtn" class="btn" type="button">↓ &nbsp; UNDUH APP</button>
+          <button id="alreadyInstalledBtn" class="btn secondary" type="button" hidden>✓ &nbsp; SUDAH UNDUH</button>
+        </div>
+        <p id="welcomeInstallStatus" class="welcome-status" aria-live="polite"></p>
+      </div>
+      <div class="welcome-mascot-wrap"><img class="welcome-mascot" src="./welcome-character.png?v=5" alt="Karakter anime LEXIAA"></div>
+    </div>
+  </div>
+
+  <script>
+    // Keep splash independent from module/CDN loading so it cannot block the app.
+    (() => {
+      const loader = document.getElementById("appLoader");
+      if (!loader) return;
+      let finished = false;
+      const finish = () => {
+        if (finished) return;
+        finished = true;
+        loader.classList.add("done");
+        window.setTimeout(() => loader.remove(), 400);
+      };
+      document.getElementById("skipLoader")?.addEventListener("click", finish);
+      window.setTimeout(finish, 3500);
+    })();
+  </script>
+  <script type="module">
+    // 1) Buat project Supabase, lalu isi URL dan anon/publishable key di bawah.
+    // 2) Di Supabase Dashboard > Authentication > Providers/Sign In, nonaktifkan Confirm email
+    //    jika memang ingin pendaftaran tanpa konfirmasi email.
+    // 3) Jangan pernah menaruh service_role key di HTML/browser.
+    const SUPABASE_URL = "https://sudvolmlzunzofzwjbfn.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_OOUKks8e7IfILH7TsOit0g_8qK0hNiL";
+
+    let supabase = null;
+    const configured = !SUPABASE_URL.startsWith("PASTE_") && !SUPABASE_ANON_KEY.startsWith("PASTE_");
+    if (configured) {
+      try {
+        const { createClient } = await import("https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm");
+        supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+          auth: {
+            persistSession: true,
+            autoRefreshToken: true,
+            detectSessionInUrl: true
+          }
+        });
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    // Expose client for the independent story controller below.
+    window.lexSupabaseClient = supabase;
+
+    // Daftarkan handler kode sedini mungkin setelah Supabase siap. Dengan begitu
+    // tombol tidak bergantung pada seluruh inisialisasi dashboard yang berjalan sesudahnya.
+    window.lexIssueOriginCode = async function () {
+      const button = document.getElementById("lexGetCode");
+      const status = document.getElementById("lexOriginStatus");
+      const output = document.getElementById("lexIssuedCode");
+      const input = document.getElementById("lexOriginCode");
+      if (!button || !status || !output || !input) return;
+      if (!supabase) { status.textContent = "Koneksi Supabase belum siap. Periksa koneksi internet lalu muat ulang halaman."; return; }
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+      if (sessionError || !session) { status.textContent = "Silakan login terlebih dahulu untuk meminta kode."; return; }
+      button.disabled = true; button.textContent = "MEMBUAT KODE...";
+      status.textContent = "Menghubungi Supabase..."; output.textContent = "MEMBUAT KODE...";
+      try {
+        const { data, error } = await supabase.rpc("lexiaa_issue_origin_code");
+        if (error) throw error;
+        if (!data) throw new Error("Supabase tidak mengembalikan kode. Pastikan SQL fitur cerita sudah dijalankan.");
+        output.textContent = data; input.value = data;
+        status.textContent = "Kode pribadi berhasil dibuat. Berlaku selama 10 menit.";
+      } catch (error) {
+        console.error("LEXIAA issue code:", error);
+        output.textContent = "KODE GAGAL DIBUAT";
+        status.textContent = error?.message || "Gagal membuat kode. Periksa fungsi Supabase.";
+      } finally { button.disabled = false; button.textContent = "DAPATKAN KODE"; }
+    };
+
+    const views = ["home","login","signup","dashboard","penemuan","secret","memberContent"];
+
+    // Ganti email ini dengan email akun yang menjadi admin website.
+    const ADMIN_EMAIL = "fathanmufadhil04@gmail.com";
+    const MEDIA_BUCKET = "lexiaa-media";
+    const memberAccessGranted = false;
+
+    function isAdminUser(user) {
+      return Boolean(user?.email && ADMIN_EMAIL !== "GANTI_DENGAN_EMAIL_ADMIN"
+        && user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase());
+    }
+
+    async function getMediaForSection(section) {
+      if (!supabase) return [];
+      const { data, error } = await supabase.from("site_media")
+        .select("id,section,title,storage_path,media_type,created_at")
+        .eq("section", section).order("created_at", { ascending: false });
+      if (error) throw error;
+      const result = [];
+      for (const item of (data || [])) {
+        const { data: signed, error: signError } = await supabase.storage
+          .from(MEDIA_BUCKET).createSignedUrl(item.storage_path, 3600);
+        if (signError) {
+          console.warn("Gagal membuat URL media:", signError.message);
+          continue;
+        }
+        result.push({ ...item, url: signed.signedUrl });
+      }
+      return result;
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? "").replace(/[&<>"']/g, ch => ({
+        "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+      }[ch]));
+    }
+
+    async function renderGallery(section) {
+      const containerId = section === "penemuan" ? "penemuanGallery" :
+        section === "secret" ? "secretGallery" : "memberGallery";
+      const container = document.getElementById(containerId);
+      container.innerHTML = '<div class="empty-state">MEMUAT KOLEKSI...</div>';
+      try {
+        const items = await getMediaForSection(section);
+        if (!items.length) {
+          container.innerHTML = '<div class="empty-state">BELUM ADA KONTEN DI SINI.<br>KOLEKSI AKAN MUNCUL SETELAH ADMIN MENGUNGGAHNYA.</div>';
+          return;
+        }
+        container.innerHTML = items.map(item => {
+          const title = escapeHtml(item.title || "TANPA JUDUL");
+          const safeUrl = escapeHtml(item.url);
+          const media = item.media_type === "video"
+            ? `<button class="video-thumb" type="button" data-full-video="${safeUrl}" data-video-title="${title}" aria-label="Putar video ukuran penuh: ${title}"><video muted playsinline preload="none" aria-hidden="true"></video><span class="video-play-badge" aria-hidden="true">▶</span></button>`
+            : `<img class="gallery-image" loading="lazy" src="${safeUrl}" alt="${title}" data-full-image="${safeUrl}" data-image-title="${title}" role="button" tabindex="0" aria-label="Buka gambar ukuran penuh: ${title}">`;
+          return `<article class="media-card">${media}<div class="media-title">${title}</div></article>`;
+        }).join("");
+      } catch (error) {
+        console.error(error);
+        container.innerHTML = '<div class="empty-state">KOLEKSI BELUM BISA DIMUAT.<br>PASTIKAN SQL SETUP SUDAH DIJALANKAN DI SUPABASE.</div>';
+      }
+    }
+
+    const tutorial = document.getElementById("tutorialModal");
+    const imageLightbox = document.getElementById("imageLightbox");
+    const lightboxImage = document.getElementById("lightboxImage");
+    const lightboxCaption = document.getElementById("lightboxCaption");
+    const videoLightbox = document.getElementById("videoLightbox");
+    const lightboxVideo = document.getElementById("lightboxVideo");
+    const videoLightboxCaption = document.getElementById("videoLightboxCaption");
+    function openVideoLightbox(button) {
+      // Hanya minta file video saat pengguna benar-benar menekan tombol putar.
+      document.querySelectorAll(".video-thumb video").forEach(v => { try { v.pause(); } catch (_) {} });
+      lightboxVideo.pause();
+      lightboxVideo.removeAttribute("src");
+      lightboxVideo.load();
+      lightboxVideo.src = button.dataset.fullVideo;
+      videoLightboxCaption.textContent = button.dataset.videoTitle || "";
+      videoLightbox.classList.add("open");
+      document.body.style.overflow = "hidden";
+      const p = lightboxVideo.play();
+      if (p && p.catch) p.catch(() => {});
+      document.getElementById("videoLightboxClose").focus({preventScroll:true});
+    }
+    function closeVideoLightbox() {
+      lightboxVideo.pause();
+      lightboxVideo.removeAttribute("src");
+      lightboxVideo.load();
+      videoLightbox.classList.remove("open");
+      document.body.style.overflow = imageLightbox.classList.contains("open") ? "hidden" : "";
+    }
+    ["penemuanGallery","secretGallery","memberGallery"].forEach(id => {
+      document.getElementById(id).addEventListener("click", e => {
+        const button = e.target.closest("button[data-full-video]");
+        if (button) openVideoLightbox(button);
+      });
+    });
+    document.getElementById("videoLightboxClose").addEventListener("click", closeVideoLightbox);
+    videoLightbox.addEventListener("click", e => { if (e.target === videoLightbox) closeVideoLightbox(); });
+    function openImageLightbox(img) {
+      lightboxImage.src = img.dataset.fullImage || img.src;
+      lightboxImage.alt = img.alt || "Gambar ukuran penuh";
+      lightboxCaption.textContent = img.dataset.imageTitle || img.alt || "";
+      imageLightbox.classList.add("open");
+      document.body.style.overflow = "hidden";
+      document.getElementById("lightboxClose").focus({preventScroll:true});
+    }
+    function closeImageLightbox() {
+      imageLightbox.classList.remove("open");
+      lightboxImage.removeAttribute("src");
+      document.body.style.overflow = "";
+    }
+    ["penemuanGallery","secretGallery","memberGallery"].forEach(id => {
+      const gallery = document.getElementById(id);
+      gallery.addEventListener("click", e => {
+        const img = e.target.closest("img[data-full-image]");
+        if (img) openImageLightbox(img);
+      });
+      gallery.addEventListener("keydown", e => {
+        if ((e.key === "Enter" || e.key === " ") && e.target.matches("img[data-full-image]")) {
+          e.preventDefault(); openImageLightbox(e.target);
+        }
+      });
+    });
+    document.getElementById("lightboxClose").addEventListener("click", closeImageLightbox);
+    imageLightbox.addEventListener("click", e => { if (e.target === imageLightbox) closeImageLightbox(); });
+    let lastFocus = null;
+    let toastTimer;
+
+    function showView(name) {
+      views.forEach(v => document.getElementById(v + "View").classList.toggle("active", v === name));
+      window.scrollTo({top:0,behavior:"smooth"});
+      if (name === "login" || name === "signup") openTutorial();
+      if (name === "home" || name === "dashboard") {
+        window.setTimeout(openWelcomePopup, 180);
+        window.setTimeout(startBackgroundMusic, 250);
+      }
+    }
+    // Popup voice audio: restart from the beginning every time its popup opens.
+    const tutorialPopupAudio = new Audio("tutorial-daftar-otw.mp3");
+    const memberPopupAudio = new Audio("member-popup.mp3");
+    tutorialPopupAudio.preload = "auto";
+    memberPopupAudio.preload = "auto";
+
+    function playPopupAudio(audio) {
+      try {
+        audio.pause();
+        audio.currentTime = 0;
+        const playPromise = audio.play();
+        if (playPromise && typeof playPromise.catch === "function") {
+          playPromise.catch(() => {
+            // Some browsers require a prior user interaction before playing audio.
+          });
+        }
+      } catch (_) {}
+    }
+
+    function openTutorial() {
+      lastFocus = document.activeElement;
+      tutorial.classList.add("open");
+      playPopupAudio(tutorialPopupAudio);
+      document.getElementById("closeTutorial").focus({preventScroll:true});
+    }
+    function closeTutorial() {
+      tutorial.classList.remove("open");
+      if (lastFocus && lastFocus.focus) lastFocus.focus({preventScroll:true});
+    }
+    function toast(message) {
+      const el = document.getElementById("toast");
+      el.textContent = message;
+      el.classList.add("show");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => el.classList.remove("show"), 3200);
+    }
+    function setNotice(id, message, kind="") {
+      const el = document.getElementById(id);
+      el.textContent = message;
+      el.className = "notice" + (kind ? " " + kind : "");
+    }
+    function requireSupabase() {
+      if (!supabase) {
+        toast("Supabase belum disetel. Isi URL dan publishable/anon key di index.html.");
+        return false;
+      }
+      return true;
+    }
+    function showDashboard(user) {
+      // memberLabel was removed when the dashboard footer became the social-links panel.
+      // Keep this optional so successful login/signup does not throw when that element is absent.
+      const memberLabel = document.getElementById("memberLabel");
+      if (memberLabel) memberLabel.textContent = user?.email ? "MEMBER: " + user.email : "MEMBER OTW";
+      showView("dashboard");
+    }
+
+    document.querySelectorAll("[data-go]").forEach(btn => btn.addEventListener("click", () => showView(btn.dataset.go)));
+    document.getElementById("tutorialBtn").addEventListener("click", openTutorial);
+    document.querySelectorAll("[data-tutorial]").forEach(btn => btn.addEventListener("click", openTutorial));
+    document.getElementById("closeTutorial").addEventListener("click", closeTutorial);
+    tutorial.addEventListener("click", e => { if (e.target === tutorial) closeTutorial(); });
+    document.addEventListener("keydown", e => {
+      if (e.key === "Escape" && imageLightbox.classList.contains("open")) closeImageLightbox();
+      if (e.key === "Escape" && videoLightbox.classList.contains("open")) closeVideoLightbox();
+      if (e.key === "Escape" && tutorial.classList.contains("open")) closeTutorial();
+    });
+    document.querySelectorAll("[data-toggle]").forEach(btn => btn.addEventListener("click", () => {
+      const input = document.getElementById(btn.dataset.toggle);
+      input.type = input.type === "password" ? "text" : "password";
+      btn.textContent = input.type === "password" ? "LIHAT" : "SEMBUNYIKAN";
+    }));
+
+    document.getElementById("signupForm").addEventListener("submit", async e => {
+      e.preventDefault();
+      if (!requireSupabase()) return;
+      const email = document.getElementById("signupEmail").value.trim();
+      const password = document.getElementById("signupPassword").value;
+      const submit = e.currentTarget.querySelector('button[type="submit"]');
+      submit.disabled = true; submit.textContent = "MEMPROSES...";
+      setNotice("signupNotice", "");
+      try {
+        const { data, error } = await supabase.auth.signUp({ email, password });
+        if (error) throw error;
+        if (data.session) {
+          setNotice("signupNotice", "Akun berhasil dibuat. Membuka dashboard...", "success");
+          showDashboard(data.user);
+        } else {
+          setNotice("signupNotice", "Permintaan daftar berhasil, tetapi belum ada sesi login. Periksa pengaturan Confirm email di Supabase.", "error");
+        }
+      } catch (err) {
+        setNotice("signupNotice", err.message || "Pendaftaran gagal. Coba lagi.", "error");
+      } finally { submit.disabled = false; submit.textContent = "BUAT AKUN"; }
+    });
+
+    document.getElementById("loginForm").addEventListener("submit", async e => {
+      e.preventDefault();
+      if (!requireSupabase()) return;
+      const email = document.getElementById("loginEmail").value.trim();
+      const password = document.getElementById("loginPassword").value;
+      const submit = e.currentTarget.querySelector('button[type="submit"]');
+      submit.disabled = true; submit.textContent = "MEMPROSES...";
+      setNotice("loginNotice", "");
+      try {
+        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) throw error;
+        setNotice("loginNotice", "Login berhasil.", "success");
+        showDashboard(data.user);
+      } catch (err) {
+        setNotice("loginNotice", err.message || "Login gagal. Periksa email dan sandi.", "error");
+      } finally { submit.disabled = false; submit.textContent = "LOGIN"; }
+    });
+
+    // Logout handler uses capture-phase delegation so it still works if dashboard
+    // layers or later UI updates interfere with the button's own event listeners.
+    document.addEventListener("click", async event => {
+      const button = event.target && event.target.closest ? event.target.closest("#logoutBtn") : null;
+      if (!button) return;
+      event.preventDefault();
+      event.stopPropagation();
+      event.stopImmediatePropagation();
+      if (button.dataset.loggingOut === "1") return;
+      button.dataset.loggingOut = "1";
+      button.disabled = true;
+      button.textContent = "LOGGING OUT...";
+
+      // Return to the login view immediately; network sign-out must not block UI.
+      try {
+        stopLexiaaMusic({ resumeDashboard: false });
+        [tutorialPopupAudio, memberPopupAudio, welcomePopupAudio].forEach(audio => {
+          if (audio) { audio.pause(); try { audio.currentTime = 0; } catch (_) {} }
+        });
+        if (backgroundAudio) backgroundAudio.pause();
+        document.getElementById("loginForm")?.reset();
+        // Logout returns directly to the public home screen without requiring refresh.
+        showView("home");
+        toast("Kamu sudah logout.");
+      } catch (err) { console.warn("Logout UI cleanup:", err); }
+
+      // Clear this browser's Supabase auth session even if the remote call fails.
+      try {
+        if (supabase?.auth) {
+          const result = await Promise.race([
+            supabase.auth.signOut({ scope: "local" }),
+            new Promise(resolve => window.setTimeout(() => resolve({ error: new Error("signOut timeout") }), 2500))
+          ]);
+          if (result?.error) console.warn("Supabase signOut:", result.error);
+        }
+      } catch (err) { console.warn("Supabase signOut:", err); }
+      finally {
+        try {
+          for (const storage of [localStorage, sessionStorage]) {
+            for (let i = storage.length - 1; i >= 0; i--) {
+              const key = storage.key(i);
+              if (key && key.startsWith("sb-") && key.endsWith("-auth-token")) storage.removeItem(key);
+            }
+          }
+        } catch (_) {}
+        button.disabled = false;
+        button.textContent = "LOGOUT ↗";
+        delete button.dataset.loggingOut;
+      }
+    }, true);
+
+    const portalTransition = document.getElementById("portalTransition");
+    const portalLabel = document.getElementById("portalLabel");
+    const memberModal = document.getElementById("memberModal");
+    let portalBusy = false;
+
+    function openMemberModal() {
+      memberModal.classList.add("open");
+      playPopupAudio(memberPopupAudio);
+      setTimeout(() => document.getElementById("memberCode").focus({preventScroll:true}), 80);
+    }
+    function closeMemberModal() {
+      memberModal.classList.remove("open");
+    }
+    function runPortal(label, callback) {
+      if (portalBusy) return;
+      portalBusy = true;
+      portalLabel.textContent = "ENTERING " + label.toUpperCase();
+      portalTransition.classList.add("active");
+      window.setTimeout(() => {
+        portalTransition.classList.remove("active");
+        portalBusy = false;
+        callback();
+      }, 760);
+    }
+
+    document.querySelectorAll("[data-content]").forEach(btn => btn.addEventListener("click", () => {
+      const section = btn.dataset.content;
+      runPortal(section, async () => {
+        showView(section);
+        await renderGallery(section);
+      });
+    }));
+
+    document.querySelectorAll("[data-back-dashboard]").forEach(btn => btn.addEventListener("click", () => showView("dashboard")));
+
+    document.querySelector("[data-member]")?.addEventListener("click", () => {
+      runPortal("MEMBER ACCESS", openMemberModal);
+    });
+
+    document.getElementById("closeMemberModal").addEventListener("click", closeMemberModal);
+    memberModal.addEventListener("click", e => { if (e.target === memberModal) { e.preventDefault(); e.stopPropagation(); } });
+    document.addEventListener("keydown", e => {
+      if (e.key === "Escape" && memberModal.classList.contains("open")) { e.preventDefault(); e.stopPropagation(); }
+    });
+
+    document.getElementById("memberForm").addEventListener("submit", async e => {
+      e.preventDefault();
+      const code = document.getElementById("memberCode").value.trim();
+      const status = document.getElementById("memberStatus");
+      if (!requireSupabase()) return;
+      status.className = "member-status";
+      status.textContent = "MEMERIKSA KODE MEMBER...";
+      try {
+        const { data, error } = await supabase.rpc("verify_member_code", { p_code: code });
+        if (error) throw error;
+        if (data === true) {
+          status.className = "member-status success";
+          status.textContent = "AKSES DITERIMA. MEMBUKA AREA MEMBER...";
+          toast("KODE MEMBER VALID — AKSES DIBUKA.");
+          setTimeout(() => {
+            closeMemberModal();
+            runPortal("MEMBER ARCHIVE", async () => {
+              showView("memberContent");
+              await renderGallery("member");
+            });
+          }, 450);
+        } else {
+          status.className = "member-status error";
+          status.textContent = "KODE TIDAK VALID. PERIKSA KEMBALI ATAU HUBUNGI ADMIN.";
+        }
+      } catch (err) {
+        console.error(err);
+        status.className = "member-status error";
+        status.textContent = "GAGAL MEMERIKSA KODE. PASTIKAN SQL SETUP SUDAH DIJALANKAN DAN LU SUDAH LOGIN.";
+      }
+    });
+
+
+    // LEXIAA Music Hub: deteksi dan embed resmi Spotify / YouTube.
+    const musicHub = document.getElementById("musicHub");
+    const musicHubForm = document.getElementById("musicHubForm");
+    const musicHubUrl = document.getElementById("musicHubUrl");
+    const musicHubStatus = document.getElementById("musicHubStatus");
+    const musicHubPlayer = document.getElementById("musicHubPlayer");
+    const musicHubExternal = document.getElementById("musicHubExternal");
+    const musicHubRevealInput = document.getElementById("musicHubRevealInput");
+    const musicHubInputRow = document.getElementById("musicHubInputRow");
+    const musicHubNowPlaying = document.getElementById("musicHubNowPlaying");
+
+    function parseMusicLink(raw) {
+      let url;
+      try { url = new URL(raw.trim()); } catch (_) { throw new Error("Link tidak valid. Periksa kembali URL yang ditempel."); }
+      if (url.protocol !== "https:" && url.protocol !== "http:") throw new Error("Gunakan link HTTPS atau HTTP yang valid.");
+      const host = url.hostname.toLowerCase().replace(/^www\./, "");
+      if (host === "open.spotify.com" || host === "spotify.link") {
+        if (host === "spotify.link") throw new Error("Link pendek Spotify belum didukung. Salin link playlist/lagu langsung dari Spotify.");
+        const parts = url.pathname.split("/").filter(Boolean);
+        const type = parts[0];
+        const id = parts[1];
+        if (!["playlist","album","track","episode","show"].includes(type) || !id || !/^[A-Za-z0-9]+$/.test(id)) {
+          throw new Error("Link Spotify harus berupa playlist, album, lagu, episode, atau show.");
+        }
+        return { source:"Spotify", embed:"https://open.spotify.com/embed/"+type+"/"+id, external:url.href, track:type==="track" };
+      }
+      if (["youtube.com","m.youtube.com","music.youtube.com","youtu.be","youtube-nocookie.com"].includes(host)) {
+        let videoId = "";
+        let listId = url.searchParams.get("list") || "";
+        if (host === "youtu.be") videoId = url.pathname.split("/").filter(Boolean)[0] || "";
+        else if (url.pathname === "/watch") videoId = url.searchParams.get("v") || "";
+        else {
+          const parts = url.pathname.split("/").filter(Boolean);
+          if (["embed","shorts","live"].includes(parts[0])) videoId = parts[1] || "";
+          else if (parts[0] === "playlist") listId = listId || url.searchParams.get("list") || "";
+        }
+        if (listId && !/^[A-Za-z0-9_-]+$/.test(listId)) throw new Error("ID playlist YouTube tidak dikenali.");
+        if (videoId && !/^[A-Za-z0-9_-]{6,}$/.test(videoId)) throw new Error("ID video YouTube tidak dikenali.");
+        if (!videoId && !listId) throw new Error("Link YouTube harus berupa video atau playlist.");
+        let embed = videoId ? "https://www.youtube-nocookie.com/embed/"+videoId : "https://www.youtube-nocookie.com/embed/videoseries?list="+encodeURIComponent(listId);
+        if (videoId && listId) embed += "?list="+encodeURIComponent(listId);
+        return { source:"YouTube", embed, external:url.href, track:false, videoId:videoId||"", listId:listId||"" };
+      }
+      throw new Error("Sumber belum didukung. Gunakan link Spotify atau YouTube.");
+    }
+
+
+    // Playlist kurasi dari Supabase. Tabel: music_playlists.
+    const musicHubPlaylists = document.getElementById("musicHubPlaylists");
+    function safeMusicText(value) {
+      return String(value ?? "").replace(/[&<>"']/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
+    }
+    // Simpan playlist yang dipilih selama halaman tetap terbuka.
+    // Iframe tidak dibuat ulang saat playlist yang sama dibuka kembali.
+    let selectedMusicPlaylistId = null;
+    let lexiaaMusicActive = false;
+    let dashboardWasPlayingBeforeLexiaa = false;
+
+    function pauseDashboardForLexiaa() {
+      lexiaaMusicActive = true;
+      document.getElementById("dashboardEqualizer")?.classList.add("is-playing");
+    }
+
+    function stopLexiaaMusic({ resumeDashboard = true } = {}) {
+      // Menghapus iframe menghentikan playback Spotify/YouTube yang berjalan di dalamnya.
+      stopYtTimer();
+      if(ytPlayer){try{ytPlayer.destroy()}catch(_){} ytPlayer=null;}
+      musicHubPlayer.querySelectorAll("iframe").forEach(frame => frame.src = "about:blank");
+      musicHubPlayer.innerHTML = '<div class="music-hub-empty">♫<br>Player sudah dihentikan. Pilih musik untuk memutar kembali.</div>';
+      musicHubNowPlaying.hidden = true;
+      selectedMusicPlaylistId = null;
+      musicHubExternal.hidden = true;
+      musicHubExternal.removeAttribute("href");
+      lexiaaMusicActive = false;
+      document.getElementById("dashboardEqualizer")?.classList.remove("is-playing");
+      dashboardWasPlayingBeforeLexiaa = false;
+    }
+
+    async function loadMusicPlaylists() {
+      if (!musicHubPlaylists) return;
+      if (!supabase) {
+        musicHubPlaylists.innerHTML = '<div class="music-playlist-empty">Playlist pilihan belum dapat dimuat. Coba lagi beberapa saat.</div>';
+        return;
+      }
+      musicHubPlaylists.innerHTML = '<div class="music-playlist-loading">Memuat playlist pilihan LEXIAA...</div>';
+      try {
+        const {data, error} = await supabase.from("music_playlists")
+          .select("id,title,description,spotify_url,cover_url")
+          .eq("is_active", true).order("created_at", {ascending:false});
+        if (error) throw error;
+        if (!data || !data.length) {
+          musicHubPlaylists.innerHTML = '<div class="music-playlist-empty">Belum ada playlist pilihan. Playlist yang ditambahkan admin akan muncul di sini. ♡</div>';
+          return;
+        }
+        musicHubPlaylists.innerHTML = data.map(item => {
+          const cover = item.cover_url
+            ? `<img class="music-playlist-cover" src="${safeMusicText(item.cover_url)}" alt="" loading="lazy" onerror="this.style.display='none'">`
+            : '<span class="music-playlist-cover placeholder">♫</span>';
+          return `<button class="music-playlist-card" type="button" data-music-playlist="${safeMusicText(item.id)}">
+            ${cover}<span class="music-playlist-meta"><strong>${safeMusicText(item.title)}</strong><small>${safeMusicText(item.description || "Playlist pilihan LEXIAA · Spotify")}</small></span><span class="music-playlist-arrow">→</span>
+          </button>`;
+        }).join("");
+        musicHubPlaylists.querySelectorAll("[data-music-playlist]").forEach(button => {
+          button.addEventListener("click", () => {
+            const item = data.find(row => String(row.id) === button.dataset.musicPlaylist);
+            if (!item) return;
+
+            const samePlaylist = selectedMusicPlaylistId === String(item.id);
+            const playerHasContent = musicHubPlayer.querySelector("iframe");
+
+            if (samePlaylist && playerHasContent) {
+              // Tutup/buka tampilan saja. Iframe tetap hidup sehingga posisi lagu
+              // (misalnya track ke-3) tidak kembali ke awal.
+              musicHubNowPlaying.hidden = !musicHubNowPlaying.hidden;
+              return;
+            }
+
+            selectedMusicPlaylistId = String(item.id);
+            playMusicLink(item.spotify_url, item.title);
+          });
+        });
+      } catch (error) {
+        console.warn("LEXIAA playlist:", error);
+        musicHubPlaylists.innerHTML = '<div class="music-playlist-empty">Playlist belum tersedia. Pastikan tabel music_playlists dan izin baca publik sudah disiapkan di Supabase.</div>';
+      }
+    }
+
+    function playMusicLink(raw, label="") {
+      try {
+        const media = parseMusicLink(raw);
+        if(media.source === "YouTube") { playYouTube(media,label); pauseDashboardForLexiaa(); return; }
+        currentMusicSource="spotify"; currentMusicLabel=label||"Spotify";
+        npTitle.textContent=currentMusicLabel;npSubtitle.textContent="♫  Spotify · kontrol pemutaran di player resmi";npProgress.style.width="0%";npCurrent.textContent="PLAYER";npDuration.textContent="SPOTIFY";
+        pauseDashboardForLexiaa();
+        const frame = document.createElement("iframe");
+        frame.src = media.embed;
+        frame.title = "LEXIAA Music Hub - " + media.source;
+        frame.allow = "autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture";
+        frame.allowFullscreen = true;
+        // Jangan lazy-load player: pada beberapa browser mobile ini dapat
+        // menunda inisialisasi audio dan membuat playback terasa tidak stabil.
+        frame.loading = "eager";
+        frame.referrerPolicy = "strict-origin-when-cross-origin";
+        if (media.track) frame.className = "spotify-track";
+        musicHubPlayer.replaceChildren(frame);
+        musicHubNowPlaying.hidden = false;
+        musicHubStatus.textContent = (label ? label + " · " : "") + "Sumber terdeteksi: " + media.source + ". Gunakan kontrol player untuk memutar musik.";
+        musicHubExternal.href = media.external;
+        musicHubExternal.hidden = false;
+      } catch (error) {
+        musicHubStatus.textContent = error.message || "Link tidak dapat diproses.";
+        musicHubExternal.hidden = true;
+      }
+    }
+
+    function openMusicHub() {
+      // Setiap popup dibuka ulang, tampilan lagu disembunyikan.
+      // Iframe tidak dihapus agar audio yang sedang berjalan tetap berlanjut.
+      musicHubNowPlaying.hidden = true;
+      musicHubInputRow.hidden = true;
+      musicHubRevealInput.hidden = false;
+      musicHub.classList.add("open");
+      musicHub.setAttribute("aria-hidden","false");
+      loadMusicPlaylists();
+    }
+    function closeMusicHub() {
+      // Jangan hapus iframe dan jangan pause: musik tetap berjalan di belakang popup.
+      musicHubNowPlaying.hidden = true;
+      musicHub.classList.remove("open");
+      musicHub.setAttribute("aria-hidden","true");
+    }
+    document.getElementById("musicHubBtn").addEventListener("click", openMusicHub);
+    document.getElementById("musicHubClose").addEventListener("click", closeMusicHub);
+    // Klik backdrop dan tombol Escape sengaja tidak menutup popup.
+    musicHubRevealInput.addEventListener("click", () => {
+      musicHubInputRow.hidden = false;
+      musicHubRevealInput.hidden = true;
+      musicHubUrl.focus({preventScroll:true});
+    });
+    document.getElementById("musicHubClear").addEventListener("click", () => {
+      stopLexiaaMusic({ resumeDashboard: true });
+      musicHubStatus.textContent = "Player dihentikan. Musik Dashboard dilanjutkan jika sebelumnya sedang aktif.";
+      musicHubUrl.value = "";
+    });
+    musicHubForm.addEventListener("submit", event => {
+      event.preventDefault();
+      selectedMusicPlaylistId = null;
+      playMusicLink(musicHubUrl.value);
+    });
+
+    // Dashboard player controls: YouTube playlists support full external controls.
+    // Spotify remains in its official embed because its iframe does not expose next/previous control APIs.
+    const npTitle = document.getElementById("npTrackTitle");
+    const npSubtitle = document.getElementById("npTrackSubtitle");
+    const npProgress = document.getElementById("npProgressFill");
+    const npCurrent = document.getElementById("npCurrentTime");
+    const npDuration = document.getElementById("npDuration");
+    let ytPlayer = null, ytApiReady = false, ytTimer = null, currentMusicSource = "", currentMusicLabel = "Chill Vibes", ytShuffle = false, ytRepeat = false;
+    function loadYouTubeApi(){
+      if(window.YT && window.YT.Player){ytApiReady=true;return Promise.resolve();}
+      return new Promise(resolve=>{
+        const previous=window.onYouTubeIframeAPIReady;
+        window.onYouTubeIframeAPIReady=()=>{ytApiReady=true;try{previous?.()}catch(_){}resolve();};
+        if(!document.querySelector('script[data-yt-api]')){const script=document.createElement('script');script.src='https://www.youtube.com/iframe_api';script.dataset.ytApi='1';document.head.appendChild(script);}
+        else {const wait=setInterval(()=>{if(window.YT&&window.YT.Player){clearInterval(wait);ytApiReady=true;resolve();}},100);setTimeout(()=>{clearInterval(wait);resolve();},12000);}
+      });
+    }
+    function formatMusicTime(value){if(!Number.isFinite(value)||value<0)return '0:00';const m=Math.floor(value/60),s=Math.floor(value%60);return m+':'+String(s).padStart(2,'0');}
+    function syncYtInfo(){
+      if(!ytPlayer||!ytPlayer.getVideoData)return;
+      try{
+        const data=ytPlayer.getVideoData();
+        if(data?.title)npTitle.textContent=data.title;
+        const duration=Number(ytPlayer.getDuration())||0;
+        const current=Number(ytPlayer.getCurrentTime())||0;
+        npCurrent.textContent=formatMusicTime(current);
+        npDuration.textContent=duration>0?formatMusicTime(duration):'--:--';
+        npProgress.style.width=(duration>0?Math.min(100,(current/duration)*100):0)+'%';
+      }catch(_){}
+    }
+    function startYtTimer(){clearInterval(ytTimer);syncYtInfo();ytTimer=setInterval(syncYtInfo,500);}
+    function stopYtTimer(){clearInterval(ytTimer);ytTimer=null;}
+    async function playYouTube(media,label){
+      await loadYouTubeApi();
+      if(!window.YT||!window.YT.Player){musicHubStatus.textContent='YouTube Player gagal dimuat. Coba buka player dari popup.';return;}
+      currentMusicSource='youtube';currentMusicLabel=label||'YouTube Playlist';npTitle.textContent=currentMusicLabel;npSubtitle.textContent='♫  YouTube · LEXIAA MUSIC';npProgress.style.width='0%';npCurrent.textContent='0:00';npDuration.textContent='--:--';
+      musicHubPlayer.innerHTML='<div id="lexiaaYtPlayer"></div>';
+      musicHubNowPlaying.hidden=false;
+      const videoId=media.videoId||undefined;
+      const playerVars={autoplay:1,playsinline:1,controls:1,rel:0};
+      if(media.listId){playerVars.listType='playlist';playerVars.list=media.listId;if(videoId)playerVars.videoId=videoId;}
+      ytPlayer=new YT.Player('lexiaaYtPlayer',{width:'100%',height:'100%',videoId, playerVars, events:{onReady:e=>{if(media.listId&&!videoId)e.target.loadPlaylist({list:media.listId,listType:'playlist'});e.target.playVideo();startYtTimer();},onStateChange:e=>{syncYtInfo();const playing=e.data===YT.PlayerState.PLAYING;document.getElementById('npOpenPlayer').textContent=playing?'Ⅱ':'▶';if(e.data===YT.PlayerState.ENDED&&ytRepeat)e.target.playVideo();},onError:()=>{musicHubStatus.textContent='Video ini tidak dapat diputar melalui embed. Coba playlist/video lain.';}}});
+      musicHubStatus.textContent=(label?label+' · ':'')+'YouTube aktif. Kontrol dashboard terhubung ke player.';
+      musicHubExternal.href=media.external;musicHubExternal.hidden=false;
+    }
+    document.getElementById('npOpenPlayer').addEventListener('click',()=>{
+      if(currentMusicSource==='youtube'&&ytPlayer){try{const state=ytPlayer.getPlayerState();if(state===YT.PlayerState.PLAYING)ytPlayer.pauseVideo();else ytPlayer.playVideo();return;}catch(_){}}
+      openMusicHub();
+    });
+    document.getElementById('npNext').addEventListener('click',()=>{if(currentMusicSource==='youtube'&&ytPlayer)ytPlayer.nextVideo();else openMusicHub();});
+    document.getElementById('npPrevious').addEventListener('click',()=>{if(currentMusicSource==='youtube'&&ytPlayer)ytPlayer.previousVideo();else openMusicHub();});
+    document.getElementById('npShuffle').addEventListener('click',()=>{if(currentMusicSource==='youtube'&&ytPlayer){ytShuffle=!ytShuffle;ytPlayer.setShuffle(ytShuffle);document.getElementById('npShuffle').classList.toggle('active',ytShuffle);}else openMusicHub();});
+    document.getElementById('npRepeat').addEventListener('click',()=>{ytRepeat=!ytRepeat;document.getElementById('npRepeat').classList.toggle('active',ytRepeat);if(currentMusicSource==='youtube'&&ytPlayer){if(ytPlayer.setLoop)ytPlayer.setLoop(ytRepeat); }else openMusicHub();});
+
+    if (supabase) {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) showDashboard(session.user);
+      supabase.auth.onAuthStateChange((_event, session) => {
+        if (session && !document.getElementById("dashboardView").classList.contains("active")) {
+          showDashboard(session.user);
+        } else if (!session && _event === "SIGNED_OUT") {
+          showView("home");
+        }
+      });
+    }
+
+
+    // Story controls are initialized by the standalone controller after this module.
+
+    // Jam lokal selalu berjalan; lokasi memakai fallback timezone agar tidak stuck jika GPS/geocoder lambat.
+    (function initLiveInfo(){
+      const zone = Intl.DateTimeFormat().resolvedOptions().timeZone || "";
+      const knownPlaces = {
+        "Asia/Jakarta":"JAKARTA, INDONESIA · WIB",
+        "Asia/Pontianak":"PONTIANAK, INDONESIA · WIB",
+        "Asia/Makassar":"MAKASSAR, INDONESIA · WITA",
+        "Asia/Ujung_Pandang":"MAKASSAR, INDONESIA · WITA",
+        "Asia/Jayapura":"JAYAPURA, INDONESIA · WIT"
+      };
+      const dateFormatter = new Intl.DateTimeFormat("id-ID",{weekday:"long",day:"2-digit",month:"long",year:"numeric"});
+      const fallbackPlace = knownPlaces[zone] || (zone ? zone.replaceAll("_"," ").toUpperCase() : "LOKASI TIDAK TERSEDIA");
+      function updateLocation(value){
+        document.querySelectorAll("[data-live-location]").forEach(el=>{el.textContent="LOKASI: "+value;});
+      }
+      function tick(){
+        const now=new Date();
+        const localTime=[now.getHours(),now.getMinutes(),now.getSeconds()].map(v=>String(v).padStart(2,"0")).join(":");
+        document.querySelectorAll("[data-live-time]").forEach(el=>{el.textContent=localTime;});
+        document.querySelectorAll("[data-live-date]").forEach(el=>{el.textContent=dateFormatter.format(now).toUpperCase();});
+      }
+      tick(); window.setInterval(tick,1000);
+      // Set a useful value immediately; reverse geocoding may improve it later.
+      updateLocation(fallbackPlace);
+      if(!navigator.geolocation)return;
+      let settled=false;
+      const settleFallback=()=>{if(!settled){settled=true;updateLocation(fallbackPlace);}};
+      const fallbackTimer=window.setTimeout(settleFallback,6500);
+      navigator.geolocation.getCurrentPosition(async position=>{
+        if(settled)return;
+        try{
+          const {latitude,longitude}=position.coords;
+          const controller=new AbortController();
+          const timer=window.setTimeout(()=>controller.abort(),4500);
+          const url="https://api.bigdatacloud.net/data/reverse-geocode-client?latitude="+encodeURIComponent(latitude)+"&longitude="+encodeURIComponent(longitude)+"&localityLanguage=id";
+          const response=await fetch(url,{signal:controller.signal});window.clearTimeout(timer);
+          if(!response.ok)throw new Error("Reverse geocoding gagal");
+          const data=await response.json();
+          const city=data.city||data.locality||data.localityInfo?.administrative?.[2]?.name||data.principalSubdivision;
+          const province=data.principalSubdivision;
+          const country=data.countryName;
+          const zoneName=Intl.DateTimeFormat().resolvedOptions().timeZone||"";
+          const tzLabel=zoneName==="Asia/Jakarta"||zoneName==="Asia/Pontianak"?"WIB":zoneName==="Asia/Makassar"||zoneName==="Asia/Ujung_Pandang"?"WITA":zoneName==="Asia/Jayapura"?"WIT":"";
+          const parts=[city,province,country].filter((v,i,a)=>v&&a.indexOf(v)===i);
+          const locationLabel=parts.join(", ")+(tzLabel?" · "+tzLabel:"");
+          if(city&&!settled){settled=true;window.clearTimeout(fallbackTimer);updateLocation(locationLabel.toUpperCase());}
+          else settleFallback();
+        }catch(error){console.info("Lokasi memakai fallback timezone:",error.message);settleFallback();}
+      },error=>{console.info("Lokasi memakai fallback timezone:",error.message);settleFallback();},{enableHighAccuracy:false,timeout:5000,maximumAge:600000});
+    })();
+
+    // PWA install prompt: browser tetap meminta persetujuan pengguna.
+    let deferredInstallPrompt = null;
+    const welcomeModal = document.getElementById("welcomeInstallModal");
+    const welcomeTypedText = document.getElementById("welcomeTypedText");
+    const welcomeInstallStatus = document.getElementById("welcomeInstallStatus");
+    const installAppBtn = document.getElementById("installAppBtn");
+    const alreadyInstalledBtn = document.getElementById("alreadyInstalledBtn");
+    const welcomeMessage = "UNTUK PENGALAMAN YANG LEBIH BAIK, AYO UNDUH/TAMBAHKAN APP DI BERANDA HP ANDA.";
+
+    function isAppInstalled() {
+      return window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
+    }
+    const welcomePopupAudio = new Audio("welcome-anime.mp3");
+    welcomePopupAudio.preload = "auto";
+    let welcomeAudioStarted = false;
+    function playWelcomePopupAudio() {
+      try {
+        welcomePopupAudio.pause();
+        welcomePopupAudio.currentTime = 0;
+        const playback = welcomePopupAudio.play();
+        if (playback && typeof playback.then === "function") {
+          playback.then(() => { welcomeAudioStarted = true; }).catch(() => {
+            // Browser dapat memblokir autoplay; coba lagi pada interaksi pertama pengguna.
+            welcomeAudioStarted = false;
+          });
+        }
+      } catch (_) { welcomeAudioStarted = false; }
+    }
+    function openWelcomePopup() {
+      const installed = isAppInstalled();
+      const stayWebsiteBtn = document.getElementById("stayWebsiteBtn");
+      welcomeModal.classList.add("open");
+      welcomeInstallStatus.textContent = "";
+      // Saat dibuka sebagai PWA terpasang, tampilkan hanya tombol konfirmasi.
+      stayWebsiteBtn.hidden = installed;
+      installAppBtn.hidden = installed;
+      alreadyInstalledBtn.hidden = !installed;
+      welcomeTypedText.textContent = welcomeMessage;
+      playWelcomePopupAudio();
+      (installed ? alreadyInstalledBtn : stayWebsiteBtn).focus({preventScroll:true});
+    }
+    function closeWelcomePopup() {
+      welcomeModal.classList.remove("open");
+      welcomePopupAudio.pause();
+      welcomePopupAudio.currentTime = 0;
+      welcomeAudioStarted = false;
+    }
+    // Tampilkan popup juga saat pengunjung pertama kali membuka halaman utama.
+    if (document.getElementById("homeView")?.classList.contains("active")) {
+      window.setTimeout(openWelcomePopup, 250);
+    }
+    // Jika autoplay diblokir browser, mulai audio pada interaksi pertama saat popup masih terbuka.
+    ["pointerdown","keydown","touchstart"].forEach(eventName => {
+      document.addEventListener(eventName, () => {
+        if (welcomeModal.classList.contains("open") && !welcomeAudioStarted && welcomePopupAudio.paused) {
+          playWelcomePopupAudio();
+        }
+      }, {passive:true});
+    });
+    // Popup hanya boleh ditutup melalui tombol "Tetap di Website" atau "Sudah Unduh".
+    welcomeModal.addEventListener("click", event => {
+      if (event.target === welcomeModal) event.preventDefault();
+    });
+    document.addEventListener("keydown", event => {
+      if (welcomeModal.classList.contains("open") && event.key === "Escape") {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+    }, true);
+    window.addEventListener("beforeinstallprompt", event => {
+      event.preventDefault();
+      deferredInstallPrompt = event;
+      if (installAppBtn) installAppBtn.hidden = isAppInstalled();
+    });
+    window.addEventListener("appinstalled", () => {
+      deferredInstallPrompt = null;
+      welcomeInstallStatus.textContent = "APP BERHASIL DITAMBAHKAN KE BERANDA.";
+      alreadyInstalledBtn.hidden = false;
+      installAppBtn.hidden = true;
+      document.getElementById("stayWebsiteBtn").hidden = true;
+    });
+    document.getElementById("stayWebsiteBtn").addEventListener("click", closeWelcomePopup);
+    alreadyInstalledBtn.addEventListener("click", closeWelcomePopup);
+    installAppBtn.addEventListener("click", async () => {
+      // Setelah pengguna mencoba mengunduh, tombol konfirmasi ditampilkan di bawah.
+      alreadyInstalledBtn.hidden = false;
+      if (isAppInstalled()) {
+        alreadyInstalledBtn.hidden = false;
+        welcomeInstallStatus.textContent = "LEXIAA SUDAH TERPASANG DI PERANGKAT INI.";
+        return;
+      }
+      if (deferredInstallPrompt) {
+        installAppBtn.disabled = true;
+        installAppBtn.textContent = "MENYIAPKAN...";
+        try {
+          deferredInstallPrompt.prompt();
+          const choice = await deferredInstallPrompt.userChoice;
+          if (choice && choice.outcome === "accepted") {
+            welcomeInstallStatus.textContent = "INSTALASI DIMULAI. IKUTI PETUNJUK BROWSER.";
+          } else {
+            welcomeInstallStatus.textContent = "INSTALASI DIBATALKAN. KAMU TETAP BISA MEMAKAI WEBSITE.";
+          }
+        } catch (_) {
+          welcomeInstallStatus.textContent = "PROMPT INSTALASI TIDAK TERSEDIA. COBA MENU BROWSER.";
+        } finally {
+          deferredInstallPrompt = null;
+          installAppBtn.disabled = false;
+          installAppBtn.textContent = "UNDUH APP";
+        }
+      } else {
+        welcomeInstallStatus.textContent = /iphone|ipad|ipod/i.test(navigator.userAgent)
+          ? "DI IPHONE/IPAD: TEKAN BAGIKAN, LALU PILIH 'TAMBAHKAN KE LAYAR UTAMA'."
+          : "PILIH MENU BROWSER (⋮), LALU 'INSTALL APP' ATAU 'TAMBAHKAN KE LAYAR UTAMA'.";
+      }
+    });
+    if ("serviceWorker" in navigator && location.protocol === "https:") {
+      window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js").catch(err => console.warn("PWA service worker:", err)));
+    }
+
+  </script>
+
+
+
+
+<script>
+(()=>{
+ const $=id=>document.getElementById(id);
+ const click=(selector)=>document.querySelector(selector)?.click();
+ document.querySelector('[data-dash-home]')?.addEventListener('click',()=>{document.querySelectorAll('.side-link').forEach(x=>x.classList.remove('is-active'));document.querySelector('[data-dash-home]').classList.add('is-active');window.scrollTo({top:0,behavior:'smooth'});});
+ document.querySelector('[data-dash-music]')?.addEventListener('click',()=>click('#musicHubBtn'));
+ document.querySelector('[data-dash-explore]')?.addEventListener('click',()=>click('[data-content="penemuan"]'));
+ document.querySelector('[data-dash-hidden]')?.addEventListener('click',()=>click('[data-content="secret"]'));
+ document.querySelector('[data-dash-member]')?.addEventListener('click',()=>click('.menu-grid [data-member]'));
+ $('npOpenPlayer')?.addEventListener('click',()=>click('#musicHubBtn'));
+ // Weather and place name use the visitor's own GPS coordinates (with permission).
+ const weatherFallback=()=>{if($('weatherDesc'))$('weatherDesc').textContent='Izinkan lokasi untuk cuaca lokal';if($('weatherPlace'))$('weatherPlace').textContent='Lokasi belum diizinkan';};
+ async function reversePlace(lat,lon){
+   const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),6500);
+   try{const r=await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${encodeURIComponent(lat)}&longitude=${encodeURIComponent(lon)}&localityLanguage=id`,{signal:controller.signal});if(!r.ok)throw Error('geocode');const d=await r.json();const zone=Intl.DateTimeFormat().resolvedOptions().timeZone||'';const tz=zone==='Asia/Jakarta'||zone==='Asia/Pontianak'?'WIB':zone==='Asia/Makassar'||zone==='Asia/Ujung_Pandang'?'WITA':zone==='Asia/Jayapura'?'WIT':'';const parts=[d.city||d.locality||d.localityInfo?.administrative?.[0]?.name,d.principalSubdivision,d.countryName].filter(Boolean).filter((v,i,a)=>a.indexOf(v)===i);return parts.join(', ')+(tz?' · '+tz:'');}finally{clearTimeout(timer)}
+ }
+ async function loadWeather(lat,lon){
+   const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),8000);
+   try{
+     const [r,place]=await Promise.all([fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code&daily=temperature_2m_max,temperature_2m_min&timezone=auto`,{signal:controller.signal}),reversePlace(lat,lon).catch(()=> '')]);
+     if(!r.ok)throw Error('weather');const d=await r.json();const code=d.current.weather_code;
+     const map=code===0?['☀','Cerah']:code<=3?['⛅','Cerah berawan']:code<=48?['☁','Berawan']:code<=67?['🌧','Hujan']:code<=77?['❄','Salju']:['⛈','Hujan badai'];
+     $('weatherIcon').textContent=map[0];$('weatherTemp').textContent=Math.round(d.current.temperature_2m)+'°C';$('weatherDesc').textContent=map[1];$('weatherRange').textContent=`Min ${Math.round(d.daily.temperature_2m_min[0])}° · Max ${Math.round(d.daily.temperature_2m_max[0])}°`;
+     const label=place||`${lat.toFixed(2)}, ${lon.toFixed(2)}`;$('weatherPlace').textContent=label;$('weatherPlace').title='Berdasarkan lokasi perangkat';
+     document.querySelectorAll('[data-live-location]').forEach(el=>el.textContent='LOKASI: '+label.toUpperCase());
+   }catch(e){weatherFallback()}finally{clearTimeout(timer)}
+ }
+ if(navigator.geolocation){navigator.geolocation.getCurrentPosition(pos=>loadWeather(pos.coords.latitude,pos.coords.longitude),weatherFallback,{enableHighAccuracy:true,timeout:12000,maximumAge:300000});}else weatherFallback();
+ // Local audio can be analysed. Spotify/YouTube embeds are cross-origin, so use a synchronized ambient pulse while an embed is mounted (not raw beat detection).
+ const musicHost=$('musicHubPlayer');
+ let embedPulseTimer=null, pulseSeed=0;
+ function stopEmbedPulse(){if(embedPulseTimer){clearInterval(embedPulseTimer);embedPulseTimer=null}eq?.classList.remove('is-playing','is-embed-playing')}
+ function startEmbedPulse(){
+   if(!eq)return;
+   stopEmbedPulse();eq.classList.add('is-playing','is-embed-playing');
+   const bars=[...eq.children];
+   embedPulseTimer=setInterval(()=>{
+     pulseSeed+=1;
+     bars.forEach((bar,i)=>{
+       const wave=Math.abs(Math.sin((pulseSeed*.42)+(i*.62)));
+       const accent=Math.abs(Math.sin((pulseSeed*.17)+(i*.21)));
+       bar.style.height=(7+wave*(18+accent*36))+'px';
+     });
+   },110);
+ }
+ if(musicHost){
+   const syncEmbedPulse=()=>{
+     const hasEmbed=!!musicHost.querySelector('iframe');
+     if(hasEmbed)startEmbedPulse();else stopEmbedPulse();
+   };
+   new MutationObserver(syncEmbedPulse).observe(musicHost,{childList:true,subtree:true});
+   syncEmbedPulse();
+ }
+
+
+})();
+</script>
+
+<script>
+/* Clock fallback: keeps dashboard time alive independently of other app modules. */
+(function(){
+  const renderClock = () => {
+    const now = new Date();
+    const time = [now.getHours(), now.getMinutes(), now.getSeconds()]
+      .map(v => String(v).padStart(2, "0")).join(":");
+    document.querySelectorAll("[data-live-time]").forEach(el => { el.textContent = time; });
+    const date = new Intl.DateTimeFormat("id-ID", {
+      weekday: "long", day: "2-digit", month: "long", year: "numeric"
+    }).format(now).toUpperCase();
+    document.querySelectorAll("[data-live-date]").forEach(el => { el.textContent = date; });
+  };
+  renderClock();
+  window.setInterval(renderClock, 1000);
+})();
+</script>
+<script>
+/* Independent location fallback: does not wait for auth, GPS, or external geocoding. */
+(function(){
+  function resolveLocation(){
+    let zone = "";
+    try { zone = Intl.DateTimeFormat().resolvedOptions().timeZone || ""; } catch(e) {}
+    const map = {
+      "Asia/Jakarta":"JAKARTA, INDONESIA · WIB",
+      "Asia/Pontianak":"PONTIANAK, INDONESIA · WIB",
+      "Asia/Makassar":"MAKASSAR, INDONESIA · WITA",
+      "Asia/Ujung_Pandang":"MAKASSAR, INDONESIA · WITA",
+      "Asia/Jayapura":"JAYAPURA, INDONESIA · WIT"
+    };
+    return map[zone] || (zone ? zone.replaceAll("_"," ").toUpperCase() : "INDONESIA · WAKTU LOKAL");
+  }
+  function paint(){
+    const value = "LOKASI: " + resolveLocation();
+    document.querySelectorAll("[data-live-location]").forEach(el => {
+      if (!el.textContent || /MEMUAT/i.test(el.textContent) || /LOKASI:/i.test(el.textContent)) el.textContent=value;
+    });
+  }
+  paint();
+  document.addEventListener("DOMContentLoaded", paint);
+  window.setTimeout(paint, 250);
+})();
+</script>
+<script>(function(){const pill=document.getElementById('deviceBatteryPill'),pct=document.getElementById('deviceBatteryPercent'),level=document.getElementById('deviceBatteryLevel'),charge=document.getElementById('deviceBatteryCharging');if(!pill||!pct||!level||!charge)return;function fallback(){pct.textContent='—';charge.textContent='';pill.title='Status baterai tidak didukung browser ini';}if(!navigator.getBattery){fallback();return;}navigator.getBattery().then(function(b){function update(){const n=Math.round(b.level*100);pct.textContent=n+'%';level.style.width=n+'%';pill.classList.toggle('is-charging',b.charging);charge.textContent=b.charging?'⚡':'';pill.title=b.charging?'Sedang mengisi daya':'Baterai '+n+'%';}['levelchange','chargingchange','chargingtimechange','dischargingtimechange'].forEach(e=>b.addEventListener(e,update));update();}).catch(fallback);})();document.querySelectorAll('.np-character').forEach(img=>{img.addEventListener('contextmenu',e=>e.preventDefault());img.addEventListener('dragstart',e=>e.preventDefault());});</script>
+<div class="lex-about-overlay" id="lexAboutOverlay" aria-hidden="true">
+  <section class="lex-about-shell" role="dialog" aria-modal="true" aria-labelledby="lexAboutTitle">
+    <button class="lex-about-close" type="button" data-about-close aria-label="Tutup Tentang Lexiaa">×</button>
+    <header class="lex-about-head">
+      <div class="lex-about-eyebrow">A LITTLE GUIDE FOR YOU · LEXIAA</div>
+      <h2 class="lex-about-title" id="lexAboutTitle">Tentang Lexiaa</h2>
+      <p class="lex-about-subtitle">Kenali lebih dekat, yaa~ Onee-san temani ♡</p>
+    </header>
+    <div class="lex-about-layout">
+      <nav class="lex-about-tabs" aria-label="Kategori Tentang Lexiaa" role="tablist">
+        <button class="lex-about-tab" type="button" role="tab" aria-selected="false" data-about-tab="about"><span class="tab-icon">✦</span><span>About Lexiaa<small>Kenalan dulu, sayang~</small></span></button>
+        <button class="lex-about-tab" type="button" role="tab" aria-selected="false" data-about-tab="features"><span class="tab-icon">▦</span><span>Fitur-Fitur Lexiaa<small>Ada apa saja di sini?</small></span></button>
+        <button class="lex-about-tab" type="button" role="tab" aria-selected="false" data-about-tab="howto"><span class="tab-icon">♧</span><span>Cara Menjalankan<small>Onee-san tunjukkan~</small></span></button>
+        <button class="lex-about-tab" type="button" role="tab" aria-selected="false" data-about-tab="guide"><span class="tab-icon">➤</span><span>Panduan Pengguna<small>Mulai dari awal, yuk</small></span></button>
+        <button class="lex-about-tab" type="button" role="tab" aria-selected="false" data-about-tab="tips"><span class="tab-icon">☼</span><span>Tips &amp; Trik<small>Rahasia kecil kita ♡</small></span></button>
+        <p class="lex-about-note">“Jelajahi, nikmati, dan temukan sisi seru Lexiaa~ ♡”</p>
+      </nav>
+      <article class="lex-about-copy" id="lexAboutContent" role="tabpanel" tabindex="0">
+        <div class="lex-about-section-kicker" id="lexAboutKicker">WELCOME TO LEXIAA</div>
+        <h3 class="lex-about-section-title" id="lexAboutHeading">Apa itu Lexiaa?</h3>
+        <div id="lexAboutBody">
+          <p><strong>Lexiaa &amp; Elstar</strong> adalah ruang digital yang menggabungkan musik, penemuan, dan akses konten dalam satu website. Dibuat supaya kamu bisa menjelajah dengan nyaman tanpa perlu berpindah-pindah tempat.</p>
+          <div class="lex-about-callout"><span>♕</span>Lexiaa bukan cuma tempat mampir, lho. Ini ruang kecil untuk menemukan hal-hal menarik. Ara ara~ jangan langsung jatuh cinta, ya ♡</div>
+          <p>Gunakan menu di samping untuk mengenal setiap bagian. Onee-san sudah siapkan panduannya khusus buat kamu~</p>
+        </div>
+      </article>
+      <aside class="lex-about-char" aria-label="Pemandu anime Lexiaa">
+        <img id="lexAboutCharacter" src="./about-main-character.png" alt="Karakter pemandu utama Lexiaa" draggable="false" oncontextmenu="return false">\n        <video id="lexAboutCharacterVideo" class="lex-about-character-video" hidden muted playsinline loop autoplay preload="none" disablepictureinpicture controlslist="nodownload noplaybackrate" oncontextmenu="return false" ondragstart="return false" aria-hidden="true"></video>
+        <div class="char-caption" id="lexAboutCaption">H a i i~<br>Selamat datang di Lexiaa ♡</div>
+      </aside>
+    </div>
+    <div class="lex-about-footer"><span>Lexiaa · Explore. Play. Enjoy. ♡</span><span>MADE FOR YOUR LITTLE ADVENTURE</span></div>
+  </section>
+</div>
+<script id="lexiaa-about-script">
+(()=>{
+ const overlay=document.getElementById('lexAboutOverlay');
+ if(!overlay)return;
+ const tabs=[...overlay.querySelectorAll('[data-about-tab]')];
+ const heading=document.getElementById('lexAboutHeading');
+ const kicker=document.getElementById('lexAboutKicker');
+ const body=document.getElementById('lexAboutBody');
+ const character=document.getElementById('lexAboutCharacter');
+ const characterVideo=document.getElementById('lexAboutCharacterVideo');
+ const caption=document.getElementById('lexAboutCaption');
+ const content=document.getElementById('lexAboutContent');
+ const mainImage='./about-main-character.png';
+ const pages={
+  about:{title:'Apa itu Lexiaa?',kicker:'WELCOME TO LEXIAA',image:'./about-welcome-character.png',alt:'Pemandu kategori About Lexiaa berambut hitam panjang',caption:'Hmm~ mau kenalan lebih dekat denganku? ♡',html:`<p><strong>Lexiaa &amp; Elstar</strong> adalah ruang digital yang menggabungkan musik, penemuan, dan akses konten dalam satu website. Dibuat supaya kamu bisa menjelajah dengan nyaman tanpa perlu berpindah-pindah tempat.</p><div class="lex-about-callout"><span>♕</span>Lexiaa bukan cuma tempat mampir, lho. Ini ruang kecil untuk menemukan hal-hal menarik. Ara ara~ jangan langsung jatuh cinta, ya ♡</div><p>Gunakan menu di samping untuk mengenal setiap bagian. Onee-san sudah siapkan panduannya khusus buat kamu~</p>`},
+  features:{title:'Apa saja yang ada di Lexiaa?',kicker:'EXPLORE THE FEATURES',image:'./about-feature-character.png',alt:'Pemandu kategori fitur berambut ungu',caption:'Ehehe~ banyak yang bisa kamu jelajahi. Mau mulai dari mana?',html:`<p>Hehe, penasaran juga kamu~ Ini dia bagian-bagian yang tersedia di website saat ini:</p><ul class="lex-about-list"><li><strong>Home / Dashboard</strong> — halaman utama untuk melihat tampilan dashboard, jam, cuaca, pemutar musik, dan pintasan menu.</li><li><strong>LEXIAA Music</strong> — area pemutar musik dengan dukungan Spotify dan YouTube. Pilih playlist atau sumber yang tersedia untuk mulai mendengarkan.</li><li><strong>Penemuan / Explore</strong> — bagian untuk menjelajahi konten penemuan yang disediakan di Lexiaa.</li><li><strong>Secret / Hidden</strong> — area konten tersembunyi yang tersedia melalui menu Hidden.</li><li><strong>Member OTW</strong> — akses pengajuan untuk menjadi member OTW dan membuka konten khusus member.</li><li><strong>Connect with Admin</strong> — pintasan untuk menghubungi admin melalui kanal sosial yang tersedia.</li></ul><div class="lex-about-callout"><span>✧</span>Setiap menu punya keseruannya sendiri. Jangan cuma lihat-lihat dari jauh, dong~ coba jelajahi satu per satu ♡</div>`},
+  howto:{title:'Cara menggunakan menu Lexiaa',kicker:'LET ME SHOW YOU HOW',image:'./about-howto-character.png',alt:'Pemandu tutorial berambut hitam',caption:'Santai saja~ ikuti langkah Onee-san, ya ♡',html:`<p>Nggak sulit kok, sayang. Ikuti langkah sederhana ini supaya nggak tersesat di dalam Lexiaa~</p><ul class="lex-about-list"><li><strong>Masuk ke website</strong> — buka alamat website Lexiaa melalui browser HP atau komputer.</li><li><strong>Login atau daftar</strong> — jika ingin menggunakan akses OTW, masuk dengan akun yang sudah ada atau buat akun melalui halaman pendaftaran.</li><li><strong>Buka Dashboard</strong> — setelah berhasil masuk, kamu akan melihat Home beserta pintasan fitur.</li><li><strong>Pilih menu</strong> — tekan LEXIAA Music, Penemuan, Secret, atau Member OTW sesuai yang ingin kamu buka.</li><li><strong>Gunakan navigasi</strong> — sidebar dashboard juga menyediakan pintasan ke Home, Music, Explore, Hidden, dan Member OTW.</li><li><strong>Kembali ke Home</strong> — gunakan menu Home pada navigasi dashboard untuk kembali ke halaman utama.</li></ul><div class="lex-about-callout"><span>♡</span>Kalau salah pencet, jangan panik. Coba kembali ke Home, lalu pilih menu yang benar. Onee-san nggak akan menertawakanmu… mungkin sedikit saja, hehe~</div>`},
+  guide:{title:'Panduan untuk pengguna baru',kicker:'YOUR FIRST STEPS',image:'./about-guide-character.png',alt:'Pemandu pengguna berambut hitam pendek',caption:'Pertama kali ke sini? Tenang, ada Onee-san~',html:`<p>Baru pertama kali mampir? Selamat datang, yaa~ Biar pengalamanmu lebih nyaman, perhatikan beberapa hal ini:</p><ul class="lex-about-list"><li><strong>Gunakan browser terbaru</strong> — Chrome atau browser modern lain akan memberi pengalaman yang lebih baik.</li><li><strong>Tambahkan ke layar utama</strong> — gunakan opsi instalasi / Add to Home Screen dari browser jika tersedia, agar Lexiaa lebih mudah dibuka seperti aplikasi.</li><li><strong>Jaga akunmu</strong> — jangan bagikan email, kata sandi, atau kode akses pribadi kepada orang lain.</li><li><strong>Pahami akses member</strong> — menu Member OTW digunakan untuk pengajuan menjadi member; konten khusus member mengikuti aturan akses yang berlaku.</li><li><strong>Gunakan koneksi internet</strong> — beberapa bagian seperti autentikasi, musik, dan konten online memerlukan koneksi aktif.</li><li><strong>Butuh bantuan?</strong> — gunakan tautan Connect with Admin yang tersedia pada dashboard.</li></ul><div class="lex-about-callout"><span>♧</span>Pelan-pelan saja, ya. Nggak perlu menguasai semuanya dalam satu malam. Nikmati proses menjelajahnya~ ♡</div>`},
+  tips:{title:'Tips kecil dari Onee-san~',kicker:'LITTLE SECRETS & SMART TIPS',image:'./about-tips-character.png',alt:'Pemandu tips berambut gelap panjang',caption:'Psst… sini, Onee-san bisikin beberapa trik~',html:`<p>Ara ara~ sudah sampai bagian rahasia? Baiklah, ini beberapa tips supaya kamu makin nyaman menggunakan Lexiaa.</p><ul class="lex-about-list"><li><strong>Pasang sebagai aplikasi</strong> — tambahkan Lexiaa ke layar utama HP agar aksesnya lebih praktis.</li><li><strong>Gunakan headphone</strong> — khususnya saat menikmati LEXIAA Music, supaya pengalaman mendengarkan lebih asyik.</li><li><strong>Periksa koneksi</strong> — jika konten tidak muncul atau musik tidak berjalan, cek jaringan lalu muat ulang halaman.</li><li><strong>Jangan tutup terlalu cepat</strong> — tunggu proses login atau pemuatan konten selesai sebelum menekan tombol lagi.</li><li><strong>Simpan akses admin</strong> — jika menemukan masalah, hubungi admin lewat kanal resmi yang tersedia dan jelaskan kendalanya.</li><li><strong>Jelajahi semua menu</strong> — beberapa bagian punya fungsi berbeda, jadi jangan berasumsi semua konten terbuka dengan cara yang sama.</li></ul><div class="lex-about-callout"><span>✦</span>Dan tips paling penting: jangan lupa bersenang-senang. Website ini dibuat untuk dinikmati, bukan bikin kamu pusing, ya~ ♡</div>`}
+ };
+ function showPage(key){
+  const page=pages[key]||pages.about;
+  tabs.forEach(tab=>tab.setAttribute('aria-selected',String(tab.dataset.aboutTab===key)));
+  heading.textContent=page.title;kicker.textContent=page.kicker;body.innerHTML=page.html;
+  character.hidden=true;
+  characterVideo.hidden=false;
+  characterVideo.src='./about-character-'+({about:1,features:2,howto:3,guide:4,tips:5}[key]||1)+'.webm';
+  characterVideo.load();
+  const playPromise=characterVideo.play();if(playPromise&&typeof playPromise.catch==='function')playPromise.catch(()=>{});
+  characterVideo.setAttribute('aria-label',page.alt);
+  caption.innerHTML=page.caption;
+  content.scrollTop=0;
+ }
+ function showIntro(){
+  tabs.forEach(tab=>tab.setAttribute('aria-selected','false'));
+  kicker.textContent='WELCOME TO LEXIAA';
+  heading.textContent='Senang kamu mampir~';
+  body.innerHTML='<p><strong>H a i i~</strong> Selamat datang di Lexiaa. Onee-san sudah menyiapkan sedikit cerita, panduan, dan rahasia kecil buat kamu.</p><div class="lex-about-callout"><span>♕</span>Lexiaa adalah ruang digital untuk menikmati musik, menjelajahi konten, dan menemukan pengalaman baru. Yuk, pilih salah satu kategori di samping. Aku temani, kok~ ♡</div><p>Jangan sungkan bertanya, ya. Klik kategori yang menarik perhatianmu… atau memang dari tadi cuma mau lihat Onee-san? Ara ara~</p>';
+  character.hidden=true;characterVideo.hidden=false;characterVideo.src='./about-intro-character.webm';characterVideo.load();characterVideo.setAttribute('aria-label','Video karakter utama popup Lexiaa');const introPlayback=characterVideo.play();if(introPlayback&&typeof introPlayback.catch==='function')introPlayback.catch(()=>{});caption.innerHTML='H a i i~<br>Selamat datang di Lexiaa ♡';content.scrollTop=0;
+ }
+ // Satu audio aktif pada satu waktu: audio lama dihentikan sebelum audio baru dimulai.
+ const lexAboutSounds={
+  intro:new Audio('./lexiaa-about-intro.wav'),
+  tips:new Audio('./lexiaa-sound-tips.wav'),
+  about:new Audio('./lexiaa-sound-about.wav'),
+  features:new Audio('./lexiaa-sound-features.wav'),
+  howto:new Audio('./lexiaa-sound-howto.wav')
+ };
+ let activeLexAboutSound=null;
+ Object.values(lexAboutSounds).forEach(sound=>{
+  sound.preload='auto';sound.volume=0.68;
+ });
+ function playLexAboutSound(key){
+  const next=lexAboutSounds[key];
+  if(!next)return; // Kategori tanpa file audio tetap berfungsi normal.
+  if(activeLexAboutSound){
+   activeLexAboutSound.pause();
+   activeLexAboutSound.currentTime=0;
+  }
+  activeLexAboutSound=next;
+  next.currentTime=0;
+  const playback=next.play();
+  if(playback&&typeof playback.catch==='function')playback.catch(()=>{});
+ }
+ function stopLexAboutSound(){
+  if(!activeLexAboutSound)return;
+  activeLexAboutSound.pause();
+  activeLexAboutSound.currentTime=0;
+  activeLexAboutSound=null;
+ }
+ function open(){
+  stopLexAboutSound();
+  overlay.classList.add('is-open');overlay.setAttribute('aria-hidden','false');
+  document.body.style.overflow='hidden';showIntro();playLexAboutSound('intro');
+  overlay.querySelector('[data-about-close]').focus();
+ }
+ window.lexOpenAbout = open;
+ function close(){
+  stopLexAboutSound();characterVideo.pause();
+  overlay.classList.remove('is-open');overlay.setAttribute('aria-hidden','true');
+  document.body.style.overflow='';document.querySelector('[data-about-open]')?.focus();
+ }
+ document.querySelectorAll('[data-about-open]').forEach(btn=>btn.addEventListener('click',open));
+ overlay.querySelectorAll('[data-about-close]').forEach(btn=>btn.addEventListener('click',close));
+ tabs.forEach(tab=>tab.addEventListener('click',()=>{
+  const key=tab.dataset.aboutTab;
+  showPage(key);
+  playLexAboutSound(key);
+ }));
+ overlay.addEventListener('click',e=>{if(e.target===overlay)close()});
+ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&overlay.classList.contains('is-open'))close()});
+ [character,characterVideo].forEach(img=>{img.addEventListener('contextmenu',e=>e.preventDefault());img.addEventListener('dragstart',e=>e.preventDefault())});
+})();
+</script>
+<script>
+/* LEXIAA story controller: isolated from the dashboard module so unrelated
+   dashboard errors cannot leave the Continue button unbound. */
+(function(){
+  const $ = id => document.getElementById(id);
+  const pages = [
+    `Akhirnya kamu datang juga.\nAda sesuatu yang sejak lama ingin kuceritakan padamu.\nApa kamu tahu arti dari nama ini?\nLexiaa…\nSekarang, nama ini telah menjadi sesuatu yang berharga bagiku.\nTapi, sejak awal nama ini tidaklah istimewa.\nDi balik nama ini, ada sebuah kisah kecil yang belum pernah kuceritakan kepada siapa pun.`,
+    `Semuanya berawal dari seorang gadis.\nNamanya Lea.\nSaat itu, aku benar-benar menyayanginya.\nWaktu yang kami habiskan bersama, bahkan percakapan sederhana kami, semuanya adalah hal yang sangat berharga bagiku.\nNamun, hari-hari seperti itu tidak berlangsung lama.\nDia akhirnya pergi meninggalkanku.\nMeski begitu, namanya tetap tertinggal di dalam hatiku.`,
+    `Meski dia sudah tidak ada, perasaanku tidak bisa begitu saja menghilang.\nAku masih menyayanginya.\nDi suatu tempat dalam hatiku, aku masih ingin bertemu dengannya.\nTapi, aku tidak ingin orang lain mengetahui perasaan itu.\nKarena hanya dengan melihat namanya, seolah-olah semua orang bisa tahu bahwa aku belum bisa melupakannya.\nJadi, aku mulai berpikir.\nDaripada menggunakan nama aslinya begitu saja, bagaimana kalau aku mengubahnya sedikit?\nDan dari nama Lea, lahirlah…\nLexia.`,
+    `Aku mulai menggunakan nama itu di Mobile Legends.\nAwalnya, itu hanyalah nama dalam sebuah game.\nAku juga tidak berniat memberinya makna yang istimewa.\nNamun, meski musim terus berganti, aku tetap menggunakan nama itu berulang kali.\nLexiaa.\nTerkadang aku hanya menyebut diriku Lexia, dan terkadang juga menggunakan nama I'm Lexia.\nTanpa kusadari, nama itu bukan lagi sekadar nama dalam game.\nEntah sejak kapan, nama itu telah menjadi nama yang menggambarkan diriku sendiri.`,
+    `Dan suatu hari, aku ingin menciptakan sesuatu yang baru.\nSaat sedang memikirkan sebuah nama, aku tiba-tiba teringat pada nama yang sudah lama kugunakan.\nLexiaa.\nSebuah nama yang telah menemaniku melewati begitu banyak waktu.\nSebuah nama yang menyimpan banyak kenangan.\nKarena itulah, aku memilih nama tersebut.\nSekarang, nama itu juga digunakan untuk tempat yang telah kubangun ini.\nDulu, nama itu hanya lahir dari sebuah kenangan.\nNamun sekarang, nama itu telah menjadi salah satu hal yang berharga bagiku.\nInilah kisah di balik nama Lexiaa.`,
+    `Setiap kali mengingatnya, rasa sakit dan kesepian kembali datang.\nMeski begitu, aku tidak pernah membencinya.\nJustru, aku benar-benar berterima kasih kepadanya.\nKarena bertemu dengannya, aku belajar mencintai dan merindukan seseorang.\nSekarang, aku tak lagi berharap dia kembali.\nAku hanya berdoa agar dia bahagia.\nMeski mungkin, kami takkan pernah bertemu lagi.\nSemoga kau selalu bahagia.\nUntukmu, Lea.`
+  ];
+  let page=0, active=false, keyFrame=0, keyCanvas=null, keyCtx=null, keyLoop=false;
+  function setupCharacterKeyer(){
+    const video=$('lexStoryCharacterVideo'),canvas=$('lexStoryCharacterCanvas');
+    if(!video||!canvas||keyLoop)return;
+    keyCanvas=canvas;keyCtx=canvas.getContext('2d',{alpha:true,willReadFrequently:true});
+    const draw=()=>{
+      if(!keyLoop||!active)return;
+      if(video.readyState>=2 && video.videoWidth>0 && video.videoHeight>0){
+        const w=480,h=Math.max(1,Math.round(480*video.videoHeight/video.videoWidth));
+        if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h;}
+        keyCtx.drawImage(video,0,0,w,h);
+        const frame=keyCtx.getImageData(0,0,w,h),d=frame.data;
+        for(let i=0;i<d.length;i+=4){
+          const r=d[i],g=d[i+1],b=d[i+2];
+          // Conservative green-screen matte: protect neutral/pale silver hair,
+          // skin and white highlights from being mistaken for the green backdrop.
+          const greenExcess=g-Math.max(r,b);
+          const raw=Math.max(0,Math.min(1,(greenExcess-25)/30));
+          // Smooth the matte to avoid a hard, jagged cut around fine hair strands.
+          const key=raw*raw*(3-2*raw);
+          const alpha=(d[i+3]/255)*(1-key);
+          d[i+3]=Math.round(alpha*255);
+          // De-spill green only where the matte identifies green-screen pixels.
+          if(alpha>0.01 && key>0){
+            const spill=Math.min(1,key*0.9);
+            const neutral=Math.max(r,b);
+            d[i+1]=Math.round(g*(1-spill)+Math.min(g,neutral+5)*spill);
+          }
+        }
+        keyCtx.putImageData(frame,0,0);
+      }
+      keyFrame=requestAnimationFrame(draw);
+    };
+    keyLoop=true;
+    const startDraw=()=>{if(keyLoop&&!keyFrame)draw();};
+    video.addEventListener('loadeddata',startDraw);
+    video.addEventListener('playing',startDraw);
+    if(video.readyState>=2)startDraw();
+  }
+  function stopCharacterKeyer(){keyLoop=false;if(keyFrame)cancelAnimationFrame(keyFrame);keyFrame=0;}
+  function status(msg){const el=$('lexOriginStatus'); if(el)el.textContent=msg;}
+
+  // Audio-reactive dialogue glow. The analyser follows the actual voice energy
+  // in the current narration track (not a guessed timer).
+  let storyAudioContext=null, storyAnalyser=null, storyAudioSource=null, storyGlowFrame=0;
+  function startStoryVoiceGlow(){
+    const audio=$('lexStoryAudio'), bubble=$('lexStoryBubble');
+    if(!audio||!bubble)return;
+    try{
+      const AudioCtx=window.AudioContext||window.webkitAudioContext;
+      if(!AudioCtx)return;
+      if(!storyAudioContext){
+        storyAudioContext=new AudioCtx();
+        storyAnalyser=storyAudioContext.createAnalyser();
+        storyAnalyser.fftSize=256;
+        storyAnalyser.smoothingTimeConstant=.78;
+        storyAudioSource=storyAudioContext.createMediaElementSource(audio);
+        storyAudioSource.connect(storyAnalyser);
+        storyAnalyser.connect(storyAudioContext.destination);
+      }
+      storyAudioContext.resume().catch(()=>{});
+      if(storyGlowFrame)cancelAnimationFrame(storyGlowFrame);
+      const bins=new Uint8Array(storyAnalyser.frequencyBinCount);
+      const tick=()=>{
+        if(!active||audio.paused||audio.ended){
+          bubble.classList.remove('voice-speaking');
+          bubble.style.setProperty('--voice-glow','0');
+          storyGlowFrame=0;return;
+        }
+        storyAnalyser.getByteFrequencyData(bins);
+        let sum=0;for(let i=2;i<Math.min(22,bins.length);i++)sum+=bins[i];
+        const energy=Math.min(1,(sum/20)/105);
+        bubble.style.setProperty('--voice-glow',energy.toFixed(3));
+        bubble.classList.toggle('voice-speaking',energy>.055);
+        storyGlowFrame=requestAnimationFrame(tick);
+      };
+      storyGlowFrame=requestAnimationFrame(tick);
+    }catch(err){console.warn('LEXIAA audio glow unavailable:',err);}
+  }
+  function stopStoryVoiceGlow(){
+    if(storyGlowFrame)cancelAnimationFrame(storyGlowFrame);
+    storyGlowFrame=0;
+    const bubble=$('lexStoryBubble');
+    if(bubble){bubble.classList.remove('voice-speaking');bubble.style.setProperty('--voice-glow','0');}
+  }
+  function render(){
+    const textEl=$('lexStoryText');
+    textEl.replaceChildren();
+    const parts=pages[page].split(/(Lexiaa|Lea)/g);
+    parts.forEach(part=>{
+      if(part==='Lexiaa'||part==='Lea'){
+        const span=document.createElement('span');
+        span.className=part==='Lexiaa'?'lex-name-lexiaa':'lex-name-lea';
+        span.textContent=part;textEl.appendChild(span);
+      }else{textEl.appendChild(document.createTextNode(part));}
+    });
+    $('lexStoryCounter').textContent=String(page+1).padStart(2,'0')+' / 06';
+    $('lexStoryPrev').disabled=page===0;
+    $('lexStoryNext').textContent=page===5?'SELESAI ✓':'BERIKUTNYA →';
+    const a=$('lexStoryAudio');
+    if(a){
+      a.pause(); a.currentTime=0;
+      const nextSrc=`./lexiaa-story-audio-${page+1}.wav`;
+      if(a.getAttribute('src')!==nextSrc){a.src=nextSrc;a.load();}
+      a.play().then(()=>startStoryVoiceGlow()).catch(err=>console.warn('LEXIAA story audio:',err));
+    }
+  }
+  window.lexOpenSecretStory = openStory;
+  function openStory(){page=0;active=true;$('lexOriginGate').classList.remove('open');$('lexOriginGate').setAttribute('aria-hidden','true');$('lexOriginStory').classList.add('open');$('lexOriginStory').setAttribute('aria-hidden','false');document.body.style.overflow='hidden';render();startStoryVoiceGlow();try{document.documentElement.requestFullscreen?.().catch(()=>{});screen.orientation?.lock?.('landscape').catch(()=>{});}catch(e){}}
+  function closeStory(){stopStoryVoiceGlow();const a=$('lexStoryAudio');a.pause();a.removeAttribute('src');a.load();const v=$('lexStoryCharacterVideo');stopCharacterKeyer();if(v){v.pause();v.currentTime=0;}active=false;$('lexOriginStory').classList.remove('open');$('lexOriginStory').setAttribute('aria-hidden','true');document.body.style.overflow='';try{screen.orientation?.unlock?.();if(document.fullscreenElement)document.exitFullscreen?.().catch(()=>{});}catch(e){}}
+  function init(){
+    const form=$('lexOriginForm'); if(!form || form.dataset.standaloneReady==='1')return;
+    form.dataset.standaloneReady='1'; form.dataset.handlerReady='1';
+    const characterVideo=$('lexStoryCharacterVideo');
+    if(characterVideo){
+      characterVideo.addEventListener('contextmenu',e=>e.preventDefault());
+      characterVideo.addEventListener('dragstart',e=>e.preventDefault());
+    }
+
+    $('lexOriginOpen')?.addEventListener('click',()=>{$('lexOriginGate').classList.add('open');$('lexOriginGate').setAttribute('aria-hidden','false');status('');$('lexIssuedCode').textContent='KODE AKAN MUNCUL DI SINI';$('lexOriginCode').value='';});
+    $('lexOriginClose')?.addEventListener('click',()=>{$('lexOriginGate').classList.remove('open');$('lexOriginGate').setAttribute('aria-hidden','true');});
+    $('lexGetCode')?.addEventListener('click',()=>{
+      if(typeof window.lexIssueOriginCode==='function') window.lexIssueOriginCode();
+      else status('Sistem kode belum siap. Muat ulang halaman dan coba lagi.');
+    });
+
+    $('lexStoryFullscreen')?.addEventListener('click',async()=>{
+      const story=$('lexOriginStory');
+      try{
+        if(!document.fullscreenElement && story.requestFullscreen) await story.requestFullscreen();
+        else if(document.fullscreenElement) await document.exitFullscreen();
+        screen.orientation?.lock?.('landscape').catch(()=>{});
+      }catch(err){status('Mode fullscreen tidak didukung browser ini. Tampilan tetap memenuhi layar.');}
+    });
+    $('lexStoryAudio')?.addEventListener('play',startStoryVoiceGlow);
+    $('lexStoryAudio')?.addEventListener('pause',stopStoryVoiceGlow);
+    $('lexStoryAudio')?.addEventListener('ended',stopStoryVoiceGlow);
+    $('lexOriginStory')?.addEventListener('pointerdown',()=>{
+      const a=$('lexStoryAudio');
+      if(active && a && a.paused) a.play().catch(err=>console.warn('LEXIAA story audio:',err));
+    },{passive:true});
+
+    form.addEventListener('submit',async e=>{
+      e.preventDefault();e.stopPropagation();
+      const b=$('lexContinue'),code=$('lexOriginCode').value.trim().toUpperCase(),client=window.lexSupabaseClient;
+      if(!client){status('Koneksi Supabase belum siap. Muat ulang halaman.');return;}
+      b.disabled=true;b.textContent='MEMERIKSA...';status('Memeriksa kode...');
+      try{const {data:{session},error:se}=await client.auth.getSession();if(se)throw se;if(!session)throw new Error('Sesi login tidak ditemukan. Silakan login kembali.');const {data,error}=await client.rpc('lexiaa_consume_origin_code',{p_code:code});if(error)throw error;const ok=data===true||data==='true'||data?.success===true||data?.valid===true||data?.consumed===true;if(!ok)throw new Error(typeof data==='string'&&data?data:'Kode tidak valid, sudah dipakai, atau kedaluwarsa.');openStory();}
+      catch(err){console.error('LEXIAA consume:',err);status(err.message||'Kode tidak dapat digunakan.');}finally{b.disabled=false;b.textContent='LANJUTKAN';}
+    });
+    $('lexStoryPrev')?.addEventListener('click',()=>{if(page>0){page--;render();}});
+    $('lexStoryNext')?.addEventListener('click',()=>{if(page<5){page++;render();}else closeStory();});
+    $('lexStoryExit')?.addEventListener('click',closeStory);
+    document.addEventListener('keydown',e=>{if(e.key==='Escape'&&active)closeStory();});
+    window.addEventListener('pagehide',()=>{if(active)closeStory();});
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+})();
+</script>
+
+\n
+
+
 <div id="lexiaaAccessRequestModal" role="dialog" aria-modal="true" aria-labelledby="lexiaaAccessRequestTitle" aria-hidden="true">
- <section class="lex-access-panel">
-  <p class="modal-kicker">LEXIAA / ACCESS CONTROL</p>
-  <h2 id="lexiaaAccessRequestTitle">MENU SEMENTARA DIKUNCI</h2>
-  <p>Untuk sementara, menu <b>LEXIAA GUIDE</b> dan <b>LEXIAA SECRET STORY</b> hanya dapat diakses oleh Tim ADMIN.</p>
-  <div class="lex-access-lock" aria-hidden="true">🔒</div>
-  <button type="button" class="lex-access-contact" id="lexiaaAccessContact">✉ KLIK DI SINI UNTUK MENGHUBUNGI ADMIN</button>
- </section>
+ <section class="lex-access-panel"><p class="modal-kicker">LEXIAA / ACCESS CONTROL</p><h2 id="lexiaaAccessRequestTitle">MENU SEMENTARA DIKUNCI</h2><p>Untuk sementara, menu <b>LEXIAA GUIDE</b> dan <b>LEXIAA SECRET STORY</b> hanya dapat diakses oleh Tim ADMIN.</p><div class="lex-access-lock" aria-hidden="true">🔒</div><button type="button" class="lex-access-contact" id="lexiaaAccessContact">✉ KLIK DI SINI UNTUK MENGHUBUNGI ADMIN</button></section>
 </div>
 <div id="lexiaaAccessChatModal" role="dialog" aria-modal="true" aria-labelledby="lexiaaAccessChatTitle" aria-hidden="true">
- <section class="lex-access-panel">
-  <p class="modal-kicker">LEXIAA / ADMIN CONTACT</p>
-  <h2 id="lexiaaAccessChatTitle">HUBUNGI TIM ADMIN</h2>
-  <p>Sampaikan pesan atau permintaan Anda. Tulis pesan dengan bebas pada kolom di bawah ini.</p>
-  <textarea id="lexiaaAccessRequestMessage" maxlength="2000" placeholder="Tulis pesan kamu untuk admin..." aria-label="Pesan untuk admin"></textarea>
-  <div class="lex-access-actions">
-   <button type="button" id="lexiaaAccessSend">KIRIM PESAN</button>
-   <button type="button" class="secondary" id="lexiaaAccessChatClose">KEMBALI</button>
-  </div>
-  <p id="lexiaaAccessRequestStatus" role="status" aria-live="polite"></p>
- </section>
+ <section class="lex-access-panel"><p class="modal-kicker">LEXIAA / ADMIN CONTACT</p><h2 id="lexiaaAccessChatTitle">HUBUNGI TIM ADMIN</h2><p>Sampaikan pesan atau permintaan Anda. Tulis pesan dengan bebas pada kolom di bawah ini.</p><textarea id="lexiaaAccessRequestMessage" maxlength="2000" placeholder="Tulis pesan kamu untuk admin..." aria-label="Pesan untuk admin"></textarea><div class="lex-access-actions"><button type="button" id="lexiaaAccessSend">KIRIM PESAN</button><button type="button" class="secondary" id="lexiaaAccessChatClose">KEMBALI</button></div><p id="lexiaaAccessRequestStatus" role="status" aria-live="polite"></p></section>
 </div>
 <script id="lexiaa-access-request-script">
 (()=>{
- const modal=document.getElementById('lexiaaAccessRequestModal');
- const chatModal=document.getElementById('lexiaaAccessChatModal');
- const message=document.getElementById('lexiaaAccessRequestMessage');
- const send=document.getElementById('lexiaaAccessSend');
- const status=document.getElementById('lexiaaAccessRequestStatus');
- const contact=document.getElementById('lexiaaAccessContact');
- if(!modal||!chatModal||!message||!send)return;
- const isUnlocked=()=>sessionStorage.getItem('lexiaa_menu_access')==='granted';
- const show=(el)=>{el.classList.add('open');el.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';};
- const hide=(el)=>{el.classList.remove('open');el.setAttribute('aria-hidden','true');};
- const openModal=()=>show(modal);
- const closeAll=()=>{hide(chatModal);hide(modal);document.body.style.overflow='';};
- contact?.addEventListener('click',()=>{hide(modal);show(chatModal);status.textContent='';message.focus();});
- document.getElementById('lexiaaAccessChatClose')?.addEventListener('click',()=>{hide(chatModal);show(modal);});
- document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(chatModal.classList.contains('open')){hide(chatModal);show(modal);}else if(modal.classList.contains('open'))closeAll();}});
- modal.addEventListener('click',e=>{if(e.target===modal)closeAll();});
- chatModal.addEventListener('click',e=>{if(e.target===chatModal){hide(chatModal);show(modal);}});
- // Capture phase prevents the existing Guide/Story click handlers from opening their old dialogs while locked.
+ const modal=document.getElementById('lexiaaAccessRequestModal'),chat=document.getElementById('lexiaaAccessChatModal'),message=document.getElementById('lexiaaAccessRequestMessage'),send=document.getElementById('lexiaaAccessSend'),status=document.getElementById('lexiaaAccessRequestStatus'),contact=document.getElementById('lexiaaAccessContact');
+ if(!modal||!chat||!message||!send)return;
+ const unlocked=()=>sessionStorage.getItem('lexiaa_menu_access')==='granted';
+ const show=el=>{el.classList.add('open');el.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';};
+ const hide=el=>{el.classList.remove('open');el.setAttribute('aria-hidden','true');};
+ const close=()=>{hide(chat);hide(modal);document.body.style.overflow='';};
+ contact.addEventListener('click',()=>{hide(modal);show(chat);status.textContent='';message.focus();});
+ document.getElementById('lexiaaAccessChatClose')?.addEventListener('click',()=>{hide(chat);show(modal);});
+ document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(chat.classList.contains('open')){hide(chat);show(modal);}else if(modal.classList.contains('open'))close();}});
+ modal.addEventListener('click',e=>{if(e.target===modal)close();});
+ chat.addEventListener('click',e=>{if(e.target===chat){hide(chat);show(modal);}});
  document.addEventListener('click',e=>{
-  const guide=e.target.closest?.('[data-about-open]');
-  const story=e.target.closest?.('#lexOriginOpen');
+  const guide=e.target.closest?.('[data-about-open]'),story=e.target.closest?.('#lexOriginOpen');
   if(!guide&&!story)return;
-  if(isUnlocked()){
-   e.preventDefault();e.stopImmediatePropagation();
-   if(guide)window.lexOpenAbout?.();
-   if(story)window.lexOpenSecretStory?.();
-   return;
-  }
-  e.preventDefault();e.stopImmediatePropagation();openModal();
+  if(unlocked()){e.preventDefault();e.stopImmediatePropagation();if(guide)window.lexOpenAbout?.();if(story)window.lexOpenSecretStory?.();return;}
+  e.preventDefault();e.stopImmediatePropagation();show(modal);
  },true);
  send.addEventListener('click',async()=>{
-  const text=message.value.trim();
-  if(!text){status.textContent='Tulis pesan terlebih dahulu.';message.focus();return;}
-  const client=window.lexSupabaseClient;
-  if(!client){status.textContent='Koneksi belum siap. Muat ulang halaman.';return;}
+  const msg=message.value.trim();if(!msg){status.textContent='Tulis pesan terlebih dahulu.';message.focus();return;}
+  const client=window.lexSupabaseClient;if(!client){status.textContent='Koneksi belum siap. Muat ulang halaman.';return;}
   send.disabled=true;send.textContent='MENGIRIM...';status.textContent='Mengirim pesan ke admin...';
   try{
-   const {data:{session},error:sessionError}=await client.auth.getSession();
-   if(sessionError)throw sessionError;
-   if(!session)throw new Error('Silakan login terlebih dahulu agar admin dapat mengetahui pengirim pesan.');
-   const {data,error}=await client.functions.invoke('lexiaa-access-request',{body:{message:text}});
-   if(error)throw error;
-   if(data?.access_granted===true){
-    sessionStorage.setItem('lexiaa_menu_access','granted');
-    status.textContent='Kata kunci benar. Kedua menu sekarang terbuka.';
-    message.value='';
-    window.setTimeout(()=>{closeAll();},900);
-   }else{
-    status.textContent='Pesan berhasil dikirim ke admin. Terima kasih sudah menghubungi kami.';
-    message.value='';
-   }
-  }catch(err){
-   console.error('LEXIAA access request:',err);
-   status.textContent=err?.message||'Pesan gagal dikirim. Coba lagi.';
-  }finally{send.disabled=false;send.textContent='KIRIM PESAN';}
+   const {data:{session},error:se}=await client.auth.getSession();if(se)throw se;if(!session)throw new Error('Silakan login terlebih dahulu agar admin dapat mengetahui pengirim pesan.');
+   const {data,error}=await client.functions.invoke('lexiaa-access-request',{body:{message:msg}});if(error)throw error;
+   if(data?.access_granted===true){sessionStorage.setItem('lexiaa_menu_access','granted');status.textContent='Kata kunci benar. Kedua menu sekarang terbuka.';message.value='';window.setTimeout(close,900);}
+   else{status.textContent='Pesan berhasil dikirim ke admin. Terima kasih sudah menghubungi kami.';message.value='';}
+  }catch(err){console.error('LEXIAA access request:',err);status.textContent=err?.message||'Pesan gagal dikirim. Coba lagi.';}
+  finally{send.disabled=false;send.textContent='KIRIM PESAN';}
  });
 })();
 </script>
