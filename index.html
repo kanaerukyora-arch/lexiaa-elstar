@@ -3233,8 +3233,8 @@ button, a, input, select, textarea { touch-action:manipulation; }
   apply(languages[saved]?saved:detect());
   document.querySelectorAll('.lex-language-control select').forEach(select=>select.addEventListener('change',()=>apply(select.value)));
   if(observer)observer.disconnect();
-  observer=new MutationObserver(records=>{for(const record of records){if(record.type==='childList'){record.addedNodes&&record.addedNodes.forEach(node=>applyNode(node,current));}else if(record.type==='characterData'){applyNode(record.target,current);}}});
-  observer.observe(document.body,{childList:true,subtree:true,characterData:true});
+  observer=new MutationObserver(records=>{for(const record of records){if(record.type==='childList'){record.addedNodes&&record.addedNodes.forEach(node=>applyNode(node,current));}else if(record.type==='characterData'){applyNode(record.target,current);}else if(record.type==='attributes'){applyNode(record.target,current);}}});
+  observer.observe(document.body,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['placeholder','aria-label','title']});
  }
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
  window.LEXIAA_LANGUAGE={get current(){return current;},get region(){return languages[current].region;},set:apply,available:Object.keys(languages)};
