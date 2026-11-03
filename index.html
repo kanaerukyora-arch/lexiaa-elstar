@@ -1017,6 +1017,19 @@ button, a, input, select, textarea { touch-action:manipulation; }
 }
 </style>
 
+
+<style id="lexiaa-access-request-styles">
+#lexiaaAccessRequestModal{position:fixed;inset:0;z-index:999999;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(3,5,10,.82);backdrop-filter:blur(12px)}
+#lexiaaAccessRequestModal.open{display:flex}
+#lexiaaAccessRequestModal .lex-access-panel{width:min(100%,520px);padding:clamp(22px,5vw,34px);border:1px solid rgba(210,225,255,.24);border-radius:22px;background:linear-gradient(145deg,#171b25,#090b10);box-shadow:0 24px 90px rgba(0,0,0,.65)}
+#lexiaaAccessRequestModal h2{margin:8px 0 12px;font:700 clamp(20px,4vw,27px) Orbitron, sans-serif;letter-spacing:.04em}
+#lexiaaAccessRequestModal p{color:#c4cad5;line-height:1.65}
+#lexiaaAccessRequestModal textarea{display:block;width:100%;min-height:120px;resize:vertical;margin:18px 0 12px;padding:14px;border:1px solid #444b5a;border-radius:12px;background:#090c12;color:#fff;font:inherit}
+#lexiaaAccessRequestModal .lex-access-actions{display:flex;gap:10px;flex-wrap:wrap}
+#lexiaaAccessRequestModal button{padding:12px 18px;border:1px solid #aebbd0;border-radius:999px;background:#e9edf5;color:#111722;font-weight:800;cursor:pointer}
+#lexiaaAccessRequestModal button.secondary{background:transparent;color:#e9edf5}
+#lexiaaAccessRequestStatus{min-height:24px;font-size:13px;color:#c6d7ff}
+</style>
 </head>
 <body>
   <div id="appLoader" role="status" aria-label="Memuat LEXIAA">
@@ -2428,6 +2441,7 @@ button, a, input, select, textarea { touch-action:manipulation; }
   document.body.style.overflow='hidden';showIntro();playLexAboutSound('intro');
   overlay.querySelector('[data-about-close]').focus();
  }
+ window.lexOpenAbout = open;
  function close(){
   stopLexAboutSound();characterVideo.pause();
   overlay.classList.remove('is-open');overlay.setAttribute('aria-hidden','true');
@@ -2565,6 +2579,7 @@ button, a, input, select, textarea { touch-action:manipulation; }
       a.play().then(()=>startStoryVoiceGlow()).catch(err=>console.warn('LEXIAA story audio:',err));
     }
   }
+  window.lexOpenSecretStory = openStory;
   function openStory(){page=0;active=true;$('lexOriginGate').classList.remove('open');$('lexOriginGate').setAttribute('aria-hidden','true');$('lexOriginStory').classList.add('open');$('lexOriginStory').setAttribute('aria-hidden','false');document.body.style.overflow='hidden';render();startStoryVoiceGlow();try{document.documentElement.requestFullscreen?.().catch(()=>{});screen.orientation?.lock?.('landscape').catch(()=>{});}catch(e){}}
   function closeStory(){stopStoryVoiceGlow();const a=$('lexStoryAudio');a.pause();a.removeAttribute('src');a.load();const v=$('lexStoryCharacterVideo');stopCharacterKeyer();if(v){v.pause();v.currentTime=0;}active=false;$('lexOriginStory').classList.remove('open');$('lexOriginStory').setAttribute('aria-hidden','true');document.body.style.overflow='';try{screen.orientation?.unlock?.();if(document.fullscreenElement)document.exitFullscreen?.().catch(()=>{});}catch(e){}}
   function init(){
@@ -2618,6 +2633,82 @@ button, a, input, select, textarea { touch-action:manipulation; }
 </script>
 
 \n
+
+
+<div id="lexiaaAccessRequestModal" role="dialog" aria-modal="true" aria-labelledby="lexiaaAccessRequestTitle" aria-hidden="true">
+ <section class="lex-access-panel">
+  <p class="modal-kicker">LEXIAA / ACCESS CONTROL</p>
+  <h2 id="lexiaaAccessRequestTitle">MENU SEMENTARA DIKUNCI</h2>
+  <p>Untuk sementara, menu <b>LEXIAA GUIDE</b> dan <b>LEXIAA SECRET STORY</b> hanya dapat diakses setelah memperoleh izin admin.</p>
+  <p>Jika ingin meminta bantuan, silakan kirim pesan kepada admin melalui kolom berikut.</p>
+  <textarea id="lexiaaAccessRequestMessage" maxlength="2000" placeholder="Tulis pesan kamu untuk admin..." aria-label="Pesan untuk admin"></textarea>
+  <div class="lex-access-actions">
+   <button type="button" id="lexiaaAccessSend">MINTA BANTUAN ADMIN</button>
+   <button type="button" class="secondary" id="lexiaaAccessClose">TUTUP</button>
+  </div>
+  <p id="lexiaaAccessRequestStatus" role="status" aria-live="polite"></p>
+ </section>
+</div>
+<script id="lexiaa-access-request-script">
+(()=>{
+ const modal=document.getElementById('lexiaaAccessRequestModal');
+ const message=document.getElementById('lexiaaAccessRequestMessage');
+ const send=document.getElementById('lexiaaAccessSend');
+ const status=document.getElementById('lexiaaAccessRequestStatus');
+ if(!modal||!message||!send)return;
+ const isUnlocked=()=>sessionStorage.getItem('lexiaa_menu_access')==='granted';
+ const openModal=()=>{
+  modal.classList.add('open');modal.setAttribute('aria-hidden','false');
+  document.body.style.overflow='hidden';status.textContent='';message.focus();
+ };
+ const closeModal=()=>{
+  modal.classList.remove('open');modal.setAttribute('aria-hidden','true');
+  document.body.style.overflow='';
+ };
+ document.getElementById('lexiaaAccessClose')?.addEventListener('click',closeModal);
+ modal.addEventListener('click',e=>{if(e.target===modal)closeModal();});
+ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&modal.classList.contains('open'))closeModal();});
+ // Capture phase prevents the existing Guide/Story click handlers from opening their old dialogs while locked.
+ document.addEventListener('click',e=>{
+  const guide=e.target.closest?.('[data-about-open]');
+  const story=e.target.closest?.('#lexOriginOpen');
+  if(!guide&&!story)return;
+  if(isUnlocked()){
+   e.preventDefault();e.stopImmediatePropagation();
+   if(guide)window.lexOpenAbout?.();
+   if(story)window.lexOpenSecretStory?.();
+   return;
+  }
+  e.preventDefault();e.stopImmediatePropagation();openModal();
+ },true);
+ send.addEventListener('click',async()=>{
+  const text=message.value.trim();
+  if(!text){status.textContent='Tulis pesan terlebih dahulu.';message.focus();return;}
+  const client=window.lexSupabaseClient;
+  if(!client){status.textContent='Koneksi belum siap. Muat ulang halaman.';return;}
+  send.disabled=true;send.textContent='MENGIRIM...';status.textContent='Mengirim pesan ke admin...';
+  try{
+   const {data:{session},error:sessionError}=await client.auth.getSession();
+   if(sessionError)throw sessionError;
+   if(!session){throw new Error('Silakan login terlebih dahulu agar admin dapat mengetahui pengirim pesan.');}
+   const {data,error}=await client.functions.invoke('lexiaa-access-request',{body:{message:text}});
+   if(error)throw error;
+   if(data?.access_granted===true){
+    sessionStorage.setItem('lexiaa_menu_access','granted');
+    status.textContent='Kode akses benar. Kedua menu sekarang terbuka.';
+    message.value='';
+    window.setTimeout(()=>{closeModal();},900);
+   }else{
+    status.textContent='Pesan berhasil dikirim ke admin. Terima kasih sudah menghubungi kami.';
+    message.value='';
+   }
+  }catch(err){
+   console.error('LEXIAA access request:',err);
+   status.textContent=err?.message||'Pesan gagal dikirim. Coba lagi.';
+  }finally{send.disabled=false;send.textContent='MINTA BANTUAN ADMIN';}
+ });
+})();
+</script>
 
 </body>
 </html>
