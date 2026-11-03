@@ -3222,8 +3222,11 @@ button, a, input, select, textarea { touch-action:manipulation; }
     const store='lxOriginal'+attr.replace(/[^a-z]/gi,'');
     if(!original)node.dataset[store]=node.getAttribute(attr)||'';
     const source=node.dataset[store];
-    if(source&&languages[lang].dict[normalize(source)]!==undefined)node.setAttribute(attr,languages[lang].dict[normalize(source)]);
-    else if(source)node.setAttribute(attr,source);
+    if(source){
+     const translated=languages[lang].dict[normalize(source)];
+     const output=translated!==undefined?translated:source;
+     if(node.getAttribute(attr)!==output)node.setAttribute(attr,output);
+    }
    }
    node.childNodes.forEach(child=>applyNode(child,lang));
   }
