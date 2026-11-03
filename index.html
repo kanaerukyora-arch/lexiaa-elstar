@@ -2726,7 +2726,7 @@ button, a, input, select, textarea { touch-action:manipulation; }
 (()=>{
  const modal=document.getElementById('lexiaaAccessRequestModal'),chat=document.getElementById('lexiaaAccessChatModal'),message=document.getElementById('lexiaaAccessRequestMessage'),send=document.getElementById('lexiaaAccessSend'),status=document.getElementById('lexiaaAccessRequestStatus'),contact=document.getElementById('lexiaaAccessContact');
  if(!modal||!chat||!message||!send)return;
- const unlocked=()=>sessionStorage.getItem('lexiaa_menu_access')==='granted';
+ let pendingMenu=null;
  const show=el=>{el.classList.add('open');el.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';};
  const hide=el=>{el.classList.remove('open');el.setAttribute('aria-hidden','true');};
  const close=()=>{hide(chat);hide(modal);document.body.style.overflow='';};
@@ -2735,11 +2735,13 @@ button, a, input, select, textarea { touch-action:manipulation; }
  document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(chat.classList.contains('open')){hide(chat);show(modal);}else if(modal.classList.contains('open'))close();}});
  modal.addEventListener('click',e=>{if(e.target===modal)close();});
  chat.addEventListener('click',e=>{if(e.target===chat){hide(chat);show(modal);}});
+ // Every fresh entry is locked. A successful code opens only the menu the visitor selected.
  document.addEventListener('click',e=>{
   const guide=e.target.closest?.('[data-about-open]'),story=e.target.closest?.('#lexOriginOpen');
   if(!guide&&!story)return;
-  if(unlocked()){e.preventDefault();e.stopImmediatePropagation();if(guide)window.lexOpenAbout?.();if(story)window.lexOpenSecretStory?.();return;}
-  e.preventDefault();e.stopImmediatePropagation();show(modal);
+  e.preventDefault();e.stopImmediatePropagation();
+  pendingMenu=guide?'guide':'story';
+  show(modal);
  },true);
  send.addEventListener('click',async()=>{
   const msg=message.value.trim();if(!msg){status.textContent='Tulis pesan terlebih dahulu.';message.focus();return;}
@@ -2748,8 +2750,16 @@ button, a, input, select, textarea { touch-action:manipulation; }
   try{
    const {data:{session},error:se}=await client.auth.getSession();if(se)throw se;if(!session)throw new Error('Silakan login terlebih dahulu agar admin dapat mengetahui pengirim pesan.');
    const {data,error}=await client.functions.invoke('lexiaa-access-request',{body:{message:msg}});if(error)throw error;
-   if(data?.access_granted===true){sessionStorage.setItem('lexiaa_menu_access','granted');status.textContent='Kata kunci benar. Kedua menu sekarang terbuka.';message.value='';window.setTimeout(close,900);}
-   else{status.textContent='Pesan berhasil dikirim ke admin. Terima kasih sudah menghubungi kami.';message.value='';}
+   if(data?.access_granted===true){
+    const destination=pendingMenu;
+    status.textContent='Kata kunci benar. Membuka menu pilihan Anda...';message.value='';
+    window.setTimeout(()=>{
+     close();
+     if(destination==='guide')window.lexOpenAbout?.();
+     else if(destination==='story')window.lexOpenSecretStory?.();
+     pendingMenu=null;
+    },650);
+   }else{status.textContent='Pesan berhasil dikirim ke admin. Terima kasih sudah menghubungi kami.';message.value='';}
   }catch(err){console.error('LEXIAA access request:',err);status.textContent=err?.message||'Pesan gagal dikirim. Coba lagi.';}
   finally{send.disabled=false;send.textContent='KIRIM PESAN';}
  });
