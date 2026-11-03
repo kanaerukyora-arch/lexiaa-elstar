@@ -1188,7 +1188,12 @@ html[data-lexiaa-theme] .live-time,html[data-lexiaa-theme] .live-greeting{color:
 @keyframes ngSpin{to{transform:rotate(360deg)}}@keyframes ngPortal{50%{transform:scale(.86);opacity:.45}}@keyframes lexNGFade{from{opacity:0}to{opacity:1}}
 @media(prefers-reduced-motion:reduce){.lex-nextgen-card:before,.lex-nextgen-card h3,.ng-loader-ring,#lexiaaNextGenTransition.phase-final:before{animation-duration:3s!important}}
 </style>
-<script id="lexiaa-nextgen-persistent-home">(()=>{try{if(localStorage.getItem('lexiaa-nextgen-mode')==='1'&&!location.pathname.endsWith('/next-generation.html'))location.replace('./next-generation.html');}catch(e){}})();</script>\n</head>
+<script id="lexiaa-nextgen-persistent-home">
+(()=>{try{
+ const mode=localStorage.getItem('lexiaa-last-experience')||'old';
+ if(mode==='next')location.replace('./next-generation.html');
+}catch(e){}})();
+</script>\n</head>
 <body>
   <div id="appLoader" role="status" aria-label="Memuat LEXIAA">
     <div class="loader-inner">
