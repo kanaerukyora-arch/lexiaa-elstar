@@ -2911,6 +2911,7 @@ button, a, input, select, textarea { touch-action:manipulation; }
   const out=document.getElementById('lexiaaWrResult1');
   try{readStats('lexiaaWrMatches1','lexiaaWrRate1');}
   catch(e){out.classList.remove('show');alert(e.message);return;}
+  out.classList.remove('show');
   withLoading(button,()=>{
    const x=readStats('lexiaaWrMatches1','lexiaaWrRate1');
    document.getElementById('lexiaaWrWins').textContent=x.wins.toLocaleString('id-ID');
@@ -2930,6 +2931,7 @@ button, a, input, select, textarea { touch-action:manipulation; }
    if(!targetRaw.trim()||!Number.isFinite(target)||target<0||target>100)throw new Error('Masukkan WR tujuan antara 0 sampai 100%.');
    needed=requiredWins(x.matches,x.wins,targetRaw);
   }catch(e){out.classList.remove('show');alert(e.message);return;}
+  out.classList.remove('show');
   withLoading(button,()=>{
    const value=requiredWins(x.matches,x.wins,targetRaw);
    const note=document.getElementById('lexiaaWrTargetNote');
