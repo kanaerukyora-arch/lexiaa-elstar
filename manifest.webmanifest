@@ -4,7 +4,7 @@
   "description": "LEXIAA The Next Generation immersive fantasy dashboard",
   "start_url": "./next-generation.html",
   "scope": "./",
-  "display": "fullscreen",
+  "display": "standalone",
   "orientation": "any",
   "background_color": "#08090c",
   "theme_color": "#08090c",
@@ -17,7 +17,6 @@
     }
   ],
   "display_override": [
-    "fullscreen",
     "standalone"
   ]
 }
