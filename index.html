@@ -835,7 +835,7 @@ html[data-lexiaa-theme="sakura"]{--lx-live-accent:#ffb5d2;--lx-live-glow:rgba(25
 html[data-lexiaa-theme="ocean"]{--lx-live-accent:#83dcff;--lx-live-glow:rgba(65,180,255,.22)}
 html[data-lexiaa-theme="emerald"]{--lx-live-accent:#8ef0c0;--lx-live-glow:rgba(63,220,151,.2)}
 html[data-lexiaa-theme="midnight"]{--lx-live-accent:#c9a7ff;--lx-live-glow:rgba(176,119,255,.2)}
-.sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}\n.live-greeting{margin-top:10px;color:var(--lx-live-accent);font-size:10px;letter-spacing:.16em;font-weight:800;text-shadow:0 0 16px var(--lx-live-glow)}
+.sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}\n.live-greeting{display:inline-block;margin:0 0 15px;padding:9px 13px;border:1px solid var(--lx-live-accent);border-radius:999px;background:var(--lx-live-glow);color:var(--lx-live-accent);font-size:11px;line-height:1.5;letter-spacing:.08em;font-weight:800;text-shadow:0 0 16px var(--lx-live-glow);box-shadow:0 0 18px var(--lx-live-glow)}
 .lexiaa-tools{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
 .lexiaa-tool-select,.lexiaa-tool-btn{min-height:34px;border:1px solid #77718b;border-radius:9px;background:#14131c;color:#f3efff;padding:7px 10px;font-size:10px;font-weight:700;letter-spacing:.04em}
 .lexiaa-tool-select:focus-visible,.lexiaa-tool-btn:focus-visible{outline:2px solid var(--lx-live-accent);outline-offset:2px}
@@ -1173,6 +1173,7 @@ html[data-lexiaa-theme] .live-time,html[data-lexiaa-theme] .live-greeting{color:
       <section id="homeView" class="view active">
         <div class="hero home-hero">
           <div class="home-copy-block">
+            <p class="live-greeting" id="lexiaaLivingGreeting">SELAMAT PAGI! SENANG MELIHATMU KEMBALI DI LEXIAA.</p>
             <p class="eyebrow home-welcome">SELAMAT DATANG DI</p>
             <h1 class="logo home-logo">LEXIAA</h1>
             <p class="subtitle home-subtitle">THE DEVELOPER OTW</p>
@@ -1189,7 +1190,7 @@ html[data-lexiaa-theme] .live-time,html[data-lexiaa-theme] .live-greeting{color:
             <div class="live-time" data-live-time>00:00:00</div>
             <div class="live-date" data-live-date>MEMUAT TANGGAL...</div>
             <div class="live-location" data-live-location>LOKASI: INDONESIA · WAKTU LOKAL</div>
-            <div class="live-greeting" id="lexiaaLivingGreeting">GOOD DAY · YOUR SPACE IS READY</div>
+            
             <div class="lexiaa-network-status" id="lexiaaNetworkStatus" role="status">● ONLINE</div>
           </div>
         </div>
@@ -3431,7 +3432,7 @@ const themeKey='lexiaa-theme-v1';
  const applyTheme=value=>{const allowed=['midnight','sakura','ocean','emerald'];const theme=allowed.includes(value)?value:'midnight';document.documentElement.dataset.lexiaaTheme=theme;if(themeSelect)themeSelect.value=theme;try{localStorage.setItem(themeKey,theme)}catch(e){}};
  try{applyTheme(localStorage.getItem(themeKey)||'midnight')}catch(e){applyTheme('midnight')}
  themeSelect?.addEventListener('change',()=>applyTheme(themeSelect.value));
- function updateGreeting(){if(!greeting)return;const hour=new Date().getHours();const index=hour<11?3:hour<15?4:hour<19?5:6;greeting.textContent=t()[index]+' · '+t()[2];}
+ function updateGreeting(){if(!greeting)return;const hour=new Date().getHours();const index=hour<11?3:hour<15?4:hour<19?5:6;const lang=getLang();const welcome={id:'Senang melihatmu kembali di Lexiaa.',en:'It’s good to see you back at Lexiaa.',ja:'Lexiaaへおかえりなさい。',ko:'Lexiaa에 다시 오신 것을 환영합니다.',zh:'欢迎回到 Lexiaa。',th:'ยินดีที่ได้พบคุณอีกครั้งที่ Lexiaa',fr:'Ravi de vous retrouver sur Lexiaa.',de:'Schön, dass du wieder bei Lexiaa bist.',es:'Qué bueno verte de nuevo en Lexiaa.',pt:'Que bom ter você de volta ao Lexiaa.'};greeting.textContent=t()[index]+'! '+(welcome[lang]||welcome.en);}
  function updateNetwork(){const el=document.getElementById('lexiaaNetworkStatus');if(!el)return;const online=navigator.onLine;const lang=getLang();const labels={id:['● ONLINE','● OFFLINE'],en:['● ONLINE','● OFFLINE'],ja:['● オンライン','● オフライン'],ko:['● 온라인','● 오프라인'],zh:['● 在线','● 离线'],th:['● ออนไลน์','● ออฟไลน์'],fr:['● EN LIGNE','● HORS LIGNE'],de:['● ONLINE','● OFFLINE'],es:['● EN LÍNEA','● SIN CONEXIÓN'],pt:['● ONLINE','● OFFLINE']};el.textContent=(labels[lang]||labels.en)[online?0:1];el.classList.toggle('is-offline',!online);}
  function openChangelog(){if(!overlay)return;overlay.classList.add('is-open');document.body.style.overflow='hidden';closeBtn?.focus();}
  function closeChangelog(){overlay?.classList.remove('is-open');document.body.style.overflow='';openBtn?.focus();}
