@@ -5,7 +5,7 @@
   "start_url": "./next-generation.html",
   "scope": "./",
   "display": "fullscreen",
-  "orientation": "landscape",
+  "orientation": "any",
   "background_color": "#08090c",
   "theme_color": "#08090c",
   "icons": [
