@@ -113,6 +113,46 @@ body:has(#dashboardView.active) .wrap{width:100%;max-width:none;margin:0}
 }
 @media(orientation:portrait){#dashboardView.active .fantasy-dashboard{display:none!important}}
 </style>
+
+<style id="lexiaa-login-visibility-fix">
+html,body{min-height:100%;height:auto}
+body:has(#loginView.active){overflow-x:hidden!important;overflow-y:auto!important;min-height:100dvh}
+body:has(#loginView.active) .wrap{min-height:100dvh}
+body:has(#loginView.active) main{min-height:0}
+#loginView.active{display:block;min-height:0;height:auto;overflow:visible}
+#loginView .login-stage{box-sizing:border-box;min-height:calc(100dvh - 76px);height:auto;padding:clamp(12px,3vh,28px) 0 clamp(24px,5vh,44px);display:grid;place-items:center}
+#loginView .login-card{box-sizing:border-box;width:min(460px,calc(100vw - 32px));max-width:100%;margin:auto;padding:clamp(18px,3.2vh,34px) clamp(18px,5vw,34px)}
+#loginView .orb{width:clamp(42px,8vh,68px);height:clamp(42px,8vh,68px);margin-bottom:clamp(8px,1.8vh,16px)}
+#loginView .tagline{margin:9px 0 clamp(12px,2.2vh,22px);font-size:10px}
+#loginView .field{margin:clamp(9px,1.7vh,15px) 0}
+#loginView .field input{height:clamp(44px,7vh,50px)}
+#loginView .submit{height:52px;min-height:52px;margin-top:10px;font-size:11px;display:block;visibility:visible;opacity:1}
+#loginView .notice{min-height:18px;margin-top:8px}
+#loginView .back-link{padding:9px 12px;margin:8px auto 0;min-height:34px}
+@media(max-height:620px){
+ body:has(#loginView.active) .topline{padding:10px 0}
+ #loginView .login-stage{min-height:0;padding:8px 0 22px;place-items:start center}
+ #loginView .login-card{padding:15px 22px}
+ #loginView .orb{width:38px;height:38px;margin-bottom:7px}
+ #loginView .eyebrow{margin-bottom:6px;font-size:8px}
+ #loginView h1{font-size:clamp(18px,4vh,25px)}
+ #loginView .tagline{margin:6px 0 10px;font-size:9px}
+ #loginView .field{margin:8px 0}
+ #loginView .field label{margin-bottom:5px}
+ #loginView .field input{height:42px}
+ #loginView .submit{height:46px;min-height:46px;margin-top:7px}
+ #loginView .notice{margin-top:5px;min-height:14px}
+ #loginView .back-link{margin-top:4px;padding:6px 10px}
+}
+@media(max-height:620px) and (orientation:landscape){
+ #loginView .login-stage{padding:5px 0 16px}
+ #loginView .login-card{width:min(500px,calc(100vw - 32px))}
+ #loginView .orb{display:none}
+ #loginView .tagline{margin-bottom:7px}
+ #loginView .field{margin:6px 0}
+ #loginView .submit{height:42px;min-height:42px}
+}
+</style>
 </head>
 <body><div id="particles" aria-hidden="true"></div><div class="wrap">
 <header class="topline"><div class="brand">LEXIAA <small>THE NEXT GENERATION</small></div><div class="system-pill" id="systemPill">● SECURE ACCESS</div></header>
@@ -132,7 +172,7 @@ body:has(#dashboardView.active) .wrap{width:100%;max-width:none;margin:0}
   <section class="fantasy-panel time-panel"><div class="fantasy-panel-heading"><span class="fantasy-symbol">◷</span><span>Live Time</span></div><div class="fantasy-clock" id="liveClock">00:00:00</div><div class="fantasy-date" id="liveDate">SYNCHRONIZING...</div></section>
   <section class="fantasy-panel location-panel"><div class="fantasy-panel-heading"><span class="fantasy-symbol">⌖</span><span>Lokasi Live</span></div><div class="fantasy-panel-main fantasy-location" id="locationValue">Mendeteksi lokasi...</div><div class="fantasy-panel-foot" id="locationSub">MENUNGGU IZIN LOKASI</div></section>
   <section class="fantasy-panel weather-panel"><div class="fantasy-panel-heading"><span class="fantasy-symbol" id="weatherIcon">☁</span><span>Cuaca</span></div><div class="weather-row"><div class="weather-glyph" id="weatherGlyph">☁</div><div><div class="fantasy-weather-main" id="weatherValue">-- °C</div><div class="fantasy-weather-desc" id="weatherSub">Memuat cuaca...</div></div></div></section>
-  <div class="fantasy-bottom-brand"><span>REGION · <b id="regionValue">DETECTING</b></span><span>VERSION · <b>V.1.0.3+</b></span></div>
+  <div class="fantasy-bottom-brand"><span>REGION · <b id="regionValue">DETECTING</b></span><span>VERSION · <b>V.1.0.4+</b></span></div>
   <button class="fantasy-logout" id="backToOldLexia" type="button" aria-label="Kembali ke Lexiaa Original">↩ <span>OLD LEXIAA</span></button><button class="fantasy-logout" id="logoutButton" type="button" aria-label="Keluar dari akun Next Generation">⇥</button>
 </div>
 <div class="portrait-guide" id="portraitGuide"><div class="rotate-device-icon">▱<span>↻</span></div><strong>Putar perangkat Anda</strong><p>LEXIAA THE NEXT GENERATION dirancang untuk tampilan landscape.</p></div>
@@ -152,7 +192,9 @@ function requestImmersive(){try{const root=document.documentElement;if(screen.or
 function enterDashboard(){if(dashboardEntered)return;dashboardEntered=true;try{localStorage.setItem("lexiaa-nextgen-mode","1");}catch(e){}show("dashboard");requestImmersive();loadBattery();const video=$("fantasyBgVideo");if(video){video.currentTime=0;video.play().catch(()=>{});}tick();loadLocation();}
 $("nextLoginForm").addEventListener("submit",async e=>{e.preventDefault();if(!supabase){notice("Koneksi autentikasi belum siap. Periksa internet lalu muat ulang halaman.");return;}requestImmersive();const btn=$("loginSubmit");btn.disabled=true;btn.textContent="AUTHENTICATING...";notice("");try{const{data,error}=await supabase.auth.signInWithPassword({email:$("nextEmail").value.trim(),password:$("nextPassword").value});if(error)throw error;notice("ACCESS GRANTED","success");enterDashboard();}catch(err){notice(err.message||"Login gagal. Periksa email dan kata sandi.");}finally{btn.disabled=false;btn.textContent="AUTHENTICATE & ENTER";}});
 $("togglePassword").addEventListener("click",()=>{const input=$("nextPassword"),visible=input.type==="password";input.type=visible?"text":"password";$("togglePassword").textContent=visible?"HIDE":"SHOW";});
-function returnToOldLexia(){try{localStorage.removeItem("lexiaa-nextgen-mode");}catch(e){}location.href="./";}\n$("backOriginal").addEventListener("click",returnToOldLexia);\n$("backToOldLexia").addEventListener("click",returnToOldLexia);
+function returnToOldLexia(){try{localStorage.removeItem("lexiaa-nextgen-mode");}catch(e){}location.href="./";}
+$("backOriginal").addEventListener("click",returnToOldLexia);
+$("backToOldLexia").addEventListener("click",returnToOldLexia);
 $("logoutButton").addEventListener("click",async()=>{const btn=$("logoutButton");btn.disabled=true;try{if(supabase)await supabase.auth.signOut({scope:"local"});}catch(e){console.warn(e);}finally{dashboardEntered=false;show("login");try{if(document.fullscreenElement)document.exitFullscreen().catch(()=>{});}catch(e){}$("nextLoginForm").reset();notice("Sesi Next Generation telah diakhiri.","success");btn.disabled=false;}});
 try{const{createClient}=await import("https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm");supabase=createClient(SUPABASE_URL,SUPABASE_ANON_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});const{data:{session}}=await supabase.auth.getSession();if(session)enterDashboard();supabase.auth.onAuthStateChange((event,session)=>{if(session&&event==="SIGNED_IN")enterDashboard();else if(!session&&event==="SIGNED_OUT")show("login");});}catch(e){notice("Supabase belum dapat dihubungi. Periksa koneksi internet.");console.error(e);}
 tick();setInterval(tick,1000);for(let i=0;i<34;i++){const p=document.createElement("i");p.className="particle";p.style.left=Math.random()*100+"%";p.style.top=Math.random()*100+"%";p.style.animationDelay=-Math.random()*14+"s";p.style.animationDuration=9+Math.random()*12+"s";$("particles").appendChild(p);}
