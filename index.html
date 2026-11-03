@@ -828,7 +828,7 @@ button, a, input, select, textarea { touch-action:manipulation; }
     @media(prefers-reduced-motion:reduce){.lex-wr-menu-card h3,.lex-wr-menu-card .mlbb-neon{animation:none}}
 
 
-/* LEXIAA V.9.0.2+ — living interface, themes, changelog */
+/* LEXIAA V.9.0.3+ — living interface, themes, changelog */
 .lexiaa-network-status{margin-top:8px;font-size:9px;letter-spacing:.15em;font-weight:800;color:#8ef0c0}.lexiaa-network-status.is-offline{color:#ff9caa}
 :root{--lx-live-accent:#c9a7ff;--lx-live-glow:rgba(176,119,255,.2)}
 html[data-lexiaa-theme="sakura"]{--lx-live-accent:#ffb5d2;--lx-live-glow:rgba(255,115,171,.22)}
@@ -1152,6 +1152,42 @@ html[data-lexiaa-theme] .live-time,html[data-lexiaa-theme] .live-greeting{color:
 @media(max-width:600px){.topbar{flex-wrap:wrap}.lex-language-control{order:3}.dash-statusbar{height:auto;min-height:66px;flex-wrap:wrap;padding:10px 4px}.dash-statusbar .lex-language-control{margin-left:0}.dash-statusbar .device-status{margin-left:auto}}
 </style>
 
+<style id="lexiaa-nextgen-gate-style">
+.lex-nextgen-card{position:relative!important;isolation:isolate;overflow:hidden!important;border:1px solid #54eaff!important;background:linear-gradient(112deg,rgba(4,20,34,.96),rgba(18,10,38,.96))!important;box-shadow:inset 0 0 0 1px #9befff18,0 0 22px #35dfff22,0 12px 38px #0009!important}
+.lex-nextgen-card:before{content:"";position:absolute;inset:-80% -30%;z-index:-1;background:linear-gradient(105deg,transparent 42%,#70edff19 49%,#c38aff30 52%,transparent 60%);transform:translateX(-65%);animation:lexNextGenSweep 5s ease-in-out infinite}
+.lex-nextgen-card:after{content:"";position:absolute;inset:0;pointer-events:none;border:1px solid #a8eaff35;clip-path:inherit}
+.lex-nextgen-card .menu-number{color:#82eaff!important;text-shadow:0 0 13px #52e7ff88}
+.lex-nextgen-card h3{color:#f0fcff!important;text-shadow:0 0 8px #52e7ff99,0 0 22px #9b70ff77;animation:lexNextGenPulse 2.8s ease-in-out infinite}
+.lex-nextgen-card p{color:#c4b5f5!important}
+.lex-nextgen-card:hover,.lex-nextgen-card:focus-visible{border-color:#d4faff!important;box-shadow:inset 0 0 0 1px #b7f5ff55,0 0 0 1px #9e7bff66,0 0 36px #43ddff55,0 0 58px #9d66ff30!important}
+@keyframes lexNextGenSweep{0%,18%{transform:translateX(-65%)}72%,100%{transform:translateX(65%)}}
+@keyframes lexNextGenPulse{0%,100%{filter:brightness(1)}50%{filter:brightness(1.3)}}
+#lexiaaNextGenModal{position:fixed;inset:0;z-index:9990;display:none;place-items:center;padding:18px;background:#02050bd9;backdrop-filter:blur(12px)}
+#lexiaaNextGenModal.open{display:grid;animation:lexNGFade .25s ease both}
+.lex-nextgen-dialog{width:min(480px,100%);padding:clamp(24px,5vw,38px);border:1px solid #65eaff88;border-radius:22px;background:linear-gradient(145deg,#10243aF2,#17102df5);box-shadow:0 0 0 1px #ffffff0c inset,0 0 38px #43dfff28,0 0 70px #a66cff20;text-align:center}
+.lex-nextgen-dialog .ng-mark{font-size:34px;color:#8beeff;text-shadow:0 0 22px #52e7ff;animation:lexNextGenPulse 2s infinite}
+.lex-nextgen-dialog h2{font:700 clamp(17px,4vw,22px) Orbitron,sans-serif;letter-spacing:.07em;color:#effcff;text-shadow:0 0 18px #52e7ff55;margin:14px 0}
+.lex-nextgen-dialog p{font-size:13px;line-height:1.8;color:#bdcfe0;margin:0}
+.lex-nextgen-actions{display:flex;gap:12px;margin-top:25px}
+.lex-nextgen-actions button{flex:1;min-height:46px;border-radius:11px;font-weight:800;font-size:10px;letter-spacing:.12em}
+#lexiaaNextGenCancel{border:1px solid #72849a;background:#ffffff08;color:#d7e4f2}
+#lexiaaNextGenContinue{border:1px solid #8defff;background:linear-gradient(110deg,#b8f8ff,#50dff6 58%,#bd9aff);color:#071321;box-shadow:0 0 22px #52e7ff33}
+#lexiaaNextGenTransition{position:fixed;inset:0;z-index:10000;display:none;place-items:center;overflow:hidden;background:#080b12;color:#eafaff}
+#lexiaaNextGenTransition.active{display:grid}
+.ng-transition-core{text-align:center;position:relative;z-index:2;padding:24px}
+.ng-loader-ring{width:72px;height:72px;margin:0 auto 26px;border:3px solid #ffffff14;border-top-color:#e8f5ff;border-right-color:#a9b6c8;border-radius:50%;animation:ngSpin .85s linear infinite;box-shadow:0 0 25px #ffffff16}
+.ng-transition-label{font:700 11px Orbitron,sans-serif;letter-spacing:.14em;color:#f0f4fb}
+.ng-transition-sub{font-size:10px;letter-spacing:.1em;color:#aab5c5;margin-top:12px}
+#lexiaaNextGenTransition.phase-mid{background:radial-gradient(circle at 50% 50%,#12384c,#0a1020 60%,#080b12);transition:background 2s}
+#lexiaaNextGenTransition.phase-mid .ng-loader-ring{width:112px;height:112px;border:2px solid #52e7ff33;border-top-color:#52e7ff;border-right-color:#b77aff;box-shadow:0 0 35px #52e7ff77,0 0 65px #a66cff44;animation-duration:1.1s}
+#lexiaaNextGenTransition.phase-mid .ng-transition-label{color:#a7f5ff;text-shadow:0 0 18px #52e7ff}
+#lexiaaNextGenTransition.phase-final{background:radial-gradient(circle at 50% 50%,#174c65 0%,#1b1240 35%,#03060d 78%);transition:background 1s}
+#lexiaaNextGenTransition.phase-final .ng-loader-ring{width:150px;height:150px;border:2px solid #52e7ff55;border-top-color:#fff;border-right-color:#b77aff;border-bottom-color:#52e7ff;box-shadow:0 0 55px #52e7ff99,0 0 100px #a66cff77;animation-duration:.7s}
+#lexiaaNextGenTransition.phase-final .ng-transition-label{color:#fff;text-shadow:0 0 24px #52e7ff,0 0 36px #b77aff}
+#lexiaaNextGenTransition.phase-final:before{content:"";position:absolute;width:80vmax;height:80vmax;border:1px solid #52e7ff55;border-radius:50%;box-shadow:0 0 45px #52e7ff33,inset 0 0 45px #b77aff22;animation:ngPortal 1.4s ease-in-out infinite}
+@keyframes ngSpin{to{transform:rotate(360deg)}}@keyframes ngPortal{50%{transform:scale(.86);opacity:.45}}@keyframes lexNGFade{from{opacity:0}to{opacity:1}}
+@media(prefers-reduced-motion:reduce){.lex-nextgen-card:before,.lex-nextgen-card h3,.ng-loader-ring,#lexiaaNextGenTransition.phase-final:before{animation-duration:3s!important}}
+</style>
 </head>
 <body>
   <div id="appLoader" role="status" aria-label="Memuat LEXIAA">
@@ -1275,6 +1311,7 @@ html[data-lexiaa-theme] .live-time,html[data-lexiaa-theme] .live-greeting{color:
               <button class="menu-card wide lex-origin-menu" type="button" id="lexOriginOpen" onclick="(function(){var g=document.getElementById('lexOriginGate');if(g){g.classList.add('open');g.setAttribute('aria-hidden','false');var st=document.getElementById('lexOriginStatus'),cd=document.getElementById('lexIssuedCode'),inp=document.getElementById('lexOriginCode');if(st)st.textContent='';if(cd)cd.textContent='KODE AKAN MUNCUL DI SINI';if(inp)inp.value='';}})()"><span class="menu-arrow" aria-hidden="true">✧</span><span class="menu-number">05 / LEXIAA SECRET STORY</span><h3>ASAL USUL NAMA "LEXIAA"</h3><p>BUKA CERITA RAHASIA DI BALIK NAMA LEXIAA.</p></button>
               <button class="menu-card wide about-menu-card" type="button" data-about-open><span class="menu-arrow" aria-hidden="true">✧</span><span class="menu-number">04 / LEXIAA GUIDE</span><h3>TENTANG LEXIAA?</h3><p>KENALI FITUR, PANDUAN, DAN RAHASIA KECIL LEXIAA.</p></button>
               <button class="menu-card wide lex-wr-menu-card" type="button" id="lexiaaWrMenuCard" aria-label="Buka Hitung Jumlah Win Rate MLBB"><span class="menu-arrow" aria-hidden="true">✦</span><span class="menu-number">06 / MLBB WIN RATE CENTER</span><h3>HITUNG JUMLAH WIN RATE <span class="mlbb-neon">MLBB</span></h3><p>HERO WIN &amp; LOSE · TARGET WIN RATE CALCULATOR</p></button>
+              <button class="menu-card wide lex-nextgen-card" type="button" id="lexiaaNextGenOpen"><span class="menu-arrow" aria-hidden="true">✧</span><span class="menu-number">07 / FUTURE EXPERIENCE</span><h3>LEXIAA THE NEXT GENERATION</h3><p>ENTER A NEW HOLOGRAPHIC DIMENSION.</p><span class="nextgen-glow-line" aria-hidden="true"></span></button>
             </div>
           <section class="social-hub" aria-label="Akun resmi admin">
             <h2 class="social-heading">CONNECT WITH ADMIN</h2>
@@ -3407,15 +3444,15 @@ html[data-lexiaa-theme] .live-time,html[data-lexiaa-theme] .live-greeting{color:
 </div>
 <script id="lexiaa-v902-features">
 (()=> {
- const VERSION='V.9.0.2+';
+ const VERSION='V.9.0.3+';
  const themeSelect=document.getElementById('lexiaaThemeSelect');
  const greeting=document.getElementById('lexiaaLivingGreeting');
  const overlay=document.getElementById('lexiaaChangelogOverlay');
  const openBtn=document.getElementById('lexiaaChangelogBtn');
  const closeBtn=document.getElementById('lexiaaChangelogClose');
  const changelogCopy={
- id:['Pembaruan Terbaru','Pengalaman LEXIAA yang lebih personal.',['Living Interface: sapaan dinamis dan tampilan waktu yang lebih jelas.','Kustomisasi Tema: Midnight, Sakura, Ocean, dan Emerald.','Riwayat Update: lihat peningkatan terbaru kapan saja.']],
- en:['What’s New','Fresh details for a more personal LEXIAA experience.',['Living Interface: live greeting and a clearer time display.','Theme Customization: Midnight, Sakura, Ocean, and Emerald.','Update Changelog: review the latest improvements anytime.']],
+ id:['Pembaruan Terbaru','Pengalaman LEXIAA yang lebih personal.',['Living Interface: sapaan dinamis dan tampilan waktu yang lebih jelas.','Kustomisasi Tema: Midnight, Sakura, Ocean, dan Emerald.','Riwayat Update: lihat peningkatan terbaru kapan saja.','The Next Generation: gerbang menuju dashboard holografik baru.']],
+ en:['What’s New','Fresh details for a more personal LEXIAA experience.',['Living Interface: live greeting and a clearer time display.','Theme Customization: Midnight, Sakura, Ocean, and Emerald.','Update Changelog: review the latest improvements anytime.','The Next Generation: enter a new holographic dashboard experience.']],
  ja:['新着情報','よりパーソナルなLEXIAA体験のための新機能。',['Living Interface：時間に合わせた挨拶と見やすい時計。','テーマ設定：Midnight、Sakura、Ocean、Emerald。','更新履歴：最新の改善内容をいつでも確認できます。']],
  ko:['새로운 소식','더욱 개인화된 LEXIAA 경험을 위한 업데이트입니다.',['Living Interface: 시간대별 인사말과 개선된 시계.','테마 설정: Midnight, Sakura, Ocean, Emerald.','업데이트 기록: 최신 개선 사항을 언제든 확인하세요.']],
  zh:['最新更新','让 LEXIAA 体验更加个性化。',['Living Interface：实时问候和清晰的时间显示。','主题自定义：Midnight、Sakura、Ocean 和 Emerald。','更新日志：随时查看最新改进。']],
@@ -3447,5 +3484,23 @@ const themeKey='lexiaa-theme-v1';
 })();
 </script>
 
+<script id="lexiaa-nextgen-gate">
+(()=> {
+ const menu=document.getElementById('lexiaaNextGenOpen');if(!menu)return;
+ document.body.insertAdjacentHTML('beforeend',`
+ <div id="lexiaaNextGenModal" aria-hidden="true"><section class="lex-nextgen-dialog" role="dialog" aria-modal="true" aria-labelledby="lexiaaNextGenTitle"><div class="ng-mark" aria-hidden="true">✧</div><h2 id="lexiaaNextGenTitle">LEXIAA THE NEXT GENERATION</h2><p>Ini adalah gerbang menuju pengalaman Lexiaa yang berbeda. Generasi baru ini masih dalam tahap pengembangan. Kami mohon pengertian Anda apabila menemukan bug atau beberapa fitur yang belum berjalan sempurna.</p><div class="lex-nextgen-actions"><button type="button" id="lexiaaNextGenCancel">BATALKAN</button><button type="button" id="lexiaaNextGenContinue">LANJUTKAN</button></div></section></div>
+ <div id="lexiaaNextGenTransition" aria-live="polite"><div class="ng-transition-core"><div class="ng-loader-ring"></div><div class="ng-transition-label" id="lexiaaNextGenTransitionLabel">LEXIAA SEDANG BERPindah, MOHON TUNGGU</div><div class="ng-transition-sub" id="lexiaaNextGenTransitionSub">PREPARING YOUR NEW EXPERIENCE</div></div></div>`);
+ const modal=document.getElementById('lexiaaNextGenModal'),cancel=document.getElementById('lexiaaNextGenCancel'),go=document.getElementById('lexiaaNextGenContinue'),transition=document.getElementById('lexiaaNextGenTransition'),label=document.getElementById('lexiaaNextGenTransitionLabel'),sub=document.getElementById('lexiaaNextGenTransitionSub');let busy=false;
+ const close=()=>{modal.classList.remove('open');modal.setAttribute('aria-hidden','true');};
+ menu.addEventListener('click',()=>{modal.classList.add('open');modal.setAttribute('aria-hidden','false');cancel.focus();});
+ cancel.addEventListener('click',close);modal.addEventListener('click',e=>{if(e.target===modal)close();});
+ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&modal.classList.contains('open'))close();});
+ go.addEventListener('click',()=>{if(busy)return;busy=true;close();transition.classList.add('active');document.body.style.overflow='hidden';label.textContent='LEXIAA SEDANG BERPindah, MOHON TUNGGU';sub.textContent='PREPARING YOUR NEW EXPERIENCE';
+ window.setTimeout(()=>{transition.classList.add('phase-mid');label.textContent='SISTEM LEXIAA SEDANG BERTRANSFORMASI';sub.textContent='RECONFIGURING DIGITAL ENVIRONMENT';},3000);
+ window.setTimeout(()=>{transition.classList.add('phase-final');label.textContent='SYSTEM TRANSFER COMPLETE';sub.textContent='WELCOME TO THE NEXT GENERATION';},8000);
+ window.setTimeout(()=>{window.location.href='./next-generation.html';},9000);
+ });
+})();
+</script>
 </body>
 </html>
