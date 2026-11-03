@@ -2967,15 +2967,19 @@ button, a, input, select, textarea { touch-action:manipulation; }
  let current='id',observer=null;
  const normalize=s=>s.replace(/\s+/g,' ').trim();
  function detect(){
-  const locale=(navigator.languages&&navigator.languages[0]||navigator.language||'id-ID').toLowerCase();
-  const code=locale.split('-')[0];
-  if(languages[code])return code;
   const zone=Intl.DateTimeFormat().resolvedOptions().timeZone||'';
   if(zone.startsWith('Asia/Jakarta')||zone.startsWith('Asia/Makassar')||zone.startsWith('Asia/Jayapura'))return 'id';
   if(zone.startsWith('Asia/Tokyo'))return 'ja';
   if(zone.startsWith('Asia/Seoul'))return 'ko';
+  if(zone.startsWith('Asia/Shanghai')||zone.startsWith('Asia/Hong_Kong')||zone.startsWith('Asia/Taipei'))return 'zh';
   if(zone.startsWith('Asia/Bangkok'))return 'th';
-  return 'en';
+  if(zone.startsWith('Europe/Paris'))return 'fr';
+  if(zone.startsWith('Europe/Berlin'))return 'de';
+  if(zone.startsWith('Europe/Madrid'))return 'es';
+  if(zone.startsWith('America/Sao_Paulo'))return 'pt';
+  const locale=(navigator.languages&&navigator.languages[0]||navigator.language||'id-ID').toLowerCase();
+  const code=locale.split('-')[0];
+  return languages[code]?code:'en';
  }
  function applyNode(node,lang){
   if(node.nodeType===Node.TEXT_NODE){
