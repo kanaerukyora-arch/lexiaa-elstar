@@ -1191,7 +1191,8 @@ html[data-lexiaa-theme] .live-time,html[data-lexiaa-theme] .live-greeting{color:
 <script id="lexiaa-nextgen-persistent-home">
 (()=>{try{
  const mode=localStorage.getItem('lexiaa-last-experience')||'old';
- if(mode==='next')location.replace('./next-generation.html');
+ if(mode==='next'){location.replace('./next-generation.html');return;}
+ localStorage.setItem('lexiaa-last-experience','old');
 }catch(e){}})();
 </script>\n</head>
 <body>
