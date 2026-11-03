@@ -3319,9 +3319,9 @@ button, a, input, select, textarea { touch-action:manipulation; }
    const value=languages[lang].dict[source];
    let output=value!==undefined?original.replace(source,value):original;
    // Keep the brand spelling exactly as it appears in the original text.
-   const originalBrands=original.match(/\\b(?:LEXIAA|Lexiaa|lexiaa)\\b/g)||[];
+   const originalBrands=original.match(/\b(?:LEXIAA|Lexiaa|lexiaa)\b/g)||[];
    let brandIndex=0;
-   output=output.replace(/\\b(?:LEXIAA|Lexiaa|lexiaa)\\b/g,()=>originalBrands[brandIndex++]||'Lexiaa');
+   output=output.replace(/\b(?:LEXIAA|Lexiaa|lexiaa)\b/g,()=>originalBrands[brandIndex++]||'Lexiaa');
    if(node.nodeValue!==output)node.nodeValue=output;state.last=output;
   }else if(node.nodeType===Node.ELEMENT_NODE){
    if(['SCRIPT','STYLE','NOSCRIPT'].includes(node.tagName))return;
