@@ -1327,7 +1327,7 @@ button, a, input, select, textarea { touch-action:manipulation; }
       </section>
 
     </main>
-    <footer class="footer">LEXIAA &amp; ELSTAR · THE DEVELOPER OTW</footer>
+    
   </div>
 
   <div id="lexOriginGate" class="lex-origin-gate" role="dialog" aria-modal="true" aria-labelledby="lexOriginTitle" aria-hidden="true">
@@ -1762,7 +1762,8 @@ button, a, input, select, textarea { touch-action:manipulation; }
         });
         if (backgroundAudio) backgroundAudio.pause();
         document.getElementById("loginForm")?.reset();
-        showView("login");
+        // Logout returns directly to the public home screen without requiring refresh.
+        showView("home");
         toast("Kamu sudah logout.");
       } catch (err) { console.warn("Logout UI cleanup:", err); }
 
@@ -2950,8 +2951,3 @@ button, a, input, select, textarea { touch-action:manipulation; }
 
 </body>
 </html>
-
-/* ABOUT character video: match the other category guides, larger but behind text */
-.lex-about-char video{width:145%;height:112%;max-width:none;max-height:none;object-fit:contain;object-position:right bottom;transform:translateX(10%);filter:drop-shadow(0 0 24px rgba(190,112,255,.55)) drop-shadow(0 12px 24px rgba(0,0,0,.35));}
-@media(max-width:900px){.lex-about-char video{width:145%;height:112%;object-position:right bottom;transform:translateX(10%)} }
-@media(max-width:600px){.lex-about-char video{width:132%;height:112%;object-fit:contain;object-position:right bottom;transform:translateX(8%);filter:drop-shadow(0 0 25px rgba(190,112,255,.55)) drop-shadow(0 12px 24px rgba(0,0,0,.4))}.lex-about-copy,.lex-about-tabs{position:relative;z-index:5}.lex-about-copy p,.lex-about-list li{max-width:82%}.lex-about-callout{max-width:86%;position:relative;z-index:5}}
