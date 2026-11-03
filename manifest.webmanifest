@@ -1,11 +1,11 @@
 {
-  "name": "LEXIAA",
-  "short_name": "LEXIAA",
-  "description": "LEXIAA · Global Language System",
-  "start_url": "./",
+  "name": "LEXIAA THE NEXT GENERATION",
+  "short_name": "LEXIAA N.G.",
+  "description": "LEXIAA The Next Generation immersive fantasy dashboard",
+  "start_url": "./next-generation.html",
   "scope": "./",
-  "display": "standalone",
-  "orientation": "any",
+  "display": "fullscreen",
+  "orientation": "landscape",
   "background_color": "#08090c",
   "theme_color": "#08090c",
   "icons": [
@@ -16,4 +16,4 @@
       "purpose": "any maskable"
     }
   ]
-}
+}\n
