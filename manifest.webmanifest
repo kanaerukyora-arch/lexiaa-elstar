@@ -1,7 +1,7 @@
 {
-  "name": "LEXIAA & ELSTAR",
+  "name": "LEXIAA",
   "short_name": "LEXIAA",
-  "description": "Ruang digital LEXIAA & ELSTAR",
+  "description": "LEXIAA · Global Language System",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
