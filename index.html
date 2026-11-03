@@ -829,6 +829,7 @@ button, a, input, select, textarea { touch-action:manipulation; }
 
 
 /* LEXIAA V.9.0.2+ — living interface, themes, changelog */
+.lexiaa-network-status{margin-top:8px;font-size:9px;letter-spacing:.15em;font-weight:800;color:#8ef0c0}.lexiaa-network-status.is-offline{color:#ff9caa}
 :root{--lx-live-accent:#c9a7ff;--lx-live-glow:rgba(176,119,255,.2)}
 html[data-lexiaa-theme="sakura"]{--lx-live-accent:#ffb5d2;--lx-live-glow:rgba(255,115,171,.22)}
 html[data-lexiaa-theme="ocean"]{--lx-live-accent:#83dcff;--lx-live-glow:rgba(65,180,255,.22)}
@@ -1189,6 +1190,7 @@ html[data-lexiaa-theme] .live-time,html[data-lexiaa-theme] .live-greeting{color:
             <div class="live-date" data-live-date>MEMUAT TANGGAL...</div>
             <div class="live-location" data-live-location>LOKASI: INDONESIA · WAKTU LOKAL</div>
             <div class="live-greeting" id="lexiaaLivingGreeting">GOOD DAY · YOUR SPACE IS READY</div>
+            <div class="lexiaa-network-status" id="lexiaaNetworkStatus" role="status">● ONLINE</div>
           </div>
         </div>
       </section>
@@ -3430,6 +3432,7 @@ const themeKey='lexiaa-theme-v1';
  try{applyTheme(localStorage.getItem(themeKey)||'midnight')}catch(e){applyTheme('midnight')}
  themeSelect?.addEventListener('change',()=>applyTheme(themeSelect.value));
  function updateGreeting(){if(!greeting)return;const hour=new Date().getHours();const index=hour<11?3:hour<15?4:hour<19?5:6;greeting.textContent=t()[index]+' · '+t()[2];}
+ function updateNetwork(){const el=document.getElementById('lexiaaNetworkStatus');if(!el)return;const online=navigator.onLine;const lang=getLang();const labels={id:['● ONLINE','● OFFLINE'],en:['● ONLINE','● OFFLINE'],ja:['● オンライン','● オフライン'],ko:['● 온라인','● 오프라인'],zh:['● 在线','● 离线'],th:['● ออนไลน์','● ออฟไลน์'],fr:['● EN LIGNE','● HORS LIGNE'],de:['● ONLINE','● OFFLINE'],es:['● EN LÍNEA','● SIN CONEXIÓN'],pt:['● ONLINE','● OFFLINE']};el.textContent=(labels[lang]||labels.en)[online?0:1];el.classList.toggle('is-offline',!online);}
  function openChangelog(){if(!overlay)return;overlay.classList.add('is-open');document.body.style.overflow='hidden';closeBtn?.focus();}
  function closeChangelog(){overlay?.classList.remove('is-open');document.body.style.overflow='';openBtn?.focus();}
  openBtn?.addEventListener('click',openChangelog);closeBtn?.addEventListener('click',closeChangelog);
