@@ -2,7 +2,7 @@
   "name": "LEXIAA THE NEXT GENERATION",
   "short_name": "LEXIAA N.G.",
   "description": "LEXIAA The Next Generation immersive fantasy dashboard",
-  "start_url": "./next-generation.html",
+  "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "orientation": "any",
