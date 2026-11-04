@@ -381,7 +381,7 @@ body:has(#loginView.active) main{min-height:0}
     <button class="lexiaa-menu-toggle lexiaa-search-toggle" id="lexiaaMenuToggle" type="button" aria-label="Cari akun Lexiaa"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"></circle><path d="m16 16 5 5"></path></svg></button>
     <div class="lexiaa-topbar-center"></div>
     <div class="lexiaa-topbar-actions">
-      <button class="lexiaa-utility-button" id="ambientToggle" type="button" aria-label="Aktifkan suara alam" aria-pressed="false"><span class="ambient-toggle-icon">♫</span><span class="ambient-toggle-label">SOUND OFF</span></button>
+      
       <button class="lexiaa-utility-button" id="backToOldLexia" type="button" aria-label="Kembali ke Lexiaa Original">↩ <span>OLD LEXIAA</span></button>
       <button class="lexiaa-utility-button logout" id="logoutButton" type="button" aria-label="Keluar dari akun Next Generation">⇥</button>
     </div>
@@ -419,7 +419,7 @@ body:has(#loginView.active) main{min-height:0}
   </section>
   <div class="lexiaa-battery-hidden" aria-hidden="true"><span id="batteryFill"></span></div>
   <div class="fantasy-top-brand"><div class="fantasy-brand-mark">✧</div><div class="fantasy-brand-name">Lexiaa</div><div class="fantasy-brand-sub">— The Next Generation —</div><div class="fantasy-brand-flare">✦</div></div>
-  <div class="fantasy-bottom-brand"><span>REGION · <b id="regionValue">DETECTING</b></span><span>VERSION · <b>V.1.0.9+</b></span></div>
+  <div class="fantasy-bottom-brand"><span>REGION · <b id="regionValue">DETECTING</b></span><span>VERSION · <b>V.1.3.2 BETA</b></span></div>
   <div class="lexiaa-settings-backdrop" id="lexiaaSettingsBackdrop" aria-hidden="true">
     <section class="lexiaa-settings-modal" role="dialog" aria-modal="true" aria-labelledby="lexiaaSettingsTitle">
       <button class="lexiaa-settings-close" id="closeLexiaSettings" type="button" aria-label="Tutup">×</button>
@@ -446,13 +446,13 @@ body:has(#loginView.active) main{min-height:0}
       <button class="lexiaa-settings-close" id="closeLexiaUpdates" type="button" aria-label="Tutup">×</button>
       <div class="lexiaa-settings-kicker">LEXIAA THE NEXT GENERATION</div>
       <h2 id="lexiaaUpdatesTitle">Update Terbaru</h2>
-      <div class="lexiaa-update-version"><strong>v1.3.1 Beta</strong><span>Online public profiles</span></div>
+      <div class="lexiaa-update-version"><strong>v1.3.2 Beta</strong><span>Ambient sound & live network</span></div>
       <ul class="lexiaa-update-list">
-        <li>Tombol pencarian akun menggantikan tombol menu garis tiga.</li>
-        <li>Rekomendasi akun tampil otomatis dan pencarian mendukung username maupun display name.</li>
-        <li>Username, display name, dan foto profil tersinkron online antarperangkat.</li>
-        <li>Akun yang belum mengatur profil ditampilkan sebagai Lexiaa.</li>
-        <li>Pop-up riwayat pembaruan ditambahkan.</li>
+        <li>Suara ambience angin dan aliran air otomatis aktif saat memasuki dashboard.</li>
+        <li>Tombol ON/OFF suara dihilangkan agar dashboard lebih bersih.</li>
+        <li>Ping ke server Lexiaa diperbarui setiap detik.</li>
+        <li>Jenis koneksi ditampilkan sesuai informasi yang tersedia dari browser.</li>
+        <li>Profil publik dan avatar Lexiaa tetap tersinkron online.</li>
       </ul>
       <div class="lexiaa-update-footer">Terima kasih sudah menggunakan Lexiaa.</div>
     </section>
@@ -531,7 +531,7 @@ function loadBattery(){if(!navigator.getBattery){$("batteryValue").textContent="
 function requestImmersive(){try{const root=document.documentElement;const lock=()=>{try{const p=screen.orientation?.lock?.("landscape");if(p&&typeof p.catch==="function")p.catch(err=>console.warn("Kunci landscape ditolak browser:",err));}catch(e){console.warn("Kunci landscape tidak tersedia:",e);}};if(document.fullscreenElement){lock();return;}if(root.requestFullscreen){const full=root.requestFullscreen({navigationUI:"hide"});lock();if(full&&typeof full.then==="function")full.then(()=>lock()).catch(err=>console.warn("Fullscreen tidak diizinkan browser:",err));}else{lock();console.warn("Fullscreen API tidak tersedia pada mode browser ini.");}}catch(e){console.warn("Mode immersive tidak tersedia:",e);}}
 function markLexiaaNextGen(){if(!supabase)return;supabase.auth.getUser().then(async({data,error})=>{if(error||!data?.user)return;const{error:profileError}=await supabase.from("lexiaa_profiles").update({nextgen_joined_at:new Date().toISOString()}).eq("id",data.user.id);if(profileError)console.warn("Status Next Gen belum tersimpan:",profileError.message);}).catch(e=>console.warn("Directory sync:",e));}
 function enterDashboard(){if(dashboardEntered)return;dashboardEntered=true;try{localStorage.setItem("lexiaa-nextgen-mode","1");localStorage.setItem("lexiaa-last-experience","next");}catch(e){}markLexiaaNextGen();show("dashboard");loadOnlineProfile();requestImmersive();loadBattery();tick();if(window.lexiaaClockTimer)clearInterval(window.lexiaaClockTimer);window.lexiaaClockTimer=setInterval(tick,1000);loadBattery();loadProfileSettings();const video=$("fantasyBgVideo");if(video){video.currentTime=0;video.play().catch(()=>{});}tick();loadLocation();}
-$("nextLoginForm").addEventListener("submit",async e=>{e.preventDefault();requestImmersive();if(!supabase){notice("Koneksi autentikasi belum siap. Periksa internet lalu muat ulang halaman.");return;}const btn=$("loginSubmit");btn.disabled=true;btn.textContent="AUTHENTICATING...";notice("");try{const{data,error}=await supabase.auth.signInWithPassword({email:$("nextEmail").value.trim(),password:$("nextPassword").value});if(error)throw error;notice("ACCESS GRANTED","success");enterDashboard();}catch(err){notice(err.message||"Login gagal. Periksa email dan kata sandi.");}finally{btn.disabled=false;btn.textContent="AUTHENTICATE & ENTER";}});
+$("nextLoginForm").addEventListener("submit",async e=>{e.preventDefault();requestImmersive();const ambientReady=window.lexiaaPrimeAmbient?.();if(!supabase){notice("Koneksi autentikasi belum siap. Periksa internet lalu muat ulang halaman.");return;}const btn=$("loginSubmit");btn.disabled=true;btn.textContent="AUTHENTICATING...";notice("");try{const{data,error}=await supabase.auth.signInWithPassword({email:$("nextEmail").value.trim(),password:$("nextPassword").value});if(error)throw error;notice("ACCESS GRANTED","success");if(ambientReady)await ambientReady;enterDashboard();window.lexiaaStartAmbient?.();}catch(err){notice(err.message||"Login gagal. Periksa email dan kata sandi.");}finally{btn.disabled=false;btn.textContent="AUTHENTICATE & ENTER";}});
 $("togglePassword").addEventListener("click",()=>{const input=$("nextPassword"),visible=input.type==="password";input.type=visible?"text":"password";$("togglePassword").textContent=visible?"HIDE":"SHOW";});
 async function returnToOldLexia(){try{localStorage.removeItem("lexiaa-nextgen-mode");localStorage.setItem("lexiaa-last-experience","old");}catch(e){}try{if(document.fullscreenElement)await document.exitFullscreen();}catch(e){}try{if(screen.orientation&&screen.orientation.unlock)screen.orientation.unlock();}catch(e){}location.replace("./?experience=old");}
 $("backOriginal").addEventListener("click",returnToOldLexia);
@@ -543,8 +543,8 @@ try{const{createClient}=await import("https://cdn.jsdelivr.net/npm/@supabase/sup
 /* Lexiaa Enchanted World: decorative canvas + opt-in procedural ambience.
    Isolated from auth, dashboard data, navigation and orientation handlers. */
 (()=>{
- const canvas=$("lexiaaMagicCanvas"),button=$("ambientToggle"),dashboard=$("dashboardView");
- if(!canvas||!button||!dashboard)return;
+ const canvas=$("lexiaaMagicCanvas"),dashboard=$("dashboardView");
+ if(!dashboard)return;
  const ctx=canvas.getContext("2d",{alpha:true});if(!ctx)return;
  let w=0,h=0,dpr=1,raf=0,active=false,last=0,fireflies=[],petals=[];
  const rand=(a,b)=>a+Math.random()*(b-a);
@@ -568,23 +568,12 @@ try{const{createClient}=await import("https://cdn.jsdelivr.net/npm/@supabase/sup
  const observer=new MutationObserver(()=>{if(dashboard.classList.contains("active"))start();else stop()});observer.observe(dashboard,{attributes:true,attributeFilter:["class"]});
  window.addEventListener("resize",resize,{passive:true});document.addEventListener("visibilitychange",()=>{if(document.hidden)stop();else if(dashboard.classList.contains("active"))start()});
  if(dashboard.classList.contains("active"))start();
- let audioCtx=null,master=null,noiseSource=null,enabled=false;
- function makeNoiseBuffer(ac){const length=ac.sampleRate*3,buffer=ac.createBuffer(1,length,ac.sampleRate),data=buffer.getChannelData(0);let lastSample=0;for(let i=0;i<length;i++){const white=Math.random()*2-1;lastSample=(lastSample+.025*white)/1.025;data[i]=lastSample*3.5;}return buffer;}
- async function enableSound(){
-  const AC=window.AudioContext||window.webkitAudioContext;if(!AC)throw Error("Audio tidak didukung browser");
-  if(!audioCtx){audioCtx=new AC();master=audioCtx.createGain();master.gain.value=.22;master.connect(audioCtx.destination);
-   const source=audioCtx.createBufferSource();source.buffer=makeNoiseBuffer(audioCtx);source.loop=true;noiseSource=source;
-   const water=audioCtx.createBiquadFilter();water.type="lowpass";water.frequency.value=520;water.Q.value=.7;
-   const waterGain=audioCtx.createGain();waterGain.gain.value=.48;source.connect(water);water.connect(waterGain);waterGain.connect(master);source.start();
-   const wind=audioCtx.createBiquadFilter();wind.type="bandpass";wind.frequency.value=260;wind.Q.value=.35;
-   const windGain=audioCtx.createGain();windGain.gain.value=.2;source.connect(wind);wind.connect(windGain);windGain.connect(master);
-   const lfo=audioCtx.createOscillator(),lfoGain=audioCtx.createGain();lfo.frequency.value=.08;lfoGain.gain.value=.07;lfo.connect(lfoGain);lfoGain.connect(waterGain.gain);lfo.start();
-  }
-  await audioCtx.resume();enabled=true;button.setAttribute("aria-pressed","true");button.setAttribute("aria-label","Matikan suara alam");button.querySelector(".ambient-toggle-label").textContent="SOUND ON";
- }
- async function disableSound(){if(audioCtx)await audioCtx.suspend();enabled=false;button.setAttribute("aria-pressed","false");button.setAttribute("aria-label","Aktifkan suara alam");button.querySelector(".ambient-toggle-label").textContent="SOUND OFF";}
- button.addEventListener("click",async()=>{button.disabled=true;try{if(enabled)await disableSound();else await enableSound()}catch(err){console.warn("Ambient sound tidak tersedia:",err);button.querySelector(".ambient-toggle-label").textContent="AUDIO N/A"}finally{button.disabled=false;try{localStorage.setItem("lexiaa-ambient-muted",String(!enabled))}catch(e){}}});
- try{if(localStorage.getItem("lexiaa-ambient-muted")==="true"){button.setAttribute("aria-pressed","false")} }catch(e){}
+ let audioCtx=null,master=null,noiseSource=null,ambientStarted=false,ambientReady=null;
+ function makeNoiseBuffer(ac){const length=ac.sampleRate*4,buffer=ac.createBuffer(1,length,ac.sampleRate),data=buffer.getChannelData(0);let lastSample=0;for(let i=0;i<length;i++){const white=Math.random()*2-1;lastSample=(lastSample+.025*white)/1.025;data[i]=lastSample*3.5;}return buffer;}
+ async function prepareAmbient(){const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return false;if(!audioCtx){audioCtx=new AC();master=audioCtx.createGain();master.gain.value=.19;master.connect(audioCtx.destination);const source=audioCtx.createBufferSource();source.buffer=makeNoiseBuffer(audioCtx);source.loop=true;noiseSource=source;const water=audioCtx.createBiquadFilter();water.type="lowpass";water.frequency.value=520;water.Q.value=.7;const waterGain=audioCtx.createGain();waterGain.gain.value=.48;source.connect(water);water.connect(waterGain);waterGain.connect(master);const wind=audioCtx.createBiquadFilter();wind.type="bandpass";wind.frequency.value=260;wind.Q.value=.35;const windGain=audioCtx.createGain();windGain.gain.value=.2;source.connect(wind);wind.connect(windGain);windGain.connect(master);const lfo=audioCtx.createOscillator(),lfoGain=audioCtx.createGain();lfo.frequency.value=.08;lfoGain.gain.value=.07;lfo.connect(lfoGain);lfoGain.connect(waterGain.gain);lfo.start();}try{await audioCtx.resume();return true;}catch(error){console.warn("Browser belum mengizinkan audio:",error);return false;}}
+ window.lexiaaPrimeAmbient=()=>{ambientReady=prepareAmbient();return ambientReady;};
+ window.lexiaaStartAmbient=async()=>{if(ambientStarted)return;if(!ambientReady)ambientReady=prepareAmbient();const ready=await ambientReady;if(!ready)return;try{if(noiseSource)noiseSource.start();ambientStarted=true;}catch(error){console.warn("Ambient sound gagal dimulai:",error);}};
+ document.addEventListener("pointerdown",()=>{if(dashboard.classList.contains("active")&&!ambientStarted)window.lexiaaStartAmbient?.();},{passive:true});
 })();
 
 tick();setInterval(tick,1000);for(let i=0;i<34;i++){const p=document.createElement("i");p.className="particle";p.style.left=Math.random()*100+"%";p.style.top=Math.random()*100+"%";p.style.animationDelay=-Math.random()*14+"s";p.style.animationDuration=9+Math.random()*12+"s";$("particles").appendChild(p);}
