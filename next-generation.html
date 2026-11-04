@@ -251,9 +251,8 @@ try{const{createClient}=await import("https://cdn.jsdelivr.net/npm/@supabase/sup
   await audioCtx.resume();enabled=true;button.setAttribute("aria-pressed","true");button.setAttribute("aria-label","Matikan suara alam");button.querySelector(".ambient-toggle-label").textContent="SOUND ON";
  }
  async function disableSound(){if(audioCtx)await audioCtx.suspend();enabled=false;button.setAttribute("aria-pressed","false");button.setAttribute("aria-label","Aktifkan suara alam");button.querySelector(".ambient-toggle-label").textContent="SOUND OFF";}
- button.addEventListener("click",async()=>{button.disabled=true;try{if(enabled)await disableSound();else await enableSound()}catch(err){console.warn("Ambient sound tidak tersedia:",err);button.querySelector(".ambient-toggle-label").textContent="AUDIO N/A"}finally{button.disabled=false}});
+ button.addEventListener("click",async()=>{button.disabled=true;try{if(enabled)await disableSound();else await enableSound()}catch(err){console.warn("Ambient sound tidak tersedia:",err);button.querySelector(".ambient-toggle-label").textContent="AUDIO N/A"}finally{button.disabled=false;try{localStorage.setItem("lexiaa-ambient-muted",String(!enabled))}catch(e){}}});
  try{if(localStorage.getItem("lexiaa-ambient-muted")==="true"){button.setAttribute("aria-pressed","false")} }catch(e){}
- button.addEventListener("click",()=>{try{localStorage.setItem("lexiaa-ambient-muted",String(!enabled))}catch(e){}});
 })();
 
 tick();setInterval(tick,1000);for(let i=0;i<34;i++){const p=document.createElement("i");p.className="particle";p.style.left=Math.random()*100+"%";p.style.top=Math.random()*100+"%";p.style.animationDelay=-Math.random()*14+"s";p.style.animationDuration=9+Math.random()*12+"s";$("particles").appendChild(p);}
