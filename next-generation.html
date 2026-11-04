@@ -281,6 +281,18 @@ body:has(#dashboardView.active) .wrap{width:100%;max-width:none;margin:0}
 }
 
 </style>
+<style id="lexiaa-profile-touch-crop-v127">
+
+/* V1.2.7 direct finger-drag cropper */
+#dashboardView .lexiaa-crop-window{width:220px;height:220px;touch-action:none;overscroll-behavior:contain;user-select:none;-webkit-user-select:none;cursor:grab}
+#dashboardView .lexiaa-crop-window img{position:absolute;left:0;top:0;max-width:none!important;max-height:none!important;width:auto;height:auto;object-fit:initial;pointer-events:none;user-select:none;-webkit-user-drag:none;transform-origin:top left;will-change:transform}
+#dashboardView .lexiaa-cropper{width:100%;box-sizing:border-box;flex:0 0 100%;order:5}
+#dashboardView .lexiaa-profile-preview{flex-wrap:wrap}
+#dashboardView .lexiaa-settings-modal{overscroll-behavior:contain}
+@media(max-width:760px){#dashboardView .lexiaa-crop-window{width:min(68vw,220px);height:min(68vw,220px)}}
+
+</style>
+
 
 
 
@@ -361,7 +373,7 @@ body:has(#loginView.active) main{min-height:0}
       <button class="lexiaa-nav-item" type="button"><span class="lexiaa-nav-icon">✉</span><span>Pesan</span></button>
       <button class="lexiaa-nav-item" type="button" data-action="updates"><span class="lexiaa-nav-icon">⟳</span><span>Update</span></button>
     </nav>
-    <div class="lexiaa-sidebar-footer"><span>Versi Apk: v1.2.6 (Beta)</span><span>Region: <b id="sidebarRegion">Asia/Jakarta</b></span></div>
+    <div class="lexiaa-sidebar-footer"><span>Versi Apk: v1.2.7 (Beta)</span><span>Region: <b id="sidebarRegion">Asia/Jakarta</b></span></div>
   </aside>
   <div class="lexiaa-status-top fantasy-panel">
     <div class="lexiaa-status-line"><span class="lexiaa-battery-icon">▰</span><strong id="batteryValue">--%</strong><span class="lexiaa-clock-icon">◷</span><strong id="liveClock">00:00:00</strong></div>
@@ -394,8 +406,7 @@ body:has(#loginView.active) main{min-height:0}
         <div class="lexiaa-cropper" id="lexiaaCropper" aria-hidden="true">
           <div class="lexiaa-cropper-title">Atur posisi foto</div>
           <div class="lexiaa-crop-window" id="cropWindow"><img id="cropImage" alt="Pratinjau pemotongan foto"></div>
-          <div class="lexiaa-crop-help">Geser foto untuk mengatur posisi, lalu atur zoom.</div>
-          <input id="cropZoom" class="lexiaa-crop-zoom" type="range" min="1" max="3" step=".01" value="1" aria-label="Zoom foto">
+          <div class="lexiaa-crop-help">Geser foto langsung dengan satu jari sampai posisi wajah atau objek sesuai. Tidak perlu zoom.</div>
           <div class="lexiaa-crop-actions"><button type="button" id="cancelCropPhoto">Batal</button><button type="button" id="applyCropPhoto">Gunakan Foto</button></div>
         </div></div>
         <label class="lexiaa-field-label" for="profileUsername">Username</label><input class="lexiaa-profile-input" id="profileUsername" name="username" maxlength="24" placeholder="contoh: kanaeru" autocomplete="username" required>
@@ -410,10 +421,10 @@ body:has(#loginView.active) main{min-height:0}
       <button class="lexiaa-settings-close" id="closeLexiaUpdates" type="button" aria-label="Tutup">×</button>
       <div class="lexiaa-settings-kicker">LEXIAA THE NEXT GENERATION</div>
       <h2 id="lexiaaUpdatesTitle">Update Terbaru</h2>
-      <div class="lexiaa-update-version"><strong>v1.2.6 Beta</strong><span>Dashboard refinement</span></div>
+      <div class="lexiaa-update-version"><strong>v1.2.7 Beta</strong><span>Profile touch-crop fix</span></div>
       <ul class="lexiaa-update-list">
         <li>Panel cuaca dan lokasi dibuat lebih ringkas.</li>
-        <li>Foto profil kini dapat dipangkas dan diatur posisinya.</li>
+        <li>Perbaikan pengaturan profil dan crop foto dengan geser jari langsung.</li>
         <li>Avatar profil ditampilkan konsisten pada dashboard.</li>
         <li>Pop-up riwayat pembaruan ditambahkan.</li>
       </ul>
@@ -440,18 +451,19 @@ function closeProfileSettings(){$("lexiaaSettingsBackdrop").classList.remove("op
 $("lexiaaSidebar")?.querySelector('[data-action="settings"]')?.addEventListener("click",openProfileSettings);
 $("closeLexiaSettings")?.addEventListener("click",closeProfileSettings);
 $("lexiaaSettingsBackdrop")?.addEventListener("click",e=>{if(e.target===$("lexiaaSettingsBackdrop"))closeProfileSettings();});
-let cropState={image:null,scale:1,x:0,y:0,base:1,drag:false,lastX:0,lastY:0};
-function layoutCropImage(){const img=cropState.image,win=$("cropWindow");if(!img||!win)return;const size=win.clientWidth;cropState.base=Math.max(size/img.naturalWidth,size/img.naturalHeight);const scale=cropState.base*cropState.scale;const w=img.naturalWidth*scale,h=img.naturalHeight*scale;cropState.x=Math.min(0,Math.max(size-w,cropState.x));cropState.y=Math.min(0,Math.max(size-h,cropState.y));img.style.width=img.naturalWidth+"px";img.style.height=img.naturalHeight+"px";img.style.transform="translate("+cropState.x+"px,"+cropState.y+"px) scale("+scale+")";}
-function closeCropper(){ $("lexiaaCropper").classList.remove("open");$("lexiaaCropper").setAttribute("aria-hidden","true");}
-$("profilePhotoInput")?.addEventListener("change",e=>{const file=e.target.files?.[0];if(!file)return;if(!file.type.startsWith("image/"))return;const reader=new FileReader();reader.onload=()=>{const img=new Image();img.onload=()=>{cropState.image=img;cropState.scale=1;$("cropZoom").value="1";const win=$("cropWindow");cropState.x=(win.clientWidth-img.naturalWidth*Math.max(win.clientWidth/img.naturalWidth,win.clientHeight/img.naturalHeight))/2;cropState.y=(win.clientHeight-img.naturalHeight*Math.max(win.clientWidth/img.naturalWidth,win.clientHeight/img.naturalHeight))/2;$("cropImage").src=reader.result;requestAnimationFrame(layoutCropImage);$("lexiaaCropper").classList.add("open");$("lexiaaCropper").setAttribute("aria-hidden","false");$("profileSaveNote").textContent="Geser dan zoom foto hingga pas di dalam lingkaran.";};img.src=reader.result;};reader.readAsDataURL(file);e.target.value="";});
-$("cropZoom")?.addEventListener("input",e=>{const prev=cropState.scale;cropState.scale=Number(e.target.value);const win=$("cropWindow"),cx=win.clientWidth/2,cy=win.clientHeight/2,ratio=cropState.scale/prev;cropState.x=cx-(cx-cropState.x)*ratio;cropState.y=cy-(cy-cropState.y)*ratio;layoutCropImage();});
+let cropState={image:null,x:0,y:0,base:1,drag:false,lastX:0,lastY:0};
+function layoutCropImage(reset=false){const img=cropState.image,win=$("cropWindow");if(!img||!win)return;const size=win.clientWidth;if(!size)return;cropState.base=Math.max(size/img.naturalWidth,size/img.naturalHeight);const w=img.naturalWidth*cropState.base,h=img.naturalHeight*cropState.base;if(reset){cropState.x=(size-w)/2;cropState.y=(size-h)/2;}cropState.x=Math.min(0,Math.max(size-w,cropState.x));cropState.y=Math.min(0,Math.max(size-h,cropState.y));img.style.width=img.naturalWidth+"px";img.style.height=img.naturalHeight+"px";img.style.transform="translate("+cropState.x+"px,"+cropState.y+"px) scale("+cropState.base+")";}
+function closeCropper(){$("lexiaaCropper").classList.remove("open");$("lexiaaCropper").setAttribute("aria-hidden","true");cropState.drag=false;}
+$("profilePhotoInput")?.addEventListener("change",e=>{const file=e.target.files?.[0];if(!file)return;if(!file.type.startsWith("image/")){$("profileSaveNote").textContent="Pilih file gambar yang valid.";return;}if(file.size>12*1024*1024){$("profileSaveNote").textContent="Ukuran foto maksimal 12 MB.";return;}const reader=new FileReader();reader.onerror=()=>{$("profileSaveNote").textContent="Foto gagal dibaca. Coba pilih gambar lain.";};reader.onload=()=>{const img=new Image();img.onerror=()=>{$("profileSaveNote").textContent="Gambar tidak dapat dibuka.";};img.onload=()=>{cropState.image=img;cropState.x=0;cropState.y=0;$("cropImage").src=reader.result;$("lexiaaCropper").classList.add("open");$("lexiaaCropper").setAttribute("aria-hidden","false");requestAnimationFrame(()=>layoutCropImage(true));$("profileSaveNote").textContent="Geser foto dengan jari untuk mengatur potongan.";};img.src=reader.result;};reader.readAsDataURL(file);e.target.value="";});
 const cropWindow=$("cropWindow");
-cropWindow?.addEventListener("pointerdown",e=>{cropState.drag=true;cropState.lastX=e.clientX;cropState.lastY=e.clientY;cropWindow.setPointerCapture(e.pointerId);});
-cropWindow?.addEventListener("pointermove",e=>{if(!cropState.drag)return;cropState.x+=e.clientX-cropState.lastX;cropState.y+=e.clientY-cropState.lastY;cropState.lastX=e.clientX;cropState.lastY=e.clientY;layoutCropImage();});
-cropWindow?.addEventListener("pointerup",()=>cropState.drag=false);cropWindow?.addEventListener("pointercancel",()=>cropState.drag=false);
+cropWindow?.addEventListener("pointerdown",e=>{if(!cropState.image)return;e.preventDefault();cropState.drag=true;cropState.lastX=e.clientX;cropState.lastY=e.clientY;cropWindow.setPointerCapture(e.pointerId);cropWindow.style.cursor="grabbing";});
+cropWindow?.addEventListener("pointermove",e=>{if(!cropState.drag)return;e.preventDefault();cropState.x+=e.clientX-cropState.lastX;cropState.y+=e.clientY-cropState.lastY;cropState.lastX=e.clientX;cropState.lastY=e.clientY;layoutCropImage();});
+function stopCropDrag(){cropState.drag=false;if(cropWindow)cropWindow.style.cursor="grab";}
+cropWindow?.addEventListener("pointerup",stopCropDrag);cropWindow?.addEventListener("pointercancel",stopCropDrag);cropWindow?.addEventListener("lostpointercapture",stopCropDrag);
 $("cancelCropPhoto")?.addEventListener("click",closeCropper);
-$("applyCropPhoto")?.addEventListener("click",()=>{const img=cropState.image,win=$("cropWindow");if(!img)return;const size=win.clientWidth,scale=cropState.base*cropState.scale,canvas=document.createElement("canvas");canvas.width=256;canvas.height=256;const ctx=canvas.getContext("2d");ctx.drawImage(img,-cropState.x/scale,-cropState.y/scale,size/scale,size/scale,0,0,256,256);window.lexiaaPendingPhoto=canvas.toDataURL("image/jpeg",.82);$("profileAvatarPreview").style.backgroundImage='url("'+window.lexiaaPendingPhoto+'")';$("profileAvatarPreview").textContent="";$("profileSaveNote").textContent="Foto sudah dipangkas 1:1. Tekan Simpan Profil untuk menerapkan.";closeCropper();});
-$("lexiaaProfileForm")?.addEventListener("submit",async e=>{e.preventDefault();const username=$("profileUsername").value.trim().replace(/^@/,""),displayName=$("profileDisplayName").value.trim();if(!/^[a-zA-Z0-9_.-]{3,24}$/.test(username)){$("profileSaveNote").textContent="Username 3–24 karakter: huruf, angka, titik, garis bawah, atau strip.";return;}if(!displayName){$("profileSaveNote").textContent="Display name tidak boleh kosong.";return;}const save=$("saveLexiaProfile");save.disabled=true;save.textContent="MENYIMPAN...";const p={username,displayName,photo:window.lexiaaPendingPhoto||readProfile().photo||""};try{localStorage.setItem("lexiaa-nextgen-profile",JSON.stringify(p));if(supabase){const{error}=await supabase.auth.updateUser({data:{username,display_name:displayName}});if(error)throw error;}paintProfile(p);$("profileSaveNote").textContent="Profil berhasil disimpan.";window.lexiaaPendingPhoto=null;setTimeout(closeProfileSettings,650);}catch(err){paintProfile(p);$("profileSaveNote").textContent="Profil tersimpan di perangkat ini. Sinkronisasi akun gagal: "+(err.message||"coba lagi nanti");}finally{save.disabled=false;save.textContent="Simpan Profil";}});
+$("applyCropPhoto")?.addEventListener("click",()=>{const img=cropState.image,win=$("cropWindow");if(!img||!win.clientWidth){$("profileSaveNote").textContent="Tunggu sampai pratinjau foto siap.";return;}const size=win.clientWidth,scale=cropState.base,canvas=document.createElement("canvas");canvas.width=256;canvas.height=256;const ctx=canvas.getContext("2d");if(!ctx){$("profileSaveNote").textContent="Browser tidak mendukung pemrosesan foto.";return;}ctx.drawImage(img,-cropState.x/scale,-cropState.y/scale,size/scale,size/scale,0,0,256,256);try{window.lexiaaPendingPhoto=canvas.toDataURL("image/jpeg",.82);}catch(err){$("profileSaveNote").textContent="Gagal memproses foto. Coba gambar lain.";return;}const preview=$("profileAvatarPreview");preview.style.backgroundImage='url("'+window.lexiaaPendingPhoto+'")';preview.style.backgroundSize="cover";preview.style.backgroundPosition="center";preview.textContent="";$("profileSaveNote").textContent="Potongan foto siap. Tekan Simpan Profil untuk menyimpan.";closeCropper();});
+$("lexiaaProfileForm")?.addEventListener("submit",async e=>{e.preventDefault();const username=$("profileUsername").value.trim().replace(/^@/,""),displayName=$("profileDisplayName").value.trim();if(!/^[a-zA-Z0-9_.-]{3,24}$/.test(username)){$("profileSaveNote").textContent="Username 3–24 karakter: huruf, angka, titik, garis bawah, atau strip.";return;}if(!displayName){$("profileSaveNote").textContent="Display name tidak boleh kosong.";return;}const save=$("saveLexiaProfile");save.disabled=true;save.textContent="MENYIMPAN...";const previous=readProfile();const p={username,displayName,photo:window.lexiaaPendingPhoto||previous.photo||""};try{localStorage.setItem("lexiaa-nextgen-profile",JSON.stringify(p));paintProfile(p);if(supabase){const{data}=await supabase.auth.getUser();if(data?.user){const{error}=await supabase.auth.updateUser({data:{username,display_name:displayName}});if(error)throw error;}}$("profileSaveNote").textContent="Profil berhasil disimpan.";window.lexiaaPendingPhoto=null;setTimeout(closeProfileSettings,650);}catch(err){paintProfile(p);$("profileSaveNote").textContent="Profil tersimpan di perangkat ini. Sinkronisasi akun tidak berhasil: "+(err.message||"coba lagi nanti");}finally{save.disabled=false;save.textContent="Simpan Profil";}});
+
 function openUpdates(){ $("lexiaaUpdatesBackdrop").classList.add("open");$("lexiaaUpdatesBackdrop").setAttribute("aria-hidden","false");}
 function closeUpdates(){$("lexiaaUpdatesBackdrop").classList.remove("open");$("lexiaaUpdatesBackdrop").setAttribute("aria-hidden","true");}
 $("lexiaaSidebar")?.querySelector('[data-action="updates"]')?.addEventListener("click",openUpdates);
