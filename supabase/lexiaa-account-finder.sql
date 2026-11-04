@@ -18,11 +18,13 @@ alter table public.lexiaa_profiles add column if not exists email text;
 alter table public.lexiaa_profiles alter column username drop not null;
 alter table public.lexiaa_profiles alter column display_name drop not null;
 alter table public.lexiaa_profiles enable row level security;
-grant select, insert, update on public.lexiaa_profiles to authenticated;
+grant select on public.lexiaa_profiles to anon, authenticated;
+grant insert, update on public.lexiaa_profiles to authenticated;
 
 drop policy if exists "Authenticated users can discover Lexiaa profiles" on public.lexiaa_profiles;
-create policy "Authenticated users can discover Lexiaa profiles"
-on public.lexiaa_profiles for select to authenticated using (true);
+drop policy if exists "Public can view Lexiaa profiles" on public.lexiaa_profiles;
+create policy "Public can view Lexiaa profiles"
+on public.lexiaa_profiles for select to anon, authenticated using (true);
 
 drop policy if exists "Users can insert their own Lexiaa profile" on public.lexiaa_profiles;
 create policy "Users can insert their own Lexiaa profile"
@@ -80,3 +82,22 @@ on conflict (id) do update set
 
 create index if not exists lexiaa_profiles_created_at_idx on public.lexiaa_profiles(created_at desc);
 create index if not exists lexiaa_profiles_nextgen_idx on public.lexiaa_profiles(nextgen_joined_at desc);
+
+
+-- Public avatar storage: users can upload/update only inside their own UUID folder.
+insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+values ('lexiaa-avatars', 'lexiaa-avatars', true, 2097152, array['image/jpeg','image/png','image/webp'])
+on conflict (id) do update set public = true, file_size_limit = 2097152, allowed_mime_types = array['image/jpeg','image/png','image/webp'];
+
+drop policy if exists "Public can view Lexiaa avatars" on storage.objects;
+create policy "Public can view Lexiaa avatars" on storage.objects
+for select using (bucket_id = 'lexiaa-avatars');
+
+drop policy if exists "Users upload own Lexiaa avatar" on storage.objects;
+create policy "Users upload own Lexiaa avatar" on storage.objects
+for insert to authenticated with check (bucket_id = 'lexiaa-avatars' and (storage.foldername(name))[1] = auth.uid()::text);
+
+drop policy if exists "Users update own Lexiaa avatar" on storage.objects;
+create policy "Users update own Lexiaa avatar" on storage.objects
+for update to authenticated using (bucket_id = 'lexiaa-avatars' and (storage.foldername(name))[1] = auth.uid()::text)
+with check (bucket_id = 'lexiaa-avatars' and (storage.foldername(name))[1] = auth.uid()::text);
