@@ -5,6 +5,7 @@ create table if not exists public.lexiaa_profiles (
   username text unique,
   display_name text,
   email_hint text,
+  email text,
   avatar_url text,
   old_registered boolean not null default true,
   nextgen_joined_at timestamptz,
@@ -13,6 +14,7 @@ create table if not exists public.lexiaa_profiles (
 );
 
 alter table public.lexiaa_profiles add column if not exists email_hint text;
+alter table public.lexiaa_profiles add column if not exists email text;
 alter table public.lexiaa_profiles alter column username drop not null;
 alter table public.lexiaa_profiles alter column display_name drop not null;
 alter table public.lexiaa_profiles enable row level security;
@@ -48,8 +50,8 @@ begin
   v_display_name := nullif(trim(coalesce(new.raw_user_meta_data->>'display_name', '')), '');
   v_email_hint := case when coalesce(new.email, '') like '%@%' then left(split_part(new.email, '@', 1), 2) || repeat('*', greatest(length(split_part(new.email, '@', 1)) - 2, 2)) || '@' || split_part(new.email, '@', 2) else null end;
 
-  insert into public.lexiaa_profiles(id, username, display_name, email_hint, old_registered)
-  values(new.id, nullif(v_username, 'lexiaa_' || substr(replace(new.id::text, '-', ''), 1, 10)), v_display_name, v_email_hint, true)
+  insert into public.lexiaa_profiles(id, username, display_name, email_hint, email, old_registered)
+  values(new.id, nullif(v_username, 'lexiaa_' || substr(replace(new.id::text, '-', ''), 1, 10)), v_display_name, v_email_hint, new.email, true)
   on conflict (id) do nothing;
   return new;
 end;
@@ -61,16 +63,18 @@ after insert on auth.users
 for each row execute procedure public.lexiaa_handle_new_auth_user();
 
 -- Backfill accounts that already existed before the directory was installed.
-insert into public.lexiaa_profiles(id, username, display_name, email_hint, old_registered)
+insert into public.lexiaa_profiles(id, username, display_name, email_hint, email, old_registered)
 select
   u.id,
   nullif(lower(regexp_replace(coalesce(u.raw_user_meta_data->>'username', ''), '[^a-zA-Z0-9_.-]', '', 'g')), ''),
   nullif(trim(coalesce(u.raw_user_meta_data->>'display_name', '')), ''),
   case when coalesce(u.email, '') like '%@%' then left(split_part(u.email, '@', 1), 2) || repeat('*', greatest(length(split_part(u.email, '@', 1)) - 2, 2)) || '@' || split_part(u.email, '@', 2) else null end,
+  u.email,
   true
 from auth.users u
 on conflict (id) do update set
   email_hint = coalesce(public.lexiaa_profiles.email_hint, excluded.email_hint),
+  email = coalesce(excluded.email, public.lexiaa_profiles.email),
   username = coalesce(public.lexiaa_profiles.username, excluded.username),
   display_name = coalesce(public.lexiaa_profiles.display_name, excluded.display_name);
 
