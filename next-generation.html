@@ -607,7 +607,8 @@ function closeLexiaaMessages(){const modal=$("lexiaaMessagesBackdrop");modal.cla
 $("lexiaaSidebar")?.querySelector('[data-action="messages"]')?.addEventListener("click",openLexiaaMessages);
 $("closeLexiaaMessages")?.addEventListener("click",closeLexiaaMessages);
 $("lexiaaMessagesBackdrop")?.addEventListener("click",e=>{if(e.target===$("lexiaaMessagesBackdrop"))closeLexiaaMessages();});
-\nfunction openLexiaaNgMenu(){const el=$("lexiaaNgMenuBackdrop");el.classList.add("open");el.setAttribute("aria-hidden","false");}
+
+function openLexiaaNgMenu(){const el=$("lexiaaNgMenuBackdrop");el.classList.add("open");el.setAttribute("aria-hidden","false");}
 function closeLexiaaNgMenu(){const el=$("lexiaaNgMenuBackdrop");el.classList.remove("open");el.setAttribute("aria-hidden","true");}
 $("lexiaaSidebar")?.querySelector('[data-action="ng-menu"]')?.addEventListener("click",openLexiaaNgMenu);
 $("closeLexiaaNgMenu")?.addEventListener("click",closeLexiaaNgMenu);
