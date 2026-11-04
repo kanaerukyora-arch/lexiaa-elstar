@@ -401,6 +401,14 @@ body:has(#loginView.active) main{min-height:0}
 #dashboardView .lexiaa-sidebar-footer span:last-child{padding-top:5px;border-top:1px solid rgba(225,220,255,.17);color:#dcd3ff}
 #dashboardView .lexiaa-sidebar-footer b{font-weight:600;color:#fff}
 </style>
+
+<style id="lexiaa-build-meta-topbar-v137">
+#dashboardView .lexiaa-build-meta{display:flex;flex-direction:column;justify-content:center;align-items:flex-end;gap:2px;min-width:max-content;padding:4px 8px;border-right:1px solid rgba(225,220,255,.24);color:#e9e2ff;font-size:clamp(8px,.72vw,10px);line-height:1.25;letter-spacing:.01em}
+#dashboardView .lexiaa-build-meta span:first-child{font-weight:700;color:#fff}
+#dashboardView .lexiaa-build-meta span:last-child{color:#cfc5ef}
+#dashboardView .lexiaa-topbar-actions{gap:7px}
+@media(max-width:560px){#dashboardView .lexiaa-build-meta{font-size:7px;padding:3px 5px;min-width:0}#dashboardView .lexiaa-utility-button{padding:5px 7px;font-size:8px}#dashboardView .lexiaa-topbar-actions{gap:4px}}
+</style>
 </head>
 <body><div id="particles" aria-hidden="true"></div><div class="wrap">
 <header class="topline"><div class="brand">LEXIAA <small>THE NEXT GENERATION</small></div><div class="system-pill" id="systemPill">● SECURE ACCESS</div></header>
@@ -422,6 +430,7 @@ body:has(#loginView.active) main{min-height:0}
     <div class="lexiaa-topbar-center"></div>
     <div class="lexiaa-topbar-actions">
       
+      <div class="lexiaa-build-meta" aria-label="Informasi versi aplikasi"><span>APK v1.3.7 Beta</span><span>Asia/Jakarta</span></div>
       <button class="lexiaa-utility-button" id="backToOldLexia" type="button" aria-label="Kembali ke Lexiaa Original">↩ <span>OLD LEXIAA</span></button>
       <button class="lexiaa-utility-button logout" id="logoutButton" type="button" aria-label="Keluar dari akun Next Generation">⇥</button>
     </div>
@@ -439,7 +448,7 @@ body:has(#loginView.active) main{min-height:0}
       <button class="lexiaa-nav-item" type="button"><span class="lexiaa-nav-icon">✉</span><span>Pesan</span></button>
       <button class="lexiaa-nav-item" type="button" data-action="updates"><span class="lexiaa-nav-icon">⟳</span><span>Update</span></button>
     </nav>
-    <div class="lexiaa-sidebar-footer"><span>Versi Apk: v1.3.6 (Beta)</span><span>Region: <b id="sidebarRegion">Asia/Jakarta</b></span></div>
+    
   </aside>
   <div class="lexiaa-status-top fantasy-panel">
     <div class="lexiaa-status-line"><span class="lexiaa-battery-icon">▰</span><strong id="batteryValue">--%</strong><span class="lexiaa-clock-icon">◷</span><strong id="liveClock">00:00:00</strong></div>
@@ -460,7 +469,7 @@ body:has(#loginView.active) main{min-height:0}
   </section>
   <div class="lexiaa-battery-hidden" aria-hidden="true"><span id="batteryFill"></span></div>
   <div class="fantasy-top-brand"><div class="fantasy-brand-mark">✧</div><div class="fantasy-brand-name">Lexiaa</div><div class="fantasy-brand-sub">— The Next Generation —</div><div class="fantasy-brand-flare">✦</div></div>
-  <div class="fantasy-bottom-brand"><span>REGION · <b id="regionValue">DETECTING</b></span><span>VERSION · <b>V.1.3.6 BETA</b></span></div>
+  <div class="fantasy-bottom-brand"><span>REGION · <b id="regionValue">DETECTING</b></span><span>VERSION · <b>V.1.3.7 BETA</b></span></div>
   <div class="lexiaa-settings-backdrop" id="lexiaaSettingsBackdrop" aria-hidden="true">
     <section class="lexiaa-settings-modal" role="dialog" aria-modal="true" aria-labelledby="lexiaaSettingsTitle">
       <button class="lexiaa-settings-close" id="closeLexiaSettings" type="button" aria-label="Tutup">×</button>
@@ -503,14 +512,14 @@ body:has(#loginView.active) main{min-height:0}
       <button class="lexiaa-settings-close" id="closeLexiaUpdates" type="button" aria-label="Tutup">×</button>
       <div class="lexiaa-settings-kicker">LEXIAA THE NEXT GENERATION</div>
       <h2 id="lexiaaUpdatesTitle">Update Terbaru</h2>
-      <div class="lexiaa-update-version"><strong>v1.3.6 Beta</strong><span>Penyempurnaan footer sidebar</span></div>
+      <div class="lexiaa-update-version"><strong>v1.3.7 Beta</strong><span>Penempatan versi dan region di topbar</span></div>
       <ul class="lexiaa-update-list">
         <li>Suara ambience angin dan aliran air otomatis aktif saat memasuki dashboard.</li>
         <li>Tombol ON/OFF suara dihilangkan agar dashboard lebih bersih.</li>
         <li>Ping ke server Lexiaa diperbarui setiap detik.</li>
         <li>Jenis koneksi ditampilkan sesuai informasi yang tersedia dari browser.</li>
         <li>Profil publik dan avatar Lexiaa tetap tersinkron online.</li>
-        <li>Enam panel MENU LEXIAA N.G tetap menampilkan SEGERA HADIR di tengah, dan ornamen sakura di samping nama menu sidebar dikembalikan.</li><li>Ikon dekoratif pada menu N.G. di sidebar dihilangkan.</li><li>Area Versi APK dan Region kini memakai panel footer terpisah dengan padding, jarak, dan garis pemisah yang lebih jelas agar tidak menempel di tepi sidebar.</li>
+        <li>Enam panel MENU LEXIAA N.G tetap menampilkan SEGERA HADIR di tengah, dan ornamen sakura di samping nama menu sidebar dikembalikan.</li><li>Ikon dekoratif pada menu N.G. di sidebar dihilangkan.</li><li>Informasi versi APK dan region dipindahkan ke samping tombol OLD LEXIAA di topbar agar sidebar lebih lega dan rapi.</li>
       </ul>
       <div class="lexiaa-update-footer">Terima kasih sudah menggunakan Lexiaa.</div>
     </section>
