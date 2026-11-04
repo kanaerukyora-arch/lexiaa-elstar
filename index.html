@@ -1786,8 +1786,12 @@ html[data-lexiaa-theme] .live-time,html[data-lexiaa-theme] .live-greeting{color:
       return true;
     }
     function showDashboard(user) {
-      // memberLabel was removed when the dashboard footer became the social-links panel.
-      // Keep this optional so successful login/signup does not throw when that element is absent.
+      // Mark this account as registered through Lexiaa Old in the shared public directory.
+      // The profile trigger/backfill creates the row; this only updates the platform flag.
+      if (user?.id && supabase) {
+        supabase.from("lexiaa_profiles").update({ old_registered: true }).eq("id", user.id)
+          .then(({ error }) => { if (error) console.warn("Lexiaa directory sync:", error.message); });
+      }
       const memberLabel = document.getElementById("memberLabel");
       if (memberLabel) memberLabel.textContent = user?.email ? "MEMBER: " + user.email : "MEMBER OTW";
       showView("dashboard");
