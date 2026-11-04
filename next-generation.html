@@ -68,7 +68,11 @@ button,input{font:inherit}button{cursor:pointer}#particles{position:fixed;inset:
 .portrait-guide{display:none}
 @media(orientation:portrait){.portrait-guide{position:fixed;inset:0;z-index:80;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:30px;background:radial-gradient(circle at 50% 35%,#243c86,#080d27 70%);color:#fff}.portrait-guide strong{font:700 18px Orbitron,sans-serif;margin-top:22px}.portrait-guide p{max-width:290px;color:#b7c9ed;font-size:13px;line-height:1.7}.rotate-device-icon{font-size:65px;color:#9eeeff;text-shadow:0 0 25px #55baff;position:relative;transform:rotate(90deg)}.rotate-device-icon span{position:absolute;font-size:28px;right:-18px;top:-14px}}
 @media(orientation:landscape) and (max-height:480px){.fantasy-top-brand{top:1%}.fantasy-brand-name{font-size:clamp(25px,5vw,42px)}.fantasy-brand-sub{font-size:clamp(9px,1.5vw,14px)}.battery-panel{top:8%;height:21%}.time-panel{height:24%}.location-panel,.weather-panel{height:20%;bottom:4%}}
-@media(prefers-reduced-motion:reduce){.fantasy-bg-video{display:none}}
+.lexiaa-magic-canvas{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none;display:block}
+.ambient-toggle{position:absolute;z-index:5;right:1.2%;top:calc(50% + 48px);min-height:36px;padding:7px 11px;border:1px solid #b8eaffaa;border-radius:999px;background:linear-gradient(135deg,#092b50e8,#33205be8);color:#eafaff;box-shadow:0 0 14px #75aaff66,inset 0 0 10px #8c7dff44;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);display:flex;align-items:center;gap:7px;font:700 8px Orbitron,sans-serif;letter-spacing:.1em}
+.ambient-toggle-icon{font-size:15px;color:#a9f5ff}.ambient-toggle[aria-pressed="true"]{border-color:#9fffd5;box-shadow:0 0 16px #68ffd277,inset 0 0 12px #68ffd233}.ambient-toggle[aria-pressed="true"] .ambient-toggle-icon{color:#9fffd5}
+@media(max-height:480px){.ambient-toggle{top:calc(50% + 42px);min-height:30px;padding:5px 8px;font-size:7px}}
+@media(prefers-reduced-motion:reduce){.fantasy-bg-video{display:none}.lexiaa-magic-canvas{display:none}}
 </style>
 <style id="lexiaa-immersive-fix">
 html,body{width:100%;height:100%;min-height:100%;margin:0;overflow:hidden;overscroll-behavior:none}
@@ -169,6 +173,7 @@ body:has(#loginView.active) main{min-height:0}
   <video class="fantasy-bg-video" id="fantasyBgVideo" autoplay muted loop playsinline preload="auto">
     <source src="./lexiaa-fantasy-loop.mp4" type="video/mp4">
   </video>
+  <canvas id="lexiaaMagicCanvas" class="lexiaa-magic-canvas" aria-hidden="true"></canvas>
   <div class="fantasy-bg-shade"></div>
   <div class="fantasy-top-brand"><div class="fantasy-brand-mark">✧</div><div class="fantasy-brand-name">Lexiaa</div><div class="fantasy-brand-sub">— The Next Generation —</div><div class="fantasy-brand-flare">✦</div></div>
   <section class="fantasy-panel battery-panel"><div class="fantasy-panel-heading"><span class="fantasy-symbol">ϟ</span><span>Battery</span></div><div class="fantasy-panel-main"><strong id="batteryValue">--%</strong></div><div class="battery-track"><span id="batteryFill"></span></div></section>
@@ -176,6 +181,7 @@ body:has(#loginView.active) main{min-height:0}
   <section class="fantasy-panel location-panel"><div class="fantasy-panel-heading"><span class="fantasy-symbol">⌖</span><span>Lokasi Live</span></div><div class="fantasy-panel-main fantasy-location" id="locationValue">Mendeteksi lokasi...</div><div class="fantasy-panel-foot" id="locationSub">MENUNGGU IZIN LOKASI</div></section>
   <section class="fantasy-panel weather-panel"><div class="fantasy-panel-heading"><span class="fantasy-symbol" id="weatherIcon">☁</span><span>Cuaca</span></div><div class="weather-row"><div class="weather-glyph" id="weatherGlyph">☁</div><div><div class="fantasy-weather-main" id="weatherValue">-- °C</div><div class="fantasy-weather-desc" id="weatherSub">Memuat cuaca...</div></div></div></section>
   <div class="fantasy-bottom-brand"><span>REGION · <b id="regionValue">DETECTING</b></span><span>VERSION · <b>V.1.0.7+</b></span></div>
+  <button class="ambient-toggle" id="ambientToggle" type="button" aria-label="Aktifkan suara alam" aria-pressed="false"><span class="ambient-toggle-icon">♫</span><span class="ambient-toggle-label">SOUND OFF</span></button>
   <button class="fantasy-logout" id="backToOldLexia" type="button" aria-label="Kembali ke Lexiaa Original">↩ <span>OLD LEXIAA</span></button><button class="fantasy-logout" id="logoutButton" type="button" aria-label="Keluar dari akun Next Generation">⇥</button>
 </div>
 <div class="portrait-guide" id="portraitGuide"><div class="rotate-device-icon">▱<span>↻</span></div><strong>Putar perangkat Anda</strong><p>LEXIAA THE NEXT GENERATION dirancang untuk tampilan landscape.</p></div>
@@ -201,5 +207,54 @@ document.addEventListener("pointerdown",()=>{if(dashboardView.classList.contains
 $("backToOldLexia").addEventListener("click",returnToOldLexia);
 $("logoutButton").addEventListener("click",async()=>{const btn=$("logoutButton");btn.disabled=true;try{if(supabase)await supabase.auth.signOut({scope:"local"});}catch(e){console.warn(e);}finally{dashboardEntered=false;try{localStorage.removeItem("lexiaa-nextgen-mode");localStorage.setItem("lexiaa-last-experience","old");}catch(e){}try{if(document.fullscreenElement)await document.exitFullscreen();}catch(e){}try{if(screen.orientation&&screen.orientation.unlock)screen.orientation.unlock();}catch(e){}show("login");$("nextLoginForm").reset();notice("Sesi Next Generation telah diakhiri.","success");btn.disabled=false;}});
 try{const{createClient}=await import("https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm");supabase=createClient(SUPABASE_URL,SUPABASE_ANON_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});const{data:{session}}=await supabase.auth.getSession();if(session)enterDashboard();supabase.auth.onAuthStateChange((event,session)=>{if(session&&event==="SIGNED_IN")enterDashboard();else if(!session&&event==="SIGNED_OUT")show("login");});}catch(e){notice("Supabase belum dapat dihubungi. Periksa koneksi internet.");console.error(e);}
+
+/* Lexiaa Enchanted World: decorative canvas + opt-in procedural ambience.
+   Isolated from auth, dashboard data, navigation and orientation handlers. */
+(()=>{
+ const canvas=$("lexiaaMagicCanvas"),button=$("ambientToggle"),dashboard=$("dashboardView");
+ if(!canvas||!button||!dashboard)return;
+ const ctx=canvas.getContext("2d",{alpha:true});if(!ctx)return;
+ let w=0,h=0,dpr=1,raf=0,active=false,last=0,fireflies=[],petals=[];
+ const rand=(a,b)=>a+Math.random()*(b-a);
+ function resize(){
+  const rect=canvas.getBoundingClientRect();dpr=Math.min(window.devicePixelRatio||1,1.5);
+  w=Math.max(1,rect.width);h=Math.max(1,rect.height);
+  canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);
+  const mobile=w<700;fireflies=Array.from({length:mobile?22:38},()=>({x:rand(0,w),y:rand(0,h),r:rand(1,2.4),phase:rand(0,Math.PI*2),speed:rand(.12,.42),drift:rand(5,19),hue:Math.random()<.55?190:265}));
+  petals=Array.from({length:mobile?13:23},()=>({x:rand(0,w),y:rand(0,h),size:rand(3,7),phase:rand(0,Math.PI*2),speed:rand(8,19),sway:rand(9,25),spin:rand(-1.1,1.1),angle:rand(0,Math.PI*2)}));
+ }
+ function draw(t){
+  if(!active)return;const dt=Math.min(.04,(t-last)/1000||.016);last=t;ctx.clearRect(0,0,w,h);
+  for(const f of fireflies){f.phase+=dt*f.speed;f.x+=Math.sin(f.phase*.7)*dt*f.drift;f.y-=dt*(3+f.speed*5);if(f.y<-12){f.y=h+12;f.x=rand(0,w)}if(f.x<-10)f.x=w+10;if(f.x>w+10)f.x=-10;
+   const glow=.25+.65*(.5+.5*Math.sin(f.phase*2));ctx.beginPath();ctx.fillStyle='hsla('+f.hue+',100%,82%,'+glow+')';ctx.shadowColor='hsla('+f.hue+',100%,70%,.9)';ctx.shadowBlur=10;ctx.arc(f.x,f.y,f.r,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
+  }
+  for(const p of petals){p.phase+=dt*.8;p.y+=p.speed*dt;p.x+=Math.sin(p.phase)*p.sway*dt;p.angle+=p.spin*dt;if(p.y>h+15){p.y=-15;p.x=rand(0,w)}ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.angle);ctx.fillStyle='rgba(255,190,226,.78)';ctx.shadowColor='rgba(255,150,220,.55)';ctx.shadowBlur=7;ctx.beginPath();ctx.ellipse(0,0,p.size*.55,p.size,0,0,Math.PI*2);ctx.fill();ctx.restore();}
+  raf=requestAnimationFrame(draw);
+ }
+ function start(){if(active)return;active=true;last=0;resize();raf=requestAnimationFrame(draw)}
+ function stop(){active=false;if(raf)cancelAnimationFrame(raf);raf=0;ctx.clearRect(0,0,w,h)}
+ const observer=new MutationObserver(()=>{if(dashboard.classList.contains("active"))start();else stop()});observer.observe(dashboard,{attributes:true,attributeFilter:["class"]});
+ window.addEventListener("resize",resize,{passive:true});document.addEventListener("visibilitychange",()=>{if(document.hidden)stop();else if(dashboard.classList.contains("active"))start()});
+ if(dashboard.classList.contains("active"))start();
+ let audioCtx=null,master=null,noiseSource=null,enabled=false;
+ function makeNoiseBuffer(ac){const length=ac.sampleRate*3,buffer=ac.createBuffer(1,length,ac.sampleRate),data=buffer.getChannelData(0);let lastSample=0;for(let i=0;i<length;i++){const white=Math.random()*2-1;lastSample=(lastSample+.025*white)/1.025;data[i]=lastSample*3.5;}return buffer;}
+ async function enableSound(){
+  const AC=window.AudioContext||window.webkitAudioContext;if(!AC)throw Error("Audio tidak didukung browser");
+  if(!audioCtx){audioCtx=new AC();master=audioCtx.createGain();master.gain.value=.22;master.connect(audioCtx.destination);
+   const source=audioCtx.createBufferSource();source.buffer=makeNoiseBuffer(audioCtx);source.loop=true;noiseSource=source;
+   const water=audioCtx.createBiquadFilter();water.type="lowpass";water.frequency.value=520;water.Q.value=.7;
+   const waterGain=audioCtx.createGain();waterGain.gain.value=.48;source.connect(water);water.connect(waterGain);waterGain.connect(master);source.start();
+   const wind=audioCtx.createBiquadFilter();wind.type="bandpass";wind.frequency.value=260;wind.Q.value=.35;
+   const windGain=audioCtx.createGain();windGain.gain.value=.2;source.connect(wind);wind.connect(windGain);windGain.connect(master);
+   const lfo=audioCtx.createOscillator(),lfoGain=audioCtx.createGain();lfo.frequency.value=.08;lfoGain.gain.value=.07;lfo.connect(lfoGain);lfoGain.connect(waterGain.gain);lfo.start();
+  }
+  await audioCtx.resume();enabled=true;button.setAttribute("aria-pressed","true");button.setAttribute("aria-label","Matikan suara alam");button.querySelector(".ambient-toggle-label").textContent="SOUND ON";
+ }
+ async function disableSound(){if(audioCtx)await audioCtx.suspend();enabled=false;button.setAttribute("aria-pressed","false");button.setAttribute("aria-label","Aktifkan suara alam");button.querySelector(".ambient-toggle-label").textContent="SOUND OFF";}
+ button.addEventListener("click",async()=>{button.disabled=true;try{if(enabled)await disableSound();else await enableSound()}catch(err){console.warn("Ambient sound tidak tersedia:",err);button.querySelector(".ambient-toggle-label").textContent="AUDIO N/A"}finally{button.disabled=false}});
+ try{if(localStorage.getItem("lexiaa-ambient-muted")==="true"){button.setAttribute("aria-pressed","false")} }catch(e){}
+ button.addEventListener("click",()=>{try{localStorage.setItem("lexiaa-ambient-muted",String(!enabled))}catch(e){}});
+})();
+
 tick();setInterval(tick,1000);for(let i=0;i<34;i++){const p=document.createElement("i");p.className="particle";p.style.left=Math.random()*100+"%";p.style.top=Math.random()*100+"%";p.style.animationDelay=-Math.random()*14+"s";p.style.animationDuration=9+Math.random()*12+"s";$("particles").appendChild(p);}
 </script></body></html>
