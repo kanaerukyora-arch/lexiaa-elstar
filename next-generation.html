@@ -237,6 +237,51 @@ body:has(#dashboardView.active) .wrap{width:100%;max-width:none;margin:0}
 }
 
 </style>
+<style id="lexiaa-dashboard-v126-style">
+
+/* V1.2.6 compact info cards, visible avatars and update/crop dialogs */
+#dashboardView .weather-panel,#dashboardView .location-panel{width:16.4%!important;min-width:155px!important;min-height:0!important;height:auto!important;padding:11px 14px!important;border-radius:13px!important}
+#dashboardView .weather-panel{left:23.3%!important;top:17%!important}
+#dashboardView .location-panel{left:23.3%!important;top:34%!important}
+#dashboardView .lexiaa-info-heading{font-size:clamp(10px,1vw,14px)!important;margin-bottom:7px!important}
+#dashboardView .weather-glyph{font-size:clamp(22px,2.4vw,32px)!important}
+#dashboardView .fantasy-weather-main{font-size:clamp(15px,1.55vw,21px)!important}
+#dashboardView .fantasy-weather-desc{font-size:clamp(7px,.68vw,9px)!important;white-space:normal;line-height:1.25}
+#dashboardView .lexiaa-info-value{font-size:clamp(11px,1.15vw,15px)!important;gap:7px!important}
+#dashboardView .lexiaa-pin{font-size:17px!important}
+#dashboardView .fantasy-panel-foot{font-size:clamp(7px,.68vw,9px)!important;margin-top:5px!important}
+#dashboardView .lexiaa-avatar{overflow:hidden;background-position:center!important;background-size:cover!important;background-repeat:no-repeat!important}
+#dashboardView .lexiaa-avatar.large{border-radius:50%!important;width:70px!important;height:70px!important;flex-basis:70px!important}
+#dashboardView .lexiaa-cropper{display:none;margin:15px 0 5px;padding:14px;border:1px solid #a99bff66;border-radius:15px;background:rgba(8,13,43,.72)}
+#dashboardView .lexiaa-cropper.open{display:block}
+#dashboardView .lexiaa-cropper-title{font-size:13px;font-weight:700;margin-bottom:10px}
+#dashboardView .lexiaa-crop-window{position:relative;width:220px;height:220px;max-width:100%;margin:0 auto;overflow:hidden;border:2px solid #d7caff;border-radius:50%;background:#080d26;touch-action:none;cursor:grab;box-shadow:0 0 0 5px #a58cff22}
+#dashboardView .lexiaa-crop-window img{position:absolute;max-width:none;max-height:none;user-select:none;-webkit-user-drag:none;pointer-events:none;transform-origin:top left}
+#dashboardView .lexiaa-crop-help{text-align:center;color:#c9c3e9;font-size:10px;margin:10px 0}
+#dashboardView .lexiaa-crop-zoom{width:100%;accent-color:#b5a0ff}
+#dashboardView .lexiaa-crop-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:10px}
+#dashboardView .lexiaa-crop-actions button{border:1px solid #a99bff88;border-radius:9px;padding:8px 12px;background:#6553b744;color:#fff;font-size:11px}
+#dashboardView #applyCropPhoto{background:linear-gradient(100deg,#6553b7,#387ab4)}
+#dashboardView .lexiaa-updates-backdrop{position:absolute;inset:0;z-index:55;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(4,7,25,.58);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+#dashboardView .lexiaa-updates-backdrop.open{display:flex}
+#dashboardView .lexiaa-updates-modal{position:relative;width:min(440px,92vw);padding:27px;border:1px solid rgba(204,190,255,.65);border-radius:22px;background:linear-gradient(145deg,rgba(36,31,91,.98),rgba(10,27,73,.97));box-shadow:0 20px 70px #0008;color:#fff}
+#dashboardView .lexiaa-updates-modal h2{margin:7px 0 18px;font-size:24px}
+#dashboardView .lexiaa-update-version{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:11px 13px;border:1px solid #b8a7ff55;border-radius:11px;background:#8c78e822}
+#dashboardView .lexiaa-update-version strong{color:#d9ceff}
+#dashboardView .lexiaa-update-version span{font-size:10px;color:#c7c0e8}
+#dashboardView .lexiaa-update-list{padding-left:20px;margin:16px 0;color:#e5e1fa;font-size:13px;line-height:1.7}
+#dashboardView .lexiaa-update-footer{padding-top:12px;border-top:1px solid #c8baff33;color:#bdb4e7;font-size:11px}
+@media(max-width:760px){
+ #dashboardView .weather-panel,#dashboardView .location-panel{width:20%!important;min-width:0!important;padding:8px 9px!important}
+ #dashboardView .weather-panel{top:17%!important}
+ #dashboardView .location-panel{top:33%!important}
+ #dashboardView .lexiaa-info-heading{font-size:9px!important}
+ #dashboardView .lexiaa-info-value{font-size:10px!important}
+ #dashboardView .lexiaa-crop-window{width:190px;height:190px}
+}
+
+</style>
+
 
 
 
@@ -314,9 +359,9 @@ body:has(#loginView.active) main{min-height:0}
       <button class="lexiaa-nav-item" type="button"><span class="lexiaa-nav-icon">▥</span><span>Statistik</span></button>
       <button class="lexiaa-nav-item" type="button" data-action="settings"><span class="lexiaa-nav-icon">⚙</span><span>Pengaturan</span></button>
       <button class="lexiaa-nav-item" type="button"><span class="lexiaa-nav-icon">✉</span><span>Pesan</span></button>
-      <button class="lexiaa-nav-item" type="button"><span class="lexiaa-nav-icon">⟳</span><span>Update</span></button>
+      <button class="lexiaa-nav-item" type="button" data-action="updates"><span class="lexiaa-nav-icon">⟳</span><span>Update</span></button>
     </nav>
-    <div class="lexiaa-sidebar-footer"><span>Versi Apk: v1.2.5 (Beta)</span><span>Region: <b id="sidebarRegion">Asia/Jakarta</b></span></div>
+    <div class="lexiaa-sidebar-footer"><span>Versi Apk: v1.2.6 (Beta)</span><span>Region: <b id="sidebarRegion">Asia/Jakarta</b></span></div>
   </aside>
   <div class="lexiaa-status-top fantasy-panel">
     <div class="lexiaa-status-line"><span class="lexiaa-battery-icon">▰</span><strong id="batteryValue">--%</strong><span class="lexiaa-clock-icon">◷</span><strong id="liveClock">00:00:00</strong></div>
@@ -337,7 +382,7 @@ body:has(#loginView.active) main{min-height:0}
   </section>
   <div class="lexiaa-battery-hidden" aria-hidden="true"><span id="batteryFill"></span></div>
   <div class="fantasy-top-brand"><div class="fantasy-brand-mark">✧</div><div class="fantasy-brand-name">Lexiaa</div><div class="fantasy-brand-sub">— The Next Generation —</div><div class="fantasy-brand-flare">✦</div></div>
-  <div class="fantasy-bottom-brand"><span>REGION · <b id="regionValue">DETECTING</b></span><span>VERSION · <b>V.1.0.8+</b></span></div>
+  <div class="fantasy-bottom-brand"><span>REGION · <b id="regionValue">DETECTING</b></span><span>VERSION · <b>V.1.0.9+</b></span></div>
   <div class="lexiaa-settings-backdrop" id="lexiaaSettingsBackdrop" aria-hidden="true">
     <section class="lexiaa-settings-modal" role="dialog" aria-modal="true" aria-labelledby="lexiaaSettingsTitle">
       <button class="lexiaa-settings-close" id="closeLexiaSettings" type="button" aria-label="Tutup">×</button>
@@ -345,12 +390,34 @@ body:has(#loginView.active) main{min-height:0}
       <h2 id="lexiaaSettingsTitle">Pengaturan Profil</h2>
       <p class="lexiaa-settings-description">Atur identitas penjelajah Lexiaa Anda.</p>
       <form id="lexiaaProfileForm">
-        <div class="lexiaa-profile-preview"><div class="lexiaa-avatar large" id="profileAvatarPreview">L</div><label class="lexiaa-upload-button" for="profilePhotoInput">＋ Tambah foto profil</label><input id="profilePhotoInput" type="file" accept="image/*" hidden></div>
+        <div class="lexiaa-profile-preview"><div class="lexiaa-avatar large" id="profileAvatarPreview">L</div><label class="lexiaa-upload-button" for="profilePhotoInput">＋ Tambah foto profil</label><input id="profilePhotoInput" type="file" accept="image/*" hidden>
+        <div class="lexiaa-cropper" id="lexiaaCropper" aria-hidden="true">
+          <div class="lexiaa-cropper-title">Atur posisi foto</div>
+          <div class="lexiaa-crop-window" id="cropWindow"><img id="cropImage" alt="Pratinjau pemotongan foto"></div>
+          <div class="lexiaa-crop-help">Geser foto untuk mengatur posisi, lalu atur zoom.</div>
+          <input id="cropZoom" class="lexiaa-crop-zoom" type="range" min="1" max="3" step=".01" value="1" aria-label="Zoom foto">
+          <div class="lexiaa-crop-actions"><button type="button" id="cancelCropPhoto">Batal</button><button type="button" id="applyCropPhoto">Gunakan Foto</button></div>
+        </div></div>
         <label class="lexiaa-field-label" for="profileUsername">Username</label><input class="lexiaa-profile-input" id="profileUsername" name="username" maxlength="24" placeholder="contoh: kanaeru" autocomplete="username" required>
         <label class="lexiaa-field-label" for="profileDisplayName">Display Name</label><input class="lexiaa-profile-input" id="profileDisplayName" name="displayName" maxlength="40" placeholder="Nama yang ditampilkan" required>
         <div class="lexiaa-profile-note" id="profileSaveNote">Foto profil disimpan pada perangkat ini. Nama profil disinkronkan ke akun bila tersedia.</div>
         <button class="lexiaa-profile-save" type="submit" id="saveLexiaProfile">Simpan Profil</button>
       </form>
+    </section>
+  </div>
+  <div class="lexiaa-updates-backdrop" id="lexiaaUpdatesBackdrop" aria-hidden="true">
+    <section class="lexiaa-updates-modal" role="dialog" aria-modal="true" aria-labelledby="lexiaaUpdatesTitle">
+      <button class="lexiaa-settings-close" id="closeLexiaUpdates" type="button" aria-label="Tutup">×</button>
+      <div class="lexiaa-settings-kicker">LEXIAA THE NEXT GENERATION</div>
+      <h2 id="lexiaaUpdatesTitle">Update Terbaru</h2>
+      <div class="lexiaa-update-version"><strong>v1.2.6 Beta</strong><span>Dashboard refinement</span></div>
+      <ul class="lexiaa-update-list">
+        <li>Panel cuaca dan lokasi dibuat lebih ringkas.</li>
+        <li>Foto profil kini dapat dipangkas dan diatur posisinya.</li>
+        <li>Avatar profil ditampilkan konsisten pada dashboard.</li>
+        <li>Pop-up riwayat pembaruan ditambahkan.</li>
+      </ul>
+      <div class="lexiaa-update-footer">Terima kasih sudah menggunakan Lexiaa.</div>
     </section>
   </div>
 </div>
@@ -364,17 +431,34 @@ function updateNetworkStatus(){const el=$("networkValue");if(!el)return;if(!navi
 window.addEventListener("online",updateNetworkStatus);window.addEventListener("offline",updateNetworkStatus);if(navigator.connection)navigator.connection.addEventListener?.("change",updateNetworkStatus);updateNetworkStatus();
 $("lexiaaMenuToggle")?.addEventListener("click",()=>{const collapsed=dashboardView.classList.toggle("sidebar-collapsed");$("lexiaaMenuToggle").setAttribute("aria-expanded",String(!collapsed));});
 $("lexiaaSidebar")?.querySelectorAll(".lexiaa-nav-item").forEach(item=>item.addEventListener("click",()=>{const nav=$("lexiaaSidebar").querySelectorAll(".lexiaa-nav-item");nav.forEach(x=>{x.classList.remove("active");x.removeAttribute("aria-current");});item.classList.add("active");item.setAttribute("aria-current","page");}));
+
 function readProfile(){try{return JSON.parse(localStorage.getItem("lexiaa-nextgen-profile")||"{}")}catch(e){return {}}}
-function paintProfile(p){const name=p.displayName||"User Name",username=p.username||"@username";$("sidebarDisplayName").textContent=name;$("sidebarUsername").textContent=username.startsWith("@")?username:"@"+username;const avatar=$("sidebarAvatar"),preview=$("profileAvatarPreview");[avatar,preview].forEach(el=>{if(!el)return;el.textContent=p.photo?"":(name.trim().charAt(0).toUpperCase()||"L");el.style.backgroundImage=p.photo?'url("'+p.photo+'")':"";});}
-function loadProfileSettings(){const p=readProfile();paintProfile(p);$("profileUsername").value=p.username||"";$("profileDisplayName").value=p.displayName||"";const user=supabase?.auth?.getUser?.();if(user&&supabase){supabase.auth.getUser().then(({data})=>{const m=data?.user?.user_metadata||{};if(!p.username&&m.username)$("profileUsername").value=m.username;if(!p.displayName&&m.display_name)$("profileDisplayName").value=m.display_name;});}}
+function paintProfile(p){const name=p.displayName||"User Name",username=p.username||"@username";$("sidebarDisplayName").textContent=name;$("sidebarUsername").textContent=username.startsWith("@")?username:"@"+username;const avatar=$("sidebarAvatar"),preview=$("profileAvatarPreview");[avatar,preview].forEach(el=>{if(!el)return;el.style.backgroundImage=p.photo?'url("'+p.photo+'")':"";el.style.backgroundSize="cover";el.style.backgroundPosition="center";el.style.backgroundRepeat="no-repeat";el.textContent=p.photo?"":(name.trim().charAt(0).toUpperCase()||"L");});}
+function loadProfileSettings(){const p=readProfile();paintProfile(p);$("profileUsername").value=p.username||"";$("profileDisplayName").value=p.displayName||"";if(supabase){supabase.auth.getUser().then(({data})=>{const m=data?.user?.user_metadata||{};if(!$("profileUsername").value&&m.username)$("profileUsername").value=m.username;if(!$("profileDisplayName").value&&m.display_name)$("profileDisplayName").value=m.display_name;}).catch(()=>{});}}
 function openProfileSettings(){loadProfileSettings();$("lexiaaSettingsBackdrop").classList.add("open");$("lexiaaSettingsBackdrop").setAttribute("aria-hidden","false");}
 function closeProfileSettings(){$("lexiaaSettingsBackdrop").classList.remove("open");$("lexiaaSettingsBackdrop").setAttribute("aria-hidden","true");}
 $("lexiaaSidebar")?.querySelector('[data-action="settings"]')?.addEventListener("click",openProfileSettings);
 $("closeLexiaSettings")?.addEventListener("click",closeProfileSettings);
 $("lexiaaSettingsBackdrop")?.addEventListener("click",e=>{if(e.target===$("lexiaaSettingsBackdrop"))closeProfileSettings();});
-$("profilePhotoInput")?.addEventListener("change",e=>{const file=e.target.files?.[0];if(!file)return;if(!file.type.startsWith("image/"))return;$("profileSaveNote").textContent="Memproses foto...";const reader=new FileReader();reader.onload=()=>{window.lexiaaPendingPhoto=reader.result;$("profileAvatarPreview").style.backgroundImage='url("'+reader.result+'")';$("profileAvatarPreview").textContent="";$("profileSaveNote").textContent="Foto siap disimpan pada perangkat ini.";};reader.readAsDataURL(file);});
-$("lexiaaProfileForm")?.addEventListener("submit",async e=>{e.preventDefault();const username=$("profileUsername").value.trim().replace(/^@/,""),displayName=$("profileDisplayName").value.trim();if(!/^[a-zA-Z0-9_.-]{3,24}$/.test(username)){ $("profileSaveNote").textContent="Username 3–24 karakter: huruf, angka, titik, garis bawah, atau strip.";return;}if(!displayName){$("profileSaveNote").textContent="Display name tidak boleh kosong.";return;}const save=$("saveLexiaProfile");save.disabled=true;save.textContent="MENYIMPAN...";const p={username,displayName,photo:window.lexiaaPendingPhoto||readProfile().photo||""};try{localStorage.setItem("lexiaa-nextgen-profile",JSON.stringify(p));if(supabase){const{error}=await supabase.auth.updateUser({data:{username,display_name:displayName}});if(error)throw error;}paintProfile(p);$("profileSaveNote").textContent="Profil berhasil disimpan.";window.lexiaaPendingPhoto=null;setTimeout(closeProfileSettings,650);}catch(err){$("profileSaveNote").textContent="Profil tersimpan di perangkat, tetapi sinkronisasi akun gagal: "+(err.message||"coba lagi nanti");paintProfile(p);}finally{save.disabled=false;save.textContent="Simpan Profil";}});
-document.addEventListener("keydown",e=>{if(e.key==="Escape")closeProfileSettings();});
+let cropState={image:null,scale:1,x:0,y:0,base:1,drag:false,lastX:0,lastY:0};
+function layoutCropImage(){const img=cropState.image,win=$("cropWindow");if(!img||!win)return;const size=win.clientWidth;cropState.base=Math.max(size/img.naturalWidth,size/img.naturalHeight);const scale=cropState.base*cropState.scale;const w=img.naturalWidth*scale,h=img.naturalHeight*scale;cropState.x=Math.min(0,Math.max(size-w,cropState.x));cropState.y=Math.min(0,Math.max(size-h,cropState.y));img.style.width=img.naturalWidth+"px";img.style.height=img.naturalHeight+"px";img.style.transform="translate("+cropState.x+"px,"+cropState.y+"px) scale("+scale+")";}
+function closeCropper(){ $("lexiaaCropper").classList.remove("open");$("lexiaaCropper").setAttribute("aria-hidden","true");}
+$("profilePhotoInput")?.addEventListener("change",e=>{const file=e.target.files?.[0];if(!file)return;if(!file.type.startsWith("image/"))return;const reader=new FileReader();reader.onload=()=>{const img=new Image();img.onload=()=>{cropState.image=img;cropState.scale=1;$("cropZoom").value="1";const win=$("cropWindow");cropState.x=(win.clientWidth-img.naturalWidth*Math.max(win.clientWidth/img.naturalWidth,win.clientHeight/img.naturalHeight))/2;cropState.y=(win.clientHeight-img.naturalHeight*Math.max(win.clientWidth/img.naturalWidth,win.clientHeight/img.naturalHeight))/2;$("cropImage").src=reader.result;requestAnimationFrame(layoutCropImage);$("lexiaaCropper").classList.add("open");$("lexiaaCropper").setAttribute("aria-hidden","false");$("profileSaveNote").textContent="Geser dan zoom foto hingga pas di dalam lingkaran.";};img.src=reader.result;};reader.readAsDataURL(file);e.target.value="";});
+$("cropZoom")?.addEventListener("input",e=>{const prev=cropState.scale;cropState.scale=Number(e.target.value);const win=$("cropWindow"),cx=win.clientWidth/2,cy=win.clientHeight/2,ratio=cropState.scale/prev;cropState.x=cx-(cx-cropState.x)*ratio;cropState.y=cy-(cy-cropState.y)*ratio;layoutCropImage();});
+const cropWindow=$("cropWindow");
+cropWindow?.addEventListener("pointerdown",e=>{cropState.drag=true;cropState.lastX=e.clientX;cropState.lastY=e.clientY;cropWindow.setPointerCapture(e.pointerId);});
+cropWindow?.addEventListener("pointermove",e=>{if(!cropState.drag)return;cropState.x+=e.clientX-cropState.lastX;cropState.y+=e.clientY-cropState.lastY;cropState.lastX=e.clientX;cropState.lastY=e.clientY;layoutCropImage();});
+cropWindow?.addEventListener("pointerup",()=>cropState.drag=false);cropWindow?.addEventListener("pointercancel",()=>cropState.drag=false);
+$("cancelCropPhoto")?.addEventListener("click",closeCropper);
+$("applyCropPhoto")?.addEventListener("click",()=>{const img=cropState.image,win=$("cropWindow");if(!img)return;const size=win.clientWidth,scale=cropState.base*cropState.scale,canvas=document.createElement("canvas");canvas.width=256;canvas.height=256;const ctx=canvas.getContext("2d");ctx.drawImage(img,-cropState.x/scale,-cropState.y/scale,size/scale,size/scale,0,0,256,256);window.lexiaaPendingPhoto=canvas.toDataURL("image/jpeg",.82);$("profileAvatarPreview").style.backgroundImage='url("'+window.lexiaaPendingPhoto+'")';$("profileAvatarPreview").textContent="";$("profileSaveNote").textContent="Foto sudah dipangkas 1:1. Tekan Simpan Profil untuk menerapkan.";closeCropper();});
+$("lexiaaProfileForm")?.addEventListener("submit",async e=>{e.preventDefault();const username=$("profileUsername").value.trim().replace(/^@/,""),displayName=$("profileDisplayName").value.trim();if(!/^[a-zA-Z0-9_.-]{3,24}$/.test(username)){$("profileSaveNote").textContent="Username 3–24 karakter: huruf, angka, titik, garis bawah, atau strip.";return;}if(!displayName){$("profileSaveNote").textContent="Display name tidak boleh kosong.";return;}const save=$("saveLexiaProfile");save.disabled=true;save.textContent="MENYIMPAN...";const p={username,displayName,photo:window.lexiaaPendingPhoto||readProfile().photo||""};try{localStorage.setItem("lexiaa-nextgen-profile",JSON.stringify(p));if(supabase){const{error}=await supabase.auth.updateUser({data:{username,display_name:displayName}});if(error)throw error;}paintProfile(p);$("profileSaveNote").textContent="Profil berhasil disimpan.";window.lexiaaPendingPhoto=null;setTimeout(closeProfileSettings,650);}catch(err){paintProfile(p);$("profileSaveNote").textContent="Profil tersimpan di perangkat ini. Sinkronisasi akun gagal: "+(err.message||"coba lagi nanti");}finally{save.disabled=false;save.textContent="Simpan Profil";}});
+function openUpdates(){ $("lexiaaUpdatesBackdrop").classList.add("open");$("lexiaaUpdatesBackdrop").setAttribute("aria-hidden","false");}
+function closeUpdates(){$("lexiaaUpdatesBackdrop").classList.remove("open");$("lexiaaUpdatesBackdrop").setAttribute("aria-hidden","true");}
+$("lexiaaSidebar")?.querySelector('[data-action="updates"]')?.addEventListener("click",openUpdates);
+$("closeLexiaUpdates")?.addEventListener("click",closeUpdates);
+$("lexiaaUpdatesBackdrop")?.addEventListener("click",e=>{if(e.target===$("lexiaaUpdatesBackdrop"))closeUpdates();});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeProfileSettings();closeUpdates();closeCropper();}});
+
 
 
 function notice(message,type=""){const el=$("loginNotice");el.textContent=message;el.className="notice "+type;}
