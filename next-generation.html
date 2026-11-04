@@ -409,7 +409,25 @@ body:has(#loginView.active) main{min-height:0}
 #dashboardView .lexiaa-topbar-actions{gap:7px}
 @media(max-width:560px){#dashboardView .lexiaa-build-meta{font-size:7px;padding:3px 5px;min-width:0}#dashboardView .lexiaa-utility-button{padding:5px 7px;font-size:8px}#dashboardView .lexiaa-topbar-actions{gap:4px}}
 </style>
-</head>
+<style id="lexiaa-private-messages-v138">
+#lexiaaMessagesBackdrop{position:fixed;inset:0;z-index:120;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(2,5,17,.78);backdrop-filter:blur(14px)}
+#lexiaaMessagesBackdrop.open{display:flex}
+#lexiaaMessagesBackdrop .msg-modal{width:min(680px,100%);max-height:min(82dvh,760px);overflow:auto;border:1px solid #75e7ff88;border-radius:22px;padding:22px;background:linear-gradient(145deg,#122a46f5,#17132ff5);box-shadow:0 24px 90px #000b,0 0 32px #56dfff25}
+#lexiaaMessagesBackdrop .msg-head{display:flex;justify-content:space-between;align-items:center;gap:12px}
+#lexiaaMessagesBackdrop h2{font:800 18px Orbitron,sans-serif;color:#eafaff;margin:0}
+#lexiaaMessagesBackdrop .msg-close{border:1px solid #8deaff66;background:#10243d;color:#dffaff;border-radius:10px;width:36px;height:36px;font-size:22px}
+#lexiaaMessagesBackdrop .msg-caption{font-size:11px;color:#91acc5;margin:9px 0 17px}
+#lexiaaMessagesList{display:grid;gap:10px}
+#lexiaaMessagesList .msg-item{width:100%;text-align:left;border:1px solid #72dfff44;border-radius:13px;background:#07182ccc;color:#effaff;padding:14px}
+#lexiaaMessagesList .msg-item.unread{border-color:#ff647eaa;box-shadow:inset 3px 0 #ff526f}
+#lexiaaMessagesList .msg-title{font-weight:800;font-size:13px;display:flex;justify-content:space-between;gap:12px}
+#lexiaaMessagesList .msg-body{font-size:12px;color:#bfd5e7;line-height:1.65;white-space:pre-wrap;margin-top:9px}
+#lexiaaMessagesList .msg-date{font-size:9px;color:#7f9db7;margin-top:9px}
+#lexiaaMessagesList .msg-unread{font-size:8px;color:#ff9cad;letter-spacing:.1em}
+.lexiaa-message-badge{display:none;position:absolute;top:7px;right:13px;width:9px;height:9px;border-radius:50%;background:#ff355d;box-shadow:0 0 0 3px #ff355d2c,0 0 13px #ff355d}
+.lexiaa-nav-item[data-action="messages"]{position:relative}
+@media(max-width:560px){#lexiaaMessagesBackdrop{padding:10px}#lexiaaMessagesBackdrop .msg-modal{padding:17px}}
+</style></head>
 <body><div id="particles" aria-hidden="true"></div><div class="wrap">
 <header class="topline"><div class="brand">LEXIAA <small>THE NEXT GENERATION</small></div><div class="system-pill" id="systemPill">● SECURE ACCESS</div></header>
 <main>
@@ -430,7 +448,7 @@ body:has(#loginView.active) main{min-height:0}
     <div class="lexiaa-topbar-center"></div>
     <div class="lexiaa-topbar-actions">
       
-      <div class="lexiaa-build-meta" aria-label="Informasi versi aplikasi"><span>APK v1.3.7 Beta</span><span id="sidebarRegion">Asia/Jakarta</span></div>
+      <div class="lexiaa-build-meta" aria-label="Informasi versi aplikasi"><span>APK v1.3.8 Beta</span><span id="sidebarRegion">Asia/Jakarta</span></div>
       <button class="lexiaa-utility-button" id="backToOldLexia" type="button" aria-label="Kembali ke Lexiaa Original">↩ <span>OLD LEXIAA</span></button>
       <button class="lexiaa-utility-button logout" id="logoutButton" type="button" aria-label="Keluar dari akun Next Generation">⇥</button>
     </div>
@@ -445,7 +463,7 @@ body:has(#loginView.active) main{min-height:0}
       <button class="lexiaa-nav-item lexiaa-ng-menu-trigger" type="button" data-action="ng-menu" aria-haspopup="dialog" aria-controls="lexiaaNgMenuBackdrop"><span class="lexiaa-nav-icon" aria-hidden="true">✿</span><span>MENU LEXIAA N.G</span></button>
       <button class="lexiaa-nav-item" type="button"><span class="lexiaa-nav-icon">▥</span><span>Statistik</span></button>
       <button class="lexiaa-nav-item" type="button" data-action="settings"><span class="lexiaa-nav-icon">⚙</span><span>Pengaturan</span></button>
-      <button class="lexiaa-nav-item" type="button"><span class="lexiaa-nav-icon">✉</span><span>Pesan</span></button>
+      <button class="lexiaa-nav-item" type="button" data-action="messages" aria-controls="lexiaaMessagesBackdrop"><span class="lexiaa-nav-icon">✉</span><span>Pesan</span><i class="lexiaa-message-badge" id="lexiaaMessageBadge" aria-label="Pesan belum dibaca"></i></button>
       <button class="lexiaa-nav-item" type="button" data-action="updates"><span class="lexiaa-nav-icon">⟳</span><span>Update</span></button>
     </nav>
     
@@ -512,14 +530,14 @@ body:has(#loginView.active) main{min-height:0}
       <button class="lexiaa-settings-close" id="closeLexiaUpdates" type="button" aria-label="Tutup">×</button>
       <div class="lexiaa-settings-kicker">LEXIAA THE NEXT GENERATION</div>
       <h2 id="lexiaaUpdatesTitle">Update Terbaru</h2>
-      <div class="lexiaa-update-version"><strong>v1.3.7 Beta</strong><span>Penempatan versi dan region di topbar</span></div>
+      <div class="lexiaa-update-version"><strong>v1.3.8 Beta</strong><span>Fitur pesan pribadi Admin New</span></div>
       <ul class="lexiaa-update-list">
         <li>Suara ambience angin dan aliran air otomatis aktif saat memasuki dashboard.</li>
         <li>Tombol ON/OFF suara dihilangkan agar dashboard lebih bersih.</li>
         <li>Ping ke server Lexiaa diperbarui setiap detik.</li>
         <li>Jenis koneksi ditampilkan sesuai informasi yang tersedia dari browser.</li>
         <li>Profil publik dan avatar Lexiaa tetap tersinkron online.</li>
-        <li>Enam panel MENU LEXIAA N.G tetap menampilkan SEGERA HADIR di tengah, dan ornamen sakura di samping nama menu sidebar dikembalikan.</li><li>Ikon dekoratif pada menu N.G. di sidebar dihilangkan.</li><li>Informasi versi APK dan region dipindahkan ke samping tombol OLD LEXIAA di topbar agar sidebar lebih lega dan rapi.</li>
+        <li>Enam panel MENU LEXIAA N.G tetap menampilkan SEGERA HADIR di tengah, dan ornamen sakura di samping nama menu sidebar dikembalikan.</li><li>Ikon dekoratif pada menu N.G. di sidebar dihilangkan.</li><li>Informasi versi APK dan region dipindahkan ke samping tombol OLD LEXIAA di topbar agar sidebar lebih lega dan rapi. Fitur pesan pribadi dari Admin New ditambahkan dengan penanda pesan belum dibaca.</li>
       </ul>
       <div class="lexiaa-update-footer">Terima kasih sudah menggunakan Lexiaa.</div>
     </section>
@@ -536,7 +554,7 @@ body:has(#loginView.active) main{min-height:0}
     </section>
   </div>
 </div>
-<div class="portrait-guide" id="portraitGuide"><div class="rotate-device-icon">▱<span>↻</span></div><strong>Putar perangkat Anda</strong><p>LEXIAA THE NEXT GENERATION dirancang untuk tampilan landscape.</p></div>
+<div id="lexiaaMessagesBackdrop" aria-hidden="true"><section class="msg-modal" role="dialog" aria-modal="true" aria-labelledby="lexiaaMessagesTitle"><div class="msg-head"><h2 id="lexiaaMessagesTitle">PESAN MASUK</h2><button class="msg-close" id="closeLexiaaMessages" type="button" aria-label="Tutup">×</button></div><p class="msg-caption">Pesan pribadi dari Admin Lexiaa.</p><div id="lexiaaMessagesList"><div class="msg-caption">Memuat pesan...</div></div></section></div>\n<div class="portrait-guide" id="portraitGuide"><div class="rotate-device-icon">▱<span>↻</span></div><strong>Putar perangkat Anda</strong><p>LEXIAA THE NEXT GENERATION dirancang untuk tampilan landscape.</p></div>
 </section></main></div>
 <script type="module">
 const SUPABASE_URL="https://sudvolmlzunzofzwjbfn.supabase.co",SUPABASE_ANON_KEY="sb_publishable_OOUKks8e7IfILH7TsOit0g_8qK0hNiL";
@@ -580,7 +598,16 @@ $("applyCropPhoto")?.addEventListener("click",()=>{const img=cropState.image,win
 $("lexiaaProfileForm")?.addEventListener("submit",async e=>{e.preventDefault();const username=$("profileUsername").value.trim().replace(/^@/,""),displayName=$("profileDisplayName").value.trim();if(!/^[a-zA-Z0-9_.-]{3,24}$/.test(username)){$("profileSaveNote").textContent="Username 3–24 karakter: huruf, angka, titik, garis bawah, atau strip.";return;}if(!displayName){$("profileSaveNote").textContent="Display name tidak boleh kosong.";return;}const save=$("saveLexiaProfile");save.disabled=true;save.textContent="MENYIMPAN...";const previous=readProfile();let avatarUrl=previous.avatarUrl||"";try{if(!supabase)throw new Error("Koneksi Supabase belum siap.");const{data:{user},error:userError}=await supabase.auth.getUser();if(userError||!user)throw new Error("Silakan login kembali.");if(window.lexiaaPendingPhoto){const blob=await(await fetch(window.lexiaaPendingPhoto)).blob();const path=user.id+"/avatar.jpg";const{error:uploadError}=await supabase.storage.from("lexiaa-avatars").upload(path,blob,{contentType:"image/jpeg",upsert:true,cacheControl:"3600"});if(uploadError)throw uploadError;const{data:publicUrl}=supabase.storage.from("lexiaa-avatars").getPublicUrl(path);avatarUrl=publicUrl.publicUrl+"?v="+Date.now();}const{error:authError}=await supabase.auth.updateUser({data:{username,display_name:displayName}});if(authError)throw authError;const{error:directoryError}=await supabase.from("lexiaa_profiles").upsert({id:user.id,username,display_name:displayName,avatar_url:avatarUrl||null,old_registered:true},{onConflict:"id"});if(directoryError)throw directoryError;const p={username,displayName,avatarUrl};localStorage.setItem("lexiaa-nextgen-profile",JSON.stringify(p));paintProfile(p);$("profileSaveNote").textContent="Profil online berhasil disimpan dan dapat dilihat pengguna Lexiaa.";window.lexiaaPendingPhoto=null;setTimeout(closeProfileSettings,650);}catch(err){$("profileSaveNote").textContent="Gagal menyimpan profil online: "+(err.message||"coba lagi nanti");}finally{save.disabled=false;save.textContent="Simpan Profil";}});
 
 function openUpdates(){ $("lexiaaUpdatesBackdrop").classList.add("open");$("lexiaaUpdatesBackdrop").setAttribute("aria-hidden","false");}
-function openLexiaaNgMenu(){const el=$("lexiaaNgMenuBackdrop");el.classList.add("open");el.setAttribute("aria-hidden","false");}
+
+let lexiaaMessagesPoll=null;
+function paintMessageBadge(count){const badge=$("lexiaaMessageBadge");if(!badge)return;badge.style.display=count>0?"block":"none";badge.setAttribute("aria-label",count+" pesan belum dibaca");}
+async function refreshUnreadMessages(){if(!supabase)return;try{const{data:{user}}=await supabase.auth.getUser();if(!user)return;const{count,error}=await supabase.from("lexiaa_messages").select("id",{count:"exact",head:true}).is("read_at",null);if(error)throw error;paintMessageBadge(count||0);}catch(e){console.warn("Pesan belum dapat diperbarui:",e.message);}}
+async function openLexiaaMessages(){const modal=$("lexiaaMessagesBackdrop"),list=$("lexiaaMessagesList");modal.classList.add("open");modal.setAttribute("aria-hidden","false");list.innerHTML='<div class="msg-caption">Memuat pesan...</div>';try{const{data,error}=await supabase.from("lexiaa_messages").select("id,title,body,created_at,read_at").order("created_at",{ascending:false}).limit(100);if(error)throw error;list.replaceChildren();if(!data?.length){list.textContent="Belum ada pesan masuk.";return;}for(const msg of data){const item=document.createElement("button");item.type="button";item.className="msg-item"+(msg.read_at?"":" unread");const head=document.createElement("div");head.className="msg-title";const title=document.createElement("span");title.textContent=msg.title;head.append(title);if(!msg.read_at){const flag=document.createElement("span");flag.className="msg-unread";flag.textContent="BELUM DIBACA";head.append(flag);}const body=document.createElement("div");body.className="msg-body";body.textContent=msg.body;const date=document.createElement("div");date.className="msg-date";date.textContent=new Date(msg.created_at).toLocaleString("id-ID",{dateStyle:"medium",timeStyle:"short"});item.append(head,body,date);item.addEventListener("click",async()=>{if(!msg.read_at){const{error:updateError}=await supabase.from("lexiaa_messages").update({read_at:new Date().toISOString()}).eq("id",msg.id);if(updateError){console.warn("Gagal menandai pesan:",updateError.message);return;}msg.read_at=new Date().toISOString();item.classList.remove("unread");const flag=item.querySelector(".msg-unread");if(flag)flag.remove();await refreshUnreadMessages();}});list.append(item);}}catch(e){list.textContent="Pesan gagal dimuat: "+(e.message||"coba lagi.");}}
+function closeLexiaaMessages(){const modal=$("lexiaaMessagesBackdrop");modal.classList.remove("open");modal.setAttribute("aria-hidden","true");}
+$("lexiaaSidebar")?.querySelector('[data-action="messages"]')?.addEventListener("click",openLexiaaMessages);
+$("closeLexiaaMessages")?.addEventListener("click",closeLexiaaMessages);
+$("lexiaaMessagesBackdrop")?.addEventListener("click",e=>{if(e.target===$("lexiaaMessagesBackdrop"))closeLexiaaMessages();});
+\nfunction openLexiaaNgMenu(){const el=$("lexiaaNgMenuBackdrop");el.classList.add("open");el.setAttribute("aria-hidden","false");}
 function closeLexiaaNgMenu(){const el=$("lexiaaNgMenuBackdrop");el.classList.remove("open");el.setAttribute("aria-hidden","true");}
 $("lexiaaSidebar")?.querySelector('[data-action="ng-menu"]')?.addEventListener("click",openLexiaaNgMenu);
 $("closeLexiaaNgMenu")?.addEventListener("click",closeLexiaaNgMenu);
@@ -591,7 +618,7 @@ function closeUpdates(){$("lexiaaUpdatesBackdrop").classList.remove("open");$("l
 $("lexiaaSidebar")?.querySelector('[data-action="updates"]')?.addEventListener("click",openUpdates);
 $("closeLexiaUpdates")?.addEventListener("click",closeUpdates);
 $("lexiaaUpdatesBackdrop")?.addEventListener("click",e=>{if(e.target===$("lexiaaUpdatesBackdrop"))closeUpdates();});
-document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeProfileSettings();closeUpdates();closeCropper();closeAccountSearch();closeLexiaaNgMenu();}});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeProfileSettings();closeUpdates();closeCropper();closeAccountSearch();closeLexiaaNgMenu();closeLexiaaMessages();}});
 
 
 
@@ -604,7 +631,7 @@ async function loadLocation(){setRegion();if(!navigator.geolocation){$("location
 function loadBattery(){if(!navigator.getBattery){$("batteryValue").textContent="N/A";$("batteryFill").style.width="0%";return;}navigator.getBattery().then(b=>{const paint=()=>{const pct=Math.round(b.level*100);$("batteryValue").textContent=pct+"%"+(b.charging?" ⚡":"");$("batteryFill").style.width=pct+"%";};paint();b.addEventListener("levelchange",paint);b.addEventListener("chargingchange",paint);}).catch(()=>{$("batteryValue").textContent="N/A";});}
 function requestImmersive(){try{const root=document.documentElement;const lock=()=>{try{const p=screen.orientation?.lock?.("landscape");if(p&&typeof p.catch==="function")p.catch(err=>console.warn("Kunci landscape ditolak browser:",err));}catch(e){console.warn("Kunci landscape tidak tersedia:",e);}};if(document.fullscreenElement){lock();return;}if(root.requestFullscreen){const full=root.requestFullscreen({navigationUI:"hide"});lock();if(full&&typeof full.then==="function")full.then(()=>lock()).catch(err=>console.warn("Fullscreen tidak diizinkan browser:",err));}else{lock();console.warn("Fullscreen API tidak tersedia pada mode browser ini.");}}catch(e){console.warn("Mode immersive tidak tersedia:",e);}}
 function markLexiaaNextGen(){if(!supabase)return;supabase.auth.getUser().then(async({data,error})=>{if(error||!data?.user)return;const{error:profileError}=await supabase.from("lexiaa_profiles").update({nextgen_joined_at:new Date().toISOString()}).eq("id",data.user.id);if(profileError)console.warn("Status Next Gen belum tersimpan:",profileError.message);}).catch(e=>console.warn("Directory sync:",e));}
-function enterDashboard(){if(dashboardEntered)return;dashboardEntered=true;try{localStorage.setItem("lexiaa-nextgen-mode","1");localStorage.setItem("lexiaa-last-experience","next");}catch(e){}markLexiaaNextGen();show("dashboard");loadOnlineProfile();requestImmersive();loadBattery();tick();if(window.lexiaaClockTimer)clearInterval(window.lexiaaClockTimer);window.lexiaaClockTimer=setInterval(tick,1000);loadBattery();loadProfileSettings();const video=$("fantasyBgVideo");if(video){video.currentTime=0;video.play().catch(()=>{});}tick();loadLocation();}
+function enterDashboard(){if(dashboardEntered)return;dashboardEntered=true;try{localStorage.setItem("lexiaa-nextgen-mode","1");localStorage.setItem("lexiaa-last-experience","next");}catch(e){}markLexiaaNextGen();show("dashboard");loadOnlineProfile();requestImmersive();loadBattery();tick();if(window.lexiaaClockTimer)clearInterval(window.lexiaaClockTimer);window.lexiaaClockTimer=setInterval(tick,1000);loadBattery();loadProfileSettings();refreshUnreadMessages();if(lexiaaMessagesPoll)clearInterval(lexiaaMessagesPoll);lexiaaMessagesPoll=setInterval(refreshUnreadMessages,30000);const video=$("fantasyBgVideo");if(video){video.currentTime=0;video.play().catch(()=>{});}tick();loadLocation();}
 $("nextLoginForm").addEventListener("submit",async e=>{e.preventDefault();requestImmersive();const ambientReady=window.lexiaaPrimeAmbient?.();if(!supabase){notice("Koneksi autentikasi belum siap. Periksa internet lalu muat ulang halaman.");return;}const btn=$("loginSubmit");btn.disabled=true;btn.textContent="AUTHENTICATING...";notice("");try{const{data,error}=await supabase.auth.signInWithPassword({email:$("nextEmail").value.trim(),password:$("nextPassword").value});if(error)throw error;notice("ACCESS GRANTED","success");if(ambientReady)await ambientReady;enterDashboard();window.lexiaaStartAmbient?.();}catch(err){notice(err.message||"Login gagal. Periksa email dan kata sandi.");}finally{btn.disabled=false;btn.textContent="AUTHENTICATE & ENTER";}});
 $("togglePassword").addEventListener("click",()=>{const input=$("nextPassword"),visible=input.type==="password";input.type=visible?"text":"password";$("togglePassword").textContent=visible?"HIDE":"SHOW";});
 async function returnToOldLexia(){try{localStorage.removeItem("lexiaa-nextgen-mode");localStorage.setItem("lexiaa-last-experience","old");}catch(e){}try{if(document.fullscreenElement)await document.exitFullscreen();}catch(e){}try{if(screen.orientation&&screen.orientation.unlock)screen.orientation.unlock();}catch(e){}location.replace("./?experience=old");}
