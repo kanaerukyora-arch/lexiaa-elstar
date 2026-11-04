@@ -336,7 +336,32 @@ body:has(#loginView.active) main{min-height:0}
  #loginView .submit{height:42px;min-height:42px}
 }
 </style>
-</head>
+
+<style id="lexiaa-account-finder-style">
+#dashboardView .lexiaa-search-toggle{display:grid;place-items:center}
+#dashboardView .lexiaa-search-toggle span{display:none}
+#dashboardView .lexiaa-search-toggle svg,.lexiaa-account-search-field svg{width:25px;height:25px;fill:none;stroke:#f2eaff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 5px #b69aff)}
+#dashboardView .lexiaa-account-search-backdrop{position:absolute;inset:0;z-index:70;display:none;align-items:center;justify-content:center;padding:16px;background:#05091dc9;backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px)}
+#dashboardView .lexiaa-account-search-backdrop.open{display:flex}
+#dashboardView .lexiaa-account-search-modal{position:relative;width:min(540px,94vw);max-height:min(78vh,680px);overflow:auto;padding:25px;border:1px solid #c4b3ff77;border-radius:22px;background:linear-gradient(145deg,#28225deF,#0c1c4af5);box-shadow:0 24px 80px #0009;color:#fff}
+#dashboardView .lexiaa-account-search-modal h2{margin:6px 0 17px;font-size:25px}
+#dashboardView .lexiaa-account-search-field{height:46px;display:flex;align-items:center;gap:10px;padding:0 13px;border:1px solid #b9a8ff66;border-radius:12px;background:#080f2e99}
+#dashboardView .lexiaa-account-search-field svg{width:20px;height:20px;flex:none}
+#dashboardView .lexiaa-account-search-field input{width:100%;min-width:0;border:0;outline:0;background:transparent;color:white;font:inherit;font-size:13px}
+#dashboardView .lexiaa-account-search-field input::placeholder{color:#bdb6dd}
+#dashboardView .lexiaa-account-section-title{margin:18px 0 9px;color:#d5cbff;font-size:12px;font-weight:700;letter-spacing:.04em}
+#dashboardView .lexiaa-account-results{display:grid;gap:8px}
+#dashboardView .lexiaa-account-card{display:flex;align-items:center;gap:11px;padding:10px;border:1px solid #b8aaff33;border-radius:13px;background:#a99bff0d}
+#dashboardView .lexiaa-account-avatar{width:42px;height:42px;flex:none;display:grid;place-items:center;border-radius:50%;background:linear-gradient(135deg,#8f79d5,#3d6ca8);background-size:cover;background-position:center;font-weight:700;color:white}
+#dashboardView .lexiaa-account-meta{display:grid;gap:3px;min-width:0;flex:1}
+#dashboardView .lexiaa-account-meta strong{font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#dashboardView .lexiaa-account-meta span{font-size:11px;color:#c7c2e9;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#dashboardView .lexiaa-account-badge{padding:5px 8px;border-radius:99px;font-size:9px;font-weight:800;letter-spacing:.04em;white-space:nowrap}
+#dashboardView .lexiaa-account-badge.is-next{color:#d7fff0;background:#1b9a7860;border:1px solid #6fffd080}
+#dashboardView .lexiaa-account-badge.is-old{color:#eee2ff;background:#8265b866;border:1px solid #c7a8ff80}
+#dashboardView .lexiaa-account-state{padding:18px 10px;text-align:center;color:#d1cbed;font-size:12px}
+#dashboardView .lexiaa-account-search-foot{margin-top:14px;color:#aaa5ca;font-size:10px;line-height:1.5}
+</style></head>
 <body><div id="particles" aria-hidden="true"></div><div class="wrap">
 <header class="topline"><div class="brand">LEXIAA <small>THE NEXT GENERATION</small></div><div class="system-pill" id="systemPill">● SECURE ACCESS</div></header>
 <main>
@@ -353,7 +378,7 @@ body:has(#loginView.active) main{min-height:0}
   <div class="fantasy-bg-shade"></div>
   <div class="fantasy-top-brand"><div class="fantasy-brand-mark">✧</div><div class="fantasy-brand-name">Lexiaa</div><div class="fantasy-brand-sub">— The Next Generation —</div><div class="fantasy-brand-flare">✦</div></div>
     <header class="lexiaa-ref-topbar">
-    <button class="lexiaa-menu-toggle" id="lexiaaMenuToggle" type="button" aria-label="Tampilkan atau sembunyikan menu" aria-expanded="true"><span></span><span></span><span></span></button>
+    <button class="lexiaa-menu-toggle lexiaa-search-toggle" id="lexiaaMenuToggle" type="button" aria-label="Cari akun Lexiaa"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"></circle><path d="m16 16 5 5"></path></svg></button>
     <div class="lexiaa-topbar-center"></div>
     <div class="lexiaa-topbar-actions">
       <button class="lexiaa-utility-button" id="ambientToggle" type="button" aria-label="Aktifkan suara alam" aria-pressed="false"><span class="ambient-toggle-icon">♫</span><span class="ambient-toggle-label">SOUND OFF</span></button>
@@ -373,7 +398,7 @@ body:has(#loginView.active) main{min-height:0}
       <button class="lexiaa-nav-item" type="button"><span class="lexiaa-nav-icon">✉</span><span>Pesan</span></button>
       <button class="lexiaa-nav-item" type="button" data-action="updates"><span class="lexiaa-nav-icon">⟳</span><span>Update</span></button>
     </nav>
-    <div class="lexiaa-sidebar-footer"><span>Versi Apk: v1.2.7 (Beta)</span><span>Region: <b id="sidebarRegion">Asia/Jakarta</b></span></div>
+    <div class="lexiaa-sidebar-footer"><span>Versi Apk: v1.2.8 (Beta)</span><span>Region: <b id="sidebarRegion">Asia/Jakarta</b></span></div>
   </aside>
   <div class="lexiaa-status-top fantasy-panel">
     <div class="lexiaa-status-line"><span class="lexiaa-battery-icon">▰</span><strong id="batteryValue">--%</strong><span class="lexiaa-clock-icon">◷</span><strong id="liveClock">00:00:00</strong></div>
@@ -421,7 +446,7 @@ body:has(#loginView.active) main{min-height:0}
       <button class="lexiaa-settings-close" id="closeLexiaUpdates" type="button" aria-label="Tutup">×</button>
       <div class="lexiaa-settings-kicker">LEXIAA THE NEXT GENERATION</div>
       <h2 id="lexiaaUpdatesTitle">Update Terbaru</h2>
-      <div class="lexiaa-update-version"><strong>v1.2.7 Beta</strong><span>Profile touch-crop fix</span></div>
+      <div class="lexiaa-update-version"><strong>v1.2.8 Beta</strong><span>Lexiaa Account Finder</span></div>
       <ul class="lexiaa-update-list">
         <li>Panel cuaca dan lokasi dibuat lebih ringkas.</li>
         <li>Perbaikan pengaturan profil dan crop foto dengan geser jari langsung.</li>
@@ -429,6 +454,17 @@ body:has(#loginView.active) main{min-height:0}
         <li>Pop-up riwayat pembaruan ditambahkan.</li>
       </ul>
       <div class="lexiaa-update-footer">Terima kasih sudah menggunakan Lexiaa.</div>
+    </section>
+  </div>
+  <div class="lexiaa-account-search-backdrop" id="lexiaaAccountSearch" aria-hidden="true">
+    <section class="lexiaa-account-search-modal" role="dialog" aria-modal="true" aria-labelledby="lexiaaAccountSearchTitle">
+      <button class="lexiaa-settings-close" id="closeAccountSearch" type="button" aria-label="Tutup">×</button>
+      <div class="lexiaa-settings-kicker">LEXIAA COMMUNITY</div>
+      <h2 id="lexiaaAccountSearchTitle">Temukan Akun</h2>
+      <label class="lexiaa-account-search-field"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"></circle><path d="m16 16 5 5"></path></svg><input id="lexiaaAccountQuery" type="search" placeholder="Cari username atau nama..." autocomplete="off"></label>
+      <div class="lexiaa-account-section-title" id="lexiaaAccountSectionTitle">Rekomendasi akun Lexiaa</div>
+      <div class="lexiaa-account-results" id="lexiaaAccountResults"><div class="lexiaa-account-state">Memuat rekomendasi akun...</div></div>
+      <div class="lexiaa-account-search-foot">Hanya nama publik dan status pengalaman yang ditampilkan. Email dan data login tidak dibagikan.</div>
     </section>
   </div>
 </div>
@@ -440,7 +476,15 @@ const $=id=>document.getElementById(id),loginView=$("loginView"),dashboardView=$
 function show(view){loginView.classList.toggle("active",view==="login");dashboardView.classList.toggle("active",view==="dashboard");$("systemPill").textContent=view==="dashboard"?"● SYSTEM ONLINE":"● SECURE ACCESS";window.scrollTo({top:0,behavior:"smooth"});}
 function updateNetworkStatus(){const el=$("networkValue");if(!el)return;if(!navigator.onLine){el.textContent="Offline";return;}const connection=navigator.connection||navigator.mozConnection||navigator.webkitConnection;const rtt=connection&&Number.isFinite(connection.rtt)?connection.rtt:null;el.textContent="Stabil"+(rtt!==null?" ("+rtt+"ms)": " · Online");}
 window.addEventListener("online",updateNetworkStatus);window.addEventListener("offline",updateNetworkStatus);if(navigator.connection)navigator.connection.addEventListener?.("change",updateNetworkStatus);updateNetworkStatus();
-$("lexiaaMenuToggle")?.addEventListener("click",()=>{const collapsed=dashboardView.classList.toggle("sidebar-collapsed");$("lexiaaMenuToggle").setAttribute("aria-expanded",String(!collapsed));});
+const accountSearch=$("lexiaaAccountSearch"),accountResults=$("lexiaaAccountResults"),accountQuery=$("lexiaaAccountQuery");
+function accountNode(profile){const card=document.createElement("article");card.className="lexiaa-account-card";const avatar=document.createElement("div");avatar.className="lexiaa-account-avatar";avatar.textContent=(profile.display_name||"L").trim().charAt(0).toUpperCase();if(profile.avatar_url){avatar.style.backgroundImage='url("'+profile.avatar_url.replace(/["\\\\]/g,"")+'")';avatar.textContent="";}const info=document.createElement("div");info.className="lexiaa-account-meta";const name=document.createElement("strong");name.textContent=profile.display_name||"Pengguna Lexiaa";const handle=document.createElement("span");handle.textContent="@"+(profile.username||"user");info.append(name,handle);const badge=document.createElement("span");badge.className="lexiaa-account-badge "+(profile.nextgen_joined_at?"is-next":"is-old");badge.textContent=profile.nextgen_joined_at?"LEXIAA NEW":"LEXIAA OLD";card.append(avatar,info,badge);return card;}
+function showAccountRows(rows){accountResults.replaceChildren();if(!rows.length){const empty=document.createElement("div");empty.className="lexiaa-account-state";empty.textContent="Belum ada akun yang cocok. Coba kata kunci lain.";accountResults.append(empty);return;}rows.forEach(p=>accountResults.append(accountNode(p)));}
+async function loadAccountRecommendations(term=""){if(!supabase){accountResults.textContent="Koneksi akun belum siap.";return;}accountResults.textContent="Memuat akun...";try{const{data:{user},error:userError}=await supabase.auth.getUser();if(userError||!user)throw new Error("Silakan login kembali.");const cols="id,username,display_name,avatar_url,old_registered,nextgen_joined_at,created_at";let rows=[];if(term.trim()){const q=term.trim().replace(/[%,()]/g," ").slice(0,48);const [a,b]=await Promise.all([supabase.from("lexiaa_profiles").select(cols).ilike("username","%"+q+"%").limit(15),supabase.from("lexiaa_profiles").select(cols).ilike("display_name","%"+q+"%").limit(15)]);if(a.error)throw a.error;if(b.error)throw b.error;const map=new Map();[...(a.data||[]),...(b.data||[])].forEach(p=>{if(p.id!==user.id)map.set(p.id,p)});rows=[...map.values()].sort((x,y)=>Number(Boolean(y.nextgen_joined_at))-Number(Boolean(x.nextgen_joined_at))).slice(0,20);}else{const{data,error}=await supabase.from("lexiaa_profiles").select(cols).neq("id",user.id).order("created_at",{ascending:false}).limit(12);if(error)throw error;rows=data||[];}showAccountRows(rows);}catch(err){accountResults.replaceChildren();const state=document.createElement("div");state.className="lexiaa-account-state";state.textContent=err.message?.includes("lexiaa_profiles")?"Direktori akun belum disiapkan. Admin perlu menjalankan SQL Account Finder di Supabase.":(err.message||"Gagal memuat akun.");accountResults.append(state);}}
+function openAccountSearch(){accountSearch.classList.add("open");accountSearch.setAttribute("aria-hidden","false");accountQuery.value="";$("lexiaaAccountSectionTitle").textContent="Rekomendasi akun Lexiaa";loadAccountRecommendations();setTimeout(()=>accountQuery.focus(),80);}
+function closeAccountSearch(){accountSearch.classList.remove("open");accountSearch.setAttribute("aria-hidden","true");}
+$("lexiaaMenuToggle")?.addEventListener("click",openAccountSearch);$("closeAccountSearch")?.addEventListener("click",closeAccountSearch);accountSearch?.addEventListener("click",e=>{if(e.target===accountSearch)closeAccountSearch();});
+let accountSearchTimer;accountQuery?.addEventListener("input",()=>{clearTimeout(accountSearchTimer);accountSearchTimer=setTimeout(()=>{$("lexiaaAccountSectionTitle").textContent=accountQuery.value.trim()?"Hasil pencarian":"Rekomendasi akun Lexiaa";loadAccountRecommendations(accountQuery.value);},220);});
+
 $("lexiaaSidebar")?.querySelectorAll(".lexiaa-nav-item").forEach(item=>item.addEventListener("click",()=>{const nav=$("lexiaaSidebar").querySelectorAll(".lexiaa-nav-item");nav.forEach(x=>{x.classList.remove("active");x.removeAttribute("aria-current");});item.classList.add("active");item.setAttribute("aria-current","page");}));
 
 function readProfile(){try{return JSON.parse(localStorage.getItem("lexiaa-nextgen-profile")||"{}")}catch(e){return {}}}
@@ -462,14 +506,14 @@ function stopCropDrag(){cropState.drag=false;if(cropWindow)cropWindow.style.curs
 cropWindow?.addEventListener("pointerup",stopCropDrag);cropWindow?.addEventListener("pointercancel",stopCropDrag);cropWindow?.addEventListener("lostpointercapture",stopCropDrag);
 $("cancelCropPhoto")?.addEventListener("click",closeCropper);
 $("applyCropPhoto")?.addEventListener("click",()=>{const img=cropState.image,win=$("cropWindow");if(!img||!win.clientWidth){$("profileSaveNote").textContent="Tunggu sampai pratinjau foto siap.";return;}const size=win.clientWidth,scale=cropState.base,canvas=document.createElement("canvas");canvas.width=256;canvas.height=256;const ctx=canvas.getContext("2d");if(!ctx){$("profileSaveNote").textContent="Browser tidak mendukung pemrosesan foto.";return;}ctx.drawImage(img,-cropState.x/scale,-cropState.y/scale,size/scale,size/scale,0,0,256,256);try{window.lexiaaPendingPhoto=canvas.toDataURL("image/jpeg",.82);}catch(err){$("profileSaveNote").textContent="Gagal memproses foto. Coba gambar lain.";return;}const preview=$("profileAvatarPreview");preview.style.backgroundImage='url("'+window.lexiaaPendingPhoto+'")';preview.style.backgroundSize="cover";preview.style.backgroundPosition="center";preview.textContent="";$("profileSaveNote").textContent="Potongan foto siap. Tekan Simpan Profil untuk menyimpan.";closeCropper();});
-$("lexiaaProfileForm")?.addEventListener("submit",async e=>{e.preventDefault();const username=$("profileUsername").value.trim().replace(/^@/,""),displayName=$("profileDisplayName").value.trim();if(!/^[a-zA-Z0-9_.-]{3,24}$/.test(username)){$("profileSaveNote").textContent="Username 3–24 karakter: huruf, angka, titik, garis bawah, atau strip.";return;}if(!displayName){$("profileSaveNote").textContent="Display name tidak boleh kosong.";return;}const save=$("saveLexiaProfile");save.disabled=true;save.textContent="MENYIMPAN...";const previous=readProfile();const p={username,displayName,photo:window.lexiaaPendingPhoto||previous.photo||""};try{localStorage.setItem("lexiaa-nextgen-profile",JSON.stringify(p));paintProfile(p);if(supabase){const{data}=await supabase.auth.getUser();if(data?.user){const{error}=await supabase.auth.updateUser({data:{username,display_name:displayName}});if(error)throw error;}}$("profileSaveNote").textContent="Profil berhasil disimpan.";window.lexiaaPendingPhoto=null;setTimeout(closeProfileSettings,650);}catch(err){paintProfile(p);$("profileSaveNote").textContent="Profil tersimpan di perangkat ini. Sinkronisasi akun tidak berhasil: "+(err.message||"coba lagi nanti");}finally{save.disabled=false;save.textContent="Simpan Profil";}});
+$("lexiaaProfileForm")?.addEventListener("submit",async e=>{e.preventDefault();const username=$("profileUsername").value.trim().replace(/^@/,""),displayName=$("profileDisplayName").value.trim();if(!/^[a-zA-Z0-9_.-]{3,24}$/.test(username)){$("profileSaveNote").textContent="Username 3–24 karakter: huruf, angka, titik, garis bawah, atau strip.";return;}if(!displayName){$("profileSaveNote").textContent="Display name tidak boleh kosong.";return;}const save=$("saveLexiaProfile");save.disabled=true;save.textContent="MENYIMPAN...";const previous=readProfile();const p={username,displayName,photo:window.lexiaaPendingPhoto||previous.photo||""};try{localStorage.setItem("lexiaa-nextgen-profile",JSON.stringify(p));paintProfile(p);if(supabase){const{data}=await supabase.auth.getUser();if(data?.user){const{error}=await supabase.auth.updateUser({data:{username,display_name:displayName}});if(error)throw error;const{error:directoryError}=await supabase.from("lexiaa_profiles").update({username,display_name:displayName}).eq("id",data.user.id);if(directoryError)throw directoryError;}}$("profileSaveNote").textContent="Profil berhasil disimpan.";window.lexiaaPendingPhoto=null;setTimeout(closeProfileSettings,650);}catch(err){paintProfile(p);$("profileSaveNote").textContent="Profil tersimpan di perangkat ini. Sinkronisasi akun tidak berhasil: "+(err.message||"coba lagi nanti");}finally{save.disabled=false;save.textContent="Simpan Profil";}});
 
 function openUpdates(){ $("lexiaaUpdatesBackdrop").classList.add("open");$("lexiaaUpdatesBackdrop").setAttribute("aria-hidden","false");}
 function closeUpdates(){$("lexiaaUpdatesBackdrop").classList.remove("open");$("lexiaaUpdatesBackdrop").setAttribute("aria-hidden","true");}
 $("lexiaaSidebar")?.querySelector('[data-action="updates"]')?.addEventListener("click",openUpdates);
 $("closeLexiaUpdates")?.addEventListener("click",closeUpdates);
 $("lexiaaUpdatesBackdrop")?.addEventListener("click",e=>{if(e.target===$("lexiaaUpdatesBackdrop"))closeUpdates();});
-document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeProfileSettings();closeUpdates();closeCropper();}});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeProfileSettings();closeUpdates();closeCropper();closeAccountSearch();}});
 
 
 
@@ -481,7 +525,8 @@ async function loadWeather(lat,lon){try{const url="https://api.open-meteo.com/v1
 async function loadLocation(){setRegion();if(!navigator.geolocation){$("locationValue").textContent="NOT SUPPORTED";$("locationSub").textContent="BROWSER LOCATION IS UNAVAILABLE";return;}navigator.geolocation.getCurrentPosition(pos=>{const{latitude:lat,longitude:lon}=pos.coords;$("locationValue").textContent=lat.toFixed(3)+"°, "+lon.toFixed(3)+"°";$("locationSub").textContent="GPS POSITION · LOCAL AREA";$("statusLocation").textContent="GPS aktif · mencari nama wilayah";loadWeather(lat,lon);const url="https://api.bigdatacloud.net/data/reverse-geocode-client?latitude="+lat+"&longitude="+lon+"&localityLanguage=id";fetch(url).then(r=>r.ok?r.json():null).then(d=>{if(d){const place=[d.locality||d.city,d.principalSubdivision,d.countryName].filter(Boolean).join(", ");if(place){$("locationValue").textContent=place;$("statusLocation").textContent=place;$("statusLocation").dataset.place=place;}}}).catch(()=>{});},()=>{$("locationValue").textContent="Izin lokasi belum diberikan";$("statusLocation").textContent="Izin lokasi diperlukan";$("locationSub").textContent="IZINKAN LOKASI DI PENGATURAN BROWSER";$("weatherValue").textContent="-- °C";$("weatherSub").textContent="LOCATION PERMISSION REQUIRED";},{enableHighAccuracy:false,timeout:10000,maximumAge:600000});}
 function loadBattery(){if(!navigator.getBattery){$("batteryValue").textContent="N/A";$("batteryFill").style.width="0%";return;}navigator.getBattery().then(b=>{const paint=()=>{const pct=Math.round(b.level*100);$("batteryValue").textContent=pct+"%"+(b.charging?" ⚡":"");$("batteryFill").style.width=pct+"%";};paint();b.addEventListener("levelchange",paint);b.addEventListener("chargingchange",paint);}).catch(()=>{$("batteryValue").textContent="N/A";});}
 function requestImmersive(){try{const root=document.documentElement;const lock=()=>{try{const p=screen.orientation?.lock?.("landscape");if(p&&typeof p.catch==="function")p.catch(err=>console.warn("Kunci landscape ditolak browser:",err));}catch(e){console.warn("Kunci landscape tidak tersedia:",e);}};if(document.fullscreenElement){lock();return;}if(root.requestFullscreen){const full=root.requestFullscreen({navigationUI:"hide"});lock();if(full&&typeof full.then==="function")full.then(()=>lock()).catch(err=>console.warn("Fullscreen tidak diizinkan browser:",err));}else{lock();console.warn("Fullscreen API tidak tersedia pada mode browser ini.");}}catch(e){console.warn("Mode immersive tidak tersedia:",e);}}
-function enterDashboard(){if(dashboardEntered)return;dashboardEntered=true;try{localStorage.setItem("lexiaa-nextgen-mode","1");localStorage.setItem("lexiaa-last-experience","next");}catch(e){}show("dashboard");requestImmersive();loadBattery();tick();if(window.lexiaaClockTimer)clearInterval(window.lexiaaClockTimer);window.lexiaaClockTimer=setInterval(tick,1000);loadBattery();loadProfileSettings();const video=$("fantasyBgVideo");if(video){video.currentTime=0;video.play().catch(()=>{});}tick();loadLocation();}
+function markLexiaaNextGen(){if(!supabase)return;supabase.auth.getUser().then(async({data,error})=>{if(error||!data?.user)return;const{error:profileError}=await supabase.from("lexiaa_profiles").update({nextgen_joined_at:new Date().toISOString()}).eq("id",data.user.id);if(profileError)console.warn("Status Next Gen belum tersimpan:",profileError.message);}).catch(e=>console.warn("Directory sync:",e));}
+function enterDashboard(){if(dashboardEntered)return;dashboardEntered=true;try{localStorage.setItem("lexiaa-nextgen-mode","1");localStorage.setItem("lexiaa-last-experience","next");}catch(e){}markLexiaaNextGen();show("dashboard");requestImmersive();loadBattery();tick();if(window.lexiaaClockTimer)clearInterval(window.lexiaaClockTimer);window.lexiaaClockTimer=setInterval(tick,1000);loadBattery();loadProfileSettings();const video=$("fantasyBgVideo");if(video){video.currentTime=0;video.play().catch(()=>{});}tick();loadLocation();}
 $("nextLoginForm").addEventListener("submit",async e=>{e.preventDefault();requestImmersive();if(!supabase){notice("Koneksi autentikasi belum siap. Periksa internet lalu muat ulang halaman.");return;}const btn=$("loginSubmit");btn.disabled=true;btn.textContent="AUTHENTICATING...";notice("");try{const{data,error}=await supabase.auth.signInWithPassword({email:$("nextEmail").value.trim(),password:$("nextPassword").value});if(error)throw error;notice("ACCESS GRANTED","success");enterDashboard();}catch(err){notice(err.message||"Login gagal. Periksa email dan kata sandi.");}finally{btn.disabled=false;btn.textContent="AUTHENTICATE & ENTER";}});
 $("togglePassword").addEventListener("click",()=>{const input=$("nextPassword"),visible=input.type==="password";input.type=visible?"text":"password";$("togglePassword").textContent=visible?"HIDE":"SHOW";});
 async function returnToOldLexia(){try{localStorage.removeItem("lexiaa-nextgen-mode");localStorage.setItem("lexiaa-last-experience","old");}catch(e){}try{if(document.fullscreenElement)await document.exitFullscreen();}catch(e){}try{if(screen.orientation&&screen.orientation.unlock)screen.orientation.unlock();}catch(e){}location.replace("./?experience=old");}
