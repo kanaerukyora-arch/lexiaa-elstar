@@ -1190,9 +1190,17 @@ html[data-lexiaa-theme] .live-time,html[data-lexiaa-theme] .live-greeting{color:
 </style>
 <script id="lexiaa-nextgen-persistent-home">
 (()=>{try{
- const last=localStorage.getItem('lexiaa-last-experience')||'old';
- // Keep Lexiaa Old directly accessible; Next Gen remains available at its own URL.
- const markOld=()=>{try{localStorage.setItem('lexiaa-last-experience','old');}catch(e){}};
+ const params=new URLSearchParams(location.search);
+ const explicitOld=params.get('experience')==='old';
+ if(explicitOld){
+  localStorage.setItem('lexiaa-last-experience','old');
+ }else{
+  const last=localStorage.getItem('lexiaa-last-experience')||'old';
+  if(last==='next'){
+   location.replace('./next-generation.html');
+   return;
+  }
+ }
  const lockOldPortrait=()=>{
   try{
    screen.orientation?.unlock?.();
@@ -1201,9 +1209,8 @@ html[data-lexiaa-theme] .live-time,html[data-lexiaa-theme] .live-greeting{color:
   }catch(e){}
  };
  window.lexiaaLockOldPortrait=lockOldPortrait;
- markOld();
  lockOldPortrait();
- window.addEventListener('pageshow',()=>{markOld();lockOldPortrait();});
+ window.addEventListener('pageshow',()=>lockOldPortrait());
  document.addEventListener('visibilitychange',()=>{if(!document.hidden)lockOldPortrait();});
 }catch(e){}})();
 </script>
