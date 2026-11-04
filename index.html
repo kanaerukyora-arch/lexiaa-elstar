@@ -1191,7 +1191,7 @@ html[data-lexiaa-theme] .live-time,html[data-lexiaa-theme] .live-greeting{color:
 <script id="lexiaa-nextgen-persistent-home">
 (()=>{try{
  const last=localStorage.getItem('lexiaa-last-experience')||'old';
- if(last==='next'){location.replace('./next-generation.html');return;}
+ // Keep Lexiaa Old directly accessible; Next Gen remains available at its own URL.
  const markOld=()=>{try{localStorage.setItem('lexiaa-last-experience','old');}catch(e){}};
  const lockOldPortrait=()=>{
   try{
