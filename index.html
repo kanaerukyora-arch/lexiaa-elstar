@@ -1190,15 +1190,22 @@ html[data-lexiaa-theme] .live-time,html[data-lexiaa-theme] .live-greeting{color:
 </style>
 <script id="lexiaa-nextgen-persistent-home">
 (()=>{try{
- // Old Lexiaa always releases any landscape lock inherited from Next Gen.
- try{screen.orientation?.unlock?.();}catch(e){}
- const params=new URLSearchParams(location.search);
- const forceOld=params.get('experience')==='old';
- if(forceOld){localStorage.setItem('lexiaa-last-experience','old');history.replaceState(null,'',location.pathname);}
- const mode=localStorage.getItem('lexiaa-last-experience')||'old';
- if(!forceOld&&mode==='next'){location.replace('./next-generation.html');return;}
- localStorage.setItem('lexiaa-last-experience','old');
- window.addEventListener('pagehide',()=>{try{localStorage.setItem('lexiaa-last-experience','old');}catch(e){}});
+ // Old Lexiaa is always the default entry point. Release Next Gen's lock
+ // and request portrait orientation whenever this experience is visible.
+ const markOld=()=>{try{localStorage.setItem('lexiaa-last-experience','old');}catch(e){}};
+ const lockOldPortrait=()=>{
+  try{
+   screen.orientation?.unlock?.();
+   const request=screen.orientation?.lock?.('portrait');
+   if(request&&typeof request.catch==='function')request.catch(()=>{});
+  }catch(e){}
+ };
+ window.lexiaaLockOldPortrait=lockOldPortrait;
+ markOld();
+ lockOldPortrait();
+ window.addEventListener('pageshow',()=>{markOld();lockOldPortrait();});
+ document.addEventListener('visibilitychange',()=>{if(!document.hidden){markOld();lockOldPortrait();}else{markOld();}});
+ window.addEventListener('pagehide',markOld);
 }catch(e){}})();
 </script>
 </head>
@@ -2757,8 +2764,8 @@ html[data-lexiaa-theme] .live-time,html[data-lexiaa-theme] .live-greeting{color:
     }
   }
   window.lexOpenSecretStory = openStory;
-  function openStory(){page=0;active=true;$('lexOriginGate').classList.remove('open');$('lexOriginGate').setAttribute('aria-hidden','true');$('lexOriginStory').classList.add('open');$('lexOriginStory').setAttribute('aria-hidden','false');document.body.style.overflow='hidden';render();startStoryVoiceGlow();try{document.documentElement.requestFullscreen?.().catch(()=>{});screen.orientation?.lock?.('landscape').catch(()=>{});}catch(e){}}
-  function closeStory(){stopStoryVoiceGlow();const a=$('lexStoryAudio');a.pause();a.removeAttribute('src');a.load();const v=$('lexStoryCharacterVideo');stopCharacterKeyer();if(v){v.pause();v.currentTime=0;}active=false;$('lexOriginStory').classList.remove('open');$('lexOriginStory').setAttribute('aria-hidden','true');document.body.style.overflow='';try{screen.orientation?.unlock?.();if(document.fullscreenElement)document.exitFullscreen?.().catch(()=>{});}catch(e){}}
+  function openStory(){page=0;active=true;$('lexOriginGate').classList.remove('open');$('lexOriginGate').setAttribute('aria-hidden','true');$('lexOriginStory').classList.add('open');$('lexOriginStory').setAttribute('aria-hidden','false');document.body.style.overflow='hidden';render();startStoryVoiceGlow();try{document.documentElement.requestFullscreen?.().catch(()=>{});window.lexiaaLockOldPortrait?.();}catch(e){}}
+  function closeStory(){stopStoryVoiceGlow();const a=$('lexStoryAudio');a.pause();a.removeAttribute('src');a.load();const v=$('lexStoryCharacterVideo');stopCharacterKeyer();if(v){v.pause();v.currentTime=0;}active=false;$('lexOriginStory').classList.remove('open');$('lexOriginStory').setAttribute('aria-hidden','true');document.body.style.overflow='';try{if(document.fullscreenElement)document.exitFullscreen?.().catch(()=>{});window.lexiaaLockOldPortrait?.();}catch(e){}}
   function init(){
     const form=$('lexOriginForm'); if(!form || form.dataset.standaloneReady==='1')return;
     form.dataset.standaloneReady='1'; form.dataset.handlerReady='1';
@@ -2780,7 +2787,7 @@ html[data-lexiaa-theme] .live-time,html[data-lexiaa-theme] .live-greeting{color:
       try{
         if(!document.fullscreenElement && story.requestFullscreen) await story.requestFullscreen();
         else if(document.fullscreenElement) await document.exitFullscreen();
-        screen.orientation?.lock?.('landscape').catch(()=>{});
+        window.lexiaaLockOldPortrait?.();
       }catch(err){status('Mode fullscreen tidak didukung browser ini. Tampilan tetap memenuhi layar.');}
     });
     $('lexStoryAudio')?.addEventListener('play',startStoryVoiceGlow);
