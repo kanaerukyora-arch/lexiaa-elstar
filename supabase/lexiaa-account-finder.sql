@@ -2,8 +2,9 @@
 -- Run once in Supabase Dashboard > SQL Editor.
 create table if not exists public.lexiaa_profiles (
   id uuid primary key references auth.users(id) on delete cascade,
-  username text not null unique,
-  display_name text not null default 'Pengguna Lexiaa',
+  username text unique,
+  display_name text,
+  email_hint text,
   avatar_url text,
   old_registered boolean not null default true,
   nextgen_joined_at timestamptz,
@@ -11,6 +12,9 @@ create table if not exists public.lexiaa_profiles (
   updated_at timestamptz not null default now()
 );
 
+alter table public.lexiaa_profiles add column if not exists email_hint text;
+alter table public.lexiaa_profiles alter column username drop not null;
+alter table public.lexiaa_profiles alter column display_name drop not null;
 alter table public.lexiaa_profiles enable row level security;
 grant select, insert, update on public.lexiaa_profiles to authenticated;
 
@@ -35,16 +39,17 @@ as $$
 declare
   v_username text;
   v_display_name text;
+  v_email_hint text;
 begin
   v_username := lower(regexp_replace(coalesce(new.raw_user_meta_data->>'username', ''), '[^a-zA-Z0-9_.-]', '', 'g'));
   if v_username = '' then
     v_username := 'lexiaa_' || substr(replace(new.id::text, '-', ''), 1, 10);
   end if;
   v_display_name := nullif(trim(coalesce(new.raw_user_meta_data->>'display_name', '')), '');
-  if v_display_name is null then v_display_name := 'Pengguna Lexiaa'; end if;
+  v_email_hint := case when coalesce(new.email, '') like '%@%' then left(split_part(new.email, '@', 1), 2) || repeat('*', greatest(length(split_part(new.email, '@', 1)) - 2, 2)) || '@' || split_part(new.email, '@', 2) else null end;
 
-  insert into public.lexiaa_profiles(id, username, display_name, old_registered)
-  values(new.id, v_username, v_display_name, true)
+  insert into public.lexiaa_profiles(id, username, display_name, email_hint, old_registered)
+  values(new.id, nullif(v_username, 'lexiaa_' || substr(replace(new.id::text, '-', ''), 1, 10)), v_display_name, v_email_hint, true)
   on conflict (id) do nothing;
   return new;
 end;
@@ -56,14 +61,18 @@ after insert on auth.users
 for each row execute procedure public.lexiaa_handle_new_auth_user();
 
 -- Backfill accounts that already existed before the directory was installed.
-insert into public.lexiaa_profiles(id, username, display_name, old_registered)
+insert into public.lexiaa_profiles(id, username, display_name, email_hint, old_registered)
 select
   u.id,
-  'lexiaa_' || substr(replace(u.id::text, '-', ''), 1, 10),
-  coalesce(nullif(trim(u.raw_user_meta_data->>'display_name'), ''), 'Pengguna Lexiaa'),
+  nullif(lower(regexp_replace(coalesce(u.raw_user_meta_data->>'username', ''), '[^a-zA-Z0-9_.-]', '', 'g')), ''),
+  nullif(trim(coalesce(u.raw_user_meta_data->>'display_name', '')), ''),
+  case when coalesce(u.email, '') like '%@%' then left(split_part(u.email, '@', 1), 2) || repeat('*', greatest(length(split_part(u.email, '@', 1)) - 2, 2)) || '@' || split_part(u.email, '@', 2) else null end,
   true
 from auth.users u
-on conflict (id) do nothing;
+on conflict (id) do update set
+  email_hint = coalesce(public.lexiaa_profiles.email_hint, excluded.email_hint),
+  username = coalesce(public.lexiaa_profiles.username, excluded.username),
+  display_name = coalesce(public.lexiaa_profiles.display_name, excluded.display_name);
 
 create index if not exists lexiaa_profiles_created_at_idx on public.lexiaa_profiles(created_at desc);
 create index if not exists lexiaa_profiles_nextgen_idx on public.lexiaa_profiles(nextgen_joined_at desc);
