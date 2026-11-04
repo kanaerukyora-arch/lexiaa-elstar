@@ -120,6 +120,86 @@ body:has(#dashboardView.active) .wrap{width:100%;max-width:none;margin:0}
 }
 @media(orientation:portrait){#dashboardView.active .fantasy-dashboard{display:none!important}}
 </style>
+<style id="lexiaa-reference-dashboard-style">
+
+/* Reference dashboard layout: glass sidebar, top status and floating info cards */
+#dashboardView .fantasy-dashboard{background:rgba(5,9,30,.08)!important}
+#dashboardView .fantasy-bg-shade{background:linear-gradient(90deg,rgba(10,7,35,.30),transparent 34%,transparent 100%),linear-gradient(180deg,rgba(5,8,35,.12),transparent 30%,rgba(5,8,35,.12))!important}
+#dashboardView .fantasy-top-brand{top:50%!important;left:50%!important;transform:translate(-50%,-50%)!important;width:min(44vw,560px)!important;z-index:3!important}
+#dashboardView .fantasy-brand-name{font-size:clamp(30px,4.5vw,62px)!important}
+#dashboardView .fantasy-brand-sub{font-size:clamp(11px,1.5vw,18px)!important}
+#dashboardView .fantasy-brand-mark,#dashboardView .fantasy-brand-flare{font-size:clamp(18px,2.2vw,30px)!important}
+#dashboardView .fantasy-bottom-brand{display:none!important}
+#dashboardView .lexiaa-ref-topbar{position:absolute;z-index:12;left:1.35%;top:1.8%;width:78.5%;height:7.2%;min-height:48px;border:1px solid rgba(190,190,255,.48);border-radius:17px;background:linear-gradient(105deg,rgba(44,34,101,.60),rgba(13,25,76,.56));backdrop-filter:blur(17px);-webkit-backdrop-filter:blur(17px);box-shadow:0 5px 22px rgba(5,7,40,.26),inset 0 1px 0 rgba(255,255,255,.16);display:flex;align-items:center;padding:0 14px}
+#dashboardView .lexiaa-menu-toggle{width:38px;height:38px;display:flex;flex-direction:column;justify-content:center;gap:5px;border:0;background:transparent;padding:5px;cursor:pointer}
+#dashboardView .lexiaa-menu-toggle span{display:block;width:27px;height:2.5px;border-radius:4px;background:#e9e4ff;box-shadow:0 0 9px #bba5ff}
+#dashboardView .lexiaa-topbar-center{flex:1}
+#dashboardView .lexiaa-topbar-actions{display:flex;align-items:center;gap:8px}
+#dashboardView .lexiaa-utility-button{min-height:32px;padding:6px 10px;border:1px solid rgba(194,190,255,.42);border-radius:10px;background:rgba(22,28,83,.58);color:#f3efff;font-size:10px;display:flex;align-items:center;gap:6px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+#dashboardView .lexiaa-utility-button.logout{width:32px;justify-content:center;font-size:16px}
+#dashboardView .lexiaa-sidebar{position:absolute;z-index:11;left:1.35%;top:12.2%;bottom:1.8%;width:19.2%;min-width:190px;max-width:310px;border:1px solid rgba(190,178,255,.62);border-radius:17px;background:linear-gradient(155deg,rgba(67,40,111,.68),rgba(21,25,78,.66) 54%,rgba(13,26,72,.72));backdrop-filter:blur(19px);-webkit-backdrop-filter:blur(19px);box-shadow:0 8px 28px rgba(4,7,35,.35),inset 0 1px 0 rgba(255,255,255,.18);padding:18px 11px 14px;display:flex;flex-direction:column;transition:transform .25s ease,width .25s ease}
+#dashboardView .lexiaa-user-card{display:flex;align-items:center;gap:12px;padding:2px 8px 24px;border-bottom:1px solid rgba(225,220,255,.18)}
+#dashboardView .lexiaa-avatar{width:52px;height:52px;flex:0 0 52px;border:2px solid rgba(231,224,255,.8);border-radius:12px;background:linear-gradient(135deg,#a18bd5,#423a80);display:grid;place-items:center;color:white;font:700 24px Georgia,serif;box-shadow:0 0 14px #c2a6ff55}
+#dashboardView .lexiaa-user-meta{min-width:0;display:flex;flex-direction:column;gap:3px;color:#fff}
+#dashboardView .lexiaa-user-meta strong{font-size:clamp(12px,1.35vw,19px);white-space:nowrap}
+#dashboardView .lexiaa-user-meta span{font-size:clamp(10px,1.1vw,15px);color:#eee9ff;white-space:nowrap}
+#dashboardView .lexiaa-side-nav{display:flex;flex-direction:column;gap:7px;padding-top:20px}
+#dashboardView .lexiaa-nav-item{width:100%;min-height:48px;display:flex;align-items:center;gap:13px;padding:8px 12px;border:1px solid transparent;border-radius:11px;background:transparent;color:#f4f0ff;text-align:left;font-size:clamp(12px,1.35vw,19px);cursor:pointer}
+#dashboardView .lexiaa-nav-item.active{border-color:rgba(219,210,255,.55);background:linear-gradient(100deg,rgba(174,157,255,.42),rgba(102,118,201,.25));box-shadow:inset 0 0 12px rgba(205,191,255,.13),0 0 13px rgba(139,121,255,.16)}
+#dashboardView .lexiaa-nav-icon{width:26px;text-align:center;font-size:clamp(19px,2vw,27px);font-weight:700;color:#c9b4ff;text-shadow:0 0 10px #b99cff}
+#dashboardView .lexiaa-sidebar-footer{margin-top:auto;display:flex;flex-direction:column;gap:5px;padding:12px 10px 4px;color:#eeeaff;font-size:clamp(9px,.95vw,13px);line-height:1.35}
+#dashboardView .lexiaa-sidebar-footer b{font-weight:500}
+#dashboardView .fantasy-panel{clip-path:none!important;border:1px solid rgba(185,177,255,.62)!important;border-radius:16px!important;background:linear-gradient(135deg,rgba(47,37,104,.64),rgba(17,35,91,.61) 58%,rgba(31,37,104,.55))!important;backdrop-filter:blur(18px)!important;-webkit-backdrop-filter:blur(18px)!important;box-shadow:0 6px 24px rgba(4,8,40,.32),inset 0 1px 0 rgba(255,255,255,.18)!important;padding:15px 19px!important}
+#dashboardView .fantasy-panel:before{display:none!important}
+#dashboardView .lexiaa-status-top{position:absolute;z-index:10;right:1.35%;top:1.8%;width:19.2%;min-width:205px;min-height:7.2%;display:flex;flex-direction:column;justify-content:center;gap:7px;padding:9px 15px!important}
+#dashboardView .lexiaa-status-line{display:flex;align-items:center;gap:9px;color:#fff;font-size:clamp(12px,1.55vw,21px);white-space:nowrap}
+#dashboardView .lexiaa-status-line strong{font-weight:500}
+#dashboardView .lexiaa-battery-icon{color:#9dffb5;font-size:22px;text-shadow:0 0 10px #8cffaa}
+#dashboardView .lexiaa-clock-icon{margin-left:auto;color:#d7c7ff;font-size:20px}
+#dashboardView .lexiaa-status-location{font-size:clamp(9px,1.05vw,14px);color:#eeeaff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#dashboardView .weather-panel{position:absolute!important;left:23.3%!important;top:14.8%!important;right:auto!important;bottom:auto!important;width:19%!important;min-width:180px;min-height:105px!important}
+#dashboardView .location-panel{position:absolute!important;left:23.3%!important;top:33.5%!important;right:auto!important;bottom:auto!important;width:19%!important;min-width:180px;min-height:105px!important}
+#dashboardView .network-panel{position:absolute;right:1.35%;top:14.8%;width:19.2%;min-width:205px;min-height:105px}
+#dashboardView .lexiaa-info-heading{font-size:clamp(11px,1.25vw,17px);color:#d4c7ff;margin-bottom:12px}
+#dashboardView .weather-row{margin:0!important;gap:10px!important}
+#dashboardView .weather-glyph{font-size:clamp(25px,3vw,39px)!important}
+#dashboardView .fantasy-weather-main{font-size:clamp(17px,1.9vw,25px)!important;font-weight:500!important;white-space:nowrap}
+#dashboardView .fantasy-weather-desc{font-size:clamp(8px,.85vw,11px)!important;max-width:15vw}
+#dashboardView .lexiaa-info-value{display:flex;align-items:center;gap:10px;color:#fff;font-size:clamp(13px,1.5vw,20px);line-height:1.3}
+#dashboardView .lexiaa-info-value span:last-child{overflow-wrap:anywhere}
+#dashboardView .lexiaa-pin{color:#c2a8ff;font-size:22px}
+#dashboardView .lexiaa-wifi{color:#b9a0ff;font-size:28px}
+#dashboardView .fantasy-panel-foot{font-size:clamp(8px,.85vw,11px)!important}
+#dashboardView .lexiaa-battery-hidden{display:none}
+#dashboardView .ambient-toggle-label{font-size:9px}
+#dashboardView .lexiaa-sidebar.is-collapsed{transform:translateX(calc(-100% - 20px))}
+#dashboardView.sidebar-collapsed .lexiaa-sidebar{transform:translateX(calc(-100% - 20px))}
+#dashboardView.sidebar-collapsed .lexiaa-ref-topbar{width:78.5%}
+@media(max-width:760px){
+ #dashboardView .lexiaa-sidebar{min-width:0;width:220px;max-width:72vw}
+ #dashboardView .lexiaa-status-top{min-width:0;width:35%;right:2%;top:2%;padding:8px 10px!important}
+ #dashboardView .lexiaa-ref-topbar{left:2%;top:2%;width:60%;min-height:44px}
+ #dashboardView .network-panel{right:2%;top:15%;width:35%;min-width:0}
+ #dashboardView .weather-panel,#dashboardView .location-panel{left:24%;width:28%;min-width:0;padding:10px 12px!important}
+ #dashboardView .weather-panel{top:15%}
+ #dashboardView .location-panel{top:34%}
+ #dashboardView .lexiaa-status-line{font-size:clamp(10px,2vw,15px);gap:5px}
+ #dashboardView .lexiaa-status-location{font-size:8px}
+ #dashboardView .lexiaa-utility-button{font-size:8px;padding:5px 7px}
+ #dashboardView .fantasy-top-brand{width:40vw!important}
+}
+@media(max-height:480px){
+ #dashboardView .lexiaa-sidebar{top:12%;bottom:2%;padding:10px 8px}
+ #dashboardView .lexiaa-user-card{padding-bottom:10px}
+ #dashboardView .lexiaa-avatar{width:38px;height:38px;flex-basis:38px}
+ #dashboardView .lexiaa-side-nav{padding-top:9px;gap:3px}
+ #dashboardView .lexiaa-nav-item{min-height:34px}
+ #dashboardView .lexiaa-sidebar-footer{padding-top:5px}
+ #dashboardView .fantasy-panel{min-height:80px!important;padding:10px 12px!important}
+}
+
+</style>
+
 
 <style id="lexiaa-login-visibility-fix">
 html,body{min-height:100%;height:auto}
@@ -176,13 +256,49 @@ body:has(#loginView.active) main{min-height:0}
   <canvas id="lexiaaMagicCanvas" class="lexiaa-magic-canvas" aria-hidden="true"></canvas>
   <div class="fantasy-bg-shade"></div>
   <div class="fantasy-top-brand"><div class="fantasy-brand-mark">✧</div><div class="fantasy-brand-name">Lexiaa</div><div class="fantasy-brand-sub">— The Next Generation —</div><div class="fantasy-brand-flare">✦</div></div>
-  <section class="fantasy-panel battery-panel"><div class="fantasy-panel-heading"><span class="fantasy-symbol">ϟ</span><span>Battery</span></div><div class="fantasy-panel-main"><strong id="batteryValue">--%</strong></div><div class="battery-track"><span id="batteryFill"></span></div></section>
-  <section class="fantasy-panel time-panel"><div class="fantasy-panel-heading"><span class="fantasy-symbol">◷</span><span>Live Time</span></div><div class="fantasy-clock" id="liveClock">00:00:00</div><div class="fantasy-date" id="liveDate">SYNCHRONIZING...</div></section>
-  <section class="fantasy-panel location-panel"><div class="fantasy-panel-heading"><span class="fantasy-symbol">⌖</span><span>Lokasi Live</span></div><div class="fantasy-panel-main fantasy-location" id="locationValue">Mendeteksi lokasi...</div><div class="fantasy-panel-foot" id="locationSub">MENUNGGU IZIN LOKASI</div></section>
-  <section class="fantasy-panel weather-panel"><div class="fantasy-panel-heading"><span class="fantasy-symbol" id="weatherIcon">☁</span><span>Cuaca</span></div><div class="weather-row"><div class="weather-glyph" id="weatherGlyph">☁</div><div><div class="fantasy-weather-main" id="weatherValue">-- °C</div><div class="fantasy-weather-desc" id="weatherSub">Memuat cuaca...</div></div></div></section>
+    <header class="lexiaa-ref-topbar">
+    <button class="lexiaa-menu-toggle" id="lexiaaMenuToggle" type="button" aria-label="Tampilkan atau sembunyikan menu" aria-expanded="true"><span></span><span></span><span></span></button>
+    <div class="lexiaa-topbar-center"></div>
+    <div class="lexiaa-topbar-actions">
+      <button class="lexiaa-utility-button" id="ambientToggle" type="button" aria-label="Aktifkan suara alam" aria-pressed="false"><span class="ambient-toggle-icon">♫</span><span class="ambient-toggle-label">SOUND OFF</span></button>
+      <button class="lexiaa-utility-button" id="backToOldLexia" type="button" aria-label="Kembali ke Lexiaa Original">↩ <span>OLD LEXIAA</span></button>
+      <button class="lexiaa-utility-button logout" id="logoutButton" type="button" aria-label="Keluar dari akun Next Generation">⇥</button>
+    </div>
+  </header>
+  <aside class="lexiaa-sidebar" id="lexiaaSidebar">
+    <div class="lexiaa-user-card">
+      <div class="lexiaa-avatar" aria-hidden="true">L</div>
+      <div class="lexiaa-user-meta"><strong>User Name</strong><span>Admin Level 1</span></div>
+    </div>
+    <nav class="lexiaa-side-nav" aria-label="Menu utama">
+      <button class="lexiaa-nav-item active" type="button" aria-current="page"><span class="lexiaa-nav-icon">⌂</span><span>Beranda</span></button>
+      <button class="lexiaa-nav-item" type="button"><span class="lexiaa-nav-icon">▥</span><span>Statistik</span></button>
+      <button class="lexiaa-nav-item" type="button"><span class="lexiaa-nav-icon">⚙</span><span>Pengaturan</span></button>
+      <button class="lexiaa-nav-item" type="button"><span class="lexiaa-nav-icon">✉</span><span>Pesan</span></button>
+      <button class="lexiaa-nav-item" type="button"><span class="lexiaa-nav-icon">⟳</span><span>Update</span></button>
+    </nav>
+    <div class="lexiaa-sidebar-footer"><span>Versi Apk: v1.2.4 (Beta)</span><span>Region: <b id="sidebarRegion">Asia/Jakarta</b></span></div>
+  </aside>
+  <div class="lexiaa-status-top fantasy-panel">
+    <div class="lexiaa-status-line"><span class="lexiaa-battery-icon">▰</span><strong id="batteryValue">--%</strong><span class="lexiaa-clock-icon">◷</span><strong id="liveClock">00:00:00</strong></div>
+    <div class="lexiaa-status-location">⌖ <span id="statusLocation">Mendeteksi lokasi...</span></div>
+  </div>
+  <section class="fantasy-panel weather-panel">
+    <div class="lexiaa-info-heading">Cuaca Live</div>
+    <div class="weather-row"><div class="weather-glyph" id="weatherGlyph">☁</div><div><div class="fantasy-weather-main" id="weatherValue">-- °C</div><div class="fantasy-weather-desc" id="weatherSub">Memuat cuaca...</div></div></div>
+  </section>
+  <section class="fantasy-panel location-panel">
+    <div class="lexiaa-info-heading">Lokasi Live</div>
+    <div class="lexiaa-info-value"><span class="lexiaa-pin">●</span><span id="locationValue">Mendeteksi lokasi...</span></div>
+    <div class="fantasy-panel-foot" id="locationSub">MENUNGGU IZIN LOKASI</div>
+  </section>
+  <section class="fantasy-panel network-panel">
+    <div class="lexiaa-info-heading">Status Jaringan</div>
+    <div class="lexiaa-info-value"><span class="lexiaa-wifi">⌁</span><span id="networkValue">Memeriksa koneksi...</span></div>
+  </section>
+  <div class="lexiaa-battery-hidden" aria-hidden="true"><span id="batteryFill"></span></div>
+  <div class="fantasy-top-brand"><div class="fantasy-brand-mark">✧</div><div class="fantasy-brand-name">Lexiaa</div><div class="fantasy-brand-sub">— The Next Generation —</div><div class="fantasy-brand-flare">✦</div></div>
   <div class="fantasy-bottom-brand"><span>REGION · <b id="regionValue">DETECTING</b></span><span>VERSION · <b>V.1.0.7+</b></span></div>
-  <button class="ambient-toggle" id="ambientToggle" type="button" aria-label="Aktifkan suara alam" aria-pressed="false"><span class="ambient-toggle-icon">♫</span><span class="ambient-toggle-label">SOUND OFF</span></button>
-  <button class="fantasy-logout" id="backToOldLexia" type="button" aria-label="Kembali ke Lexiaa Original">↩ <span>OLD LEXIAA</span></button><button class="fantasy-logout" id="logoutButton" type="button" aria-label="Keluar dari akun Next Generation">⇥</button>
 </div>
 <div class="portrait-guide" id="portraitGuide"><div class="rotate-device-icon">▱<span>↻</span></div><strong>Putar perangkat Anda</strong><p>LEXIAA THE NEXT GENERATION dirancang untuk tampilan landscape.</p></div>
 </section></main></div>
@@ -190,9 +306,14 @@ body:has(#loginView.active) main{min-height:0}
 const SUPABASE_URL="https://sudvolmlzunzofzwjbfn.supabase.co",SUPABASE_ANON_KEY="sb_publishable_OOUKks8e7IfILH7TsOit0g_8qK0hNiL";
 const $=id=>document.getElementById(id),loginView=$("loginView"),dashboardView=$("dashboardView");let supabase=null,dashboardEntered=false;
 function show(view){loginView.classList.toggle("active",view==="login");dashboardView.classList.toggle("active",view==="dashboard");$("systemPill").textContent=view==="dashboard"?"● SYSTEM ONLINE":"● SECURE ACCESS";window.scrollTo({top:0,behavior:"smooth"});}
+function updateNetworkStatus(){const el=$("networkValue");if(!el)return;if(!navigator.onLine){el.textContent="Offline";return;}const connection=navigator.connection||navigator.mozConnection||navigator.webkitConnection;const rtt=connection&&Number.isFinite(connection.rtt)?connection.rtt:null;el.textContent="Stabil"+(rtt!==null?" ("+rtt+"ms)": " · Online");}
+window.addEventListener("online",updateNetworkStatus);window.addEventListener("offline",updateNetworkStatus);if(navigator.connection)navigator.connection.addEventListener?.("change",updateNetworkStatus);updateNetworkStatus();
+$("lexiaaMenuToggle")?.addEventListener("click",()=>{const collapsed=dashboardView.classList.toggle("sidebar-collapsed");$("lexiaaMenuToggle").setAttribute("aria-expanded",String(!collapsed));});
+$("lexiaaSidebar")?.querySelectorAll(".lexiaa-nav-item").forEach(item=>item.addEventListener("click",()=>{const nav=$("lexiaaSidebar").querySelectorAll(".lexiaa-nav-item");nav.forEach(x=>{x.classList.remove("active");x.removeAttribute("aria-current");});item.classList.add("active");item.setAttribute("aria-current","page");}));
+
 function notice(message,type=""){const el=$("loginNotice");el.textContent=message;el.className="notice "+type;}
 function tick(){const now=new Date();$("liveClock").textContent=new Intl.DateTimeFormat("en-GB",{hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:false}).format(now);$("liveDate").textContent=new Intl.DateTimeFormat("id-ID",{weekday:"long",day:"2-digit",month:"long",year:"numeric"}).format(now).toUpperCase();}
-function setRegion(){const zone=Intl.DateTimeFormat().resolvedOptions().timeZone||"UNKNOWN",parts=zone.split("/"),area=parts[0]||"UNKNOWN",sub=parts.slice(1).join(" / ").replaceAll("_"," ");$("regionValue").textContent=(area+ (sub?" / "+sub:" ")).toUpperCase();}
+function setRegion(){const zone=Intl.DateTimeFormat().resolvedOptions().timeZone||"UNKNOWN",parts=zone.split("/"),area=parts[0]||"UNKNOWN",sub=parts.slice(1).join(" / ").replaceAll("_"," ");$("regionValue").textContent=(area+ (sub?" / "+sub:" ")).toUpperCase();if($("sidebarRegion"))$("sidebarRegion").textContent=zone.replaceAll("_","/");}
 function weatherLabel(code){if(code===0)return["CLEAR SKY","☀"];if([1,2,3].includes(code))return["PARTLY CLOUDY","☁"];if([45,48].includes(code))return["FOG","〰"];if([51,53,55,56,57].includes(code))return["DRIZZLE","☂"];if([61,63,65,66,67,80,81,82].includes(code))return["RAIN","☂"];if([71,73,75,77,85,86].includes(code))return["SNOW","❄"];if([95,96,99].includes(code))return["THUNDERSTORM","ϟ"];return["CURRENT CONDITIONS","◌"];}
 async function loadWeather(lat,lon){try{const url="https://api.open-meteo.com/v1/forecast?latitude="+lat+"&longitude="+lon+"&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code&timezone=auto",r=await fetch(url);if(!r.ok)throw Error("weather unavailable");const d=await r.json(),c=d.current;if(!c)throw Error("no current weather");const l=weatherLabel(c.weather_code);$("weatherValue").textContent=Math.round(c.temperature_2m)+" °C";$("weatherIcon").textContent=l[1];$("weatherGlyph").textContent=l[1];$("weatherSub").textContent=l[0]+" · FEELS "+Math.round(c.apparent_temperature)+"° · RH "+Math.round(c.relative_humidity_2m)+"%";}catch(e){$("weatherValue").textContent="UNAVAILABLE";$("weatherSub").textContent="LIVE WEATHER COULD NOT BE LOADED";}}
 async function loadLocation(){setRegion();if(!navigator.geolocation){$("locationValue").textContent="NOT SUPPORTED";$("locationSub").textContent="BROWSER LOCATION IS UNAVAILABLE";return;}navigator.geolocation.getCurrentPosition(pos=>{const{latitude:lat,longitude:lon}=pos.coords;$("locationValue").textContent=lat.toFixed(3)+"°, "+lon.toFixed(3)+"°";$("locationSub").textContent="GPS POSITION · LOCAL AREA";loadWeather(lat,lon);const url="https://api.bigdatacloud.net/data/reverse-geocode-client?latitude="+lat+"&longitude="+lon+"&localityLanguage=id";fetch(url).then(r=>r.ok?r.json():null).then(d=>{if(d){const place=[d.locality||d.city,d.principalSubdivision,d.countryName].filter(Boolean).join(", ");if(place)$("locationValue").textContent=place.toUpperCase();}}).catch(()=>{});},()=>{$("locationValue").textContent="LOCATION DISABLED";$("locationSub").textContent="ALLOW LOCATION ACCESS TO VIEW LOCAL WEATHER";$("weatherValue").textContent="-- °C";$("weatherSub").textContent="LOCATION PERMISSION REQUIRED";},{enableHighAccuracy:false,timeout:10000,maximumAge:600000});}
