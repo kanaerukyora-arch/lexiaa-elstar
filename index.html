@@ -1190,11 +1190,18 @@ html[data-lexiaa-theme] .live-time,html[data-lexiaa-theme] .live-greeting{color:
 </style>
 <script id="lexiaa-nextgen-persistent-home">
 (()=>{try{
+ // Old Lexiaa always releases any landscape lock inherited from Next Gen.
+ try{screen.orientation?.unlock?.();}catch(e){}
+ const params=new URLSearchParams(location.search);
+ const forceOld=params.get('experience')==='old';
+ if(forceOld){localStorage.setItem('lexiaa-last-experience','old');history.replaceState(null,'',location.pathname);}
  const mode=localStorage.getItem('lexiaa-last-experience')||'old';
- if(mode==='next'){location.replace('./next-generation.html');return;}
+ if(!forceOld&&mode==='next'){location.replace('./next-generation.html');return;}
  localStorage.setItem('lexiaa-last-experience','old');
+ window.addEventListener('pagehide',()=>{try{localStorage.setItem('lexiaa-last-experience','old');}catch(e){}});
 }catch(e){}})();
-</script>\n</head>
+</script>
+</head>
 <body>
   <div id="appLoader" role="status" aria-label="Memuat LEXIAA">
     <div class="loader-inner">
