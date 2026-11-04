@@ -14,7 +14,7 @@ create table if not exists public.lexiaa_profiles (
 );
 
 alter table public.lexiaa_profiles add column if not exists email_hint text;
-alter table public.lexiaa_profiles add column if not exists email text;
+alter table public.lexiaa_profiles drop column if exists email;
 alter table public.lexiaa_profiles alter column username drop not null;
 alter table public.lexiaa_profiles alter column display_name drop not null;
 alter table public.lexiaa_profiles enable row level security;
