@@ -1190,8 +1190,8 @@ html[data-lexiaa-theme] .live-time,html[data-lexiaa-theme] .live-greeting{color:
 </style>
 <script id="lexiaa-nextgen-persistent-home">
 (()=>{try{
- // Old Lexiaa is always the default entry point. Release Next Gen's lock
- // and request portrait orientation whenever this experience is visible.
+ const last=localStorage.getItem('lexiaa-last-experience')||'old';
+ if(last==='next'){location.replace('./next-generation.html');return;}
  const markOld=()=>{try{localStorage.setItem('lexiaa-last-experience','old');}catch(e){}};
  const lockOldPortrait=()=>{
   try{
@@ -1204,8 +1204,7 @@ html[data-lexiaa-theme] .live-time,html[data-lexiaa-theme] .live-greeting{color:
  markOld();
  lockOldPortrait();
  window.addEventListener('pageshow',()=>{markOld();lockOldPortrait();});
- document.addEventListener('visibilitychange',()=>{if(!document.hidden){markOld();lockOldPortrait();}else{markOld();}});
- window.addEventListener('pagehide',markOld);
+ document.addEventListener('visibilitychange',()=>{if(!document.hidden)lockOldPortrait();});
 }catch(e){}})();
 </script>
 </head>
