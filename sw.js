@@ -1,5 +1,5 @@
-const CACHE_NAME = "lexiaa-global-language-v49";
-const APP_SHELL = ["./", "./index.html", "./next-generation.html", "./admin-new.html", "./app-icon.webp", "./manifest.webmanifest", "./welcome-mascot.webp", "./mascot-member.png", "./welcome-character.png", "./lexiaa-music-character.webp", "./dashboard-characters.png", "./about-main-character.png", "./about-intro-character.webm", "./about-feature-character.png", "./about-howto-character.png", "./about-guide-character.png", "./about-tips-character.png", "./about-welcome-character.png", "./lexiaa-story-character-alpha.webm"];
+const CACHE_NAME = "lexiaa-global-language-v50";
+const APP_SHELL = ["./", "./index.html", "./next-generation.html", "./app-icon.webp", "./manifest.webmanifest", "./welcome-mascot.webp", "./mascot-member.png", "./welcome-character.png", "./lexiaa-music-character.webp", "./dashboard-characters.png", "./about-main-character.png", "./about-intro-character.webm", "./about-feature-character.png", "./about-howto-character.png", "./about-guide-character.png", "./about-tips-character.png", "./about-welcome-character.png", "./lexiaa-story-character-alpha.webm"];
 
 self.addEventListener("install", event => {
   event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(APP_SHELL)).then(() => self.skipWaiting()));
@@ -13,6 +13,8 @@ self.addEventListener("fetch", event => {
   const request = event.request;
   const url = new URL(request.url);
   if (request.method !== "GET" || url.origin !== self.location.origin) return;
+  // Admin New is a standalone admin page; keep it outside the PWA app-shell cache.
+  if (url.pathname.endsWith("/admin-new.html")) return;
   if (url.pathname.includes("/rest/") || url.pathname.includes("/auth/") || url.pathname.includes("/storage/") || url.pathname.includes("/functions/")) return;
 
   if (request.mode === "navigate") {
