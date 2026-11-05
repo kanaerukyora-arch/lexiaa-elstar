@@ -621,6 +621,95 @@ body:has(#loginView.active) main{min-height:0}
 }
 </style>
 
+
+<style id="lexiaa-wallet-compact-rupiah-v3">
+/* Fit phone and PIN steps inside the available screen without inner scrolling */
+#dashboardView .ng-feature-modal:has(#ngWalletPhoneKeypad),
+#dashboardView .ng-feature-modal:has(#ngWalletKeypad){max-height:calc(100dvh - 14px);overflow:hidden;display:flex;flex-direction:column}
+#dashboardView .ng-feature-modal:has(#ngWalletPhoneKeypad) .ng-feature-content,
+#dashboardView .ng-feature-modal:has(#ngWalletKeypad) .ng-feature-content{min-height:0;overflow:visible}
+#dashboardView .ng-auth-layout:has(#ngWalletPhoneKeypad),
+#dashboardView .ng-auth-layout:has(#ngWalletKeypad){min-height:0!important;height:auto}
+#dashboardView .ng-auth-panel:has(#ngWalletPhoneKeypad),
+#dashboardView .ng-auth-panel:has(#ngWalletKeypad){min-height:0!important;margin:0!important;padding:clamp(12px,2.4vh,22px) clamp(14px,3vw,28px)!important;justify-content:center}
+#dashboardView .ng-auth-panel:has(#ngWalletPhoneKeypad) .ng-auth-brand,
+#dashboardView .ng-auth-panel:has(#ngWalletKeypad) .ng-auth-brand{margin-bottom:clamp(5px,1.2vh,12px)}
+#dashboardView .ng-auth-panel:has(#ngWalletPhoneKeypad) .ng-auth-brand b,
+#dashboardView .ng-auth-panel:has(#ngWalletKeypad) .ng-auth-brand b{font-size:clamp(18px,2.2vh,23px)}
+#dashboardView .ng-auth-panel:has(#ngWalletPhoneKeypad) h3,
+#dashboardView .ng-auth-panel:has(#ngWalletKeypad) h3{font-size:clamp(17px,2.5vh,23px);margin:0 0 clamp(7px,1.4vh,13px)}
+#dashboardView .ng-auth-panel:has(#ngWalletPhoneKeypad) .ng-region-label{margin:clamp(4px,1vh,9px) 0 6px}
+#dashboardView .ng-auth-panel:has(#ngWalletPhoneKeypad) .ng-region-select{height:clamp(42px,6.5vh,52px)}
+#dashboardView .ng-auth-panel:has(#ngWalletPhoneKeypad) .ng-phone-entry{min-height:clamp(48px,7.5vh,62px);margin-top:9px}
+#dashboardView .ng-auth-panel:has(#ngWalletPhoneKeypad) .ng-phone-hint{margin:6px 0 8px;font-size:9px}
+#dashboardView .ng-auth-panel:has(#ngWalletPhoneKeypad) .ng-phone-keypad{grid-template-columns:repeat(3,minmax(54px,68px));gap:clamp(5px,1vh,8px);margin:2px auto 7px}
+#dashboardView .ng-auth-panel:has(#ngWalletPhoneKeypad) .ng-phone-keypad button{height:clamp(42px,6.8vh,54px);font-size:20px}
+#dashboardView .ng-auth-panel:has(#ngWalletPhoneKeypad) .ng-wallet-error,
+#dashboardView .ng-auth-panel:has(#ngWalletKeypad) .ng-wallet-error{margin:3px 0;min-height:0;font-size:11px}
+#dashboardView .ng-auth-panel:has(#ngWalletPhoneKeypad) .ng-feature-actions,
+#dashboardView .ng-auth-panel:has(#ngWalletKeypad) .ng-feature-actions{margin-top:7px}
+#dashboardView .ng-auth-panel:has(#ngWalletPhoneKeypad) .ng-feature-actions button,
+#dashboardView .ng-auth-panel:has(#ngWalletKeypad) .ng-feature-actions button{min-height:clamp(38px,5.8vh,46px)}
+#dashboardView .ng-auth-panel:has(#ngWalletPhoneKeypad) .ng-auth-safe,
+#dashboardView .ng-auth-panel:has(#ngWalletKeypad) .ng-auth-safe{margin:7px 0 0;font-size:9px}
+#dashboardView .ng-auth-pin{min-height:0!important}
+#dashboardView .ng-auth-pin .ng-pin-dots{margin:clamp(6px,1.5vh,13px) 0}
+#dashboardView .ng-auth-pin .ng-keypad{gap:clamp(5px,1vh,9px);margin:0 auto 5px}
+#dashboardView .ng-auth-pin .ng-key{width:clamp(44px,6.5vh,54px);height:clamp(44px,6.5vh,54px)}
+#dashboardView .ng-auth-pin .ng-phone-entry{min-height:40px;margin:0 auto;padding:0 12px}
+#dashboardView .ng-auth-pin .ng-auth-panel{padding-top:clamp(10px,1.8vh,18px)!important;padding-bottom:clamp(10px,1.8vh,18px)!important}
+#dashboardView .ng-money-welcome{position:relative;display:grid;place-items:center;height:clamp(90px,16vh,145px);margin:0 auto 12px;width:min(100%,330px);overflow:hidden;border:1px solid #c8b8ff66;border-radius:20px;background:linear-gradient(135deg,#28206f,#4a36a0 55%,#1a4d91);box-shadow:inset 0 0 28px #b7a3ff33,0 10px 28px #080a3c66}
+#dashboardView .ng-money-stack{position:relative;z-index:1;font-size:clamp(52px,10vh,82px);filter:drop-shadow(0 8px 12px #08052d99);transform:rotate(-7deg)}
+#dashboardView .ng-money-glow{position:absolute;width:150px;height:70px;border-radius:50%;background:#71e8ff55;filter:blur(32px)}
+#dashboardView .ng-wallet-dashboard{min-height:0!important}
+#dashboardView .ng-wallet-dash-hero{min-height:0!important;padding-top:8px;padding-bottom:12px}
+#dashboardView .ng-wallet-dash-content{max-width:760px}
+#dashboardView .ng-wallet-greeting{margin-bottom:9px}
+#dashboardView .ng-wallet-balance-modern{padding:clamp(12px,2vh,18px)}
+#dashboardView .ng-wallet-dash-content h3{margin:12px 0 7px}
+#dashboardView .ng-wallet-quick button{min-height:clamp(62px,10vh,88px)}
+#dashboardView .ng-wallet-history{margin-top:10px;padding:10px}
+#dashboardView .ng-wallet-history p{margin:9px 0 4px}
+#dashboardView .ng-wallet-bottom{padding:8px}
+@media(max-width:650px){
+ #dashboardView .ng-feature-modal:has(#ngWalletPhoneKeypad),
+ #dashboardView .ng-feature-modal:has(#ngWalletKeypad){padding:8px!important;max-height:calc(100dvh - 8px)}
+ #dashboardView .ng-feature-modal:has(#ngWalletPhoneKeypad) .ng-feature-content,
+ #dashboardView .ng-feature-modal:has(#ngWalletKeypad) .ng-feature-content{flex:1}
+ #dashboardView .ng-auth-panel:has(#ngWalletPhoneKeypad),
+ #dashboardView .ng-auth-panel:has(#ngWalletKeypad){padding:10px 12px!important}
+ #dashboardView .ng-auth-panel:has(#ngWalletPhoneKeypad) .ng-auth-brand,
+ #dashboardView .ng-auth-panel:has(#ngWalletKeypad) .ng-auth-brand{display:none}
+ #dashboardView .ng-auth-panel:has(#ngWalletPhoneKeypad) h3,
+ #dashboardView .ng-auth-panel:has(#ngWalletKeypad) h3{margin:0 0 7px}
+ #dashboardView .ng-auth-panel:has(#ngWalletPhoneKeypad) .ng-phone-entry{min-height:48px}
+ #dashboardView .ng-auth-panel:has(#ngWalletPhoneKeypad) .ng-phone-keypad{grid-template-columns:repeat(3,minmax(48px,62px));gap:5px}
+ #dashboardView .ng-auth-panel:has(#ngWalletPhoneKeypad) .ng-phone-keypad button{height:clamp(40px,6vh,48px)}
+ #dashboardView .ng-auth-pin .ng-keypad{gap:5px}
+ #dashboardView .ng-auth-pin .ng-key{width:clamp(42px,6vh,50px);height:clamp(42px,6vh,50px)}
+ #dashboardView .ng-wallet-dashboard{min-height:0!important}
+ #dashboardView .ng-wallet-dash-hero{padding:6px 10px 9px}
+ #dashboardView .ng-wallet-greeting{margin-bottom:7px;font-size:14px}
+ #dashboardView .ng-wallet-greeting strong{font-size:19px}
+ #dashboardView .ng-wallet-balance-modern{padding:10px;gap:7px}
+ #dashboardView .ng-wallet-balance-modern strong{font-size:clamp(17px,4.5vw,23px)}
+ #dashboardView .ng-wallet-quick button{min-height:60px;font-size:11px}
+ #dashboardView .ng-wallet-quick button b{font-size:20px}
+ #dashboardView .ng-wallet-history{margin-top:8px;padding:8px}
+ #dashboardView .ng-wallet-history p{margin:6px 0 2px;font-size:10px}
+ #dashboardView .ng-wallet-bottom{padding:7px 4px}
+}
+@media(max-height:740px){
+ #dashboardView .ng-feature-modal:has(#ngWalletPhoneKeypad),
+ #dashboardView .ng-feature-modal:has(#ngWalletKeypad){padding:7px!important}
+ #dashboardView .ng-auth-panel:has(#ngWalletPhoneKeypad) .ng-phone-keypad{gap:4px;margin-bottom:4px}
+ #dashboardView .ng-auth-panel:has(#ngWalletPhoneKeypad) .ng-phone-keypad button{height:40px}
+ #dashboardView .ng-auth-pin .ng-key{width:42px;height:42px}
+ #dashboardView .ng-auth-panel:has(#ngWalletPhoneKeypad) .ng-auth-safe,
+ #dashboardView .ng-auth-panel:has(#ngWalletKeypad) .ng-auth-safe{display:none}
+}
+</style>
+
 </head>
 <body><div id="particles" aria-hidden="true"></div><div class="wrap">
 <header class="topline"><div class="brand">LEXIAA <small>THE NEXT GENERATION</small></div><div class="system-pill" id="systemPill">● SECURE ACCESS</div></header>
@@ -820,7 +909,7 @@ const ngWalletState={stage:"",phone:"",phoneDigits:"",region:"ID",pin:"",confirm
 const ngEscape=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 function ngWalletError(message){const el=$("ngWalletError");if(el)el.textContent=message||"";}
 function ngWalletShell(title,body){ngFeatureTitle(title);ngFeatureContent.innerHTML=body;openNgFeature();}
-function ngWalletStart(){ngWalletState.stage="choice";ngWalletShell("GERBANG LEXIAA N.G",'<div class="ng-auth-layout"><div class="ng-auth-art"><img class="ng-wallet-character" src="./lexiaa-ng-character.webp" alt="" draggable="false"><div class="ng-auth-art-copy">Selamat datang di dunia LEXIAA ✦</div></div><div class="ng-auth-panel"><div class="ng-auth-brand"><span class="ng-auth-mark">✦</span><span><b>LEXIAA</b><small>NEXT GENERATION</small></span></div><h3>Selamat datang!</h3><p class="ng-wallet-intro">Masuk atau buat akun Saldo LEXIAA N.G untuk melanjutkan.</p><div class="ng-feature-actions"><button class="ng-fantasy-btn" id="ngWalletRegister" type="button">DAFTAR BARU</button><button class="ng-fantasy-btn secondary" id="ngWalletLogin" type="button">MASUK</button></div><p class="ng-auth-safe">♢ Pengalaman saldo digital LEXIAA</p></div></div>');$("ngWalletRegister").onclick=()=>ngWalletPhone("register");$("ngWalletLogin").onclick=()=>ngWalletPhone("login");}
+function ngWalletStart(){ngWalletState.stage="choice";ngWalletShell("GERBANG LEXIAA N.G",'<div class="ng-auth-layout"><div class="ng-auth-art"><img class="ng-wallet-character" src="./lexiaa-ng-character.webp" alt="" draggable="false"><div class="ng-auth-art-copy">Selamat datang di dunia LEXIAA ✦</div></div><div class="ng-auth-panel"><div class="ng-auth-brand"><span class="ng-auth-mark">✦</span><span><b>LEXIAA</b><small>NEXT GENERATION</small></span></div><div class="ng-money-welcome" aria-hidden="true"><span class="ng-money-stack">💵</span><span class="ng-money-glow"></span></div><h3>Selamat datang!</h3><p class="ng-wallet-intro">Dompet digital LEXIAA. Simpan dan kumpulkan saldo dalam Rupiah.</p><div class="ng-feature-actions"><button class="ng-fantasy-btn" id="ngWalletRegister" type="button">DAFTAR BARU</button><button class="ng-fantasy-btn secondary" id="ngWalletLogin" type="button">MASUK</button></div><p class="ng-auth-safe">♢ Pengalaman saldo digital LEXIAA</p></div></div>');$("ngWalletRegister").onclick=()=>ngWalletPhone("register");$("ngWalletLogin").onclick=()=>ngWalletPhone("login");}
 const ngPhoneRegions=[
 { id:"ID",name:"Indonesia",flag:"🇮🇩",code:"+62",example:"8123 4567 890",min:8,max:13 },
 { id:"MY",name:"Malaysia",flag:"🇲🇾",code:"+60",example:"12 345 6789",min:7,max:10 },
@@ -881,8 +970,8 @@ async function ngWalletRegister(){const name=$("ngWalletName").value.trim();if(n
 async function ngWalletLogin(){const{data,error}=await supabase.rpc("ng_wallet_login",{p_phone:ngWalletState.phone,p_pin:ngWalletState.pin});if(error){ngWalletError(error.message||"Login gagal. Coba lagi.");return;}const result=Array.isArray(data)?data[0]:data;if(!result?.success){ngWalletError(result?.message||"Nomor atau PIN tidak cocok.");return;}ngWalletShowAccount(result);}
 function ngWalletShowAccount(result){
  ngWalletState.account=result;ngWalletState.name=result.name||ngWalletState.name;ngWalletState.stage="account";
- const balance=Number(result.balance||0).toLocaleString("id-ID"),name=ngEscape(result.name||ngWalletState.name),phone=ngEscape(result.phone||ngWalletState.phone);
- ngWalletShell("SALDO LEXIAA N.G",'<div class="ng-wallet-dashboard"><div class="ng-wallet-top"><div class="ng-auth-brand"><span class="ng-auth-mark">✦</span><span><b>LEXIAA</b><small>NEXT GENERATION</small></span></div><div class="ng-wallet-top-actions"><span class="ng-region-chip">'+ngPhoneRegion().flag+' '+ngPhoneRegion().id+'</span><button type="button" class="ng-wallet-logout" id="ngWalletSignOut" aria-label="Keluar">×</button></div></div><div class="ng-wallet-dash-hero"><div class="ng-wallet-dash-content"><div class="ng-wallet-greeting">Halo,<strong>'+name+'</strong><small>'+phone+'</small></div><div class="ng-wallet-balance ng-wallet-balance-modern"><div class="ng-wallet-check">✓</div><div><small>Saldo Anda</small><strong id="ngWalletBalance">◆ '+balance+'</strong></div><span class="ng-wallet-purse">▣</span></div><h3>Menu Cepat</h3><div class="ng-wallet-quick"><button type="button" disabled><b>＋</b>Dapatkan<br>Saldo</button><button type="button" disabled><b>▤</b>Tambah Saldo /<br>Top Up</button></div><div class="ng-wallet-history"><div class="ng-wallet-history-head"><b>Riwayat Transaksi ◷</b><span>Belum ada</span></div><p>Riwayat transaksi akan tampil di sini.</p></div></div></div><nav class="ng-wallet-bottom"><span class="active">⌂<small>Beranda</small></span><span>▥<small>Statistik</small></span><span>♧<small>Shop</small></span><span>♙<small>Misi</small></span><span>●<small>Akun</small></span></nav></div>');
+ const balance=new Intl.NumberFormat("id-ID",{maximumFractionDigits:0}).format(Number(result.balance||0)),name=ngEscape(result.name||ngWalletState.name),phone=ngEscape(result.phone||ngWalletState.phone);
+ ngWalletShell("SALDO LEXIAA N.G",'<div class="ng-wallet-dashboard"><div class="ng-wallet-top"><div class="ng-auth-brand"><span class="ng-auth-mark">✦</span><span><b>LEXIAA</b><small>NEXT GENERATION</small></span></div><div class="ng-wallet-top-actions"><span class="ng-region-chip">'+ngPhoneRegion().flag+' '+ngPhoneRegion().id+'</span><button type="button" class="ng-wallet-logout" id="ngWalletSignOut" aria-label="Keluar">×</button></div></div><div class="ng-wallet-dash-hero"><div class="ng-wallet-dash-content"><div class="ng-wallet-greeting">Halo,<strong>'+name+'</strong><small>'+phone+'</small></div><div class="ng-wallet-balance ng-wallet-balance-modern"><div class="ng-wallet-check">✓</div><div><small>Saldo Anda</small><strong id="ngWalletBalance">Rp '+balance+'</strong></div><span class="ng-wallet-purse">▣</span></div><h3>Menu Cepat</h3><div class="ng-wallet-quick"><button type="button" disabled><b>＋</b>Dapatkan<br>Saldo</button><button type="button" disabled><b>▤</b>Tambah Saldo /<br>Top Up</button></div><div class="ng-wallet-history"><div class="ng-wallet-history-head"><b>Riwayat Transaksi ◷</b><span>Belum ada</span></div><p>Riwayat transaksi akan tampil di sini.</p></div></div></div><nav class="ng-wallet-bottom"><span class="active">⌂<small>Beranda</small></span><span>▥<small>Statistik</small></span><span>♧<small>Shop</small></span><span>♙<small>Misi</small></span><span>●<small>Akun</small></span></nav></div>');
  $("ngWalletSignOut").onclick=ngWalletStart;
 }
 $("ngFeatureClose").addEventListener("click",closeNgFeature);ngFeatureBackdrop.addEventListener("click",e=>{if(e.target===ngFeatureBackdrop)closeNgFeature();});
