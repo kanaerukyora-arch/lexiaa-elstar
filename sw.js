@@ -1,4 +1,4 @@
-const CACHE_NAME = "lexiaa-global-language-v52";
+const CACHE_NAME = "lexiaa-global-language-v53";
 const APP_SHELL = ["./", "./index.html", "./next-generation.html", "./app-icon.webp", "./manifest.webmanifest", "./welcome-mascot.webp", "./mascot-member.png", "./welcome-character.png", "./lexiaa-music-character.webp", "./dashboard-characters.png", "./about-main-character.png", "./about-intro-character.webm", "./about-feature-character.png", "./about-howto-character.png", "./about-guide-character.png", "./about-tips-character.png", "./about-welcome-character.png", "./lexiaa-story-character-alpha.webm"];
 
 self.addEventListener("install", event => {
