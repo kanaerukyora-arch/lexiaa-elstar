@@ -11,7 +11,7 @@ create table if not exists public.ng_wallet_accounts (
   balance bigint not null default 0 check (balance >= 0),
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
-  constraint ng_wallet_phone_format check (phone ~ '^\\+62[0-9]{8,13}$'),
+  constraint ng_wallet_phone_format check (phone ~ '^\+62[0-9]{8,13}$'),
   constraint ng_wallet_name_length check (char_length(display_name) between 2 and 32)
 );
 
@@ -43,7 +43,7 @@ begin
   if v_uid is null then
     return jsonb_build_object('success', false, 'message', 'Sesi akun utama tidak ditemukan. Silakan masuk kembali.');
   end if;
-  if v_phone !~ '^\\+62[0-9]{8,13}$' then
+  if v_phone !~ '^\+62[0-9]{8,13}$' then
     return jsonb_build_object('success', false, 'message', 'Nomor harus diawali +62 dan berisi 10–15 digit setelah kode negara.');
   end if;
   if coalesce(p_pin, '') !~ '^[0-9]{4}$' then
@@ -80,7 +80,7 @@ begin
   if v_uid is null then
     return jsonb_build_object('success', false, 'message', 'Sesi akun utama tidak ditemukan. Silakan masuk kembali.');
   end if;
-  if v_phone !~ '^\\+62[0-9]{8,13}$' or coalesce(p_pin, '') !~ '^[0-9]{4}$' then
+  if v_phone !~ '^\+62[0-9]{8,13}$' or coalesce(p_pin, '') !~ '^[0-9]{4}$' then
     return jsonb_build_object('success', false, 'message', 'Nomor atau PIN tidak cocok.');
   end if;
 
