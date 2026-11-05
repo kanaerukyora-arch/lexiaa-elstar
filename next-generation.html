@@ -78,8 +78,8 @@ button,input{font:inherit}button{cursor:pointer}#particles{position:fixed;inset:
 #dashboardView .ng-region-chip{padding:7px 10px;border:1px solid #c3b5ff99;border-radius:10px;background:#201b70;color:#fff;font-size:12px}
 #dashboardView .ng-wallet-logout{width:36px;height:36px;border:1px solid #c3b5ff99;border-radius:10px;background:#201b70;color:#fff;font-size:22px}
 #dashboardView .ng-wallet-dash-hero{position:relative;min-height:540px;padding:14px 18px 20px}
-#dashboardView .ng-wallet-character-dash{position:absolute;z-index:0;left:-15px;bottom:0;width:min(49%,440px);max-height:560px;object-fit:contain;object-position:left bottom;opacity:.98}
-#dashboardView .ng-wallet-dash-content{position:relative;z-index:2;width:min(68%,690px);margin-left:auto}
+#dashboardView .ng-wallet-character-dash{display:none!important}
+#dashboardView .ng-wallet-dash-content{position:relative;z-index:2;width:min(100%,720px);margin-inline:auto}
 #dashboardView .ng-wallet-greeting{margin:0 0 14px;color:#fff;font-size:17px}
 #dashboardView .ng-wallet-greeting strong{display:block;font-size:23px}
 #dashboardView .ng-wallet-greeting small{display:block;margin-top:3px;color:#c9c8ff;font-size:11px}
@@ -119,9 +119,9 @@ button,input{font:inherit}button{cursor:pointer}#particles{position:fixed;inset:
  #dashboardView .ng-wallet-dashboard{min-height:650px}
  #dashboardView .ng-wallet-top{padding:12px}
  #dashboardView .ng-wallet-dash-hero{min-height:555px;padding:8px 10px 15px}
- #dashboardView .ng-wallet-character-dash{left:-24px;width:57%;max-height:410px;opacity:.88}
- #dashboardView .ng-wallet-dash-content{width:100%;margin:0;position:relative;z-index:2}
- #dashboardView .ng-wallet-greeting{margin-left:auto;width:65%;text-align:left}
+ #dashboardView .ng-wallet-character-dash{display:none!important}
+ #dashboardView .ng-wallet-dash-content{width:100%;max-width:720px;margin-inline:auto;position:relative;z-index:2}
+ #dashboardView .ng-wallet-greeting{margin:0 0 14px;width:100%;text-align:left}
  #dashboardView .ng-wallet-balance-modern{width:100%;padding:13px 10px;gap:8px}
  #dashboardView .ng-wallet-balance-modern .ng-wallet-check{flex-basis:32px;height:32px;font-size:19px}
  #dashboardView .ng-wallet-balance-modern small{font-size:12px}
@@ -839,9 +839,8 @@ async function ngWalletLogin(){const{data,error}=await supabase.rpc("ng_wallet_l
 function ngWalletShowAccount(result){
  ngWalletState.account=result;ngWalletState.name=result.name||ngWalletState.name;ngWalletState.stage="account";
  const balance=Number(result.balance||0).toLocaleString("id-ID"),name=ngEscape(result.name||ngWalletState.name),phone=ngEscape(result.phone||ngWalletState.phone);
- ngWalletShell("SALDO LEXIAA N.G",'<div class="ng-wallet-dashboard"><div class="ng-wallet-top"><div class="ng-auth-brand"><span class="ng-auth-mark">✦</span><span><b>LEXIAA</b><small>NEXT GENERATION</small></span></div><div class="ng-wallet-top-actions"><span class="ng-region-chip">'+ngPhoneRegion().flag+' '+ngPhoneRegion().id+'</span><button type="button" class="ng-wallet-logout" id="ngWalletSignOut" aria-label="Keluar">×</button></div></div><div class="ng-wallet-dash-hero"><img class="ng-wallet-character ng-wallet-character-dash" src="./lexiaa-ng-character.webp" alt="" draggable="false"><div class="ng-wallet-dash-content"><div class="ng-wallet-greeting">Halo,<strong>'+name+'</strong><small>'+phone+'</small></div><div class="ng-wallet-balance ng-wallet-balance-modern"><div class="ng-wallet-check">✓</div><div><small>Saldo Anda</small><strong id="ngWalletBalance">◆ '+balance+'</strong></div><span class="ng-wallet-purse">▣</span></div><h3>Menu Cepat</h3><div class="ng-wallet-quick"><button type="button" disabled><b>＋</b>Dapatkan<br>Saldo</button><button type="button" disabled><b>▤</b>Tambah Saldo /<br>Top Up</button></div><div class="ng-wallet-history"><div class="ng-wallet-history-head"><b>Riwayat Transaksi ◷</b><span>Belum ada</span></div><p>Riwayat transaksi akan tampil di sini.</p></div></div></div><nav class="ng-wallet-bottom"><span class="active">⌂<small>Beranda</small></span><span>▥<small>Statistik</small></span><span>♧<small>Shop</small></span><span>♙<small>Misi</small></span><span>●<small>Akun</small></span></nav></div>');
+ ngWalletShell("SALDO LEXIAA N.G",'<div class="ng-wallet-dashboard"><div class="ng-wallet-top"><div class="ng-auth-brand"><span class="ng-auth-mark">✦</span><span><b>LEXIAA</b><small>NEXT GENERATION</small></span></div><div class="ng-wallet-top-actions"><span class="ng-region-chip">'+ngPhoneRegion().flag+' '+ngPhoneRegion().id+'</span><button type="button" class="ng-wallet-logout" id="ngWalletSignOut" aria-label="Keluar">×</button></div></div><div class="ng-wallet-dash-hero"><div class="ng-wallet-dash-content"><div class="ng-wallet-greeting">Halo,<strong>'+name+'</strong><small>'+phone+'</small></div><div class="ng-wallet-balance ng-wallet-balance-modern"><div class="ng-wallet-check">✓</div><div><small>Saldo Anda</small><strong id="ngWalletBalance">◆ '+balance+'</strong></div><span class="ng-wallet-purse">▣</span></div><h3>Menu Cepat</h3><div class="ng-wallet-quick"><button type="button" disabled><b>＋</b>Dapatkan<br>Saldo</button><button type="button" disabled><b>▤</b>Tambah Saldo /<br>Top Up</button></div><div class="ng-wallet-history"><div class="ng-wallet-history-head"><b>Riwayat Transaksi ◷</b><span>Belum ada</span></div><p>Riwayat transaksi akan tampil di sini.</p></div></div></div><nav class="ng-wallet-bottom"><span class="active">⌂<small>Beranda</small></span><span>▥<small>Statistik</small></span><span>♧<small>Shop</small></span><span>♙<small>Misi</small></span><span>●<small>Akun</small></span></nav></div>');
  $("ngWalletSignOut").onclick=ngWalletStart;
- const art=$("ngFeatureContent")?.querySelector(".ng-wallet-character");if(art){art.draggable=false;art.addEventListener("contextmenu",e=>e.preventDefault());}
 }
 $("ngFeatureClose").addEventListener("click",closeNgFeature);ngFeatureBackdrop.addEventListener("click",e=>{if(e.target===ngFeatureBackdrop)closeNgFeature();});
 $("lexiaaNgMenuBackdrop").querySelectorAll("[data-ng-feature]").forEach(btn=>btn.addEventListener("click",()=>{closeLexiaaNgMenu();if(btn.dataset.ngFeature==="about")ngShowAbout();if(btn.dataset.ngFeature==="wallet")ngWalletStart();if(btn.dataset.ngFeature==="shop")ngShowShop();}));
