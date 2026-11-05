@@ -584,6 +584,43 @@ body:has(#loginView.active) main{min-height:0}
 #dashboardView .ng-wallet-detail strong{display:block;margin-top:5px;overflow-wrap:anywhere;color:#fff;font-size:12px}
 @media(max-width:560px){#dashboardView .ng-feature-modal{padding:25px 17px;max-height:90dvh}#dashboardView .ng-keypad{grid-template-columns:repeat(3, minmax(54px,68px));gap:8px}#dashboardView .ng-key{height:54px}#dashboardView .ng-wallet-details{grid-template-columns:1fr}}
 </style>
+
+<style id="lexiaa-phone-entry-size-v2">
+/* Phone number step: make the entry area and keypad easier to see and tap */
+#dashboardView .ng-auth-panel:has(#ngWalletPhoneKeypad){padding:clamp(20px,3.2vw,38px)}
+#dashboardView .ng-auth-panel:has(#ngWalletPhoneKeypad) h3{font-size:clamp(21px,2.5vw,27px);margin-bottom:18px}
+#dashboardView .ng-auth-panel:has(#ngWalletPhoneKeypad) .ng-region-label{font-size:11px;margin:12px 0 9px}
+#dashboardView .ng-auth-panel:has(#ngWalletPhoneKeypad) .ng-region-select{height:56px;font-size:16px;padding-inline:16px}
+#dashboardView .ng-auth-panel:has(#ngWalletPhoneKeypad) .ng-phone-entry{width:100%;min-height:68px;margin-top:14px;padding:0 18px;gap:13px;border-radius:15px}
+#dashboardView .ng-auth-panel:has(#ngWalletPhoneKeypad) .ng-phone-flag{font-size:25px;flex:0 0 auto}
+#dashboardView .ng-auth-panel:has(#ngWalletPhoneKeypad) .ng-phone-code{font-size:19px;flex:0 0 auto}
+#dashboardView .ng-auth-panel:has(#ngWalletPhoneKeypad) .ng-phone-value{font-size:19px;letter-spacing:.07em;flex:1;line-height:1.4}
+#dashboardView .ng-auth-panel:has(#ngWalletPhoneKeypad) .ng-phone-hint{font-size:11px;margin:9px 0 15px}
+#dashboardView .ng-auth-panel:has(#ngWalletPhoneKeypad) .ng-phone-keypad{grid-template-columns:repeat(3,minmax(68px,82px));gap:11px;margin:4px auto 14px}
+#dashboardView .ng-auth-panel:has(#ngWalletPhoneKeypad) .ng-phone-keypad button{height:60px;font-size:22px}
+#dashboardView .ng-auth-panel:has(#ngWalletPhoneKeypad) .ng-phone-keypad .utility{font-size:20px}
+#dashboardView .ng-auth-panel:has(#ngWalletPhoneKeypad) .ng-feature-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+#dashboardView .ng-auth-panel:has(#ngWalletPhoneKeypad) .ng-feature-actions button{width:100%;min-width:0;min-height:50px}
+#dashboardView .ng-auth-panel:has(#ngWalletPhoneKeypad) .ng-auth-safe{font-size:10px;margin-top:12px}
+@media(max-width:650px){
+ #dashboardView .ng-auth-panel:has(#ngWalletPhoneKeypad){margin:0!important;padding:20px 16px 18px!important}
+ #dashboardView .ng-auth-panel:has(#ngWalletPhoneKeypad) .ng-phone-entry{min-height:64px;padding:0 14px;gap:10px}
+ #dashboardView .ng-auth-panel:has(#ngWalletPhoneKeypad) .ng-phone-flag{font-size:23px}
+ #dashboardView .ng-auth-panel:has(#ngWalletPhoneKeypad) .ng-phone-code{font-size:17px}
+ #dashboardView .ng-auth-panel:has(#ngWalletPhoneKeypad) .ng-phone-value{font-size:17px}
+ #dashboardView .ng-auth-panel:has(#ngWalletPhoneKeypad) .ng-phone-keypad{grid-template-columns:repeat(3,minmax(58px,72px));gap:9px}
+ #dashboardView .ng-auth-panel:has(#ngWalletPhoneKeypad) .ng-phone-keypad button{height:56px}
+ #dashboardView .ng-auth-panel:has(#ngWalletPhoneKeypad) .ng-feature-actions button{font-size:12px;padding-inline:8px}
+}
+@media(max-width:380px){
+ #dashboardView .ng-auth-panel:has(#ngWalletPhoneKeypad){padding:17px 12px 15px!important}
+ #dashboardView .ng-auth-panel:has(#ngWalletPhoneKeypad) .ng-phone-entry{gap:8px;padding-inline:11px}
+ #dashboardView .ng-auth-panel:has(#ngWalletPhoneKeypad) .ng-phone-value{font-size:15px}
+ #dashboardView .ng-auth-panel:has(#ngWalletPhoneKeypad) .ng-phone-keypad{grid-template-columns:repeat(3,minmax(54px,66px));gap:8px}
+ #dashboardView .ng-auth-panel:has(#ngWalletPhoneKeypad) .ng-phone-keypad button{height:53px}
+}
+</style>
+
 </head>
 <body><div id="particles" aria-hidden="true"></div><div class="wrap">
 <header class="topline"><div class="brand">LEXIAA <small>THE NEXT GENERATION</small></div><div class="system-pill" id="systemPill">● SECURE ACCESS</div></header>
