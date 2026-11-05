@@ -710,6 +710,59 @@ body:has(#loginView.active) main{min-height:0}
 }
 </style>
 
+
+<style id="lexiaa-keypad-shape-fit-v4">
+/* Phone screen: circular, square-proportioned keys and keep Continue fully visible */
+#dashboardView .ng-feature-modal:has(#ngWalletPhoneKeypad){box-sizing:border-box;max-height:calc(100dvh - 12px)!important;overflow:hidden!important;padding:10px 16px!important}
+#dashboardView .ng-feature-modal:has(#ngWalletPhoneKeypad) .ng-feature-kicker{padding-top:0;font-size:8px}
+#dashboardView .ng-feature-modal:has(#ngWalletPhoneKeypad) h2{margin:2px 42px 7px 8px;font-size:clamp(16px,2.2vh,20px)}
+#dashboardView .ng-feature-modal:has(#ngWalletPhoneKeypad) .ng-feature-content{flex:1 1 auto;min-height:0;overflow:visible!important}
+#dashboardView .ng-auth-layout:has(#ngWalletPhoneKeypad){height:auto!important;min-height:0!important;overflow:visible!important}
+#dashboardView .ng-auth-panel:has(#ngWalletPhoneKeypad){box-sizing:border-box;min-height:0!important;height:auto!important;justify-content:flex-start!important;padding:8px 18px 12px!important}
+#dashboardView .ng-auth-panel:has(#ngWalletPhoneKeypad) h3{margin:0 0 7px!important;font-size:clamp(17px,2.5vh,22px)!important}
+#dashboardView .ng-auth-panel:has(#ngWalletPhoneKeypad) .ng-region-label{margin:3px 0 5px!important}
+#dashboardView .ng-auth-panel:has(#ngWalletPhoneKeypad) .ng-region-select{height:42px!important}
+#dashboardView .ng-auth-panel:has(#ngWalletPhoneKeypad) .ng-phone-entry{height:48px!important;min-height:48px!important;margin-top:7px!important}
+#dashboardView .ng-auth-panel:has(#ngWalletPhoneKeypad) .ng-phone-hint{margin:4px 0 6px!important;font-size:9px!important}
+#dashboardView .ng-auth-panel:has(#ngWalletPhoneKeypad) .ng-phone-keypad{display:grid!important;grid-template-columns:repeat(3,58px)!important;grid-auto-rows:58px!important;justify-content:center!important;align-content:center!important;gap:6px!important;margin:2px auto 8px!important}
+#dashboardView .ng-auth-panel:has(#ngWalletPhoneKeypad) .ng-phone-keypad button{box-sizing:border-box!important;width:58px!important;height:58px!important;min-width:58px!important;max-width:58px!important;aspect-ratio:1/1!important;border-radius:50%!important;padding:0!important;display:grid!important;place-items:center!important;font-size:21px!important;line-height:1!important}
+#dashboardView .ng-auth-panel:has(#ngWalletPhoneKeypad) .ng-phone-keypad .utility{border-radius:14px!important}
+#dashboardView .ng-auth-panel:has(#ngWalletPhoneKeypad) .ng-feature-actions{display:grid!important;grid-template-columns:1fr 1fr!important;gap:9px!important;margin:5px 0 0!important;width:100%!important}
+#dashboardView .ng-auth-panel:has(#ngWalletPhoneKeypad) .ng-feature-actions button{box-sizing:border-box!important;width:100%!important;min-width:0!important;min-height:42px!important;height:42px!important;padding:7px 5px!important;font-size:12px!important;white-space:nowrap}
+#dashboardView .ng-auth-panel:has(#ngWalletPhoneKeypad) .ng-auth-safe{display:none!important}
+#dashboardView .ng-feature-modal:has(#ngWalletKeypad){box-sizing:border-box;max-height:calc(100dvh - 12px)!important;overflow:hidden!important;padding:10px 16px!important}
+#dashboardView .ng-feature-modal:has(#ngWalletKeypad) .ng-feature-kicker{padding-top:0;font-size:8px}
+#dashboardView .ng-feature-modal:has(#ngWalletKeypad) h2{margin:2px 42px 7px 8px;font-size:clamp(17px,2.5vh,22px)}
+#dashboardView .ng-feature-modal:has(#ngWalletKeypad) .ng-feature-content{flex:1 1 auto;min-height:0;overflow:visible!important}
+#dashboardView .ng-auth-layout:has(#ngWalletKeypad){height:auto!important;min-height:0!important;overflow:visible!important}
+#dashboardView .ng-auth-panel:has(#ngWalletKeypad){box-sizing:border-box;min-height:0!important;height:auto!important;justify-content:center!important;padding:12px 18px!important}
+#dashboardView .ng-auth-pin .ng-auth-brand{margin:0 0 8px!important}
+#dashboardView .ng-auth-pin h3{margin:0 0 8px!important;font-size:clamp(17px,2.5vh,22px)!important}
+#dashboardView .ng-auth-pin .ng-phone-entry{height:44px!important;min-height:44px!important;margin:0 auto!important}
+#dashboardView .ng-auth-pin .ng-pin-dots{margin:10px 0!important}
+#dashboardView .ng-auth-pin .ng-keypad{display:grid!important;grid-template-columns:repeat(3,60px)!important;grid-auto-rows:60px!important;justify-content:center!important;gap:7px!important;margin:0 auto 10px!important}
+#dashboardView .ng-auth-pin .ng-key{box-sizing:border-box!important;width:60px!important;min-width:60px!important;height:60px!important;min-height:60px!important;aspect-ratio:1/1!important;border-radius:50%!important;padding:0!important;display:grid!important;place-items:center!important;font-size:22px!important;line-height:1!important}
+#dashboardView .ng-auth-pin .ng-key.utility{border-radius:14px!important}
+#dashboardView .ng-auth-pin .ng-feature-actions{margin-top:4px!important}
+@media(max-height:740px){
+ #dashboardView .ng-feature-modal:has(#ngWalletPhoneKeypad){padding:7px 12px!important}
+ #dashboardView .ng-feature-modal:has(#ngWalletPhoneKeypad) h2{margin-bottom:4px}
+ #dashboardView .ng-auth-panel:has(#ngWalletPhoneKeypad){padding:5px 14px 8px!important}
+ #dashboardView .ng-auth-panel:has(#ngWalletPhoneKeypad) .ng-phone-keypad{grid-template-columns:repeat(3,52px)!important;grid-auto-rows:52px!important;gap:5px!important;margin:1px auto 5px!important}
+ #dashboardView .ng-auth-panel:has(#ngWalletPhoneKeypad) .ng-phone-keypad button{width:52px!important;min-width:52px!important;max-width:52px!important;height:52px!important}
+ #dashboardView .ng-auth-panel:has(#ngWalletPhoneKeypad) .ng-feature-actions button{height:38px!important;min-height:38px!important}
+ #dashboardView .ng-feature-modal:has(#ngWalletKeypad){padding:7px 12px!important}
+ #dashboardView .ng-auth-panel:has(#ngWalletKeypad){padding:8px 14px!important}
+ #dashboardView .ng-auth-pin .ng-keypad{grid-template-columns:repeat(3,58px)!important;grid-auto-rows:58px!important;gap:6px!important;margin-bottom:6px!important}
+ #dashboardView .ng-auth-pin .ng-key{width:58px!important;min-width:58px!important;height:58px!important;min-height:58px!important}
+}
+@media(max-width:650px){
+ #dashboardView .ng-feature-modal:has(#ngWalletPhoneKeypad),
+ #dashboardView .ng-feature-modal:has(#ngWalletKeypad){width:calc(100vw - 12px)!important}
+ #dashboardView .ng-auth-panel:has(#ngWalletPhoneKeypad){padding-inline:10px!important}
+}
+</style>
+
 </head>
 <body><div id="particles" aria-hidden="true"></div><div class="wrap">
 <header class="topline"><div class="brand">LEXIAA <small>THE NEXT GENERATION</small></div><div class="system-pill" id="systemPill">● SECURE ACCESS</div></header>
