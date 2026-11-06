@@ -71,7 +71,7 @@ async function api(payload){
  if(!response.ok){
   const detail=data.error||data.message||("HTTP "+response.status+" · "+raw.slice(0,180));
   if(response.status===401&&payload.action!=="login"){
-   throw new Error("401 / Invalid JWT: Supabase Gateway menolak token sebelum Edge Function berjalan. Deploy ulang function dengan --no-verify-jwt (atau pastikan [functions.lexiaa-admin] verify_jwt=false benar-benar terpasang). Ini bukan masalah password admin. Detail: "+detail);
+   throw new Error("Akses ditolak (401): "+detail);
   }
   throw new Error(detail);
  }
