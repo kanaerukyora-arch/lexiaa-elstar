@@ -113,27 +113,65 @@ declare
   v_balance bigint;
   v_login jsonb;
 begin
-  if v_uid is null then return jsonb_build_object('success',false,'message','Sesi LEXIAA tidak valid.'); end if;
+  if v_uid is null then
+    return jsonb_build_object('success',false,'message','Sesi LEXIAA tidak valid.');
+  end if;
+
   v_login := public.ng_wallet_login(p_phone, p_pin);
-  if coalesce((v_login->>'success')::boolean, false) is not true then return v_login; end if;
-  if not exists(select 1 from public.ng_video_vip_subscriptions where user_id=v_uid and ends_at>now()) then
+  if coalesce((v_login->>'success')::boolean, false) is not true then
+    return v_login;
+  end if;
+
+  if not exists (
+    select 1 from public.ng_video_vip_subscriptions
+    where user_id=v_uid and ends_at>now()
+  ) then
     return jsonb_build_object('success',false,'message','Langganan VIP kamu sudah berakhir. Aktifkan VIP kembali.');
   end if;
-  select * into v_video from public.ng_videos where id=p_video_id and is_published=true;
-  if not found or v_video.price<=0 then return jsonb_build_object('success',false,'message','Video berbayar tidak ditemukan.'); end if;
+
+  select * into v_video
+  from public.ng_videos
+  where id=p_video_id and is_published=true;
+
+  if not found or v_video.price<=0 then
+    return jsonb_build_object('success',false,'message','Video berbayar tidak ditemukan.');
+  end if;
+
   if exists(select 1 from public.ng_video_purchases where user_id=v_uid and video_id=p_video_id) then
     return jsonb_build_object('success',true,'already_owned',true);
   end if;
-  select * into v_account from public.ng_wallet_accounts where auth_user_id=v_uid and phone=v_phone for update;
-  if not found or coalesce(p_pin,'') !~ '^[0-9]{4}
+
+  select * into v_account
+  from public.ng_wallet_accounts
+  where auth_user_id=v_uid and phone=v_phone
+  for update;
+
+  if not found or coalesce(p_pin,'') !~ '^[0-9]{4}$'
+     or extensions.crypt(p_pin,v_account.pin_hash) <> v_account.pin_hash then
+    return jsonb_build_object('success',false,'message','Nomor atau PIN Wallet tidak cocok.');
+  end if;
+
+  -- Recheck after locking the wallet row, so concurrent requests cannot charge twice.
+  if exists(select 1 from public.ng_video_purchases where user_id=v_uid and video_id=p_video_id) then
+    return jsonb_build_object('success',true,'already_owned',true);
+  end if;
+
+  if v_account.balance < v_video.price then
     return jsonb_build_object('success',false,'message','Saldo Wallet N.G tidak mencukupi.','balance',v_account.balance,'required',v_video.price);
   end if;
-  update public.ng_wallet_accounts set balance=balance-v_video.price,updated_at=now()
-    where auth_user_id=v_uid returning balance into v_balance;
+
+  update public.ng_wallet_accounts
+  set balance=balance-v_video.price,updated_at=now()
+  where auth_user_id=v_uid
+  returning balance into v_balance;
+
   insert into public.ng_wallet_transactions(auth_user_id,description,amount,direction,status)
-    values(v_uid,'Pembelian video: '||v_video.title,v_video.price,'debit','success');
-  insert into public.ng_video_purchases(user_id,video_id,amount) values(v_uid,p_video_id,v_video.price)
-    on conflict(user_id,video_id) do nothing;
+  values(v_uid,'Pembelian video: '||v_video.title,v_video.price,'debit','success');
+
+  insert into public.ng_video_purchases(user_id,video_id,amount)
+  values(v_uid,p_video_id,v_video.price)
+  on conflict(user_id,video_id) do nothing;
+
   return jsonb_build_object('success',true,'balance',v_balance,'amount',v_video.price);
 end;
 $$;
