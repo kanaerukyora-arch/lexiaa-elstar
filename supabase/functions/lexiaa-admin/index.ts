@@ -72,12 +72,136 @@ Deno.serve(async req => {
     return json({ token: payload + "." + await sign(payload, tokenSecret) });
   }
 
-  const auth = (req.headers.get("Authorization") || "").replace(/^Bearer\s+/i, "");
+
+  // Public catalog and customer actions use the signed-in LEXIAA user's JWT.
+  // The service key is used only server-side; user identity is verified before every action.
+  const bearer = (req.headers.get("Authorization") || "").replace(/^Bearer\\s+/i, "");
+  const customerAction = ["novel_catalog", "novel_buy", "novel_download"].includes(String(input.action || ""));
+  if (customerAction) {
+    if (!bearer) return json({ error: "Silakan masuk ke akun LEXIAA terlebih dahulu." }, 401);
+    const { data: authData, error: authError } = await db.auth.getUser(bearer);
+    const customer = authData?.user;
+    if (authError || !customer) return json({ error: "Sesi akun tidak valid. Silakan masuk kembali." }, 401);
+    const userDb = createClient(url, service, {
+      auth: { persistSession: false, autoRefreshToken: false },
+      global: { headers: { Authorization: "Bearer " + bearer } },
+    });
+
+    if (input.action === "novel_catalog") {
+      const [{ data: novels, error: novelError }, { data: purchases, error: purchaseError }] = await Promise.all([
+        db.from("lexiaa_novels").select("id,title,price,cover_path,cover_mode,created_at").eq("is_published", true).order("created_at", { ascending: false }),
+        db.from("lexiaa_novel_purchases").select("novel_id").eq("user_id", customer.id),
+      ]);
+      if (novelError) return json({ error: "Gagal memuat katalog novel: " + novelError.message }, 400);
+      if (purchaseError) return json({ error: "Gagal memuat status pembelian: " + purchaseError.message }, 400);
+      const owned = new Set((purchases || []).map((p: any) => p.novel_id));
+      const result = await Promise.all((novels || []).map(async (n: any) => {
+        let cover_url: string | null = null;
+        if (n.cover_path) {
+          const { data } = await db.storage.from("lexiaa-novels").createSignedUrl(n.cover_path, 900);
+          cover_url = data?.signedUrl || null;
+        }
+        return { id: n.id, title: n.title, price: Number(n.price), cover_url, owned: owned.has(n.id) };
+      }));
+      return json({ novels: result });
+    }
+
+    if (input.action === "novel_buy") {
+      const novelId = String(input.novel_id || "");
+      if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(novelId)) {
+        return json({ error: "Novel tidak valid." }, 400);
+      }
+      const { data, error } = await userDb.rpc("lexiaa_novel_buy", { p_novel_id: novelId });
+      if (error) return json({ error: "Pembelian gagal diproses: " + error.message }, 400);
+      if (!data?.success) return json({ error: data?.message || "Pembelian tidak berhasil." }, 400);
+      return json(data);
+    }
+
+    if (input.action === "novel_download") {
+      const novelId = String(input.novel_id || "");
+      if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(novelId)) {
+        return json({ error: "Novel tidak valid." }, 400);
+      }
+      const { data: purchase, error: purchaseError } = await db.from("lexiaa_novel_purchases")
+        .select("novel_id").eq("user_id", customer.id).eq("novel_id", novelId).maybeSingle();
+      if (purchaseError) return json({ error: "Gagal memeriksa kepemilikan novel: " + purchaseError.message }, 400);
+      if (!purchase) return json({ error: "Novel ini belum dibeli oleh akunmu." }, 403);
+      const { data: novel, error: novelError } = await db.from("lexiaa_novels")
+        .select("title,pdf_path").eq("id", novelId).maybeSingle();
+      if (novelError || !novel) return json({ error: "File novel tidak ditemukan." }, 404);
+      const { data: signed, error: signError } = await db.storage.from("lexiaa-novels")
+        .createSignedUrl(novel.pdf_path, 90, { download: String(novel.title || "lexiaa-novel").replace(/[\\/\\:*?"<>|]/g, "_") + ".pdf" });
+      if (signError || !signed?.signedUrl) return json({ error: "Gagal menyiapkan unduhan novel." }, 400);
+      return json({ url: signed.signedUrl });
+    }
+  }
+
+  const auth = bearer;
   if (!await validToken(auth, tokenSecret)) {
     return json({ error: "Sesi admin tidak valid atau kedaluwarsa. Silakan masuk kembali." }, 401);
   }
 
   const db = createClient(url, service, { auth: { persistSession: false, autoRefreshToken: false } });
+
+
+  if (input.action === "novel_list") {
+    const { data, error } = await db.from("lexiaa_novels")
+      .select("id,title,price,pdf_path,cover_path,cover_mode,is_published,created_at")
+      .order("created_at", { ascending: false });
+    if (error) return json({ error: "Gagal memuat katalog novel: " + error.message }, 400);
+    return json({ novels: data || [] });
+  }
+
+  if (input.action === "novel_upload_sign") {
+    const kind = input.kind === "cover" ? "cover" : input.kind === "pdf" ? "pdf" : "";
+    const ext = kind === "pdf" ? "pdf" : String(input.extension || "jpg").toLowerCase();
+    const allowed = kind === "pdf" ? ["pdf"] : ["jpg", "jpeg", "png", "webp"];
+    if (!kind || !allowed.includes(ext)) return json({ error: "Jenis file unggahan tidak didukung." }, 400);
+    const path = "admin/" + crypto.randomUUID() + "/" + kind + "." + ext;
+    const { data, error } = await db.storage.from("lexiaa-novels").createSignedUploadUrl(path);
+    if (error || !data?.token) return json({ error: "Gagal menyiapkan unggahan: " + (error?.message || "Token upload tidak tersedia.") }, 400);
+    return json({ path, token: data.token });
+  }
+
+  if (input.action === "novel_save") {
+    const id = String(input.id || "");
+    const title = String(input.title || "").trim();
+    const price = Number(input.price);
+    const pdfPath = String(input.pdf_path || "");
+    const coverPath = input.cover_path ? String(input.cover_path) : null;
+    const coverMode = input.cover_mode === "custom" ? "custom" : "pdf";
+    if (!title || title.length > 160 || !Number.isSafeInteger(price) || price < 0 || price > 1_000_000_000 || !pdfPath.startsWith("admin/") || (coverPath && !coverPath.startsWith("admin/"))) {
+      return json({ error: "Judul, harga, atau file novel tidak valid." }, 400);
+    }
+    const payload = { title, price, pdf_path: pdfPath, cover_path: coverPath, cover_mode: coverMode, is_published: input.is_published !== false, updated_at: new Date().toISOString() };
+    const query = id
+      ? db.from("lexiaa_novels").update(payload).eq("id", id)
+      : db.from("lexiaa_novels").insert(payload);
+    const { data, error } = await query.select("id,title,price,pdf_path,cover_path,cover_mode,is_published,created_at").single();
+    if (error) return json({ error: "Gagal menyimpan novel: " + error.message }, 400);
+    return json({ success: true, novel: data });
+  }
+
+  if (input.action === "novel_delete") {
+    const id = String(input.id || "");
+    if (!id) return json({ error: "ID novel tidak valid." }, 400);
+    const { data: novel, error: findError } = await db.from("lexiaa_novels").select("id,pdf_path,cover_path")
+      .eq("id", id).maybeSingle();
+    if (findError || !novel) return json({ error: "Novel tidak ditemukan." }, 404);
+    const paths = [novel.pdf_path, novel.cover_path].filter(Boolean) as string[];
+    if (paths.length) await db.storage.from("lexiaa-novels").remove(paths);
+    const { error } = await db.from("lexiaa_novels").delete().eq("id", id);
+    if (error) return json({ error: "Novel tidak dapat dihapus. Jika sudah pernah dibeli, nonaktifkan publikasinya agar riwayat pembeli tetap aman." }, 400);
+    return json({ success: true });
+  }
+
+  if (input.action === "novel_publish") {
+    const id = String(input.id || "");
+    const published = input.is_published === true;
+    const { error } = await db.from("lexiaa_novels").update({ is_published: published, updated_at: new Date().toISOString() }).eq("id", id);
+    if (error) return json({ error: "Gagal mengubah status novel: " + error.message }, 400);
+    return json({ success: true });
+  }
 
   if (input.action === "users") {
     const all: any[] = [];
