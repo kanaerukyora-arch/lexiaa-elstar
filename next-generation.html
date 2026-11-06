@@ -1293,10 +1293,15 @@ async function ngVideoWalletAuthenticate(){
 }
 async function ngVideoPlay(id){
  try{
-  const status=await ngNovelApi("video_status");if(!status.vip_active)throw new Error("VIP kamu sudah berakhir. Aktifkan VIP kembali untuk menonton video offline maupun online.");
   const local=await ngVideoOfflineGet(id);let src="";
-  if(local?.blob)src=URL.createObjectURL(local.blob);
-  else{const d=await ngNovelApi("video_stream",{video_id:id});src=d.url;}
+  if(local?.blob&&local.vip_ends_at&&Date.now()<new Date(local.vip_ends_at).getTime()){
+   src=URL.createObjectURL(local.blob);
+  }else{
+   // A network refresh is required if the saved offline VIP pass has expired.
+   const d=await ngNovelApi("video_stream",{video_id:id});
+   if(local?.blob){local.vip_ends_at=d.vip_ends_at;await ngVideoOfflinePut(local);src=URL.createObjectURL(local.blob);}
+   else src=d.url;
+  }
   if(ngVideoObjectUrl)URL.revokeObjectURL(ngVideoObjectUrl);ngVideoObjectUrl=src.startsWith("blob:")?src:null;
   ngFeatureTitle("PEMUTAR VIDEO LEXIAA");ngFeatureContent.innerHTML='<div class="ng-video-wrap"><video id="ngVideoPlayer" class="ng-video-player" controls playsinline autoplay></video><p class="muted">'+(local?.blob?'Diputar dari penyimpanan offline.':'Streaming online.')+'</p><div class="ng-video-player-actions"><button class="ng-fantasy-btn secondary" id="ngVideoReturn">KEMBALI</button><button class="ng-fantasy-btn" id="ngVideoSaveFromPlayer">SIMPAN OFFLINE</button></div></div>';
   $("ngVideoPlayer").src=src;$("ngVideoReturn").onclick=()=>{if(ngVideoObjectUrl)URL.revokeObjectURL(ngVideoObjectUrl);ngVideoObjectUrl=null;ngShowVideos();};$("ngVideoSaveFromPlayer").onclick=()=>ngVideoSaveOffline(id,$("ngVideoSaveFromPlayer"));
@@ -1306,12 +1311,17 @@ async function ngVideoSaveOffline(id,button){
  const old=button?.textContent;if(button){button.disabled=true;button.textContent="MENYIMPAN...";}
  const close=ngVideoLoading("Menyiapkan Video Offline");
  try{
-  const status=await ngNovelApi("video_status");if(!status.vip_active)throw new Error("VIP aktif diperlukan untuk menyimpan video offline.");
-  const cached=await ngVideoOfflineGet(id);if(cached?.blob){close();await ngVideoDialog({title:"Sudah Tersimpan",message:"Video ini sudah tersedia di perangkat untuk ditonton offline selama VIP aktif.",actions:[{label:"Oke"}]});return;}
-  const d=await ngNovelApi("video_stream",{video_id:id}),response=await fetch(d.url);if(!response.ok)throw new Error("Unduhan video gagal ("+response.status+").");
+  // The server checks VIP and individual ownership before issuing this short-lived URL and offline expiry.
+  const d=await ngNovelApi("video_stream",{video_id:id});
+  const cached=await ngVideoOfflineGet(id);
+  if(cached?.blob){
+   cached.vip_ends_at=d.vip_ends_at;await ngVideoOfflinePut(cached);close();
+   await ngVideoDialog({title:"Offline Siap Digunakan",message:"Video sudah tersimpan. Masa akses offline diperbarui sampai "+new Date(d.vip_ends_at).toLocaleString("id-ID")+".",actions:[{label:"Oke"}]});return;
+  }
+  const response=await fetch(d.url);if(!response.ok)throw new Error("Unduhan video gagal ("+response.status+").");
   const blob=await response.blob();if(!blob.size)throw new Error("File video kosong.");
-  await ngVideoOfflinePut({id,blob,title:d.title,mime_type:d.mime_type,saved_at:new Date().toISOString()});
-  close();await ngVideoDialog({title:"Tersimpan Offline",message:"Video berhasil disimpan di perangkat ini. Kamu bisa menontonnya tanpa kuota pemutaran, tetapi VIP harus tetap aktif.",mark:"✓",actions:[{label:"Lanjutkan"}]});
+  await ngVideoOfflinePut({id,blob,title:d.title,mime_type:d.mime_type,vip_ends_at:d.vip_ends_at,saved_at:new Date().toISOString()});
+  close();await ngVideoDialog({title:"Tersimpan Offline",message:"Video berhasil disimpan di perangkat ini. Video bisa diputar tanpa internet sampai "+new Date(d.vip_ends_at).toLocaleString("id-ID")+". Setelah VIP habis, sambungkan internet dan aktifkan VIP kembali untuk memperbarui akses.",mark:"✓",actions:[{label:"Lanjutkan"}]});
  }catch(e){close();await ngVideoDialog({title:"Gagal Menyimpan",message:e.message,mark:"!",actions:[{label:"Mengerti"}]});}
  finally{if(button){button.disabled=false;button.textContent=old||"SIMPAN OFFLINE";}}
 }
