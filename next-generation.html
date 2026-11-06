@@ -1025,8 +1025,9 @@ $("closeLexiaaMessages")?.addEventListener("click",closeLexiaaMessages);
 $("lexiaaMessagesBackdrop")?.addEventListener("click",e=>{if(e.target===$("lexiaaMessagesBackdrop"))closeLexiaaMessages();});
 
 const ngFeatureBackdrop=$("ngFeatureBackdrop"),ngFeatureContent=$("ngFeatureContent");
+let ngReturnToMenu=false;
 function openNgFeature(){ngFeatureBackdrop.classList.add("open");ngFeatureBackdrop.setAttribute("aria-hidden","false");}
-function closeNgFeature(){ngFeatureBackdrop.classList.remove("open");ngFeatureBackdrop.setAttribute("aria-hidden","true");ngWalletState.pin="";ngWalletState.confirmPin="";}
+function closeNgFeature(){ngFeatureBackdrop.classList.remove("open");ngFeatureBackdrop.setAttribute("aria-hidden","true");ngWalletState.pin="";ngWalletState.confirmPin="";if(ngReturnToMenu){ngReturnToMenu=false;openLexiaaNgMenu();}}
 function ngFeatureTitle(title){$("ngFeatureTitle").textContent=title;}
 function ngShowAbout(){ngFeatureTitle("TENTANG LEXIAA N.G");ngFeatureContent.innerHTML='<div class="ng-story-copy"><p class="ng-greeting">Yoo, Akhirnya Kamu Datang Juga.</p><p>Aku Adalah Pemandu Mu saat di Lexiaa N.G. Tidak Seperti Lexiaa Old Pemandumu wanita, Di Lexiaa N.G Pemandu Nya Adalah Aku.</p><p>Disini Kita Baru Mengembangkan 2 Menu. Yaitu Saldo Lexiaa N.G dan SHOP N.G. di menu Saldo Lexiaa N.G kamu bisa melihat saldo mu dan bisa mengumpulkan saldo disana. Nantinya Saldo Mu Bisa Kamu Belikan Di Menu SHOP N.G Yang Sudah Kita Kembangkan.</p><p>Untuk Sekarang mungkin itu dulu yang bisa Ku jelaskan. Terimakasih Sudah Membaca.</p></div><div class="ng-feature-actions"><button class="ng-fantasy-btn" type="button" id="ngAboutOkay">DIMENGERTI</button></div>';$("ngAboutOkay").onclick=closeNgFeature;openNgFeature();}
 function ngShowShop(){ngFeatureTitle("SHOP N.G");ngFeatureContent.innerHTML='<div class="ng-story-copy" style="text-align:center;padding:42px 18px"><div style="font-size:52px;text-shadow:0 0 20px #d4a6ff">🏰</div><p class="ng-greeting">SEDANG DALAM PENGEMBANGAN</p><p>Gerbang Shop N.G sedang dipersiapkan. Nantikan pembukaannya.</p></div><div class="ng-feature-actions"><button class="ng-fantasy-btn" type="button" id="ngShopOkay">KEMBALI</button></div>';$("ngShopOkay").onclick=closeNgFeature;openNgFeature();}
@@ -1116,14 +1117,18 @@ function ngWalletShowAccount(result){
  $("ngWalletSignOut").onclick=ngWalletStart;
  ngWalletLoadHistory();
 }
-$("ngFeatureClose").addEventListener("click",closeNgFeature);ngFeatureBackdrop.addEventListener("click",e=>{if(e.target===ngFeatureBackdrop)closeNgFeature();});
-$("lexiaaNgMenuBackdrop").querySelectorAll("[data-ng-feature]").forEach(btn=>btn.addEventListener("click",()=>{closeLexiaaNgMenu();if(btn.dataset.ngFeature==="about")ngShowAbout();if(btn.dataset.ngFeature==="wallet")ngWalletStart();if(btn.dataset.ngFeature==="shop")ngShowShop();}));
+$("ngFeatureClose").addEventListener("click",closeNgFeature);
+/* N.G popups are intentionally modal: backdrop taps never dismiss them. */
+ngFeatureBackdrop.addEventListener("click",e=>{if(e.target===ngFeatureBackdrop){e.preventDefault();e.stopPropagation();}});
+$("lexiaaNgMenuBackdrop").querySelectorAll("[data-ng-feature]").forEach(btn=>btn.addEventListener("click",()=>{ngReturnToMenu=true;closeLexiaaNgMenu();if(btn.dataset.ngFeature==="about")ngShowAbout();if(btn.dataset.ngFeature==="wallet")ngWalletStart();if(btn.dataset.ngFeature==="shop")ngShowShop();}));
 function openLexiaaNgMenu(){const el=$("lexiaaNgMenuBackdrop");el.classList.add("open");el.setAttribute("aria-hidden","false");}
 function closeLexiaaNgMenu(){const el=$("lexiaaNgMenuBackdrop");el.classList.remove("open");el.setAttribute("aria-hidden","true");}
 $("lexiaaSidebar")?.querySelector('[data-action="ng-menu"]')?.addEventListener("click",openLexiaaNgMenu);
 $("closeLexiaaNgMenu")?.addEventListener("click",closeLexiaaNgMenu);
 $("backLexiaaNgMenu")?.addEventListener("click",closeLexiaaNgMenu);
-$("lexiaaNgMenuBackdrop")?.addEventListener("click",e=>{if(e.target===$("lexiaaNgMenuBackdrop"))closeLexiaaNgMenu();});
+$("lexiaaNgMenuBackdrop")?.addEventListener("click",e=>{if(e.target===$("lexiaaNgMenuBackdrop")){e.preventDefault();e.stopPropagation();}});
+/* Escape/backdrop dismissal is disabled for N.G; only its visible X/back controls work. */
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&(ngFeatureBackdrop.classList.contains("open")||$("lexiaaNgMenuBackdrop")?.classList.contains("open"))){e.preventDefault();e.stopImmediatePropagation();}},true);
 
 function closeUpdates(){$("lexiaaUpdatesBackdrop").classList.remove("open");$("lexiaaUpdatesBackdrop").setAttribute("aria-hidden","true");}
 $("lexiaaSidebar")?.querySelector('[data-action="updates"]')?.addEventListener("click",openUpdates);
