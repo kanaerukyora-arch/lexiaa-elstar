@@ -71,7 +71,17 @@ begin
   select * into v_account from public.ng_wallet_accounts
   where auth_user_id = v_uid and phone = v_phone;
 
-  if not found or extensions.crypt(p_pin, v_account.pin_hash) <> v_account.pin_hash then
+  if not found then
+    v_failed := coalesce(v_attempt.failed_attempts, 0) + 1;
+    update public.ng_wallet_login_attempts
+      set failed_attempts = case when v_failed >= 5 then 0 else v_failed end,
+          locked_until = case when v_failed >= 5 then now() + interval '15 minutes' else null end,
+          updated_at = now()
+      where auth_user_id = v_uid and phone = v_phone;
+    return jsonb_build_object('success', false, 'message', case when v_failed >= 5 then 'Terlalu banyak percobaan. Akun dikunci sementara selama 15 menit.' else 'Nomor atau PIN tidak cocok.' end);
+  end if;
+
+  if extensions.crypt(p_pin, v_account.pin_hash) <> v_account.pin_hash then
     v_failed := coalesce(v_attempt.failed_attempts, 0) + 1;
     update public.ng_wallet_login_attempts
       set failed_attempts = case when v_failed >= 5 then 0 else v_failed end,
