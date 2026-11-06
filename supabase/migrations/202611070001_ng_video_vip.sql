@@ -62,8 +62,11 @@ declare
   v_start timestamptz;
   v_end timestamptz;
   v_balance bigint;
+  v_login jsonb;
 begin
   if v_uid is null then return jsonb_build_object('success',false,'message','Sesi LEXIAA tidak valid. Masuk kembali.'); end if;
+  v_login := public.ng_wallet_login(p_phone, p_pin);
+  if coalesce((v_login->>'success')::boolean, false) is not true then return v_login; end if;
   case p_package
     when '1h' then v_amount:=100000; v_duration:=interval '1 hour';
     when '10h' then v_amount:=200000; v_duration:=interval '10 hours';
@@ -108,8 +111,11 @@ declare
   v_video public.ng_videos%rowtype;
   v_phone text := regexp_replace(coalesce(p_phone, ''), '[[:space:]-]', '', 'g');
   v_balance bigint;
+  v_login jsonb;
 begin
   if v_uid is null then return jsonb_build_object('success',false,'message','Sesi LEXIAA tidak valid.'); end if;
+  v_login := public.ng_wallet_login(p_phone, p_pin);
+  if coalesce((v_login->>'success')::boolean, false) is not true then return v_login; end if;
   if not exists(select 1 from public.ng_video_vip_subscriptions where user_id=v_uid and ends_at>now()) then
     return jsonb_build_object('success',false,'message','Langganan VIP kamu sudah berakhir. Aktifkan VIP kembali.');
   end if;
