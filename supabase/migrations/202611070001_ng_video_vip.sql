@@ -180,28 +180,3 @@ revoke all on function public.ng_video_vip_purchase(text,text,text) from public,
 revoke all on function public.ng_video_purchase(text,text,uuid) from public, anon;
 grant execute on function public.ng_video_vip_purchase(text,text,text) to authenticated;
 grant execute on function public.ng_video_purchase(text,text,uuid) to authenticated;
-
-     or extensions.crypt(p_pin,v_account.pin_hash)<>v_account.pin_hash then
-    return jsonb_build_object('success',false,'message','Nomor atau PIN Wallet tidak cocok.');
-  end if;
-  -- Recheck after acquiring the wallet row lock to prevent concurrent double charges.
-  if exists(select 1 from public.ng_video_purchases where user_id=v_uid and video_id=p_video_id) then
-    return jsonb_build_object('success',true,'already_owned',true);
-  end if;
-  if v_account.balance<v_video.price then
-    return jsonb_build_object('success',false,'message','Saldo Wallet N.G tidak mencukupi.','balance',v_account.balance,'required',v_video.price);
-  end if;
-  update public.ng_wallet_accounts set balance=balance-v_video.price,updated_at=now()
-    where auth_user_id=v_uid returning balance into v_balance;
-  insert into public.ng_wallet_transactions(auth_user_id,description,amount,direction,status)
-    values(v_uid,'Pembelian video: '||v_video.title,v_video.price,'debit','success');
-  insert into public.ng_video_purchases(user_id,video_id,amount) values(v_uid,p_video_id,v_video.price)
-    on conflict(user_id,video_id) do nothing;
-  return jsonb_build_object('success',true,'balance',v_balance,'amount',v_video.price);
-end;
-$$;
-
-revoke all on function public.ng_video_vip_purchase(text,text,text) from public, anon;
-revoke all on function public.ng_video_purchase(text,text,uuid) from public, anon;
-grant execute on function public.ng_video_vip_purchase(text,text,text) to authenticated;
-grant execute on function public.ng_video_purchase(text,text,uuid) to authenticated;
