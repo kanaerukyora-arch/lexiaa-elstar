@@ -8,7 +8,7 @@
 *{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 10% 0,#17385a 0,transparent 40%),radial-gradient(ellipse at 95% 15%,#39215d 0,transparent 38%),var(--bg);color:var(--text);font:14px Inter,system-ui,sans-serif;padding:20px}
 .shell{max-width:1200px;margin:auto}.brand{font-size:11px;letter-spacing:.22em;color:#b7f5ff;font-weight:900}.muted{color:var(--muted);font-size:12px;line-height:1.6}.panel{background:#111a30eF;border:1px solid #70dfff35;border-radius:18px;padding:20px;margin:14px 0;box-shadow:0 18px 55px #0005}h1{font-size:clamp(22px,4vw,30px);margin:8px 0}h2{font-size:16px;margin:0 0 12px}label{display:block;color:#9beaff;font-size:10px;font-weight:800;letter-spacing:.13em;margin:13px 0 6px}input,textarea,select{width:100%;border:1px solid #70dfff55;border-radius:10px;padding:12px;background:#071225;color:#fff;font:inherit;outline:none}textarea{min-height:100px;resize:vertical}button{border:1px solid #9af0ff;border-radius:10px;padding:11px 14px;background:linear-gradient(100deg,#baf8ff,#62dcf5,#c7a6ff);color:#07111d;font-weight:900;cursor:pointer}button:disabled{opacity:.5;cursor:wait}.secondary{background:#172746;color:#d5efff;border-color:#80dfff55}.danger{background:#3a1c2d;color:#ffd5de;border-color:#ff789866}.hidden{display:none!important}.notice{min-height:18px;color:#ffb5c3;font-size:12px;line-height:1.5;margin-top:9px}.notice.ok{color:var(--green)}.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.between{justify-content:space-between}.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:15px 0}.stat{padding:13px;border:1px solid #70dfff35;border-radius:13px;background:#09152a}.stat span{display:block;color:var(--muted);font-size:11px}.stat b{display:block;font-size:24px;margin-top:5px}.tabs{display:flex;gap:7px;flex-wrap:wrap;margin:14px 0}.tabs button{font-size:10px;padding:9px 12px}.tabs button.active{box-shadow:0 0 0 2px #70eaff55}.toolbar{display:grid;grid-template-columns:1fr 190px auto;gap:9px}.users{display:grid;gap:8px;margin-top:13px;max-height:470px;overflow:auto}.user{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;padding:13px;border:1px solid #70dfff2b;border-radius:12px;background:#09152a}.user strong{display:block;overflow-wrap:anywhere}.user small{display:block;color:var(--muted);font-size:11px;margin-top:4px;overflow-wrap:anywhere}.tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px}.tag{border:1px solid #7890ad66;color:#b6c9dc;border-radius:20px;padding:4px 7px;font-size:9px}.tag.on{border-color:#55e6b588;color:#9df4d1}.tag.wallet{border-color:#bda0ff88;color:#d7c6ff}.user button{padding:8px 11px;font-size:10px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.selected{color:#a9eaff;font-size:12px;line-height:1.6;margin:10px 0}.balance{font-size:27px;font-weight:900;color:#a6f5ff;margin:8px 0}.section-note{border-left:3px solid #bda0ff;padding:9px 12px;background:#bda0ff0c;color:#c4d3e5;font-size:11px;line-height:1.6;margin:12px 0}.login{max-width:470px;margin:8vh auto}.foot{font-size:10px;color:#6f88a4;text-align:center;margin:20px}
 @media(max-width:700px){body{padding:12px}.panel{padding:15px}.stats{grid-template-columns:repeat(2,1fr)}.toolbar{grid-template-columns:1fr}.grid{grid-template-columns:1fr}.user{grid-template-columns:1fr}.user button{width:100%}}
-</style>
+@keyframes videoPulse{0%,100%{opacity:.35;transform:scale(.8)}50%{opacity:1;transform:scale(1.15)}}.video-pulse{display:inline-block;width:10px;height:10px;border-radius:50%;background:#70eaff;box-shadow:0 0 14px #70eaff;animation:videoPulse 1s infinite}.video-progress{height:9px;border-radius:99px;background:#263c5c;overflow:hidden;margin-top:12px}.video-progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,#70eaff,#c2a0ff);transition:width .2s}.video-progress-text{font-size:11px}</style>
 </head>
 <body><main class="shell">
 <div class="brand">✦ LEXIAA · ADMIN CONTROL CENTER</div>
@@ -55,7 +55,14 @@
 </form><div id="walletList" class="users"><p class="muted">Masuk untuk memuat nomor Wallet.</p></div>
 </section>
 </div>
-<section class="panel" id="novelAdminPanel"><h2>LEXIAA NOVEL · KELOLA KATALOG</h2><p class="muted">Unggah PDF, atur harga, dan sampul novel. Login admin tetap sama dengan menu Wallet.</p><form id="novelAdminForm"><label>JUDUL NOVEL</label><input id="novelAdminTitle" maxlength="160" required><label>HARGA (RUPIAH)</label><input id="novelAdminPrice" type="number" min="0" max="1000000000" required><label>FILE PDF</label><input id="novelAdminPdf" type="file" accept="application/pdf,.pdf" required><label>SAMPUL</label><select id="novelAdminCoverMode"><option value="pdf">Ambil halaman pertama PDF</option><option value="custom">Gambar sendiri</option></select><div id="novelAdminCustomWrap" class="hidden"><label>GAMBAR SAMPUL</label><input id="novelAdminCover" type="file" accept="image/jpeg,image/png,image/webp"></div><p id="novelAdminNotice" class="notice"></p><button id="novelAdminSave">UNGGAH NOVEL</button></form><h2 style="margin-top:18px">DAFTAR NOVEL</h2><div id="novelAdminList" class="users"></div><button type="button" class="secondary" id="refreshNovels">MUAT ULANG</button></section><div class="foot">LEXIAA ADMIN CENTER · Jangan bagikan kredensial admin atau token sesi.</div>
+<section class="panel" id="novelAdminPanel"><h2>LEXIAA NOVEL · KELOLA KATALOG</h2><p class="muted">Unggah PDF, atur harga, dan sampul novel. Login admin tetap sama dengan menu Wallet.</p><form id="novelAdminForm"><label>JUDUL NOVEL</label><input id="novelAdminTitle" maxlength="160" required><label>HARGA (RUPIAH)</label><input id="novelAdminPrice" type="number" min="0" max="1000000000" required><label>FILE PDF</label><input id="novelAdminPdf" type="file" accept="application/pdf,.pdf" required><label>SAMPUL</label><select id="novelAdminCoverMode"><option value="pdf">Ambil halaman pertama PDF</option><option value="custom">Gambar sendiri</option></select><div id="novelAdminCustomWrap" class="hidden"><label>GAMBAR SAMPUL</label><input id="novelAdminCover" type="file" accept="image/jpeg,image/png,image/webp"></div><p id="novelAdminNotice" class="notice"></p><button id="novelAdminSave">UNGGAH NOVEL</button></form><h2 style="margin-top:18px">DAFTAR NOVEL</h2><div id="novelAdminList" class="users"></div><button type="button" class="secondary" id="refreshNovels">MUAT ULANG</button></section><section class="panel" id="videoAdminPanel"><h2>LEXIAA N.G VIDEO · VIP</h2><p class="muted">Unggah video MP4/WebM, atur harga, dan kelola tayangan VIP. Harga Rp0 berarti gratis untuk pelanggan VIP aktif.</p>
+<form id="videoAdminForm"><label>JUDUL VIDEO</label><input id="videoAdminTitle" maxlength="160" required>
+<label>HARGA KHUSUS (RUPIAH)</label><input id="videoAdminPrice" type="number" min="0" max="1000000000" value="0" required>
+<label>FILE VIDEO · MP4 / WEBM</label><input id="videoAdminFile" type="file" accept="video/mp4,video/webm,.mp4,.webm" required>
+<div class="section-note">Batas akhir setiap video adalah 50 MB. Jika file lebih besar, Admin akan mencoba mengompresnya menjadi di bawah 50 MB. Kompresi dilakukan di browser dan bisa berat untuk HP.</div>
+<div id="videoCompressBox" class="hidden"><div class="row"><span class="video-pulse"></span><b id="videoProgressTitle">Sedang Mengompres Video...</b></div><div class="video-progress"><span id="videoProgressBar"></span></div><p id="videoProgressText" class="muted">Menyiapkan mesin kompresi...</p></div>
+<p id="videoAdminNotice" class="notice"></p><button id="videoAdminSave">UNGGAH VIDEO</button></form>
+<h2 style="margin-top:18px">DAFTAR VIDEO</h2><div id="videoAdminList" class="users"></div><button type="button" class="secondary" id="refreshVideos">MUAT ULANG</button></section><div class="foot">LEXIAA ADMIN CENTER · Jangan bagikan kredensial admin atau token sesi.</div>
 </main>
 <script type="module">
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
@@ -130,7 +137,7 @@ async function loadUsers(){
  }catch(e){$("userList").textContent=e.message;notice("listNotice","Periksa deployment Edge Function dan konfigurasi backend.");}
 }
 $("loginForm").addEventListener("submit",async e=>{e.preventDefault();$("loginButton").disabled=true;notice("loginNotice","Memverifikasi...");
- try{const d=await api({action:"login",key:$("adminKey").value,password:$("adminPassword").value});if(!d.token)throw new Error("Server tidak mengembalikan token admin.");token=d.token;sessionStorage.setItem("lexiaaAdminNewToken",token);$("loginPanel").classList.add("hidden");$("adminPanel").classList.remove("hidden");await Promise.all([loadUsers(),loadWallets(),loadNovelAdmin()]);}
+ try{const d=await api({action:"login",key:$("adminKey").value,password:$("adminPassword").value});if(!d.token)throw new Error("Server tidak mengembalikan token admin.");token=d.token;sessionStorage.setItem("lexiaaAdminNewToken",token);$("loginPanel").classList.add("hidden");$("adminPanel").classList.remove("hidden");await Promise.all([loadUsers(),loadWallets(),loadNovelAdmin(),loadVideoAdmin()]);}
  catch(err){notice("loginNotice",err.message);}finally{$("loginButton").disabled=false;}});
 $("refresh").onclick=()=>{loadUsers();loadWallets();};$("refreshWallets").onclick=loadWallets;$("walletRecipient").onchange=updateWalletRecipient;$("search").oninput=paint;$("sort").onchange=paint;$("clearSearch").onclick=()=>{$("search").value="";filter="all";document.querySelectorAll("[data-filter]").forEach(b=>b.classList.toggle("active",b.dataset.filter==="all"));paint();};
 $("tabs").addEventListener("click",e=>{const b=e.target.closest("[data-filter]");if(!b)return;filter=b.dataset.filter;document.querySelectorAll("[data-filter]").forEach(x=>x.classList.toggle("active",x===b));paint();});
@@ -195,6 +202,84 @@ $("novelAdminForm").onsubmit=async e=>{
 };
 $("refreshNovels").onclick=loadNovelAdmin;
 
+// LEXIAA N.G Video VIP admin tools
+const videoBytes=n=>{const mb=n/1048576;return mb.toFixed(2)+" MB";};
+function videoProgress(percent,message){$("videoCompressBox").classList.remove("hidden");$("videoProgressBar").style.width=Math.max(0,Math.min(100,percent))+"%";$("videoProgressText").textContent=message||"";}
+async function compressVideoIfNeeded(file){
+ if(file.size<=52428800)return file;
+ const objectUrl=URL.createObjectURL(file);
+ try{
+  const duration=await new Promise((resolve,reject)=>{const v=document.createElement("video");v.preload="metadata";v.onloadedmetadata=()=>resolve(v.duration);v.onerror=()=>reject(new Error("Metadata video tidak dapat dibaca."));v.src=objectUrl;});
+  if(!Number.isFinite(duration)||duration<=0)throw new Error("Durasi video tidak dapat dibaca.");
+  videoProgress(2,"Memuat mesin kompresi FFmpeg...");
+  const {FFmpeg}=await import("https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.10/dist/esm/index.js");
+  const {fetchFile,toBlobURL}=await import("https://cdn.jsdelivr.net/npm/@ffmpeg/util@0.12.1/dist/esm/index.js");
+  const ffmpeg=new FFmpeg();let progress=0;
+  ffmpeg.on("progress",({progress:p})=>{progress=Math.max(0,Math.min(1,p||0));videoProgress(8+progress*75,"Mengompres video · "+Math.round(progress*100)+"%");});
+  const base="https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.6/dist/umd";
+  await ffmpeg.load({coreURL:await toBlobURL(base+"/ffmpeg-core.js","text/javascript"),wasmURL:await toBlobURL(base+"/ffmpeg-core.wasm","application/wasm")});
+  const ext=(file.name.toLowerCase().endsWith(".webm")?"webm":"mp4"),inputName="lexiaa-input."+ext;
+  await ffmpeg.writeFile(inputName,await fetchFile(file));
+  const audioRate=64000,targetBytes=45*1024*1024;
+  let bitrate=Math.max(140000,Math.floor((targetBytes*8/duration)-audioRate)),outputBlob=null;
+  for(let attempt=0;attempt<3;attempt++){
+   const outputName="lexiaa-compressed-"+attempt+".mp4";
+   videoProgress(8,"Kompresi tahap "+(attempt+1)+" dari 3...");
+   const args=["-y","-i",inputName,"-vf","scale='min(1280,iw)':-2","-c:v","libx264","-preset","ultrafast","-b:v",String(bitrate),"-maxrate",String(bitrate),"-bufsize",String(bitrate*2),"-c:a","aac","-b:a","64k","-movflags","+faststart",outputName];
+   const code=await ffmpeg.exec(args);
+   if(code!==0)throw new Error("FFmpeg gagal mengompres video. Coba file MP4 atau video yang lebih kecil.");
+   const data=await ffmpeg.readFile(outputName);outputBlob=new Blob([data],{type:"video/mp4"});
+   if(outputBlob.size<=52428800)break;
+   bitrate=Math.max(100000,Math.floor(bitrate*.72));
+   await ffmpeg.deleteFile(outputName);
+  }
+  await ffmpeg.terminate();
+  if(!outputBlob||outputBlob.size>52428800)throw new Error("Ukuran masih di atas 50 MB setelah 3 tahap kompresi. Coba video lebih pendek atau resolusi lebih rendah.");
+  const safeName=file.name.replace(/\.[^.]+$/,"").replace(/[^a-z0-9_-]+/gi,"-")+".mp4";
+  return new File([outputBlob],safeName,{type:"video/mp4",lastModified:Date.now()});
+ }finally{URL.revokeObjectURL(objectUrl);}
+}
+async function loadVideoAdmin(){
+ const host=$("videoAdminList");host.textContent="Memuat video...";
+ try{
+  const d=await api({action:"video_list"}),items=d.videos||[];host.replaceChildren();
+  if(!items.length){host.textContent="Belum ada video.";return;}
+  for(const v of items){
+   const row=document.createElement("div");row.className="user";
+   const info=document.createElement("div"),title=document.createElement("strong"),meta=document.createElement("small"),actions=document.createElement("div");
+   title.textContent=v.title;meta.textContent=rupiah(v.price)+" · "+videoBytes(v.file_size)+" · "+(v.is_published?"Tayang":"Disembunyikan");info.append(title,meta);actions.className="row";
+   const toggle=document.createElement("button");toggle.className="secondary";toggle.textContent=v.is_published?"SEMBUNYIKAN":"TERBITKAN";
+   toggle.onclick=async()=>{try{await api({action:"video_publish",id:v.id,is_published:!v.is_published});await loadVideoAdmin();}catch(e){notice("videoAdminNotice",e.message);}};
+   const del=document.createElement("button");del.className="danger";del.textContent="HAPUS";
+   del.onclick=async()=>{if(!confirm("Hapus video "+v.title+"? Jika sudah dibeli, sembunyikan saja."))return;try{await api({action:"video_delete",id:v.id});await loadVideoAdmin();}catch(e){notice("videoAdminNotice",e.message);}};
+   actions.append(toggle,del);row.append(info,actions);host.append(row);
+  }
+ }catch(e){host.textContent=e.message;}
+}
+$("videoAdminForm").onsubmit=async e=>{
+ e.preventDefault();const original=$("videoAdminFile").files[0],title=$("videoAdminTitle").value.trim(),price=Number($("videoAdminPrice").value);
+ if(!original){notice("videoAdminNotice","Pilih file video terlebih dahulu.");return;}
+ if(!title||!Number.isSafeInteger(price)||price<0||price>1e9){notice("videoAdminNotice","Judul atau harga tidak valid.");return;}
+ const btn=$("videoAdminSave");btn.disabled=true;$("videoCompressBox").classList.add("hidden");
+ let file=original,path="";
+ try{
+  if(file.size>52428800){notice("videoAdminNotice","File "+videoBytes(file.size)+" melebihi 50 MB. Memulai kompresi...");file=await compressVideoIfNeeded(file);}
+  if(file.size>52428800)throw new Error("Video masih melebihi batas 50 MB.");
+  $("videoCompressBox").classList.remove("hidden");videoProgress(100,"Ukuran akhir: "+videoBytes(file.size));
+  notice("videoAdminNotice","Menyiapkan unggahan "+videoBytes(file.size)+"...");
+  const ext=file.type==="video/webm"?"webm":"mp4",mime=ext==="webm"?"video/webm":"video/mp4";
+  const signed=await api({action:"video_upload_sign",extension:ext,file_size:file.size});
+  const {data,error}=await novelDb.storage.from("lexiaa-ng-videos").uploadToSignedUrl(signed.path,signed.token,file,{contentType:mime,upsert:false});
+  if(error)throw error;path=signed.path;
+  notice("videoAdminNotice","Menyimpan katalog video...");
+  await api({action:"video_save",title,price,video_path:path,mime_type:mime,file_size:file.size});
+  notice("videoAdminNotice","Video berhasil diunggah dan diterbitkan.",true);$("videoAdminForm").reset();$("videoCompressBox").classList.add("hidden");await loadVideoAdmin();
+ }catch(err){notice("videoAdminNotice",err.message||"Unggah video gagal.");}
+ finally{btn.disabled=false;}
+};
+$("refreshVideos").onclick=loadVideoAdmin;
+
+
 $("logout").onclick=()=>{token="";sessionStorage.removeItem("lexiaaAdminNewToken");users=[];wallets=[];selected=null;$("adminPanel").classList.add("hidden");$("loginPanel").classList.remove("hidden");$("loginForm").reset();};
-if(token){$("loginPanel").classList.add("hidden");$("adminPanel").classList.remove("hidden");Promise.all([loadUsers(),loadWallets(),loadNovelAdmin()]);}
+if(token){$("loginPanel").classList.add("hidden");$("adminPanel").classList.remove("hidden");Promise.all([loadUsers(),loadWallets(),loadNovelAdmin(),loadVideoAdmin()]);}
 </script></body></html>
