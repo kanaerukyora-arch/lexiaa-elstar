@@ -140,6 +140,28 @@ button,input{font:inherit}button{cursor:pointer}#particles{position:fixed;inset:
 #dashboardView .ng-auth-layout{grid-template-columns:minmax(0,1fr)!important;min-height:0!important;max-width:680px;margin-inline:auto}
 #dashboardView .ng-auth-panel{margin:0!important;width:100%}
 #dashboardView .ng-wallet-character{display:none!important}
+
+/* LEXIAA NOVEL library */
+#dashboardView .ng-novel-head{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:17px 19px;margin-bottom:14px;border:1px solid #aaa4ff88;border-radius:16px;background:linear-gradient(115deg,#21145fdd,#263b9add)}
+#dashboardView .ng-novel-kicker{margin:0 0 5px;color:#c9c0ff;font:800 9px Orbitron,sans-serif;letter-spacing:.18em}
+#dashboardView .ng-novel-head h3{margin:0;color:#fff;font:800 clamp(17px,2.8vw,24px) Inter,sans-serif}
+#dashboardView .ng-novel-head p:last-child{margin:6px 0 0;color:#d4d8ff;font-size:11px}
+#dashboardView .ng-novel-emblem{font-size:42px;filter:drop-shadow(0 0 13px #c8aaff)}
+#dashboardView .ng-novel-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:12px;max-height:60vh;overflow:auto;padding:2px 3px 12px}
+#dashboardView .ng-novel-card{overflow:hidden;border:1px solid #a8a2ff88;border-radius:14px;background:linear-gradient(160deg,#24206f,#111b54);box-shadow:0 7px 20px #03072c66}
+#dashboardView .ng-novel-cover{aspect-ratio:3/4;overflow:hidden;background:linear-gradient(145deg,#3d328f,#15255e)}
+#dashboardView .ng-novel-cover img{display:block;width:100%;height:100%;object-fit:cover}
+#dashboardView .ng-novel-cover-placeholder{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:#e5ddff;font-size:42px}
+#dashboardView .ng-novel-cover-placeholder small{font:800 8px Orbitron,sans-serif;letter-spacing:.15em}
+#dashboardView .ng-novel-info{padding:10px;display:grid;gap:8px}
+#dashboardView .ng-novel-info h4{margin:0;min-height:34px;color:#fff;font-size:12px;line-height:1.4;overflow-wrap:anywhere}
+#dashboardView .ng-novel-info strong{color:#d7c8ff;font-size:12px}
+#dashboardView .ng-novel-action{width:100%;padding:9px 5px;font-size:9px}
+#dashboardView .ng-novel-loading,#dashboardView .ng-novel-empty{grid-column:1/-1;text-align:center;padding:35px 12px;color:#d9d5ff;border:1px dashed #a6a0ff77;border-radius:14px;background:#17185b88}
+#dashboardView .ng-novel-empty span{display:block;font-size:30px}#dashboardView .ng-novel-empty b{display:block;margin:8px}
+#dashboardView .ng-novel-empty p{font-size:11px;color:#bfc8f2}
+@media(max-width:560px){#dashboardView .ng-novel-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}#dashboardView .ng-novel-head{padding:13px}#dashboardView .ng-novel-emblem{font-size:32px}}
+
 </style>
 <style id="lexiaa-sidebar-footer-fix-v135">
 #dashboardView .lexiaa-sidebar{padding-bottom:12px}
@@ -925,7 +947,7 @@ body:has(#loginView.active) main{min-height:0}
       <div class="lexiaa-ng-grid">
         <button class="lexiaa-ng-card is-active" type="button" data-ng-feature="about"><span class="lexiaa-ng-art">📜</span><strong>TENTANG LEXIAA N.G</strong><small>Kenali dunia generasi baru</small></button>
         <button class="lexiaa-ng-card is-active" type="button" data-ng-feature="wallet"><span class="lexiaa-ng-art">💎</span><strong>SALDO LEXIAA N.G</strong><small>Identitas & saldo milikmu</small></button>
-        <button class="lexiaa-ng-card is-active" type="button" data-ng-feature="shop"><span class="lexiaa-ng-art">🏰</span><strong>SHOP N.G</strong><small>Gerbang toko segera dibuka</small></button>
+        <button class="lexiaa-ng-card is-active" type="button" data-ng-feature="shop"><span class="lexiaa-ng-art">📚</span><strong>LEXIAA NOVEL</strong><small>Jelajahi dan miliki kisah pilihan</small></button>
         <div class="lexiaa-ng-card"><span class="lexiaa-ng-art">✧</span><strong>SEGERA HADIR</strong></div>
         <div class="lexiaa-ng-card"><span class="lexiaa-ng-art">✧</span><strong>SEGERA HADIR</strong></div>
         <div class="lexiaa-ng-card"><span class="lexiaa-ng-art">✧</span><strong>SEGERA HADIR</strong></div>
@@ -1030,7 +1052,40 @@ function openNgFeature(){ngFeatureBackdrop.classList.add("open");ngFeatureBackdr
 function closeNgFeature(){ngFeatureBackdrop.classList.remove("open");ngFeatureBackdrop.setAttribute("aria-hidden","true");ngWalletState.pin="";ngWalletState.confirmPin="";if(ngReturnToMenu){ngReturnToMenu=false;openLexiaaNgMenu();}}
 function ngFeatureTitle(title){$("ngFeatureTitle").textContent=title;}
 function ngShowAbout(){ngFeatureTitle("TENTANG LEXIAA N.G");ngFeatureContent.innerHTML='<div class="ng-story-copy"><p class="ng-greeting">Yoo, Akhirnya Kamu Datang Juga.</p><p>Aku Adalah Pemandu Mu saat di Lexiaa N.G. Tidak Seperti Lexiaa Old Pemandumu wanita, Di Lexiaa N.G Pemandu Nya Adalah Aku.</p><p>Disini Kita Baru Mengembangkan 2 Menu. Yaitu Saldo Lexiaa N.G dan SHOP N.G. di menu Saldo Lexiaa N.G kamu bisa melihat saldo mu dan bisa mengumpulkan saldo disana. Nantinya Saldo Mu Bisa Kamu Belikan Di Menu SHOP N.G Yang Sudah Kita Kembangkan.</p><p>Untuk Sekarang mungkin itu dulu yang bisa Ku jelaskan. Terimakasih Sudah Membaca.</p></div><div class="ng-feature-actions"><button class="ng-fantasy-btn" type="button" id="ngAboutOkay">DIMENGERTI</button></div>';$("ngAboutOkay").onclick=closeNgFeature;openNgFeature();}
-function ngShowShop(){ngFeatureTitle("SHOP N.G");ngFeatureContent.innerHTML='<div class="ng-story-copy" style="text-align:center;padding:42px 18px"><div style="font-size:52px;text-shadow:0 0 20px #d4a6ff">🏰</div><p class="ng-greeting">SEDANG DALAM PENGEMBANGAN</p><p>Gerbang Shop N.G sedang dipersiapkan. Nantikan pembukaannya.</p></div><div class="ng-feature-actions"><button class="ng-fantasy-btn" type="button" id="ngShopOkay">KEMBALI</button></div>';$("ngShopOkay").onclick=closeNgFeature;openNgFeature();}
+
+const NG_NOVEL_API=SUPABASE_URL+"/functions/v1/lexiaa-admin";
+async function ngNovelApi(action,payload={}){
+ const {data:{session}}=await supabase.auth.getSession();
+ if(!session?.access_token)throw new Error("Sesi LEXIAA berakhir. Silakan masuk kembali.");
+ const response=await fetch(NG_NOVEL_API,{method:"POST",headers:{"Content-Type":"application/json","apikey":SUPABASE_ANON_KEY,"Authorization":"Bearer "+session.access_token},body:JSON.stringify({action,...payload})});
+ const raw=await response.text();let result={};try{result=raw?JSON.parse(raw):{};}catch{result={error:raw||"Respons server tidak valid."};}
+ if(!response.ok)throw new Error(result.error||"Permintaan novel gagal ("+response.status+").");
+ return result;
+}
+const ngNovelRupiah=n=>new Intl.NumberFormat("id-ID",{style:"currency",currency:"IDR",maximumFractionDigits:0}).format(Number(n)||0);
+async function ngNovelDownload(id,button){
+ const old=button.textContent;button.disabled=true;button.textContent="MENYIAPKAN...";
+ try{const data=await ngNovelApi("novel_download",{novel_id:id});if(!data.url)throw new Error("Tautan unduhan tidak tersedia.");const a=document.createElement("a");a.href=data.url;a.rel="noopener";a.target="_blank";document.body.append(a);a.click();a.remove();button.textContent="UNDUH ULANG";}
+ catch(e){alert(e.message);button.textContent=old;}finally{button.disabled=false;}
+}
+async function ngNovelBuy(novel,button){
+ if(!confirm("Beli novel \""+novel.title+"\" seharga "+ngNovelRupiah(novel.price)+" menggunakan saldo Wallet N.G.?"))return;
+ button.disabled=true;button.textContent="MEMPROSES...";
+ try{const result=await ngNovelApi("novel_buy",{novel_id:novel.id});if(!result.success)throw new Error(result.message||"Pembelian gagal.");alert(result.already_owned?"Novel ini sudah ada di koleksimu.":"Pembelian berhasil! Saldo tersisa: "+ngNovelRupiah(result.balance));await ngShowShop();}
+ catch(e){alert(e.message);button.disabled=false;button.textContent="BELI SEKARANG";}
+}
+async function ngShowShop(){
+ ngFeatureTitle("LEXIAA NOVEL");
+ ngFeatureContent.innerHTML='<div class="ng-novel-head"><div><p class="ng-novel-kicker">✦ THE LEXIAA LIBRARY ✦</p><h3>Temukan Kisah Favoritmu</h3><p>Koleksi novel pilihan. Beli menggunakan saldo Wallet N.G.</p></div><div class="ng-novel-emblem">📚</div></div><div id="ngNovelGrid" class="ng-novel-grid"><div class="ng-novel-loading">Membuka perpustakaan...</div></div><div class="ng-feature-actions"><button class="ng-fantasy-btn" type="button" id="ngShopOkay">KEMBALI</button></div>';
+ openNgFeature();$("ngShopOkay").onclick=closeNgFeature;
+ const host=$("ngNovelGrid");
+ try{
+  const data=await ngNovelApi("novel_catalog");const novels=Array.isArray(data.novels)?data.novels:[];
+  if(!novels.length){host.innerHTML='<div class="ng-novel-empty"><span>✧</span><b>Belum Ada Novel</b><p>Koleksi baru akan segera hadir di perpustakaan LEXIAA.</p></div>';return;}
+  host.innerHTML=novels.map(n=>'<article class="ng-novel-card"><div class="ng-novel-cover">'+(n.cover_url?'<img src="'+ngEscape(n.cover_url)+'" alt="Sampul '+ngEscape(n.title)+'" loading="lazy">':'<div class="ng-novel-cover-placeholder">📖<small>LEXIAA NOVEL</small></div>')+'</div><div class="ng-novel-info"><h4>'+ngEscape(n.title)+'</h4><strong>'+ngNovelRupiah(n.price)+'</strong><button type="button" class="ng-fantasy-btn ng-novel-action" data-novel-id="'+ngEscape(n.id)+'" data-owned="'+(n.owned?'1':'0')+'">'+(n.owned?'UNDUH NOVEL':'BELI SEKARANG')+'</button></div></article>').join("");
+  host.querySelectorAll("[data-novel-id]").forEach(btn=>{const novel=novels.find(n=>n.id===btn.dataset.novelId);btn.onclick=()=>btn.dataset.owned==="1"?ngNovelDownload(novel.id,btn):ngNovelBuy(novel,btn);});
+ }catch(e){host.innerHTML='<div class="ng-novel-empty"><b>Perpustakaan belum dapat dibuka</b><p>'+ngEscape(e.message)+'</p><button type="button" class="ng-fantasy-btn" id="ngNovelRetry">COBA LAGI</button></div>';$("ngNovelRetry").onclick=ngShowShop;}
+}
 const ngWalletState={stage:"",phone:"",phoneDigits:"",region:"ID",pin:"",confirmPin:"",name:"",mode:"",account:null};
 const ngEscape=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 function ngWalletError(message){const el=$("ngWalletError");if(el)el.textContent=message||"";}
