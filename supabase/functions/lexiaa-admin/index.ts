@@ -188,10 +188,10 @@ Deno.serve(async req => {
     const { data: novel, error: findError } = await db.from("lexiaa_novels").select("id,pdf_path,cover_path")
       .eq("id", id).maybeSingle();
     if (findError || !novel) return json({ error: "Novel tidak ditemukan." }, 404);
-    const paths = [novel.pdf_path, novel.cover_path].filter(Boolean) as string[];
-    if (paths.length) await db.storage.from("lexiaa-novels").remove(paths);
     const { error } = await db.from("lexiaa_novels").delete().eq("id", id);
     if (error) return json({ error: "Novel tidak dapat dihapus. Jika sudah pernah dibeli, nonaktifkan publikasinya agar riwayat pembeli tetap aman." }, 400);
+    const paths = [novel.pdf_path, novel.cover_path].filter(Boolean) as string[];
+    if (paths.length) await db.storage.from("lexiaa-novels").remove(paths);
     return json({ success: true });
   }
 
