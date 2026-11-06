@@ -76,6 +76,8 @@ Deno.serve(async req => {
   // Public catalog and customer actions use the signed-in LEXIAA user's JWT.
   // The service key is used only server-side; user identity is verified before every action.
   const bearer = (req.headers.get("Authorization") || "").replace(/^Bearer\\s+/i, "");
+  const db = createClient(url, service, { auth: { persistSession: false, autoRefreshToken: false } });
+
   const customerAction = ["novel_catalog", "novel_buy", "novel_download"].includes(String(input.action || ""));
   if (customerAction) {
     if (!bearer) return json({ error: "Silakan masuk ke akun LEXIAA terlebih dahulu." }, 401);
@@ -140,8 +142,6 @@ Deno.serve(async req => {
   if (!await validToken(auth, tokenSecret)) {
     return json({ error: "Sesi admin tidak valid atau kedaluwarsa. Silakan masuk kembali." }, 401);
   }
-
-  const db = createClient(url, service, { auth: { persistSession: false, autoRefreshToken: false } });
 
 
   if (input.action === "novel_list") {
