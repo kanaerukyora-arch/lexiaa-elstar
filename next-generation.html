@@ -1239,6 +1239,7 @@ function ngVideoDialog(options){const p=ngNovelDialog(options);const k=document.
 function ngVideoLoading(message){const close=ngNovelLoading(message);const k=document.querySelector("#ngNovelDialogRoot .ng-novel-dialog-kicker");if(k)k.textContent="LEXIAA · VIDEO VIP";return close;}
 async function ngVideoDb(){return await new Promise((resolve,reject)=>{const req=indexedDB.open("lexiaa-ng-video-offline",1);req.onupgradeneeded=()=>{if(!req.result.objectStoreNames.contains("videos"))req.result.createObjectStore("videos",{keyPath:"id"});};req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error||new Error("Penyimpanan offline tidak tersedia."));});}
 async function ngVideoOfflineGet(id){const db=await ngVideoDb();return await new Promise((resolve,reject)=>{const tx=db.transaction("videos","readonly"),r=tx.objectStore("videos").get(id);r.onsuccess=()=>resolve(r.result||null);r.onerror=()=>reject(r.error);});}
+async function ngVideoOfflineList(){const db=await ngVideoDb();return await new Promise((resolve,reject)=>{const tx=db.transaction("videos","readonly"),r=tx.objectStore("videos").getAll();r.onsuccess=()=>resolve(r.result||[]);r.onerror=()=>reject(r.error);});}
 async function ngVideoOfflinePut(record){const db=await ngVideoDb();return await new Promise((resolve,reject)=>{const tx=db.transaction("videos","readwrite");tx.objectStore("videos").put(record);tx.oncomplete=()=>resolve(true);tx.onerror=()=>reject(tx.error||new Error("Penyimpanan offline gagal."));tx.onabort=()=>reject(tx.error||new Error("Penyimpanan offline dibatalkan."));});}
 async function ngVideoStart(){ngFeatureTitle("LEXIAA N.G VIDEO (VIP)");ngFeatureContent.innerHTML='<div class="ng-video-empty">Memuat perpustakaan video...</div>';openNgFeature();await ngShowVideos();}
 async function ngShowVideos(){
@@ -1264,7 +1265,19 @@ async function ngShowVideos(){
   ngFeatureContent.querySelectorAll("[data-video-buy]").forEach(b=>b.onclick=()=>ngVideoBeginPayment({kind:"video",videoId:b.dataset.videoBuy,title:videos.find(v=>v.id===b.dataset.videoBuy)?.title}));
   ngFeatureContent.querySelectorAll("[data-video-play]").forEach(b=>b.onclick=()=>ngVideoPlay(b.dataset.videoPlay));
   ngFeatureContent.querySelectorAll("[data-video-offline]").forEach(b=>b.onclick=()=>ngVideoSaveOffline(b.dataset.videoOffline,b));
- }catch(e){ngFeatureContent.innerHTML='<div class="ng-video-empty">'+ngEscape(e.message)+'<button class="ng-fantasy-btn" id="ngVideoRetry" type="button">COBA LAGI</button></div>';$("ngVideoRetry").onclick=ngShowVideos;}
+ }catch(e){
+  try{
+   const saved=await ngVideoOfflineList();
+   if(saved.length){
+    const valid=saved.filter(v=>v.blob&&v.vip_ends_at&&Date.now()<new Date(v.vip_ends_at).getTime());
+    let html='<div class="ng-video-wrap"><div class="ng-video-status"><b>MODE OFFLINE</b><br>Internet tidak tersedia. Video tersimpan hanya bisa diputar sampai masa VIP yang tersimpan berakhir.</div><div class="ng-video-grid">';
+    for(const v of valid){html+='<article class="ng-video-card"><span class="ng-video-tag">TERSIMPAN OFFLINE</span><h4>'+ngEscape(v.title||"Video LEXIAA")+'</h4><p>Akses sampai '+new Date(v.vip_ends_at).toLocaleString("id-ID")+'</p><button class="ng-fantasy-btn" type="button" data-video-play="'+v.id+'">▶ TONTON OFFLINE</button></article>';}
+    if(!valid.length)html+='<div class="ng-video-empty">Video offline tersimpan, tetapi masa VIP offline sudah berakhir. Sambungkan internet dan aktifkan VIP kembali.</div>';
+    html+='</div></div>';ngFeatureContent.innerHTML=html;
+    ngFeatureContent.querySelectorAll("[data-video-play]").forEach(b=>b.onclick=()=>ngVideoPlay(b.dataset.videoPlay));
+   }else{ngFeatureContent.innerHTML='<div class="ng-video-empty">Perpustakaan belum dapat dibuka: '+ngEscape(e.message)+'<br>Belum ada video yang disimpan offline.<button class="ng-fantasy-btn" id="ngVideoRetry" type="button">COBA LAGI</button></div>';$("ngVideoRetry").onclick=ngShowVideos;}
+  }catch(cacheError){ngFeatureContent.innerHTML='<div class="ng-video-empty">'+ngEscape(e.message)+'</div>';}
+ }
 }
 function ngVideoPackages(){
  const html='<div class="ng-video-wrap"><div class="ng-video-status">Pilih masa aktif VIP. Waktu mulai dihitung setelah pembayaran berhasil dan terus berjalan meskipun kamu tidak sedang menonton.</div><div class="ng-video-grid">'+NG_VIDEO_PACKAGES.map(p=>'<article class="ng-video-card"><h4>'+p.label+'</h4><div class="ng-video-price">'+ngNovelRupiah(p.price)+'</div><button class="ng-fantasy-btn" type="button" data-video-package="'+p.code+'">PILIH PAKET</button></article>').join("")+'</div><button class="ng-fantasy-btn secondary" id="ngVideoBack" type="button">KEMBALI</button></div>';
