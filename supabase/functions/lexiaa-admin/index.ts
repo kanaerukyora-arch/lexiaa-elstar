@@ -78,7 +78,7 @@ Deno.serve(async req => {
   const bearer = (req.headers.get("Authorization") || "").replace(/^Bearer\s+/i, "");
   const db = createClient(url, service, { auth: { persistSession: false, autoRefreshToken: false } });
 
-  const customerAction = ["novel_catalog", "novel_buy", "novel_download"].includes(String(input.action || ""));
+  const customerAction = ["novel_catalog", "novel_buy", "novel_download", "video_catalog", "video_status", "video_stream", "video_vip_purchase", "video_buy"].includes(String(input.action || ""));
   if (customerAction) {
     if (!bearer) return json({ error: "Silakan masuk ke akun LEXIAA terlebih dahulu." }, 401);
     const { data: authData, error: authError } = await db.auth.getUser(bearer);
@@ -88,6 +88,63 @@ Deno.serve(async req => {
       auth: { persistSession: false, autoRefreshToken: false },
       global: { headers: { Authorization: "Bearer " + bearer } },
     });
+
+    if (input.action === "video_status") {
+      const { data, error } = await db.from("ng_video_vip_subscriptions").select("package_code,starts_at,ends_at").eq("user_id", customer.id).maybeSingle();
+      if (error) return json({ error: "Gagal memeriksa VIP: " + error.message }, 400);
+      const active = Boolean(data && new Date(data.ends_at).getTime() > Date.now());
+      return json({ vip_active: active, subscription: data || null, server_time: new Date().toISOString() });
+    }
+
+    if (input.action === "video_catalog") {
+      const [{ data: videos, error: videoError }, { data: purchases, error: purchaseError }, { data: subscription, error: subError }] = await Promise.all([
+        db.from("ng_videos").select("id,title,price,mime_type,file_size,created_at").eq("is_published", true).order("created_at", { ascending: false }),
+        db.from("ng_video_purchases").select("video_id").eq("user_id", customer.id),
+        db.from("ng_video_vip_subscriptions").select("ends_at,package_code").eq("user_id", customer.id).maybeSingle()
+      ]);
+      if (videoError || purchaseError || subError) return json({ error: "Gagal memuat katalog video." }, 400);
+      const owned = new Set((purchases || []).map((p: any) => p.video_id));
+      const active = Boolean(subscription && new Date(subscription.ends_at).getTime() > Date.now());
+      return json({ vip_active: active, subscription: subscription || null, videos: (videos || []).map((v: any) => ({
+        id: v.id, title: v.title, price: Number(v.price), mime_type: v.mime_type, file_size: Number(v.file_size),
+        owned: owned.has(v.id), playable: active && (Number(v.price) === 0 || owned.has(v.id))
+      })) });
+    }
+
+    if (input.action === "video_stream") {
+      const videoId = String(input.video_id || "");
+      if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(videoId)) return json({ error: "Video tidak valid." }, 400);
+      const [{ data: sub }, { data: video }, { data: purchase }] = await Promise.all([
+        db.from("ng_video_vip_subscriptions").select("ends_at").eq("user_id", customer.id).maybeSingle(),
+        db.from("ng_videos").select("id,title,price,video_path,mime_type").eq("id", videoId).eq("is_published", true).maybeSingle(),
+        db.from("ng_video_purchases").select("id").eq("user_id", customer.id).eq("video_id", videoId).maybeSingle()
+      ]);
+      if (!sub || new Date(sub.ends_at).getTime() <= Date.now()) return json({ error: "Langganan VIP kamu sudah berakhir. Aktifkan VIP kembali untuk menonton." }, 403);
+      if (!video) return json({ error: "Video tidak ditemukan." }, 404);
+      if (Number(video.price) > 0 && !purchase) return json({ error: "Video ini harus dibeli terlebih dahulu." }, 403);
+      const { data: signed, error: signError } = await db.storage.from("lexiaa-ng-videos").createSignedUrl(video.video_path, 90);
+      if (signError || !signed?.signedUrl) return json({ error: "Gagal menyiapkan pemutaran video." }, 400);
+      return json({ url: signed.signedUrl, mime_type: video.mime_type, title: video.title });
+    }
+
+    if (input.action === "video_vip_purchase") {
+      const packageCode = String(input.package_code || "");
+      const phone = String(input.phone || "");
+      const pin = String(input.pin || "");
+      const { data, error } = await userDb.rpc("ng_video_vip_purchase", { p_phone: phone, p_pin: pin, p_package: packageCode });
+      if (error) return json({ error: "Pembayaran VIP gagal diproses: " + error.message }, 400);
+      if (!data?.success) return json({ error: data?.message || "Pembayaran VIP tidak berhasil.", ...data }, 400);
+      return json(data);
+    }
+
+    if (input.action === "video_buy") {
+      const videoId = String(input.video_id || "");
+      if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(videoId)) return json({ error: "Video tidak valid." }, 400);
+      const { data, error } = await userDb.rpc("ng_video_purchase", { p_phone: String(input.phone || ""), p_pin: String(input.pin || ""), p_video_id: videoId });
+      if (error) return json({ error: "Pembelian video gagal diproses: " + error.message }, 400);
+      if (!data?.success) return json({ error: data?.message || "Pembelian tidak berhasil.", ...data }, 400);
+      return json(data);
+    }
 
     if (input.action === "novel_catalog") {
       const [{ data: novels, error: novelError }, { data: purchases, error: purchaseError }] = await Promise.all([
@@ -143,6 +200,54 @@ Deno.serve(async req => {
     return json({ error: "Sesi admin tidak valid atau kedaluwarsa. Silakan masuk kembali." }, 401);
   }
 
+
+  if (input.action === "video_list") {
+    const { data, error } = await db.from("ng_videos").select("id,title,price,video_path,mime_type,file_size,is_published,created_at").order("created_at", { ascending: false });
+    if (error) return json({ error: "Gagal memuat daftar video: " + error.message }, 400);
+    return json({ videos: data || [] });
+  }
+
+  if (input.action === "video_upload_sign") {
+    const ext = String(input.extension || "").toLowerCase();
+    const mime = ext === "mp4" ? "video/mp4" : ext === "webm" ? "video/webm" : "";
+    const size = Number(input.file_size);
+    if (!mime || !Number.isSafeInteger(size) || size < 1 || size > 52428800) return json({ error: "Video harus MP4/WebM dan maksimal 50 MB." }, 400);
+    const path = "admin/" + crypto.randomUUID() + "/video." + ext;
+    const { data, error } = await db.storage.from("lexiaa-ng-videos").createSignedUploadUrl(path);
+    if (error || !data?.token) return json({ error: "Gagal menyiapkan unggahan video: " + (error?.message || "Token upload tidak tersedia.") }, 400);
+    return json({ path, token: data.token, mime_type: mime });
+  }
+
+  if (input.action === "video_save") {
+    const title = String(input.title || "").trim(), price = Number(input.price);
+    const path = String(input.video_path || ""), mime = String(input.mime_type || "");
+    const size = Number(input.file_size);
+    if (!title || title.length > 160 || !Number.isSafeInteger(price) || price < 0 || price > 1000000000 ||
+        !path.startsWith("admin/") || !["video/mp4","video/webm"].includes(mime) ||
+        !Number.isSafeInteger(size) || size < 1 || size > 52428800) return json({ error: "Judul, harga, atau file video tidak valid." }, 400);
+    const { data, error } = await db.from("ng_videos").insert({ title, price, video_path: path, mime_type: mime, file_size: size, is_published: true })
+      .select("id,title,price,video_path,mime_type,file_size,is_published,created_at").single();
+    if (error) return json({ error: "Gagal menyimpan video: " + error.message }, 400);
+    return json({ success: true, video: data });
+  }
+
+  if (input.action === "video_publish") {
+    const id = String(input.id || "");
+    if (!id) return json({ error: "ID video tidak valid." }, 400);
+    const { error } = await db.from("ng_videos").update({ is_published: input.is_published === true, updated_at: new Date().toISOString() }).eq("id", id);
+    if (error) return json({ error: "Gagal mengubah status video: " + error.message }, 400);
+    return json({ success: true });
+  }
+
+  if (input.action === "video_delete") {
+    const id = String(input.id || "");
+    const { data: video, error: findError } = await db.from("ng_videos").select("id,video_path").eq("id", id).maybeSingle();
+    if (findError || !video) return json({ error: "Video tidak ditemukan." }, 404);
+    const { error } = await db.from("ng_videos").delete().eq("id", id);
+    if (error) return json({ error: "Video tidak dapat dihapus. Sembunyikan video agar riwayat pembelian tetap aman." }, 400);
+    await db.storage.from("lexiaa-ng-videos").remove([video.video_path]);
+    return json({ success: true });
+  }
 
   if (input.action === "novel_list") {
     const { data, error } = await db.from("lexiaa_novels")
