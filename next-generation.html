@@ -179,6 +179,8 @@ button,input{font:inherit}button{cursor:pointer}#particles{position:fixed;inset:
 #dashboardView .ng-novel-empty p{font-size:11px;color:#bfc8f2}
 @media(max-width:560px){#dashboardView .ng-novel-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}#dashboardView .ng-novel-head{padding:13px}#dashboardView .ng-novel-emblem{font-size:32px}}
 
+
+.ng-video-wrap{display:grid;gap:12px}.ng-video-status{padding:13px;border:1px solid #70eaff55;border-radius:13px;background:linear-gradient(120deg,#1b3150aa,#30204aaa);font-size:12px;line-height:1.6}.ng-video-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}.ng-video-card{overflow:hidden;border:1px solid #70eaff44;border-radius:15px;background:linear-gradient(145deg,#12233b,#17152e);padding:13px}.ng-video-card h4{margin:0 0 7px;font-size:14px}.ng-video-card p{margin:0 0 10px;color:#a9bed3;font-size:11px}.ng-video-card .ng-video-price{color:#a7f2ff;font-weight:800;margin-bottom:10px}.ng-video-card button,.ng-video-player-actions button{width:100%;margin-top:7px}.ng-video-player{width:100%;max-height:65vh;border-radius:13px;background:#000}.ng-video-player-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.ng-video-empty{text-align:center;padding:25px;color:#a9bed3;font-size:12px}.ng-video-tag{display:inline-block;padding:4px 8px;border:1px solid #9b8cff88;border-radius:99px;color:#d4c9ff;font-size:9px;margin-bottom:8px}
 </style>
 <style id="lexiaa-sidebar-footer-fix-v135">
 #dashboardView .lexiaa-sidebar{padding-bottom:12px}
@@ -965,7 +967,7 @@ body:has(#loginView.active) main{min-height:0}
         <button class="lexiaa-ng-card is-active" type="button" data-ng-feature="about"><span class="lexiaa-ng-art">📜</span><strong>TENTANG LEXIAA N.G</strong><small>Kenali dunia generasi baru</small></button>
         <button class="lexiaa-ng-card is-active" type="button" data-ng-feature="wallet"><span class="lexiaa-ng-art">💎</span><strong>SALDO LEXIAA N.G</strong><small>Identitas & saldo milikmu</small></button>
         <button class="lexiaa-ng-card is-active" type="button" data-ng-feature="shop"><span class="lexiaa-ng-art">📚</span><strong>LEXIAA NOVEL</strong><small>Jelajahi dan miliki kisah pilihan</small></button>
-        <div class="lexiaa-ng-card"><span class="lexiaa-ng-art">✧</span><strong>SEGERA HADIR</strong></div>
+        <button class="lexiaa-ng-card is-active" type="button" data-ng-feature="video"><span class="lexiaa-ng-art">🎬</span><strong>LEXIAA N.G VIDEO (VIP)</strong><small>Video eksklusif & mode offline</small></button>
         <div class="lexiaa-ng-card"><span class="lexiaa-ng-art">✧</span><strong>SEGERA HADIR</strong></div>
         <div class="lexiaa-ng-card"><span class="lexiaa-ng-art">✧</span><strong>SEGERA HADIR</strong></div>
       </div>
@@ -1066,7 +1068,7 @@ $("lexiaaMessagesBackdrop")?.addEventListener("click",e=>{if(e.target===$("lexia
 const ngFeatureBackdrop=$("ngFeatureBackdrop"),ngFeatureContent=$("ngFeatureContent");
 let ngReturnToMenu=false;
 function openNgFeature(){ngFeatureBackdrop.classList.add("open");ngFeatureBackdrop.setAttribute("aria-hidden","false");}
-function closeNgFeature(){ngFeatureBackdrop.classList.remove("open");ngFeatureBackdrop.setAttribute("aria-hidden","true");ngWalletState.pin="";ngWalletState.confirmPin="";if(ngReturnToMenu){ngReturnToMenu=false;openLexiaaNgMenu();}}
+function closeNgFeature(){ngFeatureBackdrop.classList.remove("open");ngFeatureBackdrop.setAttribute("aria-hidden","true");ngWalletState.pin="";ngWalletState.confirmPin="";ngVideoPayment=null;if(ngReturnToMenu){ngReturnToMenu=false;openLexiaaNgMenu();}}
 function ngFeatureTitle(title){$("ngFeatureTitle").textContent=title;}
 function ngShowAbout(){ngFeatureTitle("TENTANG LEXIAA N.G");ngFeatureContent.innerHTML='<div class="ng-story-copy"><p class="ng-greeting">Yoo, Akhirnya Kamu Datang Juga.</p><p>Aku Adalah Pemandu Mu saat di Lexiaa N.G. Tidak Seperti Lexiaa Old Pemandumu wanita, Di Lexiaa N.G Pemandu Nya Adalah Aku.</p><p>Disini Kita Baru Mengembangkan 2 Menu. Yaitu Saldo Lexiaa N.G dan SHOP N.G. di menu Saldo Lexiaa N.G kamu bisa melihat saldo mu dan bisa mengumpulkan saldo disana. Nantinya Saldo Mu Bisa Kamu Belikan Di Menu SHOP N.G Yang Sudah Kita Kembangkan.</p><p>Untuk Sekarang mungkin itu dulu yang bisa Ku jelaskan. Terimakasih Sudah Membaca.</p></div><div class="ng-feature-actions"><button class="ng-fantasy-btn" type="button" id="ngAboutOkay">DIMENGERTI</button></div>';$("ngAboutOkay").onclick=closeNgFeature;openNgFeature();}
 
@@ -1196,7 +1198,7 @@ function ngWalletDigit(digit,kind){let value=kind==="confirm"?ngWalletState.conf
 async function ngWalletPinComplete(kind){if(kind==="create"){ngWalletPin("confirm");return;}if(kind==="confirm"){if(ngWalletState.confirmPin!==ngWalletState.pin){ngWalletError("PIN tidak sama. Silakan ulangi konfirmasi.");ngWalletState.confirmPin="";[...$("ngPinDots").children].forEach(dot=>dot.classList.remove("filled"));return;}ngWalletName();return;}await ngWalletLogin();}
 function ngWalletName(){ngWalletState.stage="name";ngWalletShell("NAMA PENJELAJAH",'<div class="ng-auth-layout"><div class="ng-auth-art"><img class="ng-wallet-character" src="./lexiaa-ng-character.webp" alt="" draggable="false"></div><div class="ng-auth-panel"><div class="ng-auth-brand"><span class="ng-auth-mark">✦</span><span><b>LEXIAA</b><small>NEXT GENERATION</small></span></div><h3>Nama akunmu</h3><p class="ng-wallet-intro">Nama ini akan ditampilkan pada akun Saldo Lexiaa N.G.</p><input class="ng-wallet-input" id="ngWalletName" type="text" maxlength="32" autocomplete="off" placeholder="Masukkan nama akun"><p class="ng-wallet-error" id="ngWalletError" role="status"></p><div class="ng-feature-actions"><button class="ng-fantasy-btn" id="ngWalletCreate" type="button">BUAT AKUN</button></div></div></div>');$("ngWalletCreate").onclick=ngWalletRegister;}
 async function ngWalletRegister(){const name=$("ngWalletName").value.trim();if(name.length<2){ngWalletError("Nama akun minimal 2 karakter.");return;}const btn=$("ngWalletCreate");btn.disabled=true;btn.textContent="MENDAFTARKAN...";try{const{data,error}=await supabase.rpc("ng_wallet_register",{p_phone:ngWalletState.phone,p_pin:ngWalletState.pin,p_name:name});if(error)throw error;const result=Array.isArray(data)?data[0]:data;if(!result?.success)throw new Error(result?.message||"Pendaftaran belum berhasil.");ngWalletState.name=result.name||name;ngWalletShowAccount(result);}catch(e){ngWalletError(e.message||"Pendaftaran gagal. Coba lagi.");btn.disabled=false;btn.textContent="BUAT AKUN";}}
-async function ngWalletLogin(){const{data,error}=await supabase.rpc("ng_wallet_login",{p_phone:ngWalletState.phone,p_pin:ngWalletState.pin});if(error){ngWalletError(error.message||"Login gagal. Coba lagi.");return;}const result=Array.isArray(data)?data[0]:data;if(!result?.success){ngWalletError(result?.message||"Nomor atau PIN tidak cocok.");return;}ngWalletShowAccount(result);}
+async function ngWalletLogin(){if(ngVideoPayment){await ngVideoWalletAuthenticate();return;}const{data,error}=await supabase.rpc("ng_wallet_login",{p_phone:ngWalletState.phone,p_pin:ngWalletState.pin});if(error){ngWalletError(error.message||"Login gagal. Coba lagi.");return;}const result=Array.isArray(data)?data[0]:data;if(!result?.success){ngWalletError(result?.message||"Nomor atau PIN tidak cocok.");return;}ngWalletShowAccount(result);}
 async function ngWalletLoadHistory(){
  const host=$("ngWalletHistoryList");if(!host)return;
  try{
@@ -1223,7 +1225,98 @@ function ngWalletShowAccount(result){
 $("ngFeatureClose").addEventListener("click",closeNgFeature);
 /* N.G popups are intentionally modal: backdrop taps never dismiss them. */
 ngFeatureBackdrop.addEventListener("click",e=>{if(e.target===ngFeatureBackdrop){e.preventDefault();e.stopPropagation();}});
-$("lexiaaNgMenuBackdrop").querySelectorAll("[data-ng-feature]").forEach(btn=>btn.addEventListener("click",()=>{ngReturnToMenu=true;closeLexiaaNgMenu();if(btn.dataset.ngFeature==="about")ngShowAbout();if(btn.dataset.ngFeature==="wallet")ngWalletStart();if(btn.dataset.ngFeature==="shop")ngShowShop();}));
+
+let ngVideoPayment=null,ngVideoObjectUrl=null;
+const NG_VIDEO_PACKAGES=[
+ {code:"1h",label:"1 Jam",price:100000,duration:"1 jam"},
+ {code:"10h",label:"10 Jam",price:200000,duration:"10 jam"},
+ {code:"1d",label:"1 Hari",price:400000,duration:"24 jam"},
+ {code:"3d",label:"3 Hari",price:800000,duration:"3 hari"},
+ {code:"7d",label:"1 Minggu",price:1500000,duration:"7 hari"},
+ {code:"30d",label:"1 Bulan",price:3000000,duration:"30 hari"}
+];
+function ngVideoDialog(options){const p=ngNovelDialog(options);const k=document.querySelector("#ngNovelDialogRoot .ng-novel-dialog-kicker");if(k)k.textContent="LEXIAA · VIDEO VIP";return p;}
+function ngVideoLoading(message){const close=ngNovelLoading(message);const k=document.querySelector("#ngNovelDialogRoot .ng-novel-dialog-kicker");if(k)k.textContent="LEXIAA · VIDEO VIP";return close;}
+async function ngVideoDb(){return await new Promise((resolve,reject)=>{const req=indexedDB.open("lexiaa-ng-video-offline",1);req.onupgradeneeded=()=>{if(!req.result.objectStoreNames.contains("videos"))req.result.createObjectStore("videos",{keyPath:"id"});};req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error||new Error("Penyimpanan offline tidak tersedia."));});}
+async function ngVideoOfflineGet(id){const db=await ngVideoDb();return await new Promise((resolve,reject)=>{const tx=db.transaction("videos","readonly"),r=tx.objectStore("videos").get(id);r.onsuccess=()=>resolve(r.result||null);r.onerror=()=>reject(r.error);});}
+async function ngVideoOfflinePut(record){const db=await ngVideoDb();return await new Promise((resolve,reject)=>{const tx=db.transaction("videos","readwrite");tx.objectStore("videos").put(record);tx.oncomplete=()=>resolve(true);tx.onerror=()=>reject(tx.error||new Error("Penyimpanan offline gagal."));tx.onabort=()=>reject(tx.error||new Error("Penyimpanan offline dibatalkan."));});}
+async function ngVideoStart(){ngFeatureTitle("LEXIAA N.G VIDEO (VIP)");ngFeatureContent.innerHTML='<div class="ng-video-empty">Memuat perpustakaan video...</div>';openNgFeature();await ngShowVideos();}
+async function ngShowVideos(){
+ try{
+  const d=await ngNovelApi("video_catalog"),videos=d.videos||[],active=d.vip_active===true,sub=d.subscription;
+  const end=sub?.ends_at?new Date(sub.ends_at):null;
+  let html='<div class="ng-video-wrap"><div class="ng-video-status"><b>'+(active?'✦ VIP AKTIF':'◇ VIP BELUM AKTIF')+'</b><br>'+(active?'Masa aktif sampai '+end.toLocaleString("id-ID"):'Aktifkan VIP untuk membuka seluruh pemutaran video. File offline juga tetap memerlukan VIP aktif.')+'</div>';
+  if(!active)html+='<button class="ng-fantasy-btn" id="ngVideoChooseVip" type="button">PILIH LANGGANAN ANDA</button>';
+  html+='<div class="ng-video-grid">';
+  if(!videos.length)html+='<div class="ng-video-empty">Belum ada video yang diterbitkan.</div>';
+  for(const v of videos){
+   const playable=active&&(Number(v.price)===0||v.owned),price=Number(v.price)===0?"GRATIS UNTUK VIP":ngNovelRupiah(v.price);
+   html+='<article class="ng-video-card"><span class="ng-video-tag">'+(v.owned?'SUDAH DIMILIKI':Number(v.price)===0?'VIP INCLUDED':'VIDEO KHUSUS')+'</span><h4>'+ngEscape(v.title)+'</h4><p>'+Math.max(1,Math.round(v.file_size/1048576))+' MB · '+ngEscape(v.mime_type.replace("video/","").toUpperCase())+'</p><div class="ng-video-price">'+price+'</div>';
+   if(!active)html+='<button class="ng-fantasy-btn" type="button" data-video-vip="1">AKTIFKAN VIP</button>';
+   else if(Number(v.price)>0&&!v.owned)html+='<button class="ng-fantasy-btn" type="button" data-video-buy="'+v.id+'">BELI VIDEO</button>';
+   else html+='<button class="ng-fantasy-btn" type="button" data-video-play="'+v.id+'">▶ TONTON</button>';
+   if(playable)html+='<button class="ng-fantasy-btn secondary" type="button" data-video-offline="'+v.id+'">SIMPAN OFFLINE</button>';
+   html+='</article>';
+  }
+  html+='</div></div>';ngFeatureContent.innerHTML=html;
+  $("ngVideoChooseVip")?.addEventListener("click",ngVideoPackages);
+  ngFeatureContent.querySelectorAll("[data-video-vip]").forEach(b=>b.onclick=ngVideoPackages);
+  ngFeatureContent.querySelectorAll("[data-video-buy]").forEach(b=>b.onclick=()=>ngVideoBeginPayment({kind:"video",videoId:b.dataset.videoBuy,title:videos.find(v=>v.id===b.dataset.videoBuy)?.title}));
+  ngFeatureContent.querySelectorAll("[data-video-play]").forEach(b=>b.onclick=()=>ngVideoPlay(b.dataset.videoPlay));
+  ngFeatureContent.querySelectorAll("[data-video-offline]").forEach(b=>b.onclick=()=>ngVideoSaveOffline(b.dataset.videoOffline,b));
+ }catch(e){ngFeatureContent.innerHTML='<div class="ng-video-empty">'+ngEscape(e.message)+'<button class="ng-fantasy-btn" id="ngVideoRetry" type="button">COBA LAGI</button></div>';$("ngVideoRetry").onclick=ngShowVideos;}
+}
+function ngVideoPackages(){
+ const html='<div class="ng-video-wrap"><div class="ng-video-status">Pilih masa aktif VIP. Waktu mulai dihitung setelah pembayaran berhasil dan terus berjalan meskipun kamu tidak sedang menonton.</div><div class="ng-video-grid">'+NG_VIDEO_PACKAGES.map(p=>'<article class="ng-video-card"><h4>'+p.label+'</h4><div class="ng-video-price">'+ngNovelRupiah(p.price)+'</div><button class="ng-fantasy-btn" type="button" data-video-package="'+p.code+'">PILIH PAKET</button></article>').join("")+'</div><button class="ng-fantasy-btn secondary" id="ngVideoBack" type="button">KEMBALI</button></div>';
+ ngFeatureTitle("PILIH LANGGANAN VIP");ngFeatureContent.innerHTML=html;
+ ngFeatureContent.querySelectorAll("[data-video-package]").forEach(b=>b.onclick=async()=>{const p=NG_VIDEO_PACKAGES.find(x=>x.code===b.dataset.videoPackage);const choice=await ngVideoDialog({title:"Konfirmasi Langganan",message:"Paket "+p.label+" · "+ngNovelRupiah(p.price)+". Lanjutkan ke pembayaran Wallet N.G?",actions:[{label:"Batalkan",secondary:true},{label:"Bayar"}]});if(choice===1)ngVideoBeginPayment({kind:"vip",packageCode:p.code,label:p.label,amount:p.price});});
+ $("ngVideoBack").onclick=ngShowVideos;
+}
+function ngVideoBeginPayment(payment){ngVideoPayment=payment;ngWalletPhone("login");ngWalletState.mode="video-payment";ngFeatureTitle("PEMBAYARAN VIDEO VIP");}
+async function ngVideoWalletAuthenticate(){
+ const close=ngVideoLoading("Menghubungkan Ke Wallet N.G");
+ try{
+  const {data,error}=await supabase.rpc("ng_wallet_login",{p_phone:ngWalletState.phone,p_pin:ngWalletState.pin});
+  if(error)throw error;const account=Array.isArray(data)?data[0]:data;if(!account?.success)throw new Error(account?.message||"Nomor atau PIN Wallet tidak cocok.");
+  close();
+  const p=ngVideoPayment,amount=p.kind==="vip"?p.amount:Number((await ngNovelApi("video_catalog")).videos.find(v=>v.id===p.videoId)?.price||0);
+  const choice=await ngVideoDialog({title:"Periksa Pembayaran Wallet",message:"Nama: "+account.name+"\nNomor: "+account.phone+"\nSaldo tersedia: "+ngNovelRupiah(account.balance)+"\nPembayaran: "+ngNovelRupiah(amount)+"\n\nLanjutkan pembayaran?",actions:[{label:"Batalkan",secondary:true},{label:"Lanjutkan"}]});
+  if(choice!==1){ngVideoPayment=null;ngWalletState.pin="";ngShowVideos();return;}
+  const finish=ngVideoLoading("Lexiaa Sedang Melakukan Pembayaran");
+  let result;
+  try{result=p.kind==="vip"?await ngNovelApi("video_vip_purchase",{package_code:p.packageCode,phone:ngWalletState.phone,pin:ngWalletState.pin}):await ngNovelApi("video_buy",{video_id:p.videoId,phone:ngWalletState.phone,pin:ngWalletState.pin});}
+  finally{finish();}
+  ngWalletState.pin="";ngVideoPayment=null;
+  await ngVideoDialog({title:"Pembayaran Berhasil",message:"Pembayaran berhasil, anda bisa kapan saja membuka menu ini mulai sekarang.\n\nSaldo tersisa: "+ngNovelRupiah(result.balance),mark:"✓",actions:[{label:"Kembali",secondary:true},{label:"Lanjutkan"}]});
+  await ngShowVideos();
+ }catch(e){close();ngWalletState.pin="";ngVideoPayment=null;await ngVideoDialog({title:"Pembayaran Belum Berhasil",message:e.message||"Periksa saldo dan data Wallet N.G.",mark:"!",actions:[{label:"Mengerti"}]});ngShowVideos();}
+}
+async function ngVideoPlay(id){
+ try{
+  const status=await ngNovelApi("video_status");if(!status.vip_active)throw new Error("VIP kamu sudah berakhir. Aktifkan VIP kembali untuk menonton video offline maupun online.");
+  const local=await ngVideoOfflineGet(id);let src="";
+  if(local?.blob)src=URL.createObjectURL(local.blob);
+  else{const d=await ngNovelApi("video_stream",{video_id:id});src=d.url;}
+  if(ngVideoObjectUrl)URL.revokeObjectURL(ngVideoObjectUrl);ngVideoObjectUrl=src.startsWith("blob:")?src:null;
+  ngFeatureTitle("PEMUTAR VIDEO LEXIAA");ngFeatureContent.innerHTML='<div class="ng-video-wrap"><video id="ngVideoPlayer" class="ng-video-player" controls playsinline autoplay></video><p class="muted">'+(local?.blob?'Diputar dari penyimpanan offline.':'Streaming online.')+'</p><div class="ng-video-player-actions"><button class="ng-fantasy-btn secondary" id="ngVideoReturn">KEMBALI</button><button class="ng-fantasy-btn" id="ngVideoSaveFromPlayer">SIMPAN OFFLINE</button></div></div>';
+  $("ngVideoPlayer").src=src;$("ngVideoReturn").onclick=()=>{if(ngVideoObjectUrl)URL.revokeObjectURL(ngVideoObjectUrl);ngVideoObjectUrl=null;ngShowVideos();};$("ngVideoSaveFromPlayer").onclick=()=>ngVideoSaveOffline(id,$("ngVideoSaveFromPlayer"));
+ }catch(e){await ngVideoDialog({title:"Tidak Dapat Memutar",message:e.message,mark:"!",actions:[{label:"Mengerti"}]});}
+}
+async function ngVideoSaveOffline(id,button){
+ const old=button?.textContent;if(button){button.disabled=true;button.textContent="MENYIMPAN...";}
+ const close=ngVideoLoading("Menyiapkan Video Offline");
+ try{
+  const status=await ngNovelApi("video_status");if(!status.vip_active)throw new Error("VIP aktif diperlukan untuk menyimpan video offline.");
+  const cached=await ngVideoOfflineGet(id);if(cached?.blob){close();await ngVideoDialog({title:"Sudah Tersimpan",message:"Video ini sudah tersedia di perangkat untuk ditonton offline selama VIP aktif.",actions:[{label:"Oke"}]});return;}
+  const d=await ngNovelApi("video_stream",{video_id:id}),response=await fetch(d.url);if(!response.ok)throw new Error("Unduhan video gagal ("+response.status+").");
+  const blob=await response.blob();if(!blob.size)throw new Error("File video kosong.");
+  await ngVideoOfflinePut({id,blob,title:d.title,mime_type:d.mime_type,saved_at:new Date().toISOString()});
+  close();await ngVideoDialog({title:"Tersimpan Offline",message:"Video berhasil disimpan di perangkat ini. Kamu bisa menontonnya tanpa kuota pemutaran, tetapi VIP harus tetap aktif.",mark:"✓",actions:[{label:"Lanjutkan"}]});
+ }catch(e){close();await ngVideoDialog({title:"Gagal Menyimpan",message:e.message,mark:"!",actions:[{label:"Mengerti"}]});}
+ finally{if(button){button.disabled=false;button.textContent=old||"SIMPAN OFFLINE";}}
+}
+
+$("lexiaaNgMenuBackdrop").querySelectorAll("[data-ng-feature]").forEach(btn=>btn.addEventListener("click",()=>{ngReturnToMenu=true;closeLexiaaNgMenu();if(btn.dataset.ngFeature==="about")ngShowAbout();if(btn.dataset.ngFeature==="wallet")ngWalletStart();if(btn.dataset.ngFeature==="shop")ngShowShop();if(btn.dataset.ngFeature==="video")ngVideoStart();}));
 function openLexiaaNgMenu(){const el=$("lexiaaNgMenuBackdrop");el.classList.add("open");el.setAttribute("aria-hidden","false");}
 function closeLexiaaNgMenu(){const el=$("lexiaaNgMenuBackdrop");el.classList.remove("open");el.setAttribute("aria-hidden","true");}
 $("lexiaaSidebar")?.querySelector('[data-action="ng-menu"]')?.addEventListener("click",openLexiaaNgMenu);
