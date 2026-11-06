@@ -265,7 +265,7 @@ $("videoAdminForm").onsubmit=async e=>{
  try{
   if(file.size>52428800){notice("videoAdminNotice","File "+videoBytes(file.size)+" melebihi 50 MB. Memulai kompresi...");file=await compressVideoIfNeeded(file);}
   if(file.size>52428800)throw new Error("Video masih melebihi batas 50 MB.");
-  $("videoCompressBox").classList.remove("hidden");videoProgress(100,"Ukuran akhir: "+videoBytes(file.size));
+  $("videoCompressBox").classList.remove("hidden");$("videoProgressTitle").textContent=original.size>52428800?"Video Berhasil Dikompres":"Video Siap Diunggah";videoProgress(100,"Ukuran akhir: "+videoBytes(file.size));
   notice("videoAdminNotice","Menyiapkan unggahan "+videoBytes(file.size)+"...");
   const ext=file.type==="video/webm"?"webm":"mp4",mime=ext==="webm"?"video/webm":"video/mp4";
   const signed=await api({action:"video_upload_sign",extension:ext,file_size:file.size});
