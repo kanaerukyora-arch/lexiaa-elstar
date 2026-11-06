@@ -124,7 +124,7 @@ Deno.serve(async req => {
       if (Number(video.price) > 0 && !purchase) return json({ error: "Video ini harus dibeli terlebih dahulu." }, 403);
       const { data: signed, error: signError } = await db.storage.from("lexiaa-ng-videos").createSignedUrl(video.video_path, 90);
       if (signError || !signed?.signedUrl) return json({ error: "Gagal menyiapkan pemutaran video." }, 400);
-      return json({ url: signed.signedUrl, mime_type: video.mime_type, title: video.title });
+      return json({ url: signed.signedUrl, mime_type: video.mime_type, title: video.title, vip_ends_at: sub.ends_at });
     }
 
     if (input.action === "video_vip_purchase") {
