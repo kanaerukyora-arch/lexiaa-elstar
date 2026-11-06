@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#080b18"><title>LEXIAA ADMIN CENTER</title>
+<style>
+:root{color-scheme:dark;--bg:#080b18;--panel:#111a30;--panel2:#0b1427;--line:#263c5c;--cyan:#70eaff;--purple:#c2a0ff;--text:#eff8ff;--muted:#8fa7c2;--green:#91f2c9;--red:#ff718e}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 10% 0,#17385a 0,transparent 40%),radial-gradient(ellipse at 95% 15%,#39215d 0,transparent 38%),var(--bg);color:var(--text);font:14px Inter,system-ui,sans-serif;padding:20px}
+.shell{max-width:1200px;margin:auto}.brand{font-size:11px;letter-spacing:.22em;color:#b7f5ff;font-weight:900}.muted{color:var(--muted);font-size:12px;line-height:1.6}.panel{background:#111a30eF;border:1px solid #70dfff35;border-radius:18px;padding:20px;margin:14px 0;box-shadow:0 18px 55px #0005}h1{font-size:clamp(22px,4vw,30px);margin:8px 0}h2{font-size:16px;margin:0 0 12px}label{display:block;color:#9beaff;font-size:10px;font-weight:800;letter-spacing:.13em;margin:13px 0 6px}input,textarea,select{width:100%;border:1px solid #70dfff55;border-radius:10px;padding:12px;background:#071225;color:#fff;font:inherit;outline:none}textarea{min-height:100px;resize:vertical}button{border:1px solid #9af0ff;border-radius:10px;padding:11px 14px;background:linear-gradient(100deg,#baf8ff,#62dcf5,#c7a6ff);color:#07111d;font-weight:900;cursor:pointer}button:disabled{opacity:.5;cursor:wait}.secondary{background:#172746;color:#d5efff;border-color:#80dfff55}.danger{background:#3a1c2d;color:#ffd5de;border-color:#ff789866}.hidden{display:none!important}.notice{min-height:18px;color:#ffb5c3;font-size:12px;line-height:1.5;margin-top:9px}.notice.ok{color:var(--green)}.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.between{justify-content:space-between}.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:15px 0}.stat{padding:13px;border:1px solid #70dfff35;border-radius:13px;background:#09152a}.stat span{display:block;color:var(--muted);font-size:11px}.stat b{display:block;font-size:24px;margin-top:5px}.tabs{display:flex;gap:7px;flex-wrap:wrap;margin:14px 0}.tabs button{font-size:10px;padding:9px 12px}.tabs button.active{box-shadow:0 0 0 2px #70eaff55}.toolbar{display:grid;grid-template-columns:1fr 190px auto;gap:9px}.users{display:grid;gap:8px;margin-top:13px;max-height:470px;overflow:auto}.user{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;padding:13px;border:1px solid #70dfff2b;border-radius:12px;background:#09152a}.user strong{display:block;overflow-wrap:anywhere}.user small{display:block;color:var(--muted);font-size:11px;margin-top:4px;overflow-wrap:anywhere}.tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px}.tag{border:1px solid #7890ad66;color:#b6c9dc;border-radius:20px;padding:4px 7px;font-size:9px}.tag.on{border-color:#55e6b588;color:#9df4d1}.tag.wallet{border-color:#bda0ff88;color:#d7c6ff}.user button{padding:8px 11px;font-size:10px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.selected{color:#a9eaff;font-size:12px;line-height:1.6;margin:10px 0}.balance{font-size:27px;font-weight:900;color:#a6f5ff;margin:8px 0}.section-note{border-left:3px solid #bda0ff;padding:9px 12px;background:#bda0ff0c;color:#c4d3e5;font-size:11px;line-height:1.6;margin:12px 0}.login{max-width:470px;margin:8vh auto}.foot{font-size:10px;color:#6f88a4;text-align:center;margin:20px}
+@media(max-width:700px){body{padding:12px}.panel{padding:15px}.stats{grid-template-columns:repeat(2,1fr)}.toolbar{grid-template-columns:1fr}.grid{grid-template-columns:1fr}.user{grid-template-columns:1fr}.user button{width:100%}}
+</style>
+</head>
+<body><main class="shell">
+<div class="brand">✦ LEXIAA · ADMIN CONTROL CENTER</div>
+<section class="panel login" id="loginPanel">
+<h1>ADMIN ACCESS</h1><p class="muted">Panel mandiri untuk mengelola akun LEXIAA OLD, NEW GENERATION, Wallet, dan pesan.</p>
+<form id="loginForm">
+<label>ADMIN KEY</label><input id="adminKey" autocomplete="username" required>
+<label>ADMIN PASSWORD</label><input id="adminPassword" type="password" autocomplete="current-password" required>
+<p id="loginNotice" class="notice" role="status"></p><button id="loginButton" type="submit">MASUK PANEL</button>
+</form></section>
+<div id="adminPanel" class="hidden">
+<section class="panel">
+<div class="row between"><div><h1>LEXIAA ADMIN</h1><p class="muted">Account directory · Wallet management · Private messages</p></div><div class="row"><button class="secondary" id="refresh">REFRESH</button><button class="danger" id="logout">KELUAR</button></div></div>
+<div class="stats">
+<div class="stat"><span>Semua akun Auth</span><b id="total">—</b></div>
+<div class="stat"><span>LEXIAA OLD</span><b id="oldTotal">—</b></div>
+<div class="stat"><span>LEXIAA NEW</span><b id="newTotal">—</b></div>
+<div class="stat"><span>Wallet N.G.</span><b id="walletTotal">—</b></div>
+</div>
+<div class="section-note">Akun OLD dan NEW memakai direktori autentikasi Supabase yang sama. Status OLD/NEW dibaca dari tabel <b>lexiaa_profiles</b>; Wallet dibaca dari <b>ng_wallet_accounts</b>.</div>
+<div class="tabs" id="tabs">
+<button class="secondary active" data-filter="all">SEMUA</button><button class="secondary" data-filter="old">OLD</button><button class="secondary" data-filter="new">NEW</button><button class="secondary" data-filter="wallet">WALLET</button>
+</div>
+<div class="toolbar"><input id="search" type="search" placeholder="Cari nama, email, atau nomor HP Wallet..." autocomplete="off"><select id="sort"><option value="recent">Terbaru</option><option value="name">Nama A–Z</option></select><button class="secondary" id="clearSearch">RESET</button></div>
+<div id="userList" class="users"><p class="muted">Masuk untuk memuat akun.</p></div><p id="listNotice" class="notice"></p>
+</section>
+<section class="panel">
+<h2>AKUN TERPILIH</h2><div id="selectedUser" class="selected">Pilih akun untuk melihat detail dan mengirim pesan.</div>
+<form id="messageForm"><h2>Kirim Pesan ke LEXIAA NEW</h2><p class="muted">Pesan akan masuk ke menu Pesan di dashboard penerima.</p>
+<label>JUDUL</label><input id="messageTitle" maxlength="140" placeholder="Informasi penting" required>
+<label>ISI PESAN</label><textarea id="messageBody" maxlength="5000" placeholder="Tulis pesan..." required></textarea>
+<p id="messageNotice" class="notice"></p><button id="messageButton" disabled>KIRIM PESAN</button></form>
+</section>
+<section class="panel">
+<h2>WALLET NG · DAFTAR NOMOR TERDAFTAR</h2>
+<p class="muted">Daftar ini diambil langsung dari tabel ng_wallet_accounts. Hanya Wallet yang sudah terdaftar yang muncul di sini.</p>
+<div class="row"><button class="secondary" type="button" id="refreshWallets">MUAT ULANG WALLET</button><span class="muted" id="walletCount">0 nomor terdaftar</span></div>
+<form id="creditForm">
+<label>PILIH NOMOR WALLET TUJUAN</label><select id="walletRecipient" required><option value="">Memuat daftar Wallet...</option></select>
+<div id="walletRecipientInfo" class="selected">Pilih nomor Wallet untuk melihat nama dan saldo saat ini.</div>
+<label>NOMINAL (RUPIAH)</label><input id="amount" type="number" min="1" max="1000000000" step="1" placeholder="50000" required>
+<label>KETERANGAN</label><input id="description" maxlength="120" value="Top Up oleh Admin" required>
+<p id="creditNotice" class="notice"></p><button id="creditButton" disabled>KIRIM SALDO</button>
+</form><div id="walletList" class="users"><p class="muted">Masuk untuk memuat nomor Wallet.</p></div>
+</section>
+</div>
+<section class="panel" id="novelAdminPanel"><h2>LEXIAA NOVEL · KELOLA KATALOG</h2><p class="muted">Unggah PDF, atur harga, dan sampul novel. Login admin tetap sama dengan menu Wallet.</p><form id="novelAdminForm"><label>JUDUL NOVEL</label><input id="novelAdminTitle" maxlength="160" required><label>HARGA (RUPIAH)</label><input id="novelAdminPrice" type="number" min="0" max="1000000000" required><label>FILE PDF</label><input id="novelAdminPdf" type="file" accept="application/pdf,.pdf" required><label>SAMPUL</label><select id="novelAdminCoverMode"><option value="pdf">Ambil halaman pertama PDF</option><option value="custom">Gambar sendiri</option></select><div id="novelAdminCustomWrap" class="hidden"><label>GAMBAR SAMPUL</label><input id="novelAdminCover" type="file" accept="image/jpeg,image/png,image/webp"></div><p id="novelAdminNotice" class="notice"></p><button id="novelAdminSave">UNGGAH NOVEL</button></form><h2 style="margin-top:18px">DAFTAR NOVEL</h2><div id="novelAdminList" class="users"></div><button type="button" class="secondary" id="refreshNovels">MUAT ULANG</button></section><div class="foot">LEXIAA ADMIN CENTER · Jangan bagikan kredensial admin atau token sesi.</div>
+</main>
+<script type="module">
+const API_URL="https://sudvolmlzunzofzwjbfn.supabase.co/functions/v1/lexiaa-admin";
+const API_KEY="sb_publishable_OOUKks8e7IfILH7TsOit0g_8qK0hNiL";
+const $=id=>document.getElementById(id), rupiah=n=>new Intl.NumberFormat("id-ID",{style:"currency",currency:"IDR",maximumFractionDigits:0}).format(Number(n)||0);
+let token=sessionStorage.getItem("lexiaaAdminNewToken")||"",users=[],wallets=[],selected=null,filter="all";
+function notice(id,msg,ok=false){$(id).textContent=msg||"";$(id).className="notice"+(ok?" ok":"");}
+async function api(payload){
+ const response=await fetch(API_URL,{method:"POST",headers:{"Content-Type":"application/json","apikey":API_KEY,...(token?{Authorization:"Bearer "+token}:{})},body:JSON.stringify(payload)});
+ const raw=await response.text();let data={};try{data=raw?JSON.parse(raw):{};}catch{data={error:raw||"Respons server bukan JSON."};}
+ if(!response.ok){
+  const detail=data.error||data.message||("HTTP "+response.status+" · "+raw.slice(0,180));
+  if(response.status===401&&payload.action!=="login"){
+   throw new Error("401 / Invalid JWT: Supabase Gateway menolak token sebelum Edge Function berjalan. Deploy ulang function dengan --no-verify-jwt (atau pastikan [functions.lexiaa-admin] verify_jwt=false benar-benar terpasang). Ini bukan masalah password admin. Detail: "+detail);
+  }
+  throw new Error(detail);
+ }
+ return data;
+}
+const isOld=u=>u.old_registered===true;
+const isNew=u=>Boolean(u.nextgen_joined_at);
+function choose(u){selected=u;const bits=[u.display_name||u.username||"Pengguna",u.username?"@"+u.username:null,u.email?"Email: "+u.email:(u.email_hint?"Email: "+u.email_hint:null)].filter(Boolean);$("selectedUser").textContent=bits.join(" · ")+" | "+(isOld(u)?"OLD ":"")+(isNew(u)?"NEW":"");$("messageButton").disabled=false;notice("messageNotice","");paint();}
+function paint(){
+ const q=$("search").value.trim().toLocaleLowerCase("id-ID");
+ let list=users.filter(u=>{
+  const match=[u.username,u.display_name,u.email_hint,u.email,u.phone,u.wallet_name].some(v=>String(v||"").toLocaleLowerCase("id-ID").includes(q));
+  const tab=filter==="all"||(filter==="old"&&isOld(u))||(filter==="new"&&isNew(u))||(filter==="wallet"&&u.has_wallet);
+  return match&&tab;
+ });
+ if($("sort").value==="name")list.sort((a,b)=>String(a.display_name||a.username||a.email||"").localeCompare(String(b.display_name||b.username||b.email||""),"id"));
+ const host=$("userList");host.replaceChildren();
+ if(!list.length){const p=document.createElement("p");p.className="muted";p.textContent=users.length?"Tidak ada akun yang cocok.":"Belum ada akun yang dapat ditampilkan.";host.append(p);}
+ for(const u of list){
+  const item=document.createElement("div");item.className="user";const info=document.createElement("div"),name=document.createElement("strong"),meta=document.createElement("small"),tags=document.createElement("div"),btn=document.createElement("button");
+  name.textContent=u.display_name||u.username||u.email||"Pengguna LEXIAA";
+  meta.textContent=[u.username?"@"+u.username:null,u.email?"Email: "+u.email:(u.email_hint?"Email: "+u.email_hint:null),u.phone?"Nomor Wallet: "+u.phone:null].filter(Boolean).join(" · ")||"Email/nomor belum tersedia di direktori.";
+  tags.className="tags";
+  const addTag=(label,on,cls="")=>{const t=document.createElement("span");t.className="tag "+(on?"on ":"")+cls;t.textContent=label;tags.append(t);};
+  addTag("LEXIAA OLD",isOld(u));addTag("LEXIAA NEW",isNew(u));addTag(u.has_wallet?"WALLET · "+rupiah(u.balance):"TANPA WALLET",u.has_wallet,"wallet");
+  info.append(name,meta,tags);btn.type="button";btn.className="secondary";btn.textContent=selected?.id===u.id?"DIPILIH":"PILIH";btn.onclick=()=>choose(u);item.append(info,btn);host.append(item);
+ }
+ $("total").textContent=users.length;$("oldTotal").textContent=users.filter(isOld).length;$("newTotal").textContent=users.filter(isNew).length;$("walletTotal").textContent=wallets.length;
+}
+function renderWallets(){
+ const select=$("walletRecipient"), previous=select.value;select.replaceChildren();
+ const placeholder=document.createElement("option");placeholder.value="";placeholder.textContent=wallets.length?"-- Pilih nomor Wallet --":"Belum ada nomor Wallet terdaftar";select.append(placeholder);
+ wallets.forEach(w=>{const o=document.createElement("option");o.value=w.recipient_id;o.textContent=w.phone+" · "+(w.display_name||"Wallet")+" · "+rupiah(w.balance);select.append(o);});
+ if(wallets.some(w=>w.recipient_id===previous))select.value=previous;
+ $("walletCount").textContent=wallets.length+" nomor terdaftar";$("walletTotal").textContent=wallets.length;
+ const host=$("walletList");host.replaceChildren();
+ if(!wallets.length){const p=document.createElement("p");p.className="muted";p.textContent="Belum ada Wallet yang terdaftar.";host.append(p);}
+ wallets.forEach(w=>{const item=document.createElement("div");item.className="user";const info=document.createElement("div"),name=document.createElement("strong"),meta=document.createElement("small");name.textContent=w.phone;meta.textContent=(w.display_name||"Tanpa nama")+" · Saldo: "+rupiah(w.balance);info.append(name,meta);item.append(info);host.append(item);});
+ updateWalletRecipient();
+}
+function updateWalletRecipient(){const w=wallets.find(x=>x.recipient_id===$("walletRecipient").value);$("walletRecipientInfo").textContent=w?(w.display_name||"Wallet NG")+" · "+w.phone+" · Saldo saat ini: "+rupiah(w.balance):"Pilih nomor Wallet untuk melihat nama dan saldo saat ini.";$("creditButton").disabled=!w;}
+async function loadWallets(){
+ $("walletList").textContent="Memuat nomor Wallet...";notice("creditNotice","");
+ try{const d=await api({action:"wallet_accounts"});wallets=Array.isArray(d.wallets)?d.wallets:[];renderWallets();}
+ catch(e){$("walletList").textContent=e.message;wallets=[];renderWallets();notice("creditNotice","Gagal memuat daftar Wallet.");}
+}
+async function loadUsers(){
+ $("userList").textContent="Memuat akun...";notice("listNotice","");
+ try{
+  const data=await api({action:"users"});users=Array.isArray(data.users)?data.users:[];
+  if(selected)selected=users.find(u=>u.id===selected.id)||null;
+  if(selected){$("selectedUser").textContent=[selected.display_name||selected.username||selected.email||"Pengguna",selected.username?"@"+selected.username:null].filter(Boolean).join(" · ");}
+  else {$("selectedUser").textContent="Pilih akun dari daftar di atas.";$("messageButton").disabled=true;}
+  paint();
+  if(data.profile_directory_available===false)notice("listNotice","Peringatan: direktori lexiaa_profiles tidak dapat dibaca. Status OLD/NEW mungkin belum lengkap.");
+ }catch(e){$("userList").textContent=e.message;notice("listNotice","Periksa deployment Edge Function dan konfigurasi backend.");}
+}
+$("loginForm").addEventListener("submit",async e=>{e.preventDefault();$("loginButton").disabled=true;notice("loginNotice","Memverifikasi...");
+ try{const d=await api({action:"login",key:$("adminKey").value,password:$("adminPassword").value});if(!d.token)throw new Error("Server tidak mengembalikan token admin.");token=d.token;sessionStorage.setItem("lexiaaAdminNewToken",token);$("loginPanel").classList.add("hidden");$("adminPanel").classList.remove("hidden");await Promise.all([loadUsers(),loadWallets()]);}
+ catch(err){notice("loginNotice",err.message);}finally{$("loginButton").disabled=false;}});
+$("refresh").onclick=()=>{loadUsers();loadWallets();};$("refreshWallets").onclick=loadWallets;$("walletRecipient").onchange=updateWalletRecipient;$("search").oninput=paint;$("sort").onchange=paint;$("clearSearch").onclick=()=>{$("search").value="";filter="all";document.querySelectorAll("[data-filter]").forEach(b=>b.classList.toggle("active",b.dataset.filter==="all"));paint();};
+$("tabs").addEventListener("click",e=>{const b=e.target.closest("[data-filter]");if(!b)return;filter=b.dataset.filter;document.querySelectorAll("[data-filter]").forEach(x=>x.classList.toggle("active",x===b));paint();});
+$("creditForm").addEventListener("submit",async e=>{e.preventDefault();const recipient=$("walletRecipient").value;const w=wallets.find(x=>x.recipient_id===recipient);if(!w){notice("creditNotice","Pilih nomor Wallet yang terdaftar.");return;}const amount=Number($("amount").value);if(!Number.isSafeInteger(amount)||amount<1||amount>1e9){notice("creditNotice","Nominal harus Rp1 sampai Rp1.000.000.000.");return;}if(!confirm("Tambahkan "+rupiah(amount)+" ke Wallet nomor "+w.phone+" ("+(w.display_name||"tanpa nama")+")?"))return;
+ $("creditButton").disabled=true;notice("creditNotice","Memproses saldo...");
+ try{const d=await api({action:"wallet_credit",recipient_id:w.recipient_id,amount,description:$("description").value});notice("creditNotice","Berhasil. Saldo terbaru nomor "+w.phone+": "+rupiah(d.balance),true);$("amount").value="";await loadWallets();}
+ catch(err){notice("creditNotice",err.message);}finally{updateWalletRecipient();}});
+$("messageForm").addEventListener("submit",async e=>{e.preventDefault();if(!selected){notice("messageNotice","Pilih penerima terlebih dahulu.");return;}if(!isNew(selected)&&!confirm("Akun ini belum memiliki status LEXIAA NEW. Tetap kirim pesan?"))return;
+ $("messageButton").disabled=true;notice("messageNotice","Mengirim pesan...");
+ try{await api({action:"send",recipient_id:selected.id,title:$("messageTitle").value,body:$("messageBody").value});notice("messageNotice","Pesan berhasil dikirim.",true);$("messageForm").reset();}
+ catch(err){notice("messageNotice",err.message);}finally{$("messageButton").disabled=false;}});
+$("logout").onclick=()=>{token="";sessionStorage.removeItem("lexiaaAdminNewToken");users=[];wallets=[];selected=null;$("adminPanel").classList.add("hidden");$("loginPanel").classList.remove("hidden");$("loginForm").reset();};
+if(token){$("loginPanel").classList.add("hidden");$("adminPanel").classList.remove("hidden");Promise.all([loadUsers(),loadWallets()]);}
+</script></body></html>
