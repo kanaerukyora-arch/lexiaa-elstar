@@ -132,6 +132,20 @@ Deno.serve(async req => {
     });
   }
 
+  if (input.action === "wallet_accounts") {
+    const { data, error } = await db.from("ng_wallet_accounts")
+      .select("auth_user_id,phone,display_name,balance,created_at,updated_at")
+      .order("created_at", { ascending: false });
+    if (error) return json({ error: "Gagal membaca daftar Wallet: " + error.message }, 400);
+    return json({ wallets: (data || []).map((w: any) => ({
+      recipient_id: w.auth_user_id,
+      phone: w.phone,
+      display_name: w.display_name,
+      balance: Number(w.balance),
+      created_at: w.created_at,
+    })), total: (data || []).length });
+  }
+
   if (input.action === "send") {
     const recipient = String(input.recipient_id || "");
     const title = String(input.title || "").trim();
@@ -156,9 +170,9 @@ Deno.serve(async req => {
       return json({ error: "Pilih akun Wallet N.G dan masukkan nominal Rp1 sampai Rp1.000.000.000." }, 400);
     }
     const { data: account, error: accountError } = await db.from("ng_wallet_accounts")
-      .select("auth_user_id").eq("auth_user_id", recipient).maybeSingle();
+      .select("auth_user_id,phone").eq("auth_user_id", recipient).maybeSingle();
     if (accountError) return json({ error: "Gagal memeriksa akun Wallet: " + accountError.message }, 400);
-    if (!account) return json({ error: "Pengguna belum mendaftarkan Wallet LEXIAA N.G." }, 404);
+    if (!account) return json({ error: "Nomor Wallet tujuan tidak ditemukan atau sudah tidak terdaftar." }, 404);
     const { data, error } = await db.rpc("ng_wallet_admin_credit", {
       p_auth_user_id: recipient, p_amount: amount, p_description: description,
     });
