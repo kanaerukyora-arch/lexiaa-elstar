@@ -1175,14 +1175,8 @@ async function ngNovelBuy(novel,button){
  requestImmersive();
  const choice=await ngNovelDialog({title:"Konfirmasi Pembelian",message:'Kamu akan membeli "'+novel.title+'" seharga '+ngNovelRupiah(novel.price)+' menggunakan saldo Wallet N.G. Lanjutkan pembelian?',mark:"📚",actions:[{label:"BATAL",secondary:true},{label:"BELI SEKARANG"}]});
  if(choice!==1)return;
- button.disabled=true;button.textContent="MEMPROSES...";
- const closeLoading=ngNovelLoading("Lexiaa Sedang Memproses...");
- try{
-  const result=await ngNovelApi("novel_buy",{novel_id:novel.id});if(!result.success)throw new Error(result.message||"Pembelian gagal.");
-  closeLoading();
-  await ngNovelDialog({title:"Pembelian Berhasil",message:result.already_owned?"Novel ini sudah ada di koleksimu.":"Pembelian berhasil! Saldo tersisa: "+ngNovelRupiah(result.balance),mark:"✓",actions:[{label:"SELESAI"}]});
-  await ngShowShop();
- }catch(e){closeLoading();await ngNovelDialog({title:"Pembelian Gagal",message:e.message||"Terjadi kesalahan saat membeli novel.",mark:"!",actions:[{label:"TUTUP"}]});button.disabled=false;button.textContent="BELI SEKARANG";}
+ button.disabled=true;button.textContent="MENUNGGU PIN...";
+ await ngWalletPaymentStart({type:"novel",novelId:novel.id,title:novel.title,amount:novel.price,button});
 }
 async function ngShowShop(){
  ngFeatureTitle("LEXIAA NOVEL");
@@ -1234,7 +1228,7 @@ function ngWalletPhoneRender(){
 function ngWalletPhone(mode){
  ngWalletState.mode=mode;ngWalletState.phone="";ngWalletState.phoneDigits="";ngWalletState.region="ID";ngWalletState.pin="";ngWalletState.confirmPin="";ngWalletState.name="";ngWalletState.stage="phone";
  const options=ngPhoneRegions.map(r=>'<option value="'+r.id+'" '+(r.id==="ID"?"selected":"")+'>'+r.flag+'  '+ngEscape(r.name)+' ('+r.code+')</option>').join("");
- ngWalletShell(mode==="register"?"DAFTAR AKUN LEXIAA":"MASUK KE LEXIAA",'<div class="ng-auth-layout"><div class="ng-auth-art"><img class="ng-wallet-character" src="./lexiaa-ng-character.webp" alt="" draggable="false"><div class="ng-auth-art-copy">Senang melihatmu kembali ✦</div></div><div class="ng-auth-panel"><div class="ng-auth-brand"><span class="ng-auth-mark">✦</span><span><b>LEXIAA</b><small>NEXT GENERATION</small></span></div><h3>Nomor Telepon</h3><label class="ng-region-label" for="ngWalletRegion">PILIH REGION / NEGARA</label><select class="ng-region-select" id="ngWalletRegion">'+options+'</select><div class="ng-phone-entry"><span class="ng-phone-flag" id="ngWalletPhoneFlag">🇮🇩</span><span class="ng-phone-code" id="ngWalletPhoneCode">+62</span><span class="ng-phone-value" id="ngWalletPhoneDisplay"><span class="ng-phone-placeholder">8123 4567 890</span></span></div><p class="ng-phone-hint" id="ngWalletPhoneHint">Contoh: 8123 4567 890 · tanpa angka 0 di depan</p><div class="ng-phone-keypad" id="ngWalletPhoneKeypad"><button type="button" data-phone-digit="1">1</button><button type="button" data-phone-digit="2">2</button><button type="button" data-phone-digit="3">3</button><button type="button" data-phone-digit="4">4</button><button type="button" data-phone-digit="5">5</button><button type="button" data-phone-digit="6">6</button><button type="button" data-phone-digit="7">7</button><button type="button" data-phone-digit="8">8</button><button type="button" data-phone-digit="9">9</button><span></span><button type="button" data-phone-digit="0">0</button><button type="button" class="utility" data-phone-digit="back" aria-label="Hapus satu angka">⌫</button></div><p class="ng-wallet-error" id="ngWalletError" role="status"></p><div class="ng-feature-actions"><button class="ng-fantasy-btn" id="ngWalletPhoneNext" type="button" disabled>LANJUTKAN</button><button class="ng-fantasy-btn secondary" id="ngWalletCancel" type="button">KEMBALI</button></div><p class="ng-auth-safe">♢ Data akun diproses secara aman bersama LEXIAA</p></div></div>');
+ ngWalletShell(mode==="register"?"DAFTAR AKUN LEXIAA":mode==="payment-link"?"HUBUNGKAN WALLET N.G":"MASUK KE LEXIAA",'<div class="ng-auth-layout"><div class="ng-auth-art"><img class="ng-wallet-character" src="./lexiaa-ng-character.webp" alt="" draggable="false"><div class="ng-auth-art-copy">Senang melihatmu kembali ✦</div></div><div class="ng-auth-panel"><div class="ng-auth-brand"><span class="ng-auth-mark">✦</span><span><b>LEXIAA</b><small>NEXT GENERATION</small></span></div><h3>Nomor Telepon</h3><label class="ng-region-label" for="ngWalletRegion">PILIH REGION / NEGARA</label><select class="ng-region-select" id="ngWalletRegion">'+options+'</select><div class="ng-phone-entry"><span class="ng-phone-flag" id="ngWalletPhoneFlag">🇮🇩</span><span class="ng-phone-code" id="ngWalletPhoneCode">+62</span><span class="ng-phone-value" id="ngWalletPhoneDisplay"><span class="ng-phone-placeholder">8123 4567 890</span></span></div><p class="ng-phone-hint" id="ngWalletPhoneHint">Contoh: 8123 4567 890 · tanpa angka 0 di depan</p><div class="ng-phone-keypad" id="ngWalletPhoneKeypad"><button type="button" data-phone-digit="1">1</button><button type="button" data-phone-digit="2">2</button><button type="button" data-phone-digit="3">3</button><button type="button" data-phone-digit="4">4</button><button type="button" data-phone-digit="5">5</button><button type="button" data-phone-digit="6">6</button><button type="button" data-phone-digit="7">7</button><button type="button" data-phone-digit="8">8</button><button type="button" data-phone-digit="9">9</button><span></span><button type="button" data-phone-digit="0">0</button><button type="button" class="utility" data-phone-digit="back" aria-label="Hapus satu angka">⌫</button></div><p class="ng-wallet-error" id="ngWalletError" role="status"></p><div class="ng-feature-actions"><button class="ng-fantasy-btn" id="ngWalletPhoneNext" type="button" disabled>LANJUTKAN</button><button class="ng-fantasy-btn secondary" id="ngWalletCancel" type="button">KEMBALI</button></div><p class="ng-auth-safe">♢ Data akun diproses secara aman bersama LEXIAA</p></div></div>');
  $("ngWalletRegion").onchange=()=>{ngWalletState.region=$("ngWalletRegion").value;ngWalletState.phoneDigits="";ngWalletError("");ngWalletPhoneRender();};
  $("ngWalletPhoneKeypad").querySelectorAll("[data-phone-digit]").forEach(btn=>btn.addEventListener("click",()=>{
   const key=btn.dataset.phoneDigit,region=ngPhoneRegion();let value=ngWalletState.phoneDigits;
@@ -1247,18 +1241,92 @@ function ngWalletPhone(mode){
 function ngWalletPin(kind){
  ngWalletState.stage=kind==="create"?"pin-create":kind==="confirm"?"pin-confirm":"pin-login";
  if(kind==="confirm")ngWalletState.confirmPin="";else ngWalletState.pin="";
- const title=kind==="create"?"BUAT PIN RAHASIA":kind==="confirm"?"KONFIRMASI PIN":"MASUKKAN PIN ANDA";
- const desc=kind==="create"?"Buat PIN 4 digit untuk akunmu.":kind==="confirm"?"Masukkan kembali PIN yang sama.":"Masukkan PIN 4 digit akunmu.";
+ const title=kind==="create"?"BUAT PIN RAHASIA":kind==="confirm"?"KONFIRMASI PIN":kind==="payment"?"KONFIRMASI PEMBAYARAN":"MASUKKAN PIN ANDA";
+ const desc=kind==="create"?"Buat PIN 4 digit untuk akunmu.":kind==="confirm"?"Masukkan kembali PIN yang sama.":kind==="payment"?"Masukkan PIN Wallet N.G yang sudah terhubung.":"Masukkan PIN 4 digit akunmu.";
  const region=ngPhoneRegion();
  ngWalletShell(title,'<div class="ng-auth-layout ng-auth-pin"><div class="ng-auth-art"><img class="ng-wallet-character" src="./lexiaa-ng-character.webp" alt="" draggable="false"><div class="ng-auth-art-copy">Keamanan akunmu prioritas kami ✦</div></div><div class="ng-auth-panel"><div class="ng-auth-brand"><span class="ng-auth-mark">✦</span><span><b>LEXIAA</b><small>NEXT GENERATION</small></span></div><h3>🔒 '+ngEscape(desc)+'</h3><div class="ng-phone-entry ng-pin-phone"><span>'+region.flag+'</span><b>'+region.code+'</b><span>'+ngEscape(ngPhoneFormat(ngWalletState.phoneDigits))+'</span></div><div class="ng-pin-dots" id="ngPinDots"><i class="ng-pin-dot"></i><i class="ng-pin-dot"></i><i class="ng-pin-dot"></i><i class="ng-pin-dot"></i></div><div class="ng-keypad" id="ngWalletKeypad"><button class="ng-key" data-digit="1">1</button><button class="ng-key" data-digit="2">2</button><button class="ng-key" data-digit="3">3</button><button class="ng-key" data-digit="4">4</button><button class="ng-key" data-digit="5">5</button><button class="ng-key" data-digit="6">6</button><button class="ng-key" data-digit="7">7</button><button class="ng-key" data-digit="8">8</button><button class="ng-key" data-digit="9">9</button><span></span><button class="ng-key" data-digit="0">0</button><button class="ng-key utility" data-digit="back" aria-label="Hapus satu angka">⌫</button></div><p class="ng-wallet-error" id="ngWalletError" role="status"></p><div class="ng-feature-actions"><button class="ng-fantasy-btn secondary" id="ngWalletPinBack" type="button">KEMBALI</button></div><p class="ng-auth-safe">♢ PIN tidak pernah ditampilkan kepada pengguna lain</p></div></div>');
- $("ngWalletPinBack").onclick=()=>ngWalletPhone(ngWalletState.mode);
+ $("ngWalletPinBack").onclick=()=>{if(kind==="payment"){ngWalletPaymentCancel();return;}ngWalletPhone(ngWalletState.mode);};
  $("ngWalletKeypad").querySelectorAll("[data-digit]").forEach(btn=>btn.addEventListener("click",()=>ngWalletDigit(btn.dataset.digit,kind)));
 }
 function ngWalletDigit(digit,kind){let value=kind==="confirm"?ngWalletState.confirmPin:ngWalletState.pin;if(digit==="back")value=value.slice(0,-1);else if(value.length<4&&/^[0-9]$/.test(digit))value+=digit;if(kind==="confirm")ngWalletState.confirmPin=value;else ngWalletState.pin=value;[...$("ngPinDots").children].forEach((dot,i)=>dot.classList.toggle("filled",i<value.length));if(value.length===4)setTimeout(()=>ngWalletPinComplete(kind),130);}
-async function ngWalletPinComplete(kind){if(kind==="create"){ngWalletPin("confirm");return;}if(kind==="confirm"){if(ngWalletState.confirmPin!==ngWalletState.pin){ngWalletError("PIN tidak sama. Silakan ulangi konfirmasi.");ngWalletState.confirmPin="";[...$("ngPinDots").children].forEach(dot=>dot.classList.remove("filled"));return;}ngWalletName();return;}await ngWalletLogin();}
+async function ngWalletPinComplete(kind){if(kind==="create"){ngWalletPin("confirm");return;}if(kind==="confirm"){if(ngWalletState.confirmPin!==ngWalletState.pin){ngWalletError("PIN tidak sama. Silakan ulangi konfirmasi.");ngWalletState.confirmPin="";[...$("ngPinDots").children].forEach(dot=>dot.classList.remove("filled"));return;}ngWalletName();return;}if(kind==="payment"){ngWalletPaymentProcess(ngWalletState.account);return;}await ngWalletLogin();}
 function ngWalletName(){ngWalletState.stage="name";ngWalletShell("NAMA PENJELAJAH",'<div class="ng-auth-layout"><div class="ng-auth-art"><img class="ng-wallet-character" src="./lexiaa-ng-character.webp" alt="" draggable="false"></div><div class="ng-auth-panel"><div class="ng-auth-brand"><span class="ng-auth-mark">✦</span><span><b>LEXIAA</b><small>NEXT GENERATION</small></span></div><h3>Nama akunmu</h3><p class="ng-wallet-intro">Nama ini akan ditampilkan pada akun Saldo Lexiaa N.G.</p><input class="ng-wallet-input" id="ngWalletName" type="text" maxlength="32" autocomplete="off" placeholder="Masukkan nama akun"><p class="ng-wallet-error" id="ngWalletError" role="status"></p><div class="ng-feature-actions"><button class="ng-fantasy-btn" id="ngWalletCreate" type="button">BUAT AKUN</button></div></div></div>');$("ngWalletCreate").onclick=ngWalletRegister;}
 async function ngWalletRegister(){const name=$("ngWalletName").value.trim();if(name.length<2){ngWalletError("Nama akun minimal 2 karakter.");return;}const btn=$("ngWalletCreate");btn.disabled=true;btn.textContent="MENDAFTARKAN...";try{const{data,error}=await supabase.rpc("ng_wallet_register",{p_phone:ngWalletState.phone,p_pin:ngWalletState.pin,p_name:name});if(error)throw error;const result=Array.isArray(data)?data[0]:data;if(!result?.success)throw new Error(result?.message||"Pendaftaran belum berhasil.");ngWalletState.name=result.name||name;ngWalletShowAccount(result);}catch(e){ngWalletError(e.message||"Pendaftaran gagal. Coba lagi.");btn.disabled=false;btn.textContent="BUAT AKUN";}}
-async function ngWalletLogin(){if(ngVideoPayment){await ngVideoWalletAuthenticate();return;}const{data,error}=await supabase.rpc("ng_wallet_login",{p_phone:ngWalletState.phone,p_pin:ngWalletState.pin});if(error){ngWalletError(error.message||"Login gagal. Coba lagi.");return;}const result=Array.isArray(data)?data[0]:data;if(!result?.success){ngWalletError(result?.message||"Nomor atau PIN tidak cocok.");return;}ngWalletShowAccount(result);}
+async function ngWalletLogin(){
+ if(ngWalletState.mode==="payment-link"){
+  const{data,error}=await supabase.rpc("ng_wallet_link_payments",{p_phone:ngWalletState.phone,p_pin:ngWalletState.pin});
+  if(error){ngWalletError(error.message||"Wallet gagal dihubungkan.");return;}
+  const result=Array.isArray(data)?data[0]:data;
+  if(!result?.success){ngWalletError(result?.message||"Nomor atau PIN tidak cocok.");return;}
+  await ngWalletPaymentProcess(result);return;
+ }
+ const{data,error}=await supabase.rpc("ng_wallet_login",{p_phone:ngWalletState.phone,p_pin:ngWalletState.pin});
+ if(error){ngWalletError(error.message||"Login gagal. Coba lagi.");return;}
+ const result=Array.isArray(data)?data[0]:data;
+ if(!result?.success){ngWalletError(result?.message||"Nomor atau PIN tidak cocok.");return;}
+ ngWalletShowAccount(result);
+}
+
+async function ngWalletPaymentStart(payment){
+ ngWalletPendingPayment=payment;ngWalletState.pin="";
+ try{
+  const{data,error}=await supabase.rpc("ng_wallet_payment_status");
+  if(error)throw error;
+  const status=Array.isArray(data)?data[0]:data;
+  if(!status?.success)throw new Error(status?.message||"Status Wallet tidak dapat diperiksa.");
+  if(!status.has_wallet){
+   ngWalletPendingPayment=null;if(payment.button){payment.button.disabled=false;payment.button.textContent="BELI SEKARANG";}
+   await ngNovelDialog({title:"Wallet Belum Dibuat",message:"Buat akun Wallet N.G terlebih dahulu sebelum melakukan pembelian.",actions:[{label:"MENGERTI"}]});return;
+  }
+  ngWalletState.account=status;
+  if(status.linked){ngWalletState.mode="payment-pin";ngWalletPin("payment");}
+  else{ngWalletPhone("payment-link");ngFeatureTitle("HUBUNGKAN WALLET N.G");}
+ }catch(error){
+  ngWalletPendingPayment=null;if(payment.button){payment.button.disabled=false;payment.button.textContent="BELI SEKARANG";}
+  await ngNovelDialog({title:"Wallet Tidak Dapat Diperiksa",message:error.message||"Coba lagi.",mark:"!",actions:[{label:"TUTUP"}]});
+ }
+}
+function ngWalletPaymentCancel(){
+ const payment=ngWalletPendingPayment;ngWalletPendingPayment=null;ngWalletState.pin="";ngWalletState.mode="";
+ if(payment?.button){payment.button.disabled=false;payment.button.textContent="BELI SEKARANG";}
+ if(payment?.type==="video")ngShowVideos();else ngShowShop();
+}
+async function ngWalletPaymentProcess(account){
+ const payment=ngWalletPendingPayment;if(!payment)return;
+ const pin=ngWalletState.pin;
+ try{
+  if(!/^[0-9]{4}$/.test(pin))throw new Error("PIN harus tepat 4 digit.");
+  const amount=payment.type==="video"?(payment.amount||Number((await ngNovelApi("video_catalog")).videos.find(v=>v.id===payment.videoId)?.price||0)):payment.amount;
+  const message="Nama: "+(account?.name||"Wallet N.G")+
+   "\nNomor: "+(account?.phone||("•••• "+(account?.phone_hint||"----")))+
+   "\nSaldo tersedia: "+ngNovelRupiah(account?.balance||0)+
+   "\nPembayaran: "+ngNovelRupiah(amount)+"\n\nLanjutkan pembayaran?";
+  const choice=payment.type==="video"
+   ?await ngVideoDialog({title:"Periksa Pembayaran Wallet",message,actions:[{label:"Batalkan",secondary:true},{label:"Lanjutkan"}]})
+   :await ngNovelDialog({title:"Periksa Pembayaran Wallet",message,mark:"🔐",actions:[{label:"BATAL",secondary:true},{label:"LANJUTKAN"}]});
+  if(choice!==1){ngWalletPaymentCancel();return;}
+  const finish=payment.type==="video"?ngVideoLoading("Lexiaa Sedang Melakukan Pembayaran"):ngNovelLoading("Lexiaa Sedang Memproses...");
+  let result;
+  try{
+   if(payment.type==="novel")result=await ngNovelApi("novel_buy",{novel_id:payment.novelId,pin});
+   else if(payment.kind==="vip")result=await ngNovelApi("video_vip_purchase",{package_code:payment.packageCode,pin});
+   else result=await ngNovelApi("video_buy",{video_id:payment.videoId,pin});
+  }finally{finish();}
+  ngWalletState.pin="";ngWalletPendingPayment=null;ngVideoPayment=null;
+  const successMessage=payment.type==="video"
+   ?"Pembayaran berhasil. Saldo tersisa: "+ngNovelRupiah(result.balance)
+   :(result.already_owned?"Novel ini sudah ada di koleksimu.":"Pembelian berhasil! Saldo tersisa: "+ngNovelRupiah(result.balance));
+  if(payment.type==="video")await ngVideoDialog({title:"Pembayaran Berhasil",message:successMessage,mark:"✓",actions:[{label:"LANJUT"}]});
+  else await ngNovelDialog({title:"Pembelian Berhasil",message:successMessage,mark:"✓",actions:[{label:"SELESAI"}]});
+  if(payment.type==="video")await ngShowVideos();else await ngShowShop();
+ }catch(error){
+  ngWalletState.pin="";ngWalletPendingPayment=null;ngVideoPayment=null;
+  if(payment.button){payment.button.disabled=false;payment.button.textContent="BELI SEKARANG";}
+  if(payment.type==="video"){await ngVideoDialog({title:"Pembayaran Belum Berhasil",message:error.message||"Periksa saldo dan PIN Wallet N.G.",mark:"!",actions:[{label:"MENGERTI"}]});await ngShowVideos();}
+  else{await ngNovelDialog({title:"Pembelian Gagal",message:error.message||"Periksa saldo dan PIN Wallet N.G.",mark:"!",actions:[{label:"TUTUP"}]});}
+ }
+}
+
 async function ngWalletLoadHistory(){
  const host=$("ngWalletHistoryList");if(!host)return;
  try{
@@ -1286,7 +1354,7 @@ $("ngFeatureClose").addEventListener("click",closeNgFeature);
 /* N.G popups are intentionally modal: backdrop taps never dismiss them. */
 ngFeatureBackdrop.addEventListener("click",e=>{if(e.target===ngFeatureBackdrop){e.preventDefault();e.stopPropagation();}});
 
-let ngVideoPayment=null,ngVideoObjectUrl=null,ngVideoPosterObjectUrls=[];
+let ngVideoPayment=null,ngWalletPendingPayment=null,ngVideoObjectUrl=null,ngVideoPosterObjectUrls=[];
 function ngVideoClearPosterUrls(){for(const url of ngVideoPosterObjectUrls)URL.revokeObjectURL(url);ngVideoPosterObjectUrls=[];}
 const NG_VIDEO_PACKAGES=[
  {code:"1h",label:"1 Jam",price:100000,duration:"1 jam"},
@@ -1378,7 +1446,7 @@ function ngVideoNav(active){
  ngFeatureContent.querySelectorAll("[data-video-package]").forEach(b=>b.onclick=async()=>{const p=NG_VIDEO_PACKAGES.find(x=>x.code===b.dataset.videoPackage);const choice=await ngVideoDialog({title:"Konfirmasi Langganan",message:"Paket "+p.label+" · "+ngNovelRupiah(p.price)+". Lanjutkan ke pembayaran Wallet N.G?",actions:[{label:"Batalkan",secondary:true},{label:"Bayar"}]});if(choice===1)ngVideoBeginPayment({kind:"vip",packageCode:p.code,label:p.label,amount:p.price});});
  $("ngVideoBack").onclick=ngShowVideos;
 }
-function ngVideoBeginPayment(payment){ngVideoPayment=payment;ngWalletPhone("login");ngWalletState.mode="video-payment";ngFeatureTitle("PEMBAYARAN VIDEO VIP");}
+function ngVideoBeginPayment(payment){ngVideoPayment=payment;ngWalletPaymentStart({type:"video",...payment});}
 async function ngVideoWalletAuthenticate(){
  const close=ngVideoLoading("Menghubungkan Ke Wallet N.G");
  try{
