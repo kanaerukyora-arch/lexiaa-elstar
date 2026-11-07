@@ -64,6 +64,10 @@
  <p id="proSettingsNotice" class="notice"></p><button type="button" id="saveProSettings">SIMPAN PENGATURAN PRO</button>
  <h2 style="margin-top:22px">DAFTAR PENGAJUAN</h2><div id="proApplicationList" class="users"><p class="muted">Memuat pengajuan...</p></div>
  <p id="proApplicationNotice" class="notice"></p>
+ <h2 style="margin-top:22px">ANGGOTA PRO · EDIT MASA AKTIF / NONAKTIFKAN</h2>
+ <p class="muted">Admin dapat mengubah tanggal mulai dan berakhir. Penonaktifan wajib disertai catatan.</p>
+ <div id="proMembershipList" class="users"><p class="muted">Memuat anggota Pro...</p></div>
+ <p id="proMembershipNotice" class="notice"></p>
 </section>
 <section class="panel">
 <h2>WALLET NG · DAFTAR NOMOR TERDAFTAR</h2>
@@ -159,6 +163,41 @@ async function saveProSettings(){
  catch(e){notice("proSettingsNotice",e.message);}
  finally{btn.disabled=false;}
 }
+const localDateTimeValue=value=>{const d=new Date(value);if(!Number.isFinite(d.getTime()))return "";const z=new Date(d.getTime()-d.getTimezoneOffset()*60000);return z.toISOString().slice(0,16);};
+async function loadProMemberships(){
+ const host=$("proMembershipList");host.textContent="Memuat anggota Pro...";
+ try{
+  const d=await api({action:"pro_memberships"}),items=d.memberships||[];host.replaceChildren();
+  if(!items.length){host.textContent="Belum ada anggota Pro.";return;}
+  for(const m of items){
+   const app=m.application||{},card=document.createElement("article");card.className="pro-app-card";
+   const title=document.createElement("strong");title.textContent=(app.full_name||m.user_id)+" · "+String(m.status||"").toUpperCase();
+   const meta=document.createElement("div");meta.className="pro-app-meta";
+   meta.textContent="Wallet N.G: "+(app.wallet_phone||"—")+" · Email: "+(app.email||"—")+" · User ID: "+m.user_id+" · Catatan: "+(m.admin_note||"—");
+   const grid=document.createElement("div");grid.className="grid";
+   const startWrap=document.createElement("div"),endWrap=document.createElement("div"),startLabel=document.createElement("label"),endLabel=document.createElement("label"),start=document.createElement("input"),end=document.createElement("input");
+   startLabel.textContent="MULAI AKTIF";endLabel.textContent="AKHIR MASA AKTIF";start.type=end.type="datetime-local";start.value=localDateTimeValue(m.starts_at);end.value=localDateTimeValue(m.ends_at);
+   startWrap.append(startLabel,start);endWrap.append(endLabel,end);grid.append(startWrap,endWrap);
+   const note=document.createElement("textarea");note.maxLength=500;note.placeholder="Catatan admin (wajib jika dinonaktifkan)";note.value=m.admin_note||"";
+   const actions=document.createElement("div");actions.className="row";
+   const save=document.createElement("button");save.type="button";save.textContent="SIMPAN MASA AKTIF";
+   save.onclick=()=>updateProMembership(m.user_id,"active",start.value,end.value,note.value);
+   const disable=document.createElement("button");disable.type="button";disable.className="danger";disable.textContent="NONAKTIFKAN PRO";
+   disable.disabled=m.status!=="active";
+   disable.onclick=()=>{if(!note.value.trim()){notice("proMembershipNotice","Isi catatan admin sebelum menonaktifkan Pro.");note.focus();return;}if(confirm("Nonaktifkan LEXIAA N.G Pro untuk "+(app.full_name||m.user_id)+"?"))updateProMembership(m.user_id,"inactive",start.value,end.value,note.value);};
+   actions.append(save,disable);card.append(title,meta,grid,note,actions);host.append(card);
+  }
+ }catch(e){host.textContent=e.message;notice("proMembershipNotice","Gagal memuat anggota Pro.");}
+}
+async function updateProMembership(userId,status,startsAt,endsAt,note){
+ if(!startsAt||!endsAt){notice("proMembershipNotice","Tanggal mulai dan akhir wajib diisi.");return;}
+ notice("proMembershipNotice","Menyimpan perubahan keanggotaan...");
+ try{
+  await api({action:"pro_membership_update",user_id:userId,status,starts_at:new Date(startsAt).toISOString(),ends_at:new Date(endsAt).toISOString(),admin_note:note});
+  notice("proMembershipNotice",status==="active"?"Masa aktif Pro berhasil diperbarui.":"Keanggotaan Pro berhasil dinonaktifkan dan catatan tersimpan.",true);
+  await loadProMemberships();
+ }catch(e){notice("proMembershipNotice",e.message);}
+}
 async function loadProApplications(){
  const host=$("proApplicationList");host.textContent="Memuat pengajuan...";
  try{
@@ -194,7 +233,7 @@ async function decideProApplication(app,decision,days){
  }catch(e){notice("proApplicationNotice",e.message);}
 }
 $("saveProSettings").onclick=saveProSettings;
-$("refreshPro").onclick=()=>{loadProSettings();loadProApplications();};
+$("refreshPro").onclick=()=>{loadProSettings();loadProApplications();loadProMemberships();};
 async function loadUsers(){
  $("userList").textContent="Memuat akun...";notice("listNotice","");
  try{
@@ -207,7 +246,7 @@ async function loadUsers(){
  }catch(e){$("userList").textContent=e.message;notice("listNotice","Periksa deployment Edge Function dan konfigurasi backend.");}
 }
 $("loginForm").addEventListener("submit",async e=>{e.preventDefault();$("loginButton").disabled=true;notice("loginNotice","Memverifikasi...");
- try{const d=await api({action:"login",key:$("adminKey").value,password:$("adminPassword").value});if(!d.token)throw new Error("Server tidak mengembalikan token admin.");token=d.token;sessionStorage.setItem("lexiaaAdminNewToken",token);$("loginPanel").classList.add("hidden");$("adminPanel").classList.remove("hidden");await Promise.all([loadUsers(),loadWallets(),loadNovelAdmin(),loadVideoAdmin(),loadProSettings(),loadProApplications()]);}
+ try{const d=await api({action:"login",key:$("adminKey").value,password:$("adminPassword").value});if(!d.token)throw new Error("Server tidak mengembalikan token admin.");token=d.token;sessionStorage.setItem("lexiaaAdminNewToken",token);$("loginPanel").classList.add("hidden");$("adminPanel").classList.remove("hidden");await Promise.all([loadUsers(),loadWallets(),loadNovelAdmin(),loadVideoAdmin(),loadProSettings(),loadProApplications(),loadProMemberships()]);}
  catch(err){notice("loginNotice",err.message);}finally{$("loginButton").disabled=false;}});
 $("refresh").onclick=()=>{loadUsers();loadWallets();};$("refreshWallets").onclick=loadWallets;$("walletRecipient").onchange=updateWalletRecipient;$("search").oninput=paint;$("sort").onchange=paint;$("clearSearch").onclick=()=>{$("search").value="";filter="all";document.querySelectorAll("[data-filter]").forEach(b=>b.classList.toggle("active",b.dataset.filter==="all"));paint();};
 $("tabs").addEventListener("click",e=>{const b=e.target.closest("[data-filter]");if(!b)return;filter=b.dataset.filter;document.querySelectorAll("[data-filter]").forEach(x=>x.classList.toggle("active",x===b));paint();});
@@ -411,5 +450,5 @@ $("refreshVideos").onclick=loadVideoAdmin;
 
 
 $("logout").onclick=()=>{token="";sessionStorage.removeItem("lexiaaAdminNewToken");users=[];wallets=[];selected=null;$("adminPanel").classList.add("hidden");$("loginPanel").classList.remove("hidden");$("loginForm").reset();};
-if(token){$("loginPanel").classList.add("hidden");$("adminPanel").classList.remove("hidden");Promise.all([loadUsers(),loadWallets(),loadNovelAdmin(),loadVideoAdmin(),loadProSettings(),loadProApplications()]);}
+if(token){$("loginPanel").classList.add("hidden");$("adminPanel").classList.remove("hidden");Promise.all([loadUsers(),loadWallets(),loadNovelAdmin(),loadVideoAdmin(),loadProSettings(),loadProApplications(),loadProMemberships()]);}
 </script></body></html>
