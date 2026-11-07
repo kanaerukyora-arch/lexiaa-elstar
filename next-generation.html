@@ -1003,6 +1003,7 @@ html.ng-low-perf button,html.ng-low-perf input{transition:none!important}
 #lexiaaProBackdrop .pro-note{min-height:20px;margin-top:10px;color:#ffc1d0;font-size:11px;line-height:1.5}
 #lexiaaProBackdrop .pro-note.ok{color:#9af4cf}
 @media(max-width:560px){#lexiaaProBackdrop{padding:8px}#lexiaaProBackdrop .pro-modal{padding:18px;border-radius:18px}}
+#lexiaaProBackdrop{overscroll-behavior:contain;touch-action:pan-y}#lexiaaProBackdrop .pro-modal{overscroll-behavior:contain}#lexiaaProBackdrop .pro-close{z-index:5;box-shadow:0 3px 12px #0006}#lexiaaSidebar [data-action="pro-register"]{margin-top:5px;border:1px solid #a88aff66;background:linear-gradient(100deg,#9a70ff1c,#42c9f21a);color:#e9ddff;font-weight:800}#lexiaaSidebar [data-action="pro-register"] .lexiaa-nav-icon{color:#d3b1ff;text-shadow:0 0 12px #a879ff}
 </style>
 </head>
 <body><div id="particles" aria-hidden="true"></div><div class="wrap">
@@ -1161,6 +1162,8 @@ html.ng-low-perf button,html.ng-low-perf input{transition:none!important}
    <label for="lexiaaProBirth">TANGGAL LAHIR</label><input id="lexiaaProBirth" type="date" required>
    <label for="lexiaaProEmail">EMAIL AKTIF</label><input id="lexiaaProEmail" type="email" maxlength="254" autocomplete="email" placeholder="nama@email.com" required>
    <label for="lexiaaProWhatsapp">NOMOR WHATSAPP</label><input id="lexiaaProWhatsapp" type="tel" maxlength="20" autocomplete="tel" placeholder="+628123456789" required>
+   <label for="lexiaaProWalletPhone">NOMOR WALLET N.G</label><input id="lexiaaProWalletPhone" type="tel" maxlength="16" inputmode="tel" autocomplete="tel" placeholder="+628123456789" required>
+   <small style="display:block;color:#b9c9e8;font-size:10px;line-height:1.5;margin-top:5px">Masukkan nomor Wallet N.G milikmu yang sudah terdaftar. Bonus harian Rp5.000.000 akan dikirim ke nomor ini.</small>
    <p id="lexiaaProNotice" class="pro-note"></p>
    <button class="pro-submit" id="lexiaaProSubmit" type="submit">KIRIM PENGAJUAN</button>
   </form>
@@ -1230,13 +1233,13 @@ async function loadLexiaaProStatus(){
 }
 $("lexiaaSidebar")?.querySelector('[data-action="pro-register"]')?.addEventListener("click",openLexiaaPro);
 $("closeLexiaaPro")?.addEventListener("click",closeLexiaaPro);
-$("lexiaaProBackdrop")?.addEventListener("click",e=>{if(e.target===$("lexiaaProBackdrop"))closeLexiaaPro();});
+// Modal hanya dapat ditutup melalui tombol X.
 $("lexiaaProForm")?.addEventListener("submit",async e=>{
  e.preventDefault();const btn=$("lexiaaProSubmit"),note=$("lexiaaProNotice");btn.disabled=true;note.className="pro-note";note.textContent="Mengirim pengajuan...";
  try{
   const {data,error}=await supabase.rpc("ng_pro_submit_application",{
    p_full_name:$("lexiaaProFullName").value.trim(),p_birth_date:$("lexiaaProBirth").value,
-   p_email:$("lexiaaProEmail").value.trim(),p_whatsapp:$("lexiaaProWhatsapp").value.trim()
+   p_email:$("lexiaaProEmail").value.trim(),p_whatsapp:$("lexiaaProWhatsapp").value.trim(),p_wallet_phone:$("lexiaaProWalletPhone").value.trim()
   });
   if(error)throw error;if(!data?.success)throw new Error(data?.message||"Pengajuan gagal dikirim.");
   note.className="pro-note ok";note.textContent=data.message||"Pengajuan berhasil dikirim.";
@@ -1661,7 +1664,7 @@ function closeUpdates(){$("lexiaaUpdatesBackdrop").classList.remove("open");$("l
 $("lexiaaSidebar")?.querySelector('[data-action="updates"]')?.addEventListener("click",openUpdates);
 $("closeLexiaUpdates")?.addEventListener("click",closeUpdates);
 $("lexiaaUpdatesBackdrop")?.addEventListener("click",e=>{if(e.target===$("lexiaaUpdatesBackdrop"))closeUpdates();});
-document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeProfileSettings();closeUpdates();closeCropper();closeAccountSearch();closeLexiaaNgMenu();closeNgFeature();closeLexiaaMessages();closeLexiaaPro();}});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeProfileSettings();closeUpdates();closeCropper();closeAccountSearch();closeLexiaaNgMenu();closeNgFeature();closeLexiaaMessages();}});
 
 
 
