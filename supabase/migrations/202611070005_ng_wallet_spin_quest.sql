@@ -107,26 +107,26 @@ begin
   end if;
 
   -- Weighted roll out of 10,000,000 using cryptographically secure random bytes.
-  -- ZONK 80%; Rp1jt 15%; Rp2jt 4%; Rp3jt 0.9%; Rp100jt 0.09%;
-  -- Rp999jt 0.009%; Rp1M 0.001% (1 in 100,000).
+  -- ZONK 89.889889%; Rp1jt 10%; Rp2jt 0.1%; Rp3jt 0.01%;
+  -- Rp100jt 0.0001%; Rp999jt 0.00001%; Rp1M 0.000001% (1 in 100,000,000).
   v_bytes := extensions.gen_random_bytes(4);
   v_roll := (get_byte(v_bytes,0)::bigint << 24)
           + (get_byte(v_bytes,1)::bigint << 16)
           + (get_byte(v_bytes,2)::bigint << 8)
           + get_byte(v_bytes,3)::bigint;
-  v_roll := mod(v_roll,10000000);
+  v_roll := mod(v_roll,1000000000);
 
-  if v_roll < 8000000 then
+  if v_roll < 898898890 then
     v_prize := 'ZONK';
-  elsif v_roll < 9500000 then
+  elsif v_roll < 998898890 then
     v_prize := 'Rp1.000.000'; v_amount := 1000000;
-  elsif v_roll < 9900000 then
+  elsif v_roll < 999898890 then
     v_prize := 'Rp2.000.000'; v_amount := 2000000;
-  elsif v_roll < 9990000 then
+  elsif v_roll < 999998890 then
     v_prize := 'Rp3.000.000'; v_amount := 3000000;
-  elsif v_roll < 9999000 then
+  elsif v_roll < 999999890 then
     v_prize := 'Rp100.000.000'; v_amount := 100000000;
-  elsif v_roll < 9999900 then
+  elsif v_roll < 999999990 then
     v_prize := 'Rp999.000.000'; v_amount := 999000000;
   else
     v_prize := 'Rp1.000.000.000'; v_amount := 1000000000;
