@@ -213,21 +213,34 @@ async function compressVideoIfNeeded(file){
   if(!Number.isFinite(duration)||duration<=0)throw new Error("Durasi video tidak dapat dibaca.");
   videoProgress(2,"Memuat mesin kompresi FFmpeg...");
   const {FFmpeg}=await import("https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.10/dist/esm/index.js");
-  const {fetchFile,toBlobURL}=await import("https://cdn.jsdelivr.net/npm/@ffmpeg/util@0.12.1/dist/esm/index.js");
-  const ffmpeg=new FFmpeg();let progress=0;
-  ffmpeg.on("progress",({progress:p})=>{progress=Math.max(0,Math.min(1,p||0));videoProgress(8+progress*75,"Mengompres video · "+Math.round(progress*100)+"%");});
-  const base="https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.10/dist/umd";
-  // FFmpeg's default ESM worker points to jsDelivr, which browsers reject as a cross-origin Worker.
-  // Fetch it and its relative ESM imports, then create a Blob worker on this page's own origin.
-  const ffmpegPkg="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.10/dist/esm/";
-  const workerResponse=await fetch(ffmpegPkg+"worker.js");
-  if(!workerResponse.ok)throw new Error("Worker FFmpeg tidak dapat dimuat ("+workerResponse.status+"). Buka Admin Center melalui HTTPS dan coba lagi.");
-  let workerSource=await workerResponse.text();
-  workerSource=workerSource.replaceAll('"./const.js"','"'+ffmpegPkg+'const.js"').replaceAll('"./errors.js"','"'+ffmpegPkg+'errors.js"');
-  const classWorkerURL=URL.createObjectURL(new Blob([workerSource],{type:"text/javascript"}));
-  try{
-   await ffmpeg.load({classWorkerURL,coreURL:await toBlobURL(base+"/ffmpeg-core.js","text/javascript"),wasmURL:await toBlobURL(base+"/ffmpeg-core.wasm","application/wasm")});
-  }finally{URL.revokeObjectURL(classWorkerURL);}
+  const {fetchFile}=await import("https://cdn.jsdelivr.net/npm/@ffmpeg/util@0.12.1/dist/esm/index.js");
+  let ffmpeg=null,loadError=null,progress=0;
+  const mirrors=[
+   {pkg:"https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.10/dist/esm/",core:"https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.10/dist/umd/"},
+   {pkg:"https://unpkg.com/@ffmpeg/ffmpeg@0.12.10/dist/esm/",core:"https://unpkg.com/@ffmpeg/core@0.12.10/dist/umd/"}
+  ];
+  for(const mirror of mirrors){
+   let classWorkerURL="",coreURL="",wasmURL="";
+   try{
+    videoProgress(3,"Menyiapkan mesin kompresi...");
+    const workerResponse=await fetch(mirror.pkg+"worker.js");
+    if(!workerResponse.ok)throw new Error("Worker CDN gagal dimuat ("+workerResponse.status+").");
+    let workerSource=await workerResponse.text();
+    workerSource=workerSource.replace(/(["'])\\.\\/(const|errors)\\.js\\1/g,(_,quote,name)=>quote+mirror.pkg+name+".js"+quote);
+    classWorkerURL=URL.createObjectURL(new Blob([workerSource],{type:"text/javascript"}));
+    const [coreResponse,wasmResponse]=await Promise.all([fetch(mirror.core+"ffmpeg-core.js"),fetch(mirror.core+"ffmpeg-core.wasm")]);
+    if(!coreResponse.ok||!wasmResponse.ok)throw new Error("File mesin FFmpeg gagal dimuat dari CDN.");
+    coreURL=URL.createObjectURL(await coreResponse.blob());
+    wasmURL=URL.createObjectURL(await wasmResponse.blob());
+    const candidate=new FFmpeg();
+    candidate.on("progress",({progress:p})=>{progress=Math.max(0,Math.min(1,p||0));videoProgress(8+progress*75,"Mengompres video · "+Math.round(progress*100)+"%");});
+    await candidate.load({classWorkerURL,coreURL,wasmURL});
+    ffmpeg=candidate;
+    break;
+   }catch(error){loadError=error;}
+   finally{if(classWorkerURL)URL.revokeObjectURL(classWorkerURL);if(coreURL)URL.revokeObjectURL(coreURL);if(wasmURL)URL.revokeObjectURL(wasmURL);}
+  }
+  if(!ffmpeg)throw new Error("Mesin FFmpeg gagal dimuat dari dua CDN. "+(loadError?.message||"Periksa koneksi internet lalu coba lagi."));
   const ext=(file.name.toLowerCase().endsWith(".webm")?"webm":"mp4"),inputName="lexiaa-input."+ext;
   await ffmpeg.writeFile(inputName,await fetchFile(file));
   const audioRate=64000,targetBytes=45*1024*1024;
