@@ -1394,7 +1394,7 @@ async function ngVideoWalletAuthenticate(){
 }
 async function ngVideoPlay(id,mode="online"){
  try{
-  let src="",playLabel="";
+  let src="",playLabel="",thumbnailUrl="";
   if(mode==="offline"){
    const local=await ngVideoOfflineGet(id);
    if(!local?.blob)throw new Error("Video ini belum tersimpan di perangkat.");
@@ -1402,12 +1402,12 @@ async function ngVideoPlay(id,mode="online"){
    src=URL.createObjectURL(local.blob);playLabel="Diputar langsung dari penyimpanan perangkat. Tidak menggunakan internet.";
   }else{
    const d=await ngNovelApi("video_stream",{video_id:id});
-   src=d.url;playLabel="Streaming online. Video diambil dari server meskipun sudah tersimpan offline.";
+   src=d.url;thumbnailUrl=d.thumbnail_url||"";playLabel="Streaming online. Video diambil dari server meskipun sudah tersimpan offline.";
   }
   if(ngVideoObjectUrl)URL.revokeObjectURL(ngVideoObjectUrl);
   ngVideoObjectUrl=src.startsWith("blob:")?src:null;
   ngFeatureTitle(mode==="offline"?"PEMUTAR VIDEO OFFLINE":"PEMUTAR VIDEO ONLINE");
-  ngFeatureContent.innerHTML='<div class="ng-video-wrap"><video id="ngVideoPlayer" class="ng-video-player" controls playsinline autoplay preload="metadata" poster="'+(mode==="online"&&d.thumbnail_url?ngEscape(d.thumbnail_url):"")+'"></video><p class="muted">'+playLabel+'</p><div class="ng-video-player-actions"><button class="ng-fantasy-btn secondary" id="ngVideoReturn" type="button">KEMBALI</button>'+(mode==="online"?'<button class="ng-fantasy-btn" id="ngVideoSaveFromPlayer" type="button">SIMPAN OFFLINE</button>':'')+'</div></div>';
+  ngFeatureContent.innerHTML='<div class="ng-video-wrap"><video id="ngVideoPlayer" class="ng-video-player" controls playsinline autoplay preload="metadata" poster="'+(mode==="online"&&thumbnailUrl?ngEscape(thumbnailUrl):"")+'"></video><p class="muted">'+playLabel+'</p><div class="ng-video-player-actions"><button class="ng-fantasy-btn secondary" id="ngVideoReturn" type="button">KEMBALI</button>'+(mode==="online"?'<button class="ng-fantasy-btn" id="ngVideoSaveFromPlayer" type="button">SIMPAN OFFLINE</button>':'')+'</div></div>';
   $("ngVideoPlayer").src=src;
   $("ngVideoReturn").onclick=()=>{stopNgVideoPlayback();mode==="offline"?ngShowOfflineVideos():ngShowVideos();};
   $("ngVideoSaveFromPlayer")?.addEventListener("click",()=>ngVideoSaveOffline(id,$("ngVideoSaveFromPlayer")));
