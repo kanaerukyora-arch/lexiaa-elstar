@@ -214,13 +214,13 @@ async function compressVideoIfNeeded(file){
   videoProgress(2,"Memuat mesin kompresi FFmpeg...");
   const {FFmpeg}=await import("https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.10/dist/esm/index.js");
   const {fetchFile}=await import("https://cdn.jsdelivr.net/npm/@ffmpeg/util@0.12.1/dist/esm/index.js");
-  let ffmpeg=null,loadError=null,progress=0;
+  let ffmpeg=null,loadErrors=[],progress=0;
   const mirrors=[
    {pkg:"https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.10/dist/esm/",core:"https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.10/dist/umd/"},
    {pkg:"https://unpkg.com/@ffmpeg/ffmpeg@0.12.10/dist/esm/",core:"https://unpkg.com/@ffmpeg/core@0.12.10/dist/umd/"}
   ];
   for(const mirror of mirrors){
-   let classWorkerURL="",coreURL="",wasmURL="";
+   let classWorkerURL="";
    try{
     videoProgress(3,"Menyiapkan mesin kompresi...");
     const workerResponse=await fetch(mirror.pkg+"worker.js");
@@ -228,19 +228,17 @@ async function compressVideoIfNeeded(file){
     let workerSource=await workerResponse.text();
     workerSource=workerSource.replace(/(["'])\.\/(const|errors)\.js\1/g,(_,quote,name)=>quote+mirror.pkg+name+".js"+quote);
     classWorkerURL=URL.createObjectURL(new Blob([workerSource],{type:"text/javascript"}));
-    const [coreResponse,wasmResponse]=await Promise.all([fetch(mirror.core+"ffmpeg-core.js"),fetch(mirror.core+"ffmpeg-core.wasm")]);
-    if(!coreResponse.ok||!wasmResponse.ok)throw new Error("File mesin FFmpeg gagal dimuat dari CDN.");
-    coreURL=URL.createObjectURL(await coreResponse.blob());
-    wasmURL=URL.createObjectURL(await wasmResponse.blob());
     const candidate=new FFmpeg();
     candidate.on("progress",({progress:p})=>{progress=Math.max(0,Math.min(1,p||0));videoProgress(8+progress*75,"Mengompres video · "+Math.round(progress*100)+"%");});
-    await candidate.load({classWorkerURL,coreURL,wasmURL});
+    // Keep core and WASM on the CDN. Loading them directly avoids buffering a second
+    // 30+ MB WASM copy in Blob memory on Android devices.
+    await candidate.load({classWorkerURL,coreURL:mirror.core+"ffmpeg-core.js",wasmURL:mirror.core+"ffmpeg-core.wasm"});
     ffmpeg=candidate;
     break;
-   }catch(error){loadError=error;}
-   finally{if(classWorkerURL)URL.revokeObjectURL(classWorkerURL);if(coreURL)URL.revokeObjectURL(coreURL);if(wasmURL)URL.revokeObjectURL(wasmURL);}
+   }catch(error){loadErrors.push(mirror.pkg.split("/")[2]+": "+(error?.message||String(error)));}
+   finally{if(classWorkerURL)URL.revokeObjectURL(classWorkerURL);}
   }
-  if(!ffmpeg)throw new Error("Mesin FFmpeg gagal dimuat dari dua CDN. "+(loadError?.message||"Periksa koneksi internet lalu coba lagi."));
+  if(!ffmpeg)throw new Error("Mesin FFmpeg gagal dimuat. "+(loadErrors.join(" | ")||"Periksa koneksi internet, izin unduhan, dan ruang penyimpanan perangkat."));
   const ext=(file.name.toLowerCase().endsWith(".webm")?"webm":"mp4"),inputName="lexiaa-input."+ext;
   await ffmpeg.writeFile(inputName,await fetchFile(file));
   const audioRate=64000,targetBytes=45*1024*1024;
