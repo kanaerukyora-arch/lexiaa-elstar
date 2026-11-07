@@ -144,7 +144,7 @@ Deno.serve(async req => {
       const packageCode = String(input.package_code || "");
       const phone = String(input.phone || "");
       const pin = String(input.pin || "");
-      const { data, error } = await userDb.rpc("ng_video_vip_purchase", { p_phone: phone, p_pin: pin, p_package: packageCode });
+      const { data, error } = await userDb.rpc("ng_video_vip_purchase_linked", { p_pin: pin, p_package: packageCode });
       if (error) return json({ error: "Pembayaran VIP gagal diproses: " + error.message }, 400);
       if (!data?.success) return json({ error: data?.message || "Pembayaran VIP tidak berhasil.", ...data }, 400);
       return json(data);
@@ -153,7 +153,7 @@ Deno.serve(async req => {
     if (input.action === "video_buy") {
       const videoId = String(input.video_id || "");
       if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(videoId)) return json({ error: "Video tidak valid." }, 400);
-      const { data, error } = await userDb.rpc("ng_video_purchase", { p_phone: String(input.phone || ""), p_pin: String(input.pin || ""), p_video_id: videoId });
+      const { data, error } = await userDb.rpc("ng_video_purchase_linked", { p_pin: String(input.pin || ""), p_video_id: videoId });
       if (error) return json({ error: "Pembelian video gagal diproses: " + error.message }, 400);
       if (!data?.success) return json({ error: data?.message || "Pembelian tidak berhasil.", ...data }, 400);
       return json(data);
@@ -183,7 +183,7 @@ Deno.serve(async req => {
       if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(novelId)) {
         return json({ error: "Novel tidak valid." }, 400);
       }
-      const { data, error } = await userDb.rpc("lexiaa_novel_buy", { p_novel_id: novelId });
+      const { data, error } = await userDb.rpc("lexiaa_novel_buy_with_pin", { p_novel_id: novelId, p_pin: String(input.pin || "") });
       if (error) return json({ error: "Pembelian gagal diproses: " + error.message }, 400);
       if (!data?.success) return json({ error: data?.message || "Pembelian tidak berhasil." }, 400);
       return json(data);
