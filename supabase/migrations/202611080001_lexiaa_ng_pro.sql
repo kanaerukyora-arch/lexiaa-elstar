@@ -83,7 +83,7 @@ begin
  select * into v_settings from public.ng_pro_settings where id=true;
  return jsonb_build_object('success',true,'application_status',v_app.status,'application_created_at',v_app.created_at,
    'admin_note',v_app.admin_note,'pro_active',coalesce(v_member.status='active' and v_member.ends_at>now(),false),
-   'pro_ends_at',v_member.ends_at,'renewal_price',v_settings.renewal_price,'duration_days',v_settings.duration_days);
+   'pro_ends_at',v_member.ends_at,'membership_exists',v_member.user_id is not null,'renewal_price',v_settings.renewal_price,'duration_days',v_settings.duration_days);
 end $$;
 
 create or replace function public.ng_pro_claim_daily_bonus()
@@ -149,6 +149,10 @@ create table if not exists public.ng_wallet_spin_daily (
   primary key (auth_user_id, spin_date),
   check (quest_spins_used <= quest_spins_earned)
 );
+
+-- Upgrade the existing standard-user spin counter constraint for Pro accounts.
+alter table public.ng_wallet_spin_daily drop constraint if exists ng_wallet_spin_daily_free_spins_used_check;
+alter table public.ng_wallet_spin_daily add constraint ng_wallet_spin_daily_free_spins_used_check check (free_spins_used between 0 and 20);
 
 create table if not exists public.ng_wallet_spin_game_sessions (
   id uuid primary key default gen_random_uuid(),
