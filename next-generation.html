@@ -1313,7 +1313,7 @@ async function ngNovelDownload(id,button){
 }
 async function ngNovelBuy(novel,button){
  requestImmersive();
- const choice=await ngNovelDialog({title:"Konfirmasi Pembelian",message:'Kamu akan membeli "'+novel.title+'" seharga '+ngNovelRupiah(novel.price)+' menggunakan saldo Wallet N.G. Lanjutkan pembelian?',mark:"📚",actions:[{label:"BATAL",secondary:true},{label:"BELI SEKARANG"}]});
+ const choice=await ngNovelDialog({title:"Konfirmasi Pembelian",message:'Kamu akan membeli "'+novel.title+'" seharga '+ngNovelRupiah(novel.price)+(Number(novel.discount_percent)>0?' (diskon '+Number(novel.discount_percent)+'% dari '+ngNovelRupiah(novel.list_price)+')':'')+' menggunakan saldo Wallet N.G. Lanjutkan pembelian?',mark:"📚",actions:[{label:"BATAL",secondary:true},{label:"BELI SEKARANG"}]});
  if(choice!==1)return;
  button.disabled=true;button.textContent="MENUNGGU PIN...";
  await ngWalletPaymentStart({type:"novel",novelId:novel.id,title:novel.title,amount:novel.price,button});
@@ -1326,7 +1326,7 @@ async function ngShowShop(){
  try{
   const data=await ngNovelApi("novel_catalog");const novels=Array.isArray(data.novels)?data.novels:[];
   if(!novels.length){host.innerHTML='<div class="ng-novel-empty"><span>✧</span><b>Belum Ada Novel</b><p>Koleksi baru akan segera hadir di perpustakaan LEXIAA.</p></div>';return;}
-  host.innerHTML=novels.map(n=>'<article class="ng-novel-card"><div class="ng-novel-cover">'+(n.cover_url?'<img src="'+ngEscape(n.cover_url)+'" alt="Sampul '+ngEscape(n.title)+'" loading="lazy">':'<div class="ng-novel-cover-placeholder">📖<small>LEXIAA NOVEL</small></div>')+'</div><div class="ng-novel-info"><h4>'+ngEscape(n.title)+'</h4><strong>'+ngNovelRupiah(n.price)+'</strong><button type="button" class="ng-fantasy-btn ng-novel-action" data-novel-id="'+ngEscape(n.id)+'" data-owned="'+(n.owned?'1':'0')+'">'+(n.owned?'UNDUH NOVEL':'BELI SEKARANG')+'</button></div></article>').join("");
+  host.innerHTML=novels.map(n=>'<article class="ng-novel-card"><div class="ng-novel-cover">'+(n.cover_url?'<img src="'+ngEscape(n.cover_url)+'" alt="Sampul '+ngEscape(n.title)+'" loading="lazy">':'<div class="ng-novel-cover-placeholder">📖<small>LEXIAA NOVEL</small></div>')+'</div><div class="ng-novel-info"><h4>'+ngEscape(n.title)+'</h4>'+(Number(n.discount_percent)>0?'<div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap"><s style="opacity:.65;font-size:.85em">'+ngNovelRupiah(n.list_price)+'</s><strong style="color:#35d69a">'+ngNovelRupiah(n.price)+'</strong><small style="color:#35d69a;font-weight:800">DISKON '+Number(n.discount_percent)+'%</small></div>':'<strong>'+ngNovelRupiah(n.price)+'</strong>')+'<button type="button" class="ng-fantasy-btn ng-novel-action" data-novel-id="'+ngEscape(n.id)+'" data-owned="'+(n.owned?'1':'0')+'">'+(n.owned?'UNDUH NOVEL':'BELI SEKARANG')+'</button></div></article>').join("");
   host.querySelectorAll("[data-novel-id]").forEach(btn=>{const novel=novels.find(n=>n.id===btn.dataset.novelId);btn.onclick=()=>btn.dataset.owned==="1"?ngNovelDownload(novel.id,btn):ngNovelBuy(novel,btn);});
  }catch(e){host.innerHTML='<div class="ng-novel-empty"><b>Perpustakaan belum dapat dibuka</b><p>'+ngEscape(e.message)+'</p><button type="button" class="ng-fantasy-btn" id="ngNovelRetry">COBA LAGI</button></div>';$("ngNovelRetry").onclick=ngShowShop;}
 }
