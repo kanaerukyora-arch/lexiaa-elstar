@@ -1504,6 +1504,12 @@ const NG_VIDEO_PACKAGES=[
  {code:"7d",label:"1 Minggu",price:1500000,duration:"7 hari"},
  {code:"30d",label:"1 Bulan",price:3000000,duration:"30 hari"}
 ];
+let ngVideoProDiscountPercent=0;
+function ngVideoDiscountPrice(price){return Math.floor(Number(price||0)*(100-ngVideoProDiscountPercent)/100);}
+function ngVideoPriceMarkup(price){
+ const list=Number(price||0),discount=ngVideoProDiscountPercent,finalPrice=ngVideoDiscountPrice(list);
+ return discount>0?'<div class="ng-video-price"><s>'+ngNovelRupiah(list)+'</s><br><strong>'+ngNovelRupiah(finalPrice)+'</strong><small>Diskon Pro '+discount+'%</small></div>':'<div class="ng-video-price">'+ngNovelRupiah(list)+'</div>';
+}
 function ngVideoDialog(options){const p=ngNovelDialog(options);const k=document.querySelector("#ngNovelDialogRoot .ng-novel-dialog-kicker");if(k)k.textContent="LEXIAA · VIDEO VIP";return p;}
 function ngVideoLoading(message){const close=ngNovelLoading(message);const k=document.querySelector("#ngNovelDialogRoot .ng-novel-dialog-kicker");if(k)k.textContent="LEXIAA · VIDEO VIP";return close;}
 async function ngVideoDb(){return await new Promise((resolve,reject)=>{const req=indexedDB.open("lexiaa-ng-video-offline",1);req.onupgradeneeded=()=>{if(!req.result.objectStoreNames.contains("videos"))req.result.createObjectStore("videos",{keyPath:"id"});};req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error||new Error("Penyimpanan offline tidak tersedia."));});}
@@ -1529,7 +1535,7 @@ function ngVideoNav(active){
  async function ngShowVideos(){
   ngVideoClearPosterUrls();
   try{
-   const d=await ngNovelApi("video_catalog"),videos=d.videos||[],active=d.vip_active===true,sub=d.subscription;
+   const d=await ngNovelApi("video_catalog"),videos=d.videos||[],active=d.vip_active===true,sub=d.subscription;ngVideoProDiscountPercent=Number(d.discount_percent||0);
    const end=sub?.ends_at?new Date(sub.ends_at):null;
    let html='<div class="ng-video-wrap">'+ngVideoNav("online")+'<div class="ng-video-status"><b>'+(active?'VIP AKTIF':'VIP BELUM AKTIF')+'</b><br>'+(active?'Masa aktif sampai '+end.toLocaleString("id-ID"):'Aktifkan VIP untuk menonton video. Video yang sudah dibeli tetap memerlukan VIP aktif.')+'</div>';
    if(!active)html+='<button class="ng-fantasy-btn" id="ngVideoChooseVip" type="button">PILIH LANGGANAN VIP</button>';
@@ -1540,7 +1546,7 @@ function ngVideoNav(active){
     const saved=await ngVideoOfflineGet(v.id);
     html+='<article class="ng-video-card">'+ngVideoPoster(v.title,v.thumbnail_url)+'<h4>'+ngEscape(v.title)+'</h4>';
     if(!eligible){
-     html+='<button class="ng-fantasy-btn" type="button" data-video-buy="'+v.id+'">Beli Sekarang</button><div class="ng-video-price">'+ngNovelRupiah(v.price)+'</div>';
+     html+='<button class="ng-fantasy-btn" type="button" data-video-buy="'+v.id+'">Beli Sekarang</button>'+ngVideoPriceMarkup(v.list_price??v.price);
     }else{
      if(playable)html+='<button class="ng-fantasy-btn" type="button" data-video-play="'+v.id+'">Tonton Video Online</button>';
      else html+='<button class="ng-fantasy-btn" type="button" data-video-vip="1">Aktifkan VIP untuk Menonton</button>';
@@ -1552,7 +1558,7 @@ function ngVideoNav(active){
    html+='</div></div>';ngFeatureContent.innerHTML=html;ngVideoBindNav();
    $("ngVideoChooseVip")?.addEventListener("click",ngVideoPackages);
    ngFeatureContent.querySelectorAll("[data-video-vip]").forEach(b=>b.onclick=ngVideoPackages);
-   ngFeatureContent.querySelectorAll("[data-video-buy]").forEach(b=>b.onclick=()=>ngVideoBeginPayment({kind:"video",videoId:b.dataset.videoBuy,title:videos.find(v=>v.id===b.dataset.videoBuy)?.title}));
+   ngFeatureContent.querySelectorAll("[data-video-buy]").forEach(b=>b.onclick=()=>ngVideoBeginPayment({kind:"video",videoId:b.dataset.videoBuy,title:videos.find(v=>v.id===b.dataset.videoBuy)?.title,amount:Number(videos.find(v=>v.id===b.dataset.videoBuy)?.price||0)}));
    ngFeatureContent.querySelectorAll("[data-video-play]").forEach(b=>b.onclick=()=>ngVideoPlay(b.dataset.videoPlay,"online"));
    ngFeatureContent.querySelectorAll("[data-video-offline]").forEach(b=>b.onclick=()=>ngVideoSaveOffline(b.dataset.videoOffline,b));
   }catch(e){
@@ -1581,9 +1587,9 @@ function ngVideoNav(active){
   }
  }
  function ngVideoPackages(){
- const html='<div class="ng-video-wrap"><div class="ng-video-status">Pilih masa aktif VIP. Waktu mulai dihitung setelah pembayaran berhasil dan terus berjalan meskipun kamu tidak sedang menonton.</div><div class="ng-video-grid">'+NG_VIDEO_PACKAGES.map(p=>'<article class="ng-video-card"><h4>'+p.label+'</h4><div class="ng-video-price">'+ngNovelRupiah(p.price)+'</div><button class="ng-fantasy-btn" type="button" data-video-package="'+p.code+'">PILIH PAKET</button></article>').join("")+'</div><button class="ng-fantasy-btn secondary" id="ngVideoBack" type="button">KEMBALI</button></div>';
+ const html='<div class="ng-video-wrap"><div class="ng-video-status">Pilih masa aktif VIP. Waktu mulai dihitung setelah pembayaran berhasil dan terus berjalan meskipun kamu tidak sedang menonton.</div><div class="ng-video-grid">'+NG_VIDEO_PACKAGES.map(p=>'<article class="ng-video-card"><h4>'+p.label+'</h4>'+ngVideoPriceMarkup(p.price)+'<button class="ng-fantasy-btn" type="button" data-video-package="'+p.code+'">PILIH PAKET</button></article>').join("")+'</div><button class="ng-fantasy-btn secondary" id="ngVideoBack" type="button">KEMBALI</button></div>';
  ngFeatureTitle("PILIH LANGGANAN VIP");ngFeatureContent.innerHTML=html;
- ngFeatureContent.querySelectorAll("[data-video-package]").forEach(b=>b.onclick=async()=>{const p=NG_VIDEO_PACKAGES.find(x=>x.code===b.dataset.videoPackage);const choice=await ngVideoDialog({title:"Konfirmasi Langganan",message:"Paket "+p.label+" · "+ngNovelRupiah(p.price)+". Lanjutkan ke pembayaran Wallet N.G?",actions:[{label:"Batalkan",secondary:true},{label:"Bayar"}]});if(choice===1)ngVideoBeginPayment({kind:"vip",packageCode:p.code,label:p.label,amount:p.price});});
+ ngFeatureContent.querySelectorAll("[data-video-package]").forEach(b=>b.onclick=async()=>{const p=NG_VIDEO_PACKAGES.find(x=>x.code===b.dataset.videoPackage);const choice=await ngVideoDialog({title:"Konfirmasi Langganan",message:"Paket "+p.label+" · "+(ngVideoProDiscountPercent>0?ngNovelRupiah(p.price)+" menjadi "+ngNovelRupiah(ngVideoDiscountPrice(p.price)):ngNovelRupiah(p.price))+". Lanjutkan ke pembayaran Wallet N.G?",actions:[{label:"Batalkan",secondary:true},{label:"Bayar"}]});if(choice===1)ngVideoBeginPayment({kind:"vip",packageCode:p.code,label:p.label,amount:ngVideoDiscountPrice(p.price)});});
  $("ngVideoBack").onclick=ngShowVideos;
 }
 function ngVideoBeginPayment(payment){ngVideoPayment=payment;ngWalletPaymentStart({type:"video",...payment});}
