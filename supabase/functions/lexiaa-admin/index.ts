@@ -228,6 +228,46 @@ Deno.serve(async req => {
 
 
 
+  if (input.action === "pro_memberships") {
+    const { data, error } = await db.from("ng_pro_memberships")
+      .select("user_id,application_id,status,starts_at,ends_at,admin_note,updated_at")
+      .order("updated_at", { ascending: false });
+    if (error) return json({ error: "Gagal memuat anggota Pro: " + error.message }, 400);
+    const appIds = [...new Set((data || []).map((m: any) => m.application_id).filter(Boolean))];
+    let apps: any[] = [];
+    if (appIds.length) {
+      const { data: rows, error: appError } = await db.from("ng_pro_applications")
+        .select("id,full_name,email,wallet_phone").in("id", appIds);
+      if (appError) return json({ error: "Gagal memuat identitas anggota Pro: " + appError.message }, 400);
+      apps = rows || [];
+    }
+    const appMap = new Map(apps.map((a: any) => [a.id, a]));
+    return json({ memberships: (data || []).map((m: any) => ({ ...m, application: appMap.get(m.application_id) || null })) });
+  }
+
+  if (input.action === "pro_membership_update") {
+    const userId = String(input.user_id || "");
+    const status = input.status === "active" ? "active" : input.status === "inactive" ? "inactive" : "";
+    const startsAt = new Date(String(input.starts_at || "")).toISOString();
+    const endsAt = new Date(String(input.ends_at || "")).toISOString();
+    const note = String(input.admin_note || "").trim().slice(0, 500);
+    if (!userId || !status || !Number.isFinite(Date.parse(String(input.starts_at || ""))) ||
+        !Number.isFinite(Date.parse(String(input.ends_at || ""))) || new Date(endsAt) <= new Date(startsAt)) {
+      return json({ error: "Status atau rentang masa aktif tidak valid." }, 400);
+    }
+    if (status === "inactive" && !note) return json({ error: "Catatan admin wajib diisi saat menonaktifkan Pro." }, 400);
+    const { error } = await db.from("ng_pro_memberships").update({
+      status, starts_at: startsAt, ends_at: endsAt, admin_note: note || null, updated_at: new Date().toISOString()
+    }).eq("user_id", userId);
+    if (error) return json({ error: "Gagal memperbarui keanggotaan Pro: " + error.message }, 400);
+    const title = status === "active" ? "Status LEXIAA N.G Pro Diperbarui" : "LEXIAA N.G Pro Dinonaktifkan";
+    const body = status === "active"
+      ? "Masa aktif LEXIAA N.G Pro kamu telah diperbarui hingga " + new Date(endsAt).toLocaleString("id-ID", { timeZone: "Asia/Jakarta" }) + "." + (note ? "\\nCatatan admin: " + note : "")
+      : "Keanggotaan LEXIAA N.G Pro kamu telah dinonaktifkan." + "\\nCatatan admin: " + note;
+    await db.from("lexiaa_messages").insert({ recipient_id: userId, title, body });
+    return json({ success: true, status, starts_at: startsAt, ends_at: endsAt });
+  }
+
   if (input.action === "pro_applications") {
     const { data, error } = await db.from("ng_pro_applications")
       .select("id,user_id,full_name,birth_date,email,whatsapp,wallet_phone,status,created_at")
