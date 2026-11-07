@@ -180,7 +180,31 @@ button,input{font:inherit}button{cursor:pointer}#particles{position:fixed;inset:
 @media(max-width:560px){#dashboardView .ng-novel-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}#dashboardView .ng-novel-head{padding:13px}#dashboardView .ng-novel-emblem{font-size:32px}}
 
 
-.ng-video-wrap{display:grid;gap:12px}.ng-video-status{padding:13px;border:1px solid #70eaff55;border-radius:13px;background:linear-gradient(120deg,#1b3150aa,#30204aaa);font-size:12px;line-height:1.6}.ng-video-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}.ng-video-card{overflow:hidden;border:1px solid #70eaff44;border-radius:15px;background:linear-gradient(145deg,#12233b,#17152e);padding:13px}.ng-video-card h4{margin:0 0 7px;font-size:14px}.ng-video-card p{margin:0 0 10px;color:#a9bed3;font-size:11px}.ng-video-card .ng-video-price{color:#a7f2ff;font-weight:800;margin-bottom:10px}.ng-video-card button,.ng-video-player-actions button{width:100%;margin-top:7px}.ng-video-player{width:100%;max-height:65vh;border-radius:13px;background:#000}.ng-video-player-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.ng-video-empty{text-align:center;padding:25px;color:#a9bed3;font-size:12px}.ng-video-tag{display:inline-block;padding:4px 8px;border:1px solid #9b8cff88;border-radius:99px;color:#d4c9ff;font-size:9px;margin-bottom:8px}
+.ng-video-wrap{display:grid;gap:12px;padding:clamp(10px,2vw,22px);border-radius:18px;background:#f8f5e9;color:#181818;box-shadow:0 12px 35px #0005}
+.ng-video-status{padding:10px 12px;border:1px solid #ded9c9;border-radius:10px;background:#fffdf5;color:#49443a;font-size:12px;line-height:1.6}
+.ng-video-nav{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 5px;border-bottom:1px solid #d5d0c4}
+.ng-video-nav button{min-height:46px;padding:9px 7px;border:0;border-bottom:3px solid transparent;border-radius:0;background:transparent;color:#89867e;font:700 clamp(11px,2vw,17px) Georgia,serif;letter-spacing:0}
+.ng-video-nav button.active{border-bottom-color:#29251d;background:transparent;color:#211e19;box-shadow:none}
+.ng-video-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px 12px}
+.ng-video-card{min-width:0;overflow:hidden;border:0;border-radius:12px;background:transparent;padding:0;text-align:center}
+.ng-video-poster{display:grid;place-items:center;aspect-ratio:16/9;overflow:hidden;border-radius:11px;background:linear-gradient(135deg,#314a5b,#c08b62 52%,#e9bd7b);color:#fff;font-size:38px;text-shadow:0 2px 10px #0008}
+.ng-video-card:nth-child(4n+2) .ng-video-poster{background:linear-gradient(135deg,#304f68,#a56c55,#e8b87b)}
+.ng-video-card:nth-child(4n+3) .ng-video-poster{background:linear-gradient(135deg,#142d42,#427e83,#e6b76b)}
+.ng-video-card:nth-child(4n) .ng-video-poster{background:linear-gradient(135deg,#8b5262,#f0a45e,#f6d18a)}
+.ng-video-card h4{margin:7px 0 8px;font:800 clamp(12px,1.6vw,16px) Inter,sans-serif;color:#171717;line-height:1.25;overflow-wrap:anywhere}
+.ng-video-card p{margin:5px 0;color:#69645b;font-size:10px}
+.ng-video-card .ng-video-price{color:#191919;font-size:clamp(13px,1.7vw,17px);font-weight:500;margin:7px 0 0}
+.ng-video-card button,.ng-video-player-actions button{width:100%;min-height:38px;margin:4px 0 0;padding:7px 5px;border:0;border-radius:10px;background:#205640;color:#fff;font:700 clamp(10px,1.3vw,14px) Inter,sans-serif;line-height:1.2}
+.ng-video-card button[data-video-offline]{background:#48b5c0}
+.ng-video-card button[data-video-play]{background:#c52d2d}
+.ng-video-card button[data-video-buy]{background:#205640}
+.ng-video-card button:disabled{opacity:.5}
+.ng-video-tag{display:block;margin:5px 0 0;color:#27634c;font-size:10px;font-weight:800;letter-spacing:.04em}
+.ng-video-player{width:100%;max-height:65vh;border-radius:13px;background:#000}
+.ng-video-player-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.ng-video-empty{text-align:center;padding:25px;color:#6b655a;font-size:12px}
+@media(max-width:680px){.ng-video-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:15px 10px}.ng-video-nav button{font-size:11px;min-height:44px}.ng-video-card button{min-height:36px;font-size:10px}}
+@media(max-width:360px){.ng-video-nav{gap:3px}.ng-video-nav button{font-size:10px}}
 </style>
 <style id="lexiaa-sidebar-footer-fix-v135">
 #dashboardView .lexiaa-sidebar{padding-bottom:12px}
@@ -1244,65 +1268,72 @@ async function ngVideoOfflineGet(id){const db=await ngVideoDb();return await new
 async function ngVideoOfflineList(){const db=await ngVideoDb();return await new Promise((resolve,reject)=>{const tx=db.transaction("videos","readonly"),r=tx.objectStore("videos").getAll();r.onsuccess=()=>resolve(r.result||[]);r.onerror=()=>reject(r.error);});}
 async function ngVideoOfflinePut(record){const db=await ngVideoDb();return await new Promise((resolve,reject)=>{const tx=db.transaction("videos","readwrite");tx.objectStore("videos").put(record);tx.oncomplete=()=>resolve(true);tx.onerror=()=>reject(tx.error||new Error("Penyimpanan offline gagal."));tx.onabort=()=>reject(tx.error||new Error("Penyimpanan offline dibatalkan."));});}
 function ngVideoNav(active){
- return '<div class="ng-video-nav"><button type="button" class="'+(active==="online"?"active":"")+'" id="ngVideoOnlineTab">▶ TONTON ONLINE</button><button type="button" class="'+(active==="offline"?"active":"")+'" id="ngVideoOfflineTab">▣ TONTON OFFLINE</button></div>';
-}
-function ngVideoBindNav(){
- $("ngVideoOnlineTab")?.addEventListener("click",ngShowVideos);
- $("ngVideoOfflineTab")?.addEventListener("click",ngShowOfflineVideos);
-}
-async function ngVideoStart(){
- ngFeatureTitle("LEXIAA N.G VIDEO (VIP)");
- ngFeatureContent.innerHTML='<div class="ng-video-empty">Memuat perpustakaan video...</div>';
- openNgFeature();
- await ngShowVideos();
-}
-async function ngShowVideos(){
- try{
-  const d=await ngNovelApi("video_catalog"),videos=d.videos||[],active=d.vip_active===true,sub=d.subscription;
-  const end=sub?.ends_at?new Date(sub.ends_at):null;
-  let html='<div class="ng-video-wrap">'+ngVideoNav("online")+'<div class="ng-video-status"><b>'+(active?'✦ VIP AKTIF':'◇ VIP BELUM AKTIF')+'</b><br>'+(active?'Masa aktif sampai '+end.toLocaleString("id-ID"):'Aktifkan VIP untuk membuka seluruh pemutaran video. File offline juga tetap memerlukan VIP aktif.')+'</div>';
-  if(!active)html+='<button class="ng-fantasy-btn" id="ngVideoChooseVip" type="button">PILIH LANGGANAN ANDA</button>';
-  html+='<div class="ng-video-grid">';
-  if(!videos.length)html+='<div class="ng-video-empty">Belum ada video yang diterbitkan.</div>';
-  for(const v of videos){
-   const playable=active&&(Number(v.price)===0||v.owned),price=Number(v.price)===0?"GRATIS UNTUK VIP":ngNovelRupiah(v.price);
-   const saved=await ngVideoOfflineGet(v.id);
-   html+='<article class="ng-video-card"><span class="ng-video-tag">'+(v.owned?'SUDAH DIMILIKI':Number(v.price)===0?'VIP INCLUDED':'VIDEO KHUSUS')+'</span><h4>'+ngEscape(v.title)+'</h4><p>'+Math.max(1,Math.round(v.file_size/1048576))+' MB · '+ngEscape(v.mime_type.replace("video/","").toUpperCase())+'</p><div class="ng-video-price">'+price+'</div>';
-   if(!active)html+='<button class="ng-fantasy-btn" type="button" data-video-vip="1">AKTIFKAN VIP</button>';
-   else if(Number(v.price)>0&&!v.owned)html+='<button class="ng-fantasy-btn" type="button" data-video-buy="'+v.id+'">BELI VIDEO</button>';
-   else html+='<button class="ng-fantasy-btn" type="button" data-video-play="'+v.id+'">▶ TONTON ONLINE</button>';
-   if(playable)html+='<button class="ng-fantasy-btn secondary" type="button" data-video-offline="'+v.id+'">'+(saved?.blob?'✓ TERSIMPAN · PERBARUI OFFLINE':'SIMPAN OFFLINE')+'</button>';
-   html+='</article>';
-  }
-  html+='</div></div>';ngFeatureContent.innerHTML=html;ngVideoBindNav();
-  $("ngVideoChooseVip")?.addEventListener("click",ngVideoPackages);
-  ngFeatureContent.querySelectorAll("[data-video-vip]").forEach(b=>b.onclick=ngVideoPackages);
-  ngFeatureContent.querySelectorAll("[data-video-buy]").forEach(b=>b.onclick=()=>ngVideoBeginPayment({kind:"video",videoId:b.dataset.videoBuy,title:videos.find(v=>v.id===b.dataset.videoBuy)?.title}));
-  ngFeatureContent.querySelectorAll("[data-video-play]").forEach(b=>b.onclick=()=>ngVideoPlay(b.dataset.videoPlay,"online"));
-  ngFeatureContent.querySelectorAll("[data-video-offline]").forEach(b=>b.onclick=()=>ngVideoSaveOffline(b.dataset.videoOffline,b));
- }catch(e){
-  ngFeatureContent.innerHTML='<div class="ng-video-wrap">'+ngVideoNav("online")+'<div class="ng-video-empty">Katalog online belum dapat dibuka: '+ngEscape(e.message)+'<br>Periksa koneksi internet, atau buka menu Tonton Offline untuk video yang tersimpan di perangkat.</div></div>';
-  ngVideoBindNav();
+  return '<div class="ng-video-nav"><button type="button" class="'+(active==="online"?"active":"")+'" id="ngVideoOnlineTab">Tonton Video Online</button><button type="button" class="'+(active==="offline"?"active":"")+'" id="ngVideoOfflineTab">Tonton Video Offline Anda</button></div>';
  }
-}
-async function ngShowOfflineVideos(){
- try{
-  const saved=await ngVideoOfflineList();
-  const now=Date.now();
-  let html='<div class="ng-video-wrap">'+ngVideoNav("offline")+'<div class="ng-video-status"><b>▣ PERPUSTAKAAN OFFLINE</b><br>Hanya video yang tersimpan di perangkat ini. Pemutaran di sini tidak mengambil video dari internet.</div><div class="ng-video-grid">';
-  if(!saved.length)html+='<div class="ng-video-empty">Belum ada video yang disimpan offline. Buka Tonton Online lalu pilih SIMPAN OFFLINE.</div>';
-  for(const v of saved){
-   const valid=!!v.blob&&!!v.vip_ends_at&&now<new Date(v.vip_ends_at).getTime();
-   html+='<article class="ng-video-card"><span class="ng-video-tag">'+(valid?'✓ TERSIMPAN OFFLINE':'AKSES VIP BERAKHIR')+'</span><h4>'+ngEscape(v.title||"Video LEXIAA")+'</h4><p>'+(valid?'Akses sampai '+new Date(v.vip_ends_at).toLocaleString("id-ID"):'Sambungkan internet dan aktifkan VIP kembali untuk memperbarui akses.')+'</p><button class="ng-fantasy-btn" type="button" data-video-play-offline="'+v.id+'" '+(valid?'':'disabled')+'>▣ TONTON OFFLINE</button></article>';
-  }
-  html+='</div></div>';ngFeatureContent.innerHTML=html;ngVideoBindNav();
-  ngFeatureContent.querySelectorAll("[data-video-play-offline]").forEach(b=>b.onclick=()=>ngVideoPlay(b.dataset.videoPlayOffline,"offline"));
- }catch(e){
-  ngFeatureContent.innerHTML='<div class="ng-video-wrap">'+ngVideoNav("offline")+'<div class="ng-video-empty">Penyimpanan offline tidak dapat dibuka: '+ngEscape(e.message)+'</div></div>';
-  ngVideoBindNav();
+ function ngVideoBindNav(){
+  $("ngVideoOnlineTab")?.addEventListener("click",ngShowVideos);
+  $("ngVideoOfflineTab")?.addEventListener("click",ngShowOfflineVideos);
  }
-}
-function ngVideoPackages(){
+ async function ngVideoStart(){
+  ngFeatureTitle("LEXIAA N.G VIDEO (VIP)");
+  ngFeatureContent.innerHTML='<div class="ng-video-empty">Memuat perpustakaan video...</div>';
+  openNgFeature();
+  await ngShowVideos();
+ }
+ function ngVideoPoster(title){
+  return '<div class="ng-video-poster" aria-label="Pratinjau video">▶</div>';
+ }
+ async function ngShowVideos(){
+  try{
+   const d=await ngNovelApi("video_catalog"),videos=d.videos||[],active=d.vip_active===true,sub=d.subscription;
+   const end=sub?.ends_at?new Date(sub.ends_at):null;
+   let html='<div class="ng-video-wrap">'+ngVideoNav("online")+'<div class="ng-video-status"><b>'+(active?'VIP AKTIF':'VIP BELUM AKTIF')+'</b><br>'+(active?'Masa aktif sampai '+end.toLocaleString("id-ID"):'Aktifkan VIP untuk menonton video. Video yang sudah dibeli tetap memerlukan VIP aktif.')+'</div>';
+   if(!active)html+='<button class="ng-fantasy-btn" id="ngVideoChooseVip" type="button">PILIH LANGGANAN VIP</button>';
+   html+='<div class="ng-video-grid">';
+   if(!videos.length)html+='<div class="ng-video-empty">Belum ada video yang diterbitkan.</div>';
+   for(const v of videos){
+    const free=Number(v.price)===0,owned=!!v.owned,eligible=free||owned,playable=active&&eligible;
+    const saved=await ngVideoOfflineGet(v.id);
+    html+='<article class="ng-video-card">'+ngVideoPoster(v.title)+'<h4>'+ngEscape(v.title)+'</h4>';
+    if(!eligible){
+     html+='<button class="ng-fantasy-btn" type="button" data-video-buy="'+v.id+'">Beli Sekarang</button><div class="ng-video-price">'+ngNovelRupiah(v.price)+'</div>';
+    }else{
+     if(playable)html+='<button class="ng-fantasy-btn" type="button" data-video-play="'+v.id+'">Tonton Video Online</button>';
+     else html+='<button class="ng-fantasy-btn" type="button" data-video-vip="1">Aktifkan VIP untuk Menonton</button>';
+     if(playable)html+='<button class="ng-fantasy-btn secondary" type="button" data-video-offline="'+v.id+'">'+(saved?.blob?'Simpan Video Offline ✓':'Simpan Video Offline')+'</button>';
+     html+='<div class="ng-video-price">'+(free?'Rp0':'Sudah Dibeli')+'</div>';
+    }
+    html+='</article>';
+   }
+   html+='</div></div>';ngFeatureContent.innerHTML=html;ngVideoBindNav();
+   $("ngVideoChooseVip")?.addEventListener("click",ngVideoPackages);
+   ngFeatureContent.querySelectorAll("[data-video-vip]").forEach(b=>b.onclick=ngVideoPackages);
+   ngFeatureContent.querySelectorAll("[data-video-buy]").forEach(b=>b.onclick=()=>ngVideoBeginPayment({kind:"video",videoId:b.dataset.videoBuy,title:videos.find(v=>v.id===b.dataset.videoBuy)?.title}));
+   ngFeatureContent.querySelectorAll("[data-video-play]").forEach(b=>b.onclick=()=>ngVideoPlay(b.dataset.videoPlay,"online"));
+   ngFeatureContent.querySelectorAll("[data-video-offline]").forEach(b=>b.onclick=()=>ngVideoSaveOffline(b.dataset.videoOffline,b));
+  }catch(e){
+   ngFeatureContent.innerHTML='<div class="ng-video-wrap">'+ngVideoNav("online")+'<div class="ng-video-empty">Katalog online belum dapat dibuka: '+ngEscape(e.message)+'<br>Periksa koneksi internet, atau buka Tonton Video Offline Anda untuk video yang tersimpan di perangkat.</div></div>';
+   ngVideoBindNav();
+  }
+ }
+ async function ngShowOfflineVideos(){
+  try{
+   const saved=await ngVideoOfflineList();
+   const now=Date.now();
+   let html='<div class="ng-video-wrap">'+ngVideoNav("offline")+'<div class="ng-video-status"><b>PERPUSTAKAAN OFFLINE</b><br>Hanya video yang tersimpan di perangkat ini.</div><div class="ng-video-grid">';
+   if(!saved.length)html+='<div class="ng-video-empty">Belum ada video yang disimpan offline. Buka Tonton Video Online lalu pilih Simpan Video Offline.</div>';
+   for(const v of saved){
+    const valid=!!v.blob&&!!v.vip_ends_at&&now<new Date(v.vip_ends_at).getTime();
+    html+='<article class="ng-video-card">'+ngVideoPoster(v.title||"Video LEXIAA")+'<h4>'+ngEscape(v.title||"Video LEXIAA")+'</h4><div class="ng-video-tag">'+(valid?'Tersimpan Offline':'Akses VIP Berakhir')+'</div><button class="ng-fantasy-btn" type="button" data-video-play-offline="'+v.id+'" '+(valid?'':'disabled')+'>Tonton Video Offline</button></article>';
+   }
+   html+='</div></div>';ngFeatureContent.innerHTML=html;ngVideoBindNav();
+   ngFeatureContent.querySelectorAll("[data-video-play-offline]").forEach(b=>b.onclick=()=>ngVideoPlay(b.dataset.videoPlayOffline,"offline"));
+  }catch(e){
+   ngFeatureContent.innerHTML='<div class="ng-video-wrap">'+ngVideoNav("offline")+'<div class="ng-video-empty">Penyimpanan offline tidak dapat dibuka: '+ngEscape(e.message)+'</div></div>';
+   ngVideoBindNav();
+  }
+ }
+ function ngVideoPackages(){
  const html='<div class="ng-video-wrap"><div class="ng-video-status">Pilih masa aktif VIP. Waktu mulai dihitung setelah pembayaran berhasil dan terus berjalan meskipun kamu tidak sedang menonton.</div><div class="ng-video-grid">'+NG_VIDEO_PACKAGES.map(p=>'<article class="ng-video-card"><h4>'+p.label+'</h4><div class="ng-video-price">'+ngNovelRupiah(p.price)+'</div><button class="ng-fantasy-btn" type="button" data-video-package="'+p.code+'">PILIH PAKET</button></article>').join("")+'</div><button class="ng-fantasy-btn secondary" id="ngVideoBack" type="button">KEMBALI</button></div>';
  ngFeatureTitle("PILIH LANGGANAN VIP");ngFeatureContent.innerHTML=html;
  ngFeatureContent.querySelectorAll("[data-video-package]").forEach(b=>b.onclick=async()=>{const p=NG_VIDEO_PACKAGES.find(x=>x.code===b.dataset.videoPackage);const choice=await ngVideoDialog({title:"Konfirmasi Langganan",message:"Paket "+p.label+" · "+ngNovelRupiah(p.price)+". Lanjutkan ke pembayaran Wallet N.G?",actions:[{label:"Batalkan",secondary:true},{label:"Bayar"}]});if(choice===1)ngVideoBeginPayment({kind:"vip",packageCode:p.code,label:p.label,amount:p.price});});
