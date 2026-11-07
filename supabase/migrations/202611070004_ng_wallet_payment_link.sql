@@ -179,4 +179,4 @@ grant execute on function public.lexiaa_novel_buy_with_pin(uuid,text) to authent
 
 revoke all on function public.ng_video_vip_purchase(text,text,text) from authenticated;
 revoke all on function public.ng_video_purchase(text,text,uuid) from authenticated;
-revoke all on function public.lexiaa_novel_buy(uuid) from authenticated;
+revoke all on function public.lexiaa_novel_buy(uuid) from public,anon,authenticated;
