@@ -226,7 +226,11 @@ Deno.serve(async req => {
     const size = Number(input.file_size);
     const maxSize = ext === "jpg" ? 200000 : 52428800;
     if (!mime || !Number.isSafeInteger(size) || size < 1 || size > maxSize) return json({ error: "File video atau thumbnail tidak valid." }, 400);
-    const path = "admin/" + crypto.randomUUID() + (ext === "jpg" ? "/thumbnail.jpg" : "/video." + ext);
+    const requestedVideoPath = String(input.video_path || "");
+    const path = ext === "jpg"
+      ? (/^admin\/[a-f0-9-]+\/video\.(?:mp4|webm)$/i.test(requestedVideoPath) ? requestedVideoPath.replace(/\/video\.(?:mp4|webm)$/i, "/thumbnail.jpg") : "")
+      : "admin/" + crypto.randomUUID() + "/video." + ext;
+    if (!path) return json({ error: "Lokasi video untuk thumbnail tidak valid." }, 400);
     const { data, error } = await db.storage.from("lexiaa-ng-videos").createSignedUploadUrl(path);
     if (error || !data?.token) return json({ error: "Gagal menyiapkan unggahan video: " + (error?.message || "Token upload tidak tersedia.") }, 400);
     return json({ path, token: data.token, mime_type: mime });
