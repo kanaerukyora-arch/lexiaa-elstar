@@ -197,7 +197,7 @@ begin
     return jsonb_build_object('success',false,'message','Sesi permainan tidak valid atau sudah diklaim.');
   end if;
   v_elapsed := floor(extract(epoch from (now()-v_session.started_at)))::integer;
-  if v_elapsed < (p_score/100)*2 then
+  if v_elapsed < (p_score/100)*10 then
     return jsonb_build_object('success',false,'message','Waktu permainan tidak sesuai dengan skor. Coba main secara normal.');
   end if;
   insert into public.ng_wallet_spin_daily(auth_user_id,spin_date)
