@@ -22,9 +22,9 @@ begin
   end if;
   if char_length(btrim(coalesce(p_full_name,''))) not between 2 and 120
     or p_birth_date is null or p_birth_date>current_date or p_birth_date<date '1900-01-01'
-    or coalesce(p_email,'') !~* '^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}$'
+    or coalesce(p_email,'') !~* '^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$'
     or char_length(coalesce(p_whatsapp,'')) not between 8 and 20
-    or v_wallet_phone !~ '^\\+[1-9][0-9]{7,14}$'
+    or v_wallet_phone !~ '^\+[1-9][0-9]{7,14}$'
   then
     return jsonb_build_object('success',false,'message','Periksa nama, tanggal lahir, email, WhatsApp, dan nomor Wallet N.G.');
   end if;
