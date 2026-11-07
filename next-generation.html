@@ -912,7 +912,8 @@ html.ng-low-perf body{background:#070b16}
 html.ng-low-perf body:before{display:none}
 html.ng-low-perf #particles{display:none!important}
 html.ng-low-perf .particle{display:none!important}
-html.ng-low-perf .fantasy-bg-video,html.ng-low-perf .lexiaa-magic-canvas{display:none!important}
+html.ng-low-perf .lexiaa-magic-canvas{display:none!important}
+html.ng-low-perf .fantasy-bg-video{display:block!important;opacity:.58;filter:saturate(.72)}
 html.ng-low-perf .login-card,html.ng-low-perf .clock-panel,html.ng-low-perf .glass-panel,
 html.ng-low-perf #dashboardView .ng-auth-panel,html.ng-low-perf #dashboardView .ng-wallet-history,
 html.ng-low-perf #dashboardView .lexiaa-ref-topbar,html.ng-low-perf #dashboardView .lexiaa-sidebar,
@@ -1128,7 +1129,8 @@ $("lexiaaMessagesBackdrop")?.addEventListener("click",e=>{if(e.target===$("lexia
 const ngFeatureBackdrop=$("ngFeatureBackdrop"),ngFeatureContent=$("ngFeatureContent");
 let ngReturnToMenu=false;
 function openNgFeature(){ngFeatureBackdrop.classList.add("open");ngFeatureBackdrop.setAttribute("aria-hidden","false");}
-function closeNgFeature(){ngFeatureBackdrop.classList.remove("open");ngFeatureBackdrop.setAttribute("aria-hidden","true");ngWalletState.pin="";ngWalletState.confirmPin="";ngVideoPayment=null;if(ngReturnToMenu){ngReturnToMenu=false;openLexiaaNgMenu();}}
+function stopNgVideoPlayback(){const player=$("ngVideoPlayer");if(player){player.pause();player.removeAttribute("src");player.load();}if(ngVideoObjectUrl){URL.revokeObjectURL(ngVideoObjectUrl);ngVideoObjectUrl=null;}}
+function closeNgFeature(){stopNgVideoPlayback();ngFeatureBackdrop.classList.remove("open");ngFeatureBackdrop.setAttribute("aria-hidden","true");ngWalletState.pin="";ngWalletState.confirmPin="";ngVideoPayment=null;if(ngReturnToMenu){ngReturnToMenu=false;openLexiaaNgMenu();}}
 function ngFeatureTitle(title){$("ngFeatureTitle").textContent=title;}
 function ngShowAbout(){ngFeatureTitle("TENTANG LEXIAA N.G");ngFeatureContent.innerHTML='<div class="ng-story-copy"><p class="ng-greeting">Yoo, Akhirnya Kamu Datang Juga.</p><p>Aku Adalah Pemandu Mu saat di Lexiaa N.G. Tidak Seperti Lexiaa Old Pemandumu wanita, Di Lexiaa N.G Pemandu Nya Adalah Aku.</p><p>Disini Kita Baru Mengembangkan 2 Menu. Yaitu Saldo Lexiaa N.G dan SHOP N.G. di menu Saldo Lexiaa N.G kamu bisa melihat saldo mu dan bisa mengumpulkan saldo disana. Nantinya Saldo Mu Bisa Kamu Belikan Di Menu SHOP N.G Yang Sudah Kita Kembangkan.</p><p>Untuk Sekarang mungkin itu dulu yang bisa Ku jelaskan. Terimakasih Sudah Membaca.</p></div><div class="ng-feature-actions"><button class="ng-fantasy-btn" type="button" id="ngAboutOkay">DIMENGERTI</button></div>';$("ngAboutOkay").onclick=closeNgFeature;openNgFeature();}
 
@@ -1409,7 +1411,7 @@ async function ngVideoPlay(id,mode="online"){
   ngFeatureTitle(mode==="offline"?"PEMUTAR VIDEO OFFLINE":"PEMUTAR VIDEO ONLINE");
   ngFeatureContent.innerHTML='<div class="ng-video-wrap"><video id="ngVideoPlayer" class="ng-video-player" controls playsinline autoplay></video><p class="muted">'+playLabel+'</p><div class="ng-video-player-actions"><button class="ng-fantasy-btn secondary" id="ngVideoReturn" type="button">KEMBALI</button>'+(mode==="online"?'<button class="ng-fantasy-btn" id="ngVideoSaveFromPlayer" type="button">SIMPAN OFFLINE</button>':'')+'</div></div>';
   $("ngVideoPlayer").src=src;
-  $("ngVideoReturn").onclick=()=>{if(ngVideoObjectUrl)URL.revokeObjectURL(ngVideoObjectUrl);ngVideoObjectUrl=null;mode==="offline"?ngShowOfflineVideos():ngShowVideos();};
+  $("ngVideoReturn").onclick=()=>{stopNgVideoPlayback();mode==="offline"?ngShowOfflineVideos():ngShowVideos();};
   $("ngVideoSaveFromPlayer")?.addEventListener("click",()=>ngVideoSaveOffline(id,$("ngVideoSaveFromPlayer")));
  }catch(e){
   await ngVideoDialog({title:"Tidak Dapat Memutar",message:e.message,mark:"!",actions:[{label:"Mengerti"}]});
@@ -1483,7 +1485,7 @@ $("enterLandscapeMode")?.addEventListener("click",async()=>{
  else if(button){button.disabled=false;button.textContent="COBA LAGI";}
 });
 function markLexiaaNextGen(){if(!supabase)return;supabase.auth.getUser().then(async({data,error})=>{if(error||!data?.user)return;const{error:profileError}=await supabase.from("lexiaa_profiles").update({nextgen_joined_at:new Date().toISOString()}).eq("id",data.user.id);if(profileError)console.warn("Status Next Gen belum tersimpan:",profileError.message);}).catch(e=>console.warn("Directory sync:",e));}
-function enterDashboard(){if(dashboardEntered)return;dashboardEntered=true;try{localStorage.setItem("lexiaa-nextgen-mode","1");localStorage.setItem("lexiaa-last-experience","next");}catch(e){}markLexiaaNextGen();show("dashboard");loadOnlineProfile();requestImmersive();tick();if(window.lexiaaClockTimer)clearInterval(window.lexiaaClockTimer);window.lexiaaClockTimer=setInterval(tick,1000);loadBattery();loadProfileSettings();refreshUnreadMessages();if(lexiaaMessagesPoll)clearInterval(lexiaaMessagesPoll);lexiaaMessagesPoll=setInterval(refreshUnreadMessages,30000);const video=$("fantasyBgVideo");if(video){if(document.documentElement.classList.contains("ng-low-perf")){video.pause();video.removeAttribute("autoplay");}else{video.currentTime=0;video.play().catch(()=>{});}}tick();loadLocation();}
+function enterDashboard(){if(dashboardEntered)return;dashboardEntered=true;try{localStorage.setItem("lexiaa-nextgen-mode","1");localStorage.setItem("lexiaa-last-experience","next");}catch(e){}markLexiaaNextGen();show("dashboard");loadOnlineProfile();requestImmersive();tick();if(window.lexiaaClockTimer)clearInterval(window.lexiaaClockTimer);window.lexiaaClockTimer=setInterval(tick,1000);loadBattery();loadProfileSettings();refreshUnreadMessages();if(lexiaaMessagesPoll)clearInterval(lexiaaMessagesPoll);lexiaaMessagesPoll=setInterval(refreshUnreadMessages,30000);const video=$("fantasyBgVideo");if(video){video.currentTime=0;video.play().catch(()=>{});}tick();loadLocation();}
 $("nextLoginForm").addEventListener("submit",async e=>{e.preventDefault();requestImmersive();const ambientReady=window.lexiaaPrimeAmbient?.();if(!supabase){notice("Koneksi autentikasi belum siap. Periksa internet lalu muat ulang halaman.");return;}const btn=$("loginSubmit");btn.disabled=true;btn.textContent="AUTHENTICATING...";notice("");try{const{data,error}=await supabase.auth.signInWithPassword({email:$("nextEmail").value.trim(),password:$("nextPassword").value});if(error)throw error;if(!data?.session)throw new Error("Login belum menghasilkan sesi aktif. Silakan coba lagi.");notice("ACCESS GRANTED","success");enterDashboard();if(ambientReady&&typeof ambientReady.then==="function")ambientReady.then(()=>window.lexiaaStartAmbient?.()).catch(err=>console.warn("Audio ambience:",err));else window.lexiaaStartAmbient?.();}catch(err){notice(err.message||"Login gagal. Periksa email dan kata sandi.");}finally{btn.disabled=false;btn.textContent="AUTHENTICATE & ENTER";}});
 $("togglePassword").addEventListener("click",()=>{const input=$("nextPassword"),visible=input.type==="password";input.type=visible?"text":"password";$("togglePassword").textContent=visible?"HIDE":"SHOW";});
 async function returnToOldLexia(){try{localStorage.removeItem("lexiaa-nextgen-mode");localStorage.setItem("lexiaa-last-experience","old");}catch(e){}try{if(document.fullscreenElement)await document.exitFullscreen();}catch(e){}try{if(screen.orientation&&screen.orientation.unlock)screen.orientation.unlock();}catch(e){}location.replace("./?experience=old");}
