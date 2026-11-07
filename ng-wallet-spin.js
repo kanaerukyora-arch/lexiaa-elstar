@@ -4,7 +4,8 @@ let spinBusy=false,questFrame=0,questSession=null,questRunning=false,questGameCl
 const byId=id=>document.getElementById(id);
 const money=n=>new Intl.NumberFormat("id-ID",{style:"currency",currency:"IDR",maximumFractionDigits:0}).format(Number(n)||0);
 async function rpc(name,args){
- const {data,error}=await supabase.rpc(name,args||{});
+ const client=window.lexiaaNgWalletBridge?.supabase;if(!client)throw new Error("Koneksi Wallet belum siap. Muat ulang halaman.");
+ const {data,error}=await client.rpc(name,args||{});
  if(error)throw new Error(error.message||"Permintaan gagal.");
  const result=Array.isArray(data)?data[0]:data;
  if(!result||result.success!==true)throw new Error(result?.message||"Permintaan tidak berhasil.");
@@ -13,7 +14,7 @@ async function rpc(name,args){
 function backToWallet(){
  if(questGameCleanup){questGameCleanup();questGameCleanup=null;}
  questRunning=false;questSession=null;
- ngWalletShowAccount(ngWalletState.account||{});
+ window.lexiaaNgWalletBridge.showAccount(window.lexiaaNgWalletBridge.state.account||{});
 }
 async function status(){
  return await rpc("ng_wallet_spin_status");
@@ -24,11 +25,11 @@ function spinPageMarkup(s){
 async function openSpin(){
  try{
   const s=await status();
-  ngWalletShell("SPIN & QUEST LEXIAA",spinPageMarkup(s));
+  window.lexiaaNgWalletBridge.shell("SPIN & QUEST LEXIAA",spinPageMarkup(s));
   byId("ngSpinBack").onclick=backToWallet;
   byId("ngQuestOpen").onclick=openQuest;
   byId("ngSpinNow").onclick=doSpin;
- }catch(e){await ngNovelDialog({title:"Spin Belum Siap",message:e.message,actions:[{label:"TUTUP"}]});}
+ }catch(e){await window.lexiaaNgWalletBridge.dialog({title:"Spin Belum Siap",message:e.message,actions:[{label:"TUTUP"}]});}
 }
 async function refreshSpinStats(){
  const s=await status();
@@ -49,7 +50,7 @@ async function doSpin(){
   await new Promise(resolve=>setTimeout(resolve,3250));
   resultBox.hidden=false;
   resultBox.innerHTML='<small>HASIL SPIN KAMU</small><strong>'+escapeHtml(result.prize)+'</strong><span>'+(Number(result.amount)>0?"Saldo bertambah "+money(result.amount):"Belum beruntung. Coba putar lagi!")+'</span>';
-  if(Number(result.amount)>0&&ngWalletState.account){ngWalletState.account.balance=result.balance;}
+  if(Number(result.amount)>0&&window.lexiaaNgWalletBridge.state.account){window.lexiaaNgWalletBridge.state.account.balance=result.balance;}
   await refreshSpinStats();
  }catch(e){
   resultBox.hidden=false;resultBox.innerHTML='<strong>Spin belum berhasil</strong><span>'+escapeHtml(e.message)+'</span>';
@@ -64,7 +65,7 @@ function questMarkup(s){
 async function openQuest(){
  if(questGameCleanup){questGameCleanup();questGameCleanup=null;}
  const s=await refreshSpinStats();
- ngWalletShell("QUEST · HINDARI RINTANGAN",questMarkup(s));
+ window.lexiaaNgWalletBridge.shell("QUEST · HINDARI RINTANGAN",questMarkup(s));
  byId("ngQuestBack").onclick=openSpin;
  byId("ngQuestStart").onclick=startQuest;
 }
