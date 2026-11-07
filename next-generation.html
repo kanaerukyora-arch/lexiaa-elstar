@@ -986,6 +986,24 @@ html.ng-low-perf button,html.ng-low-perf input{transition:none!important}
 }
 </style>
 
+
+<style id="lexiaa-pro-styles">
+#lexiaaProBackdrop{position:fixed;inset:0;z-index:140;display:none;align-items:center;justify-content:center;padding:12px;background:#020617d9;backdrop-filter:blur(12px)}
+#lexiaaProBackdrop.open{display:flex}
+#lexiaaProBackdrop .pro-modal{position:relative;width:min(520px,100%);max-height:92dvh;overflow:auto;padding:22px;border:1px solid #c4a4ff99;border-radius:22px;background:linear-gradient(145deg,#17194c,#102c50 58%,#201442);box-shadow:0 22px 80px #000b,0 0 32px #9b78ff33;color:#f5f4ff}
+#lexiaaProBackdrop h2{margin:3px 42px 8px 0;font:800 21px Orbitron,Inter,sans-serif;color:#fff}
+#lexiaaProBackdrop .pro-kicker{font:700 9px Orbitron,sans-serif;letter-spacing:.2em;color:#d0baff}
+#lexiaaProBackdrop .pro-copy{font-size:11px;line-height:1.65;color:#c7d4ed;margin:8px 0 16px}
+#lexiaaProBackdrop .pro-close{position:absolute;right:14px;top:14px;width:36px;height:36px;border:1px solid #c3b1ff88;border-radius:11px;background:#ffffff12;color:#fff;font-size:22px}
+#lexiaaProBackdrop label{display:block;margin:12px 0 6px;color:#d8caff;font-size:10px;font-weight:800;letter-spacing:.1em}
+#lexiaaProBackdrop input{width:100%;height:46px;padding:0 12px;border:1px solid #a99aff66;border-radius:11px;background:#080f2d;color:#fff;outline:none;color-scheme:dark}
+#lexiaaProBackdrop input:focus{border-color:#d3baff;box-shadow:0 0 0 3px #b68aff22}
+#lexiaaProBackdrop .pro-submit{width:100%;min-height:48px;margin-top:17px;border:1px solid #e0caff;border-radius:12px;background:linear-gradient(100deg,#9c6bff,#46c8f2);color:#fff;font-weight:900;letter-spacing:.08em}
+#lexiaaProBackdrop .pro-benefits{display:grid;gap:8px;margin:14px 0;padding:13px;border:1px solid #bba6ff55;border-radius:13px;background:#ffffff0a;font-size:11px;line-height:1.6}
+#lexiaaProBackdrop .pro-note{min-height:20px;margin-top:10px;color:#ffc1d0;font-size:11px;line-height:1.5}
+#lexiaaProBackdrop .pro-note.ok{color:#9af4cf}
+@media(max-width:560px){#lexiaaProBackdrop{padding:8px}#lexiaaProBackdrop .pro-modal{padding:18px;border-radius:18px}}
+</style>
 </head>
 <body><div id="particles" aria-hidden="true"></div><div class="wrap">
 <header class="topline"><div class="brand">LEXIAA <small>THE NEXT GENERATION</small></div><div class="system-pill" id="systemPill">● SECURE ACCESS</div></header>
@@ -1023,6 +1041,7 @@ html.ng-low-perf button,html.ng-low-perf input{transition:none!important}
       <button class="lexiaa-nav-item" type="button"><span class="lexiaa-nav-icon">▥</span><span>Statistik</span></button>
       <button class="lexiaa-nav-item" type="button" data-action="settings"><span class="lexiaa-nav-icon">⚙</span><span>Pengaturan</span></button>
       <button class="lexiaa-nav-item" type="button" data-action="messages" aria-controls="lexiaaMessagesBackdrop"><span class="lexiaa-nav-icon">✉</span><span>Pesan</span><i class="lexiaa-message-badge" id="lexiaaMessageBadge" aria-label="Pesan belum dibaca"></i></button>
+      <button class="lexiaa-nav-item" type="button" data-action="pro-register" aria-controls="lexiaaProBackdrop"><span class="lexiaa-nav-icon">✦</span><span>Daftar LEXIAA N.G Pro</span></button>
       <button class="lexiaa-nav-item" type="button" data-action="updates"><span class="lexiaa-nav-icon">⟳</span><span>Update</span></button>
     </nav>
     
@@ -1121,6 +1140,33 @@ html.ng-low-perf button,html.ng-low-perf input{transition:none!important}
     </section>
   </div>
 </div>
+
+<div id="lexiaaProBackdrop" aria-hidden="true">
+ <section class="pro-modal" role="dialog" aria-modal="true" aria-labelledby="lexiaaProTitle">
+  <button type="button" class="pro-close" id="closeLexiaaPro" aria-label="Tutup">×</button>
+  <div class="pro-kicker">✦ LEXIAA · PREMIUM MEMBERSHIP</div>
+  <h2 id="lexiaaProTitle">DAFTAR LEXIAA N.G PRO</h2>
+  <p class="pro-copy">Ajukan keanggotaan LEXIAA N.G Pro. Pastikan email aktif karena keputusan admin akan dikirim melalui menu Pesan dan email.</p>
+  <div id="lexiaaProStatus" class="pro-copy">Memeriksa status pengajuan...</div>
+  <div class="pro-benefits">
+   <b>KEUNTUNGAN LEXIAA N.G PRO</b>
+   <span>✦ Diskon 50% untuk produk LEXIAA</span>
+   <span>✦ Cashback 20% setiap pembelian</span>
+   <span>✦ 20 spin gratis setiap hari</span>
+   <span>✦ Bonus saldo Rp5.000.000 setiap hari</span>
+   <span>✦ Masa aktif dan biaya perpanjangan diatur admin</span>
+  </div>
+  <form id="lexiaaProForm">
+   <label for="lexiaaProFullName">NAMA LENGKAP</label><input id="lexiaaProFullName" maxlength="120" autocomplete="name" required>
+   <label for="lexiaaProBirth">TANGGAL LAHIR</label><input id="lexiaaProBirth" type="date" required>
+   <label for="lexiaaProEmail">EMAIL AKTIF</label><input id="lexiaaProEmail" type="email" maxlength="254" autocomplete="email" placeholder="nama@email.com" required>
+   <label for="lexiaaProWhatsapp">NOMOR WHATSAPP</label><input id="lexiaaProWhatsapp" type="tel" maxlength="20" autocomplete="tel" placeholder="+628123456789" required>
+   <p id="lexiaaProNotice" class="pro-note"></p>
+   <button class="pro-submit" id="lexiaaProSubmit" type="submit">KIRIM PENGAJUAN</button>
+  </form>
+  <button class="pro-submit" id="lexiaaProRenew" type="button" hidden>PERPANJANG LEXIAA N.G PRO</button>
+ </section>
+</div>
 <div id="lexiaaMessagesBackdrop" aria-hidden="true"><section class="msg-modal" role="dialog" aria-modal="true" aria-labelledby="lexiaaMessagesTitle"><div class="msg-head"><h2 id="lexiaaMessagesTitle">PESAN MASUK</h2><button class="msg-close" id="closeLexiaaMessages" type="button" aria-label="Tutup">×</button></div><p class="msg-caption">Pesan pribadi dari Admin Lexiaa.</p><div id="lexiaaMessagesList"><div class="msg-caption">Memuat pesan...</div></div></section></div>\n<div class="portrait-guide" id="portraitGuide"><div class="rotate-device-icon">▱<span>↻</span></div><strong>LEXIAA N.G · LANDSCAPE</strong><p id="portraitGuideText">Sentuh tombol di bawah. LEXIAA akan mencoba mengaktifkan layar penuh dan mengubah orientasi secara otomatis.</p><button type="button" id="enterLandscapeMode" class="portrait-guide-enter">MASUK KE LEXIAA N.G</button></div>
 </section></main></div>
 <script type="module">
@@ -1164,6 +1210,44 @@ $("cancelCropPhoto")?.addEventListener("click",closeCropper);
 $("applyCropPhoto")?.addEventListener("click",()=>{const img=cropState.image,win=$("cropWindow");if(!img||!win.clientWidth){$("profileSaveNote").textContent="Tunggu sampai pratinjau foto siap.";return;}const size=win.clientWidth,scale=cropState.base,canvas=document.createElement("canvas");canvas.width=256;canvas.height=256;const ctx=canvas.getContext("2d");if(!ctx){$("profileSaveNote").textContent="Browser tidak mendukung pemrosesan foto.";return;}ctx.drawImage(img,-cropState.x/scale,-cropState.y/scale,size/scale,size/scale,0,0,256,256);try{window.lexiaaPendingPhoto=canvas.toDataURL("image/jpeg",.82);}catch(err){$("profileSaveNote").textContent="Gagal memproses foto. Coba gambar lain.";return;}const preview=$("profileAvatarPreview");preview.style.backgroundImage='url("'+window.lexiaaPendingPhoto+'")';preview.style.backgroundSize="cover";preview.style.backgroundPosition="center";preview.textContent="";$("profileSaveNote").textContent="Potongan foto siap. Tekan Simpan Profil untuk menyimpan.";closeCropper();});
 $("lexiaaProfileForm")?.addEventListener("submit",async e=>{e.preventDefault();const username=$("profileUsername").value.trim().replace(/^@/,""),displayName=$("profileDisplayName").value.trim();if(!/^[a-zA-Z0-9_.-]{3,24}$/.test(username)){$("profileSaveNote").textContent="Username 3–24 karakter: huruf, angka, titik, garis bawah, atau strip.";return;}if(!displayName){$("profileSaveNote").textContent="Display name tidak boleh kosong.";return;}const save=$("saveLexiaProfile");save.disabled=true;save.textContent="MENYIMPAN...";const previous=readProfile();let avatarUrl=previous.avatarUrl||"";try{if(!supabase)throw new Error("Koneksi Supabase belum siap.");const{data:{user},error:userError}=await supabase.auth.getUser();if(userError||!user)throw new Error("Silakan login kembali.");if(window.lexiaaPendingPhoto){const blob=await(await fetch(window.lexiaaPendingPhoto)).blob();const path=user.id+"/avatar.jpg";const{error:uploadError}=await supabase.storage.from("lexiaa-avatars").upload(path,blob,{contentType:"image/jpeg",upsert:true,cacheControl:"3600"});if(uploadError)throw uploadError;const{data:publicUrl}=supabase.storage.from("lexiaa-avatars").getPublicUrl(path);avatarUrl=publicUrl.publicUrl+"?v="+Date.now();}const{error:authError}=await supabase.auth.updateUser({data:{username,display_name:displayName}});if(authError)throw authError;const{error:directoryError}=await supabase.from("lexiaa_profiles").upsert({id:user.id,username,display_name:displayName,avatar_url:avatarUrl||null,old_registered:true},{onConflict:"id"});if(directoryError)throw directoryError;const p={username,displayName,avatarUrl};localStorage.setItem("lexiaa-nextgen-profile",JSON.stringify(p));paintProfile(p);$("profileSaveNote").textContent="Profil online berhasil disimpan dan dapat dilihat pengguna Lexiaa.";window.lexiaaPendingPhoto=null;setTimeout(closeProfileSettings,650);}catch(err){$("profileSaveNote").textContent="Gagal menyimpan profil online: "+(err.message||"coba lagi nanti");}finally{save.disabled=false;save.textContent="Simpan Profil";}});
 
+
+function openLexiaaPro(){const root=$("lexiaaProBackdrop");root.classList.add("open");root.setAttribute("aria-hidden","false");loadLexiaaProStatus();}
+function closeLexiaaPro(){const root=$("lexiaaProBackdrop");root.classList.remove("open");root.setAttribute("aria-hidden","true");}
+async function loadLexiaaProStatus(){
+ const status=$("lexiaaProStatus"),form=$("lexiaaProForm"),submit=$("lexiaaProSubmit"),renew=$("lexiaaProRenew");
+ status.textContent="Memeriksa status pengajuan...";form.hidden=true;renew.hidden=true;submit.disabled=true;
+ try{
+  const {data,error}=await supabase.rpc("ng_pro_status");if(error)throw error;if(!data?.success)throw new Error(data?.message||"Status Pro belum dapat diperiksa.");
+  if(data.pro_active){status.textContent="Status: LEXIAA N.G Pro AKTIF sampai "+new Date(data.pro_ends_at).toLocaleString("id-ID")+".";
+    form.hidden=true;renew.hidden=false;renew.textContent="PERPANJANG · "+new Intl.NumberFormat("id-ID",{style:"currency",currency:"IDR",maximumFractionDigits:0}).format(data.renewal_price||0);renew.disabled=Number(data.renewal_price)<=0;
+  }else if(data.application_status==="pending"){status.textContent="Pengajuan kamu sedang menunggu keputusan admin. Notifikasi akan dikirim melalui menu Pesan dan email.";form.hidden=true;}
+  else if(data.application_status==="rejected"){status.textContent="Pengajuan sebelumnya belum disetujui. Kamu dapat mengirim pengajuan baru.";form.hidden=false;submit.disabled=false;}
+  else{status.textContent="Kamu belum terdaftar sebagai LEXIAA N.G Pro.";form.hidden=false;submit.disabled=false;}
+  const {data:{user}}=await supabase.auth.getUser();if(user?.email&&!$("lexiaaProEmail").value)$("lexiaaProEmail").value=user.email;
+ }catch(e){status.textContent=e.message||"Gagal memeriksa status Pro.";form.hidden=false;submit.disabled=false;}
+}
+$("lexiaaSidebar")?.querySelector('[data-action="pro-register"]')?.addEventListener("click",openLexiaaPro);
+$("closeLexiaaPro")?.addEventListener("click",closeLexiaaPro);
+$("lexiaaProBackdrop")?.addEventListener("click",e=>{if(e.target===$("lexiaaProBackdrop"))closeLexiaaPro();});
+$("lexiaaProForm")?.addEventListener("submit",async e=>{
+ e.preventDefault();const btn=$("lexiaaProSubmit"),note=$("lexiaaProNotice");btn.disabled=true;note.className="pro-note";note.textContent="Mengirim pengajuan...";
+ try{
+  const {data,error}=await supabase.rpc("ng_pro_submit_application",{
+   p_full_name:$("lexiaaProFullName").value.trim(),p_birth_date:$("lexiaaProBirth").value,
+   p_email:$("lexiaaProEmail").value.trim(),p_whatsapp:$("lexiaaProWhatsapp").value.trim()
+  });
+  if(error)throw error;if(!data?.success)throw new Error(data?.message||"Pengajuan gagal dikirim.");
+  note.className="pro-note ok";note.textContent=data.message||"Pengajuan berhasil dikirim.";
+  await loadLexiaaProStatus();
+ }catch(err){note.textContent=err.message||"Pengajuan gagal dikirim.";}
+ finally{btn.disabled=false;}
+});
+$("lexiaaProRenew")?.addEventListener("click",async()=>{
+ const btn=$("lexiaaProRenew");if(!confirm("Perpanjang keanggotaan LEXIAA N.G Pro menggunakan saldo Wallet N.G?"))return;
+ btn.disabled=true;try{const {data,error}=await supabase.rpc("ng_pro_renew");if(error)throw error;if(!data?.success)throw new Error(data?.message||"Perpanjangan gagal.");alert("LEXIAA N.G Pro berhasil diperpanjang sampai "+new Date(data.ends_at).toLocaleString("id-ID")+".");await loadLexiaaProStatus();}
+ catch(e){alert(e.message||"Perpanjangan gagal.");}finally{btn.disabled=false;}
+});
+async function claimLexiaaProDailyBonus(){if(!supabase)return;try{const{data,error}=await supabase.rpc("ng_pro_claim_daily_bonus");if(error)throw error;if(data?.credited)console.info("LEXIAA N.G Pro daily bonus credited",data.amount);}catch(e){console.warn("Bonus harian Pro belum diproses:",e.message||e);}}
 function openUpdates(){ $("lexiaaUpdatesBackdrop").classList.add("open");$("lexiaaUpdatesBackdrop").setAttribute("aria-hidden","false");}
 
 let lexiaaMessagesPoll=null;
@@ -1575,7 +1659,7 @@ function closeUpdates(){$("lexiaaUpdatesBackdrop").classList.remove("open");$("l
 $("lexiaaSidebar")?.querySelector('[data-action="updates"]')?.addEventListener("click",openUpdates);
 $("closeLexiaUpdates")?.addEventListener("click",closeUpdates);
 $("lexiaaUpdatesBackdrop")?.addEventListener("click",e=>{if(e.target===$("lexiaaUpdatesBackdrop"))closeUpdates();});
-document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeProfileSettings();closeUpdates();closeCropper();closeAccountSearch();closeLexiaaNgMenu();closeNgFeature();closeLexiaaMessages();}});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeProfileSettings();closeUpdates();closeCropper();closeAccountSearch();closeLexiaaNgMenu();closeNgFeature();closeLexiaaMessages();closeLexiaaPro();}});
 
 
 
@@ -1609,7 +1693,7 @@ $("enterLandscapeMode")?.addEventListener("click",async()=>{
  else if(button){button.disabled=false;button.textContent="COBA LAGI";}
 });
 function markLexiaaNextGen(){if(!supabase)return;supabase.auth.getUser().then(async({data,error})=>{if(error||!data?.user)return;const{error:profileError}=await supabase.from("lexiaa_profiles").update({nextgen_joined_at:new Date().toISOString()}).eq("id",data.user.id);if(profileError)console.warn("Status Next Gen belum tersimpan:",profileError.message);}).catch(e=>console.warn("Directory sync:",e));}
-function enterDashboard(){if(dashboardEntered)return;dashboardEntered=true;try{localStorage.setItem("lexiaa-nextgen-mode","1");localStorage.setItem("lexiaa-last-experience","next");}catch(e){}markLexiaaNextGen();show("dashboard");loadOnlineProfile();requestImmersive();tick();if(window.lexiaaClockTimer)clearInterval(window.lexiaaClockTimer);window.lexiaaClockTimer=setInterval(tick,1000);loadBattery();loadProfileSettings();refreshUnreadMessages();if(lexiaaMessagesPoll)clearInterval(lexiaaMessagesPoll);lexiaaMessagesPoll=setInterval(refreshUnreadMessages,30000);const video=$("fantasyBgVideo");if(video){video.currentTime=0;video.play().catch(()=>{});}tick();loadLocation();}
+function enterDashboard(){if(dashboardEntered)return;dashboardEntered=true;claimLexiaaProDailyBonus();try{localStorage.setItem("lexiaa-nextgen-mode","1");localStorage.setItem("lexiaa-last-experience","next");}catch(e){}markLexiaaNextGen();show("dashboard");loadOnlineProfile();requestImmersive();tick();if(window.lexiaaClockTimer)clearInterval(window.lexiaaClockTimer);window.lexiaaClockTimer=setInterval(tick,1000);loadBattery();loadProfileSettings();refreshUnreadMessages();if(lexiaaMessagesPoll)clearInterval(lexiaaMessagesPoll);lexiaaMessagesPoll=setInterval(refreshUnreadMessages,30000);const video=$("fantasyBgVideo");if(video){video.currentTime=0;video.play().catch(()=>{});}tick();loadLocation();}
 $("nextLoginForm").addEventListener("submit",async e=>{e.preventDefault();requestImmersive();const ambientReady=window.lexiaaPrimeAmbient?.();if(!supabase){notice("Koneksi autentikasi belum siap. Periksa internet lalu muat ulang halaman.");return;}const btn=$("loginSubmit");btn.disabled=true;btn.textContent="AUTHENTICATING...";notice("");try{const{data,error}=await supabase.auth.signInWithPassword({email:$("nextEmail").value.trim(),password:$("nextPassword").value});if(error)throw error;if(!data?.session)throw new Error("Login belum menghasilkan sesi aktif. Silakan coba lagi.");notice("ACCESS GRANTED","success");enterDashboard();if(ambientReady&&typeof ambientReady.then==="function")ambientReady.then(()=>window.lexiaaStartAmbient?.()).catch(err=>console.warn("Audio ambience:",err));else window.lexiaaStartAmbient?.();}catch(err){notice(err.message||"Login gagal. Periksa email dan kata sandi.");}finally{btn.disabled=false;btn.textContent="AUTHENTICATE & ENTER";}});
 $("togglePassword").addEventListener("click",()=>{const input=$("nextPassword"),visible=input.type==="password";input.type=visible?"text":"password";$("togglePassword").textContent=visible?"HIDE":"SHOW";});
 async function returnToOldLexia(){try{localStorage.removeItem("lexiaa-nextgen-mode");localStorage.setItem("lexiaa-last-experience","old");}catch(e){}try{if(document.fullscreenElement)await document.exitFullscreen();}catch(e){}try{if(screen.orientation&&screen.orientation.unlock)screen.orientation.unlock();}catch(e){}location.replace("./?experience=old");}
