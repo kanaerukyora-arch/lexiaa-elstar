@@ -193,8 +193,9 @@ async function updateProMembership(userId,status,startsAt,endsAt,note){
  if(!startsAt||!endsAt){notice("proMembershipNotice","Tanggal mulai dan akhir wajib diisi.");return;}
  notice("proMembershipNotice","Menyimpan perubahan keanggotaan...");
  try{
-  await api({action:"pro_membership_update",user_id:userId,status,starts_at:new Date(startsAt).toISOString(),ends_at:new Date(endsAt).toISOString(),admin_note:note});
-  notice("proMembershipNotice",status==="active"?"Masa aktif Pro berhasil diperbarui.":"Keanggotaan Pro berhasil dinonaktifkan dan catatan tersimpan.",true);
+  const result=await api({action:"pro_membership_update",user_id:userId,status,starts_at:new Date(startsAt).toISOString(),ends_at:new Date(endsAt).toISOString(),admin_note:note});
+  const emailNotice=result.email_sent?"Email pemberitahuan berhasil dikirim.":"Email belum terkirim: "+(result.email_error||"Tidak ada detail error.");
+  notice("proMembershipNotice",(status==="active"?"Masa aktif Pro berhasil diperbarui. ":"Keanggotaan Pro berhasil dinonaktifkan dan catatan tersimpan. ")+emailNotice,true);
   await loadProMemberships();
  }catch(e){notice("proMembershipNotice",e.message);}
 }
