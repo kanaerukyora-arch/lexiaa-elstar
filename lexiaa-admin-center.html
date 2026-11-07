@@ -9,6 +9,16 @@
 .shell{max-width:1200px;margin:auto}.brand{font-size:11px;letter-spacing:.22em;color:#b7f5ff;font-weight:900}.muted{color:var(--muted);font-size:12px;line-height:1.6}.panel{background:#111a30eF;border:1px solid #70dfff35;border-radius:18px;padding:20px;margin:14px 0;box-shadow:0 18px 55px #0005}h1{font-size:clamp(22px,4vw,30px);margin:8px 0}h2{font-size:16px;margin:0 0 12px}label{display:block;color:#9beaff;font-size:10px;font-weight:800;letter-spacing:.13em;margin:13px 0 6px}input,textarea,select{width:100%;border:1px solid #70dfff55;border-radius:10px;padding:12px;background:#071225;color:#fff;font:inherit;outline:none}textarea{min-height:100px;resize:vertical}button{border:1px solid #9af0ff;border-radius:10px;padding:11px 14px;background:linear-gradient(100deg,#baf8ff,#62dcf5,#c7a6ff);color:#07111d;font-weight:900;cursor:pointer}button:disabled{opacity:.5;cursor:wait}.secondary{background:#172746;color:#d5efff;border-color:#80dfff55}.danger{background:#3a1c2d;color:#ffd5de;border-color:#ff789866}.hidden{display:none!important}.notice{min-height:18px;color:#ffb5c3;font-size:12px;line-height:1.5;margin-top:9px}.notice.ok{color:var(--green)}.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.between{justify-content:space-between}.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:15px 0}.stat{padding:13px;border:1px solid #70dfff35;border-radius:13px;background:#09152a}.stat span{display:block;color:var(--muted);font-size:11px}.stat b{display:block;font-size:24px;margin-top:5px}.tabs{display:flex;gap:7px;flex-wrap:wrap;margin:14px 0}.tabs button{font-size:10px;padding:9px 12px}.tabs button.active{box-shadow:0 0 0 2px #70eaff55}.toolbar{display:grid;grid-template-columns:1fr 190px auto;gap:9px}.users{display:grid;gap:8px;margin-top:13px;max-height:470px;overflow:auto}.user{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;padding:13px;border:1px solid #70dfff2b;border-radius:12px;background:#09152a}.user strong{display:block;overflow-wrap:anywhere}.user small{display:block;color:var(--muted);font-size:11px;margin-top:4px;overflow-wrap:anywhere}.tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px}.tag{border:1px solid #7890ad66;color:#b6c9dc;border-radius:20px;padding:4px 7px;font-size:9px}.tag.on{border-color:#55e6b588;color:#9df4d1}.tag.wallet{border-color:#bda0ff88;color:#d7c6ff}.user button{padding:8px 11px;font-size:10px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.selected{color:#a9eaff;font-size:12px;line-height:1.6;margin:10px 0}.balance{font-size:27px;font-weight:900;color:#a6f5ff;margin:8px 0}.section-note{border-left:3px solid #bda0ff;padding:9px 12px;background:#bda0ff0c;color:#c4d3e5;font-size:11px;line-height:1.6;margin:12px 0}.login{max-width:470px;margin:8vh auto}.foot{font-size:10px;color:#6f88a4;text-align:center;margin:20px}
 @media(max-width:700px){body{padding:12px}.panel{padding:15px}.stats{grid-template-columns:repeat(2,1fr)}.toolbar{grid-template-columns:1fr}.grid{grid-template-columns:1fr}.user{grid-template-columns:1fr}.user button{width:100%}}
 @keyframes videoPulse{0%,100%{opacity:.35;transform:scale(.8)}50%{opacity:1;transform:scale(1.15)}}.video-pulse{display:inline-block;width:10px;height:10px;border-radius:50%;background:#70eaff;box-shadow:0 0 14px #70eaff;animation:videoPulse 1s infinite}.video-progress{height:9px;border-radius:99px;background:#263c5c;overflow:hidden;margin-top:12px}.video-progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,#70eaff,#c2a0ff);transition:width .2s}.video-progress-text{font-size:11px}</style>
+
+<style id="pro-admin-styles">
+#proAdminPanel .pro-app-card{display:grid;gap:10px;padding:14px;border:1px solid #8f85d955;border-radius:13px;background:#0b1730}
+#proAdminPanel .pro-app-card strong{font-size:14px;color:#fff}
+#proAdminPanel .pro-app-meta{font-size:11px;color:#b8c9df;line-height:1.7;overflow-wrap:anywhere}
+#proAdminPanel .pro-app-actions{display:grid;grid-template-columns:minmax(90px,140px) 1fr 1fr;gap:8px}
+#proAdminPanel .pro-app-actions input{min-width:0}
+#proAdminPanel .pro-app-actions button{padding:9px;font-size:10px}
+@media(max-width:700px){#proAdminPanel .pro-app-actions{grid-template-columns:1fr 1fr}#proAdminPanel .pro-app-actions input{grid-column:1/-1}}
+</style>
 </head>
 <body><main class="shell">
 <div class="brand">✦ LEXIAA · ADMIN CONTROL CENTER</div>
@@ -41,6 +51,19 @@
 <label>JUDUL</label><input id="messageTitle" maxlength="140" placeholder="Informasi penting" required>
 <label>ISI PESAN</label><textarea id="messageBody" maxlength="5000" placeholder="Tulis pesan..." required></textarea>
 <p id="messageNotice" class="notice"></p><button id="messageButton" disabled>KIRIM PESAN</button></form>
+</section>
+
+<section class="panel" id="proAdminPanel">
+ <div class="row between"><div><h2>LEXIAA N.G PRO · PENGAJUAN & KEANGGOTAAN</h2><p class="muted">Tinjau pendaftaran, ACC/Tolak, dan atur masa aktif serta biaya perpanjangan.</p></div><button type="button" class="secondary" id="refreshPro">MUAT ULANG</button></div>
+ <div class="grid">
+  <div><label>HARGA PERPANJANGAN (RUPIAH)</label><input id="proRenewalPrice" type="number" min="0" max="1000000000" step="1" value="0"></div>
+  <div><label>DURASI DEFAULT (HARI)</label><input id="proDurationDays" type="number" min="1" max="3650" step="1" value="30"></div>
+ </div>
+ <label>BONUS HARIAN (RUPIAH)</label><input id="proDailyBonus" type="number" min="0" max="1000000000" step="1" value="5000000">
+ <div class="section-note">Benefit tetap: diskon 50%, cashback 20%, 20 spin gratis per hari. Bonus harian hanya masuk sekali per hari ke Wallet N.G anggota Pro aktif.</div>
+ <p id="proSettingsNotice" class="notice"></p><button type="button" id="saveProSettings">SIMPAN PENGATURAN PRO</button>
+ <h2 style="margin-top:22px">DAFTAR PENGAJUAN</h2><div id="proApplicationList" class="users"><p class="muted">Memuat pengajuan...</p></div>
+ <p id="proApplicationNotice" class="notice"></p>
 </section>
 <section class="panel">
 <h2>WALLET NG · DAFTAR NOMOR TERDAFTAR</h2>
@@ -125,6 +148,53 @@ async function loadWallets(){
  try{const d=await api({action:"wallet_accounts"});wallets=Array.isArray(d.wallets)?d.wallets:[];renderWallets();}
  catch(e){$("walletList").textContent=e.message;wallets=[];renderWallets();notice("creditNotice","Gagal memuat daftar Wallet.");}
 }
+
+async function loadProSettings(){
+ try{const d=await api({action:"pro_settings_get"}),s=d.settings||{};$("proRenewalPrice").value=s.renewal_price??0;$("proDurationDays").value=s.duration_days??30;$("proDailyBonus").value=s.daily_bonus??5000000;}
+ catch(e){notice("proSettingsNotice",e.message);}
+}
+async function saveProSettings(){
+ const btn=$("saveProSettings");btn.disabled=true;notice("proSettingsNotice","Menyimpan pengaturan...");
+ try{await api({action:"pro_settings_save",renewal_price:Number($("proRenewalPrice").value),duration_days:Number($("proDurationDays").value),daily_bonus:Number($("proDailyBonus").value)});notice("proSettingsNotice","Pengaturan LEXIAA N.G Pro berhasil disimpan.",true);}
+ catch(e){notice("proSettingsNotice",e.message);}
+ finally{btn.disabled=false;}
+}
+async function loadProApplications(){
+ const host=$("proApplicationList");host.textContent="Memuat pengajuan...";
+ try{
+  const d=await api({action:"pro_applications"}),items=d.applications||[];host.replaceChildren();
+  if(!items.length){host.textContent="Belum ada pengajuan LEXIAA N.G Pro.";return;}
+  for(const a of items){
+   const card=document.createElement("article");card.className="pro-app-card";
+   const title=document.createElement("strong");title.textContent=a.full_name+" · "+String(a.status||"").toUpperCase();
+   const meta=document.createElement("div");meta.className="pro-app-meta";meta.textContent="Tanggal lahir: "+a.birth_date+" | Email: "+a.email+" | WhatsApp: "+a.whatsapp+" | Diajukan: "+new Date(a.created_at).toLocaleString("id-ID");
+   card.append(title,meta);
+   if(a.status==="pending"){
+    const actions=document.createElement("div");actions.className="pro-app-actions";
+    const days=document.createElement("input");days.type="number";days.min="1";days.max="3650";days.value=$("proDurationDays").value||"30";days.setAttribute("aria-label","Masa aktif Pro dalam hari");
+    const approve=document.createElement("button");approve.type="button";approve.textContent="ACC";
+    approve.onclick=()=>decideProApplication(a,"approved",Number(days.value));
+    const reject=document.createElement("button");reject.type="button";reject.className="danger";reject.textContent="TOLAK";
+    reject.onclick=()=>decideProApplication(a,"rejected",Number(days.value));
+    actions.append(days,approve,reject);card.append(actions);
+   }
+   host.append(card);
+  }
+ }catch(e){host.textContent=e.message;notice("proApplicationNotice","Gagal memuat pengajuan Pro.");}
+}
+async function decideProApplication(app,decision,days){
+ const label=decision==="approved"?"ACC":"Tolak";
+ if(decision==="approved"&&(!Number.isInteger(days)||days<1||days>3650)){notice("proApplicationNotice","Masa aktif harus 1 sampai 3650 hari.");return;}
+ if(!confirm(label+" pengajuan LEXIAA N.G Pro atas nama "+app.full_name+"?"))return;
+ notice("proApplicationNotice","Memproses keputusan...");
+ try{
+  const d=await api({action:"pro_decide",application_id:app.id,decision,duration_days:days});
+  notice("proApplicationNotice",label+" berhasil. "+(d.email_sent?"Email terkirim.":"Notifikasi LEXIAA diproses; email belum terkirim: "+(d.email_error||"Periksa konfigurasi email.")),true);
+  await loadProApplications();
+ }catch(e){notice("proApplicationNotice",e.message);}
+}
+$("saveProSettings").onclick=saveProSettings;
+$("refreshPro").onclick=()=>{loadProSettings();loadProApplications();};
 async function loadUsers(){
  $("userList").textContent="Memuat akun...";notice("listNotice","");
  try{
@@ -137,7 +207,7 @@ async function loadUsers(){
  }catch(e){$("userList").textContent=e.message;notice("listNotice","Periksa deployment Edge Function dan konfigurasi backend.");}
 }
 $("loginForm").addEventListener("submit",async e=>{e.preventDefault();$("loginButton").disabled=true;notice("loginNotice","Memverifikasi...");
- try{const d=await api({action:"login",key:$("adminKey").value,password:$("adminPassword").value});if(!d.token)throw new Error("Server tidak mengembalikan token admin.");token=d.token;sessionStorage.setItem("lexiaaAdminNewToken",token);$("loginPanel").classList.add("hidden");$("adminPanel").classList.remove("hidden");await Promise.all([loadUsers(),loadWallets(),loadNovelAdmin(),loadVideoAdmin()]);}
+ try{const d=await api({action:"login",key:$("adminKey").value,password:$("adminPassword").value});if(!d.token)throw new Error("Server tidak mengembalikan token admin.");token=d.token;sessionStorage.setItem("lexiaaAdminNewToken",token);$("loginPanel").classList.add("hidden");$("adminPanel").classList.remove("hidden");await Promise.all([loadUsers(),loadWallets(),loadNovelAdmin(),loadVideoAdmin(),loadProSettings(),loadProApplications()]);}
  catch(err){notice("loginNotice",err.message);}finally{$("loginButton").disabled=false;}});
 $("refresh").onclick=()=>{loadUsers();loadWallets();};$("refreshWallets").onclick=loadWallets;$("walletRecipient").onchange=updateWalletRecipient;$("search").oninput=paint;$("sort").onchange=paint;$("clearSearch").onclick=()=>{$("search").value="";filter="all";document.querySelectorAll("[data-filter]").forEach(b=>b.classList.toggle("active",b.dataset.filter==="all"));paint();};
 $("tabs").addEventListener("click",e=>{const b=e.target.closest("[data-filter]");if(!b)return;filter=b.dataset.filter;document.querySelectorAll("[data-filter]").forEach(x=>x.classList.toggle("active",x===b));paint();});
@@ -341,5 +411,5 @@ $("refreshVideos").onclick=loadVideoAdmin;
 
 
 $("logout").onclick=()=>{token="";sessionStorage.removeItem("lexiaaAdminNewToken");users=[];wallets=[];selected=null;$("adminPanel").classList.add("hidden");$("loginPanel").classList.remove("hidden");$("loginForm").reset();};
-if(token){$("loginPanel").classList.add("hidden");$("adminPanel").classList.remove("hidden");Promise.all([loadUsers(),loadWallets(),loadNovelAdmin(),loadVideoAdmin()]);}
+if(token){$("loginPanel").classList.add("hidden");$("adminPanel").classList.remove("hidden");Promise.all([loadUsers(),loadWallets(),loadNovelAdmin(),loadVideoAdmin(),loadProSettings(),loadProApplications()]);}
 </script></body></html>
