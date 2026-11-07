@@ -248,13 +248,14 @@ Deno.serve(async req => {
   if (input.action === "pro_membership_update") {
     const userId = String(input.user_id || "");
     const status = input.status === "active" ? "active" : input.status === "inactive" ? "inactive" : "";
-    const startsAt = new Date(String(input.starts_at || "")).toISOString();
-    const endsAt = new Date(String(input.ends_at || "")).toISOString();
+    const startsMs = Date.parse(String(input.starts_at || ""));
+    const endsMs = Date.parse(String(input.ends_at || ""));
     const note = String(input.admin_note || "").trim().slice(0, 500);
-    if (!userId || !status || !Number.isFinite(Date.parse(String(input.starts_at || ""))) ||
-        !Number.isFinite(Date.parse(String(input.ends_at || ""))) || new Date(endsAt) <= new Date(startsAt)) {
+    if (!userId || !status || !Number.isFinite(startsMs) || !Number.isFinite(endsMs) || endsMs <= startsMs) {
       return json({ error: "Status atau rentang masa aktif tidak valid." }, 400);
     }
+    const startsAt = new Date(startsMs).toISOString();
+    const endsAt = new Date(endsMs).toISOString();
     if (status === "inactive" && !note) return json({ error: "Catatan admin wajib diisi saat menonaktifkan Pro." }, 400);
     const { error } = await db.from("ng_pro_memberships").update({
       status, starts_at: startsAt, ends_at: endsAt, admin_note: note || null, updated_at: new Date().toISOString()
