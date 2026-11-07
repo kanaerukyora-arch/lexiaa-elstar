@@ -271,20 +271,21 @@ $("videoAdminForm").onsubmit=async e=>{
  if(!original){notice("videoAdminNotice","Pilih file video terlebih dahulu.");return;}
  if(!title||!Number.isSafeInteger(price)||price<0||price>1e9){notice("videoAdminNotice","Judul atau harga tidak valid.");return;}
  const btn=$("videoAdminSave");btn.disabled=true;$("videoCompressBox").classList.add("hidden");
- let file=original,path="";
+ let file=original,path="",videoStage="Memulai proses";
  try{
-  if(file.size>52428800){notice("videoAdminNotice","File "+videoBytes(file.size)+" melebihi 50 MB. Memulai kompresi...");file=await compressVideoIfNeeded(file);}
+  if(file.size>52428800){videoStage="Kompresi FFmpeg";notice("videoAdminNotice","File "+videoBytes(file.size)+" melebihi 50 MB. Memulai kompresi...");file=await compressVideoIfNeeded(file);videoStage="Kompresi selesai";}
   if(file.size>52428800)throw new Error("Video masih melebihi batas 50 MB.");
   $("videoCompressBox").classList.remove("hidden");$("videoProgressTitle").textContent=original.size>52428800?"Video Berhasil Dikompres":"Video Siap Diunggah";videoProgress(100,"Ukuran akhir: "+videoBytes(file.size));
-  notice("videoAdminNotice","Menyiapkan unggahan "+videoBytes(file.size)+"...");
+  videoStage="Meminta izin unggah ke server";notice("videoAdminNotice","Kompresi selesai: "+videoBytes(file.size)+". Menyiapkan unggahan...");
   const ext=file.type==="video/webm"?"webm":"mp4",mime=ext==="webm"?"video/webm":"video/mp4";
   const signed=await api({action:"video_upload_sign",extension:ext,file_size:file.size});
-  const {data,error}=await novelDb.storage.from("lexiaa-ng-videos").uploadToSignedUrl(signed.path,signed.token,file,{contentType:mime,upsert:false});
-  if(error)throw error;path=signed.path;
-  notice("videoAdminNotice","Menyimpan katalog video...");
+  if(!signed?.path||!signed?.token)throw new Error("Server tidak mengembalikan token unggah yang lengkap.");
+  videoStage="Mengirim file ke Supabase Storage";const {data,error}=await novelDb.storage.from("lexiaa-ng-videos").uploadToSignedUrl(signed.path,signed.token,file,{contentType:mime,upsert:false});
+  if(error)throw new Error("Supabase Storage: "+(error.message||JSON.stringify(error)));
+  path=signed.path;videoStage="Menyimpan data katalog";notice("videoAdminNotice","Menyimpan katalog video...");
   await api({action:"video_save",title,price,video_path:path,mime_type:mime,file_size:file.size});
   notice("videoAdminNotice","Video berhasil diunggah dan diterbitkan.",true);$("videoAdminForm").reset();$("videoCompressBox").classList.add("hidden");await loadVideoAdmin();
- }catch(err){notice("videoAdminNotice",err.message||"Unggah video gagal.");}
+ }catch(err){const detail=err?.message||String(err)||"Error tidak memiliki pesan";console.error("[LEXIAA video upload]",videoStage,err);notice("videoAdminNotice","Gagal pada tahap: "+videoStage+". Detail: "+detail);}
  finally{btn.disabled=false;}
 };
 $("refreshVideos").onclick=loadVideoAdmin;
