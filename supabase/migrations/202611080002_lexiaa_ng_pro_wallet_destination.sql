@@ -103,7 +103,7 @@ begin
 
   if v_amount>0 then
     insert into public.ng_wallet_transactions(auth_user_id,description,amount,direction,status)
-    values(v_uid,'Bonus harian LEXIAA N.G Pro · '+v_wallet_phone,v_amount,'credit','success');
+    values(v_uid,'Bonus harian LEXIAA N.G Pro · '||v_wallet_phone,v_amount,'credit','success');
   end if;
   return jsonb_build_object('success',true,'credited',true,'amount',v_amount,'balance',v_balance,'wallet_phone',v_wallet_phone);
 end
