@@ -262,13 +262,23 @@ async function compressVideoIfNeeded(file){
 }
 async function makeVideoThumbnail(file){
  const objectUrl=URL.createObjectURL(file),video=document.createElement("video");
- video.muted=true;video.playsInline=true;video.preload="metadata";video.src=objectUrl;
+ video.muted=true;video.playsInline=true;video.preload="auto";video.src=objectUrl;
  try{
   await new Promise((resolve,reject)=>{
-   video.onloadedmetadata=()=>{try{video.currentTime=Math.min(.8,Math.max(0,(video.duration||1)*.12));}catch(err){reject(err);}};
-   video.onseeked=resolve;video.onerror=()=>reject(new Error("Cuplikan video tidak dapat dibaca."));
+   let settled=false;const timer=setTimeout(()=>finish(new Error("Waktu membaca cuplikan video habis.")),10000);
+   const finish=error=>{if(settled)return;settled=true;clearTimeout(timer);error?reject(error):resolve();};
+   video.addEventListener("error",()=>finish(new Error("Cuplikan video tidak dapat dibaca.")),{once:true});
+   video.addEventListener("loadeddata",()=>{
+    try{
+     const target=Math.min(.8,Math.max(0,(video.duration||1)*.12));
+     if(target<.05){finish();return;}
+     video.addEventListener("seeked",()=>finish(),{once:true});
+     video.currentTime=target;
+    }catch(err){finish(err);}
+   },{once:true});
    video.load();
   });
+  if(!video.videoWidth||!video.videoHeight)throw new Error("Video belum memiliki frame yang bisa dijadikan thumbnail.");
   const width=320,height=180,canvas=document.createElement("canvas");canvas.width=width;canvas.height=height;
   const ctx=canvas.getContext("2d",{alpha:false});if(!ctx)throw new Error("Canvas thumbnail tidak tersedia.");
   const scale=Math.max(width/video.videoWidth,height/video.videoHeight),sw=width/scale,sh=height/scale,sx=(video.videoWidth-sw)/2,sy=(video.videoHeight-sh)/2;
@@ -312,7 +322,7 @@ $("videoAdminForm").onsubmit=async e=>{
   videoStage="Mengirim file ke Supabase Storage";const {data,error}=await novelDb.storage.from("lexiaa-ng-videos").uploadToSignedUrl(signed.path,signed.token,file,{contentType:mime,upsert:false});
   if(error)throw new Error("Supabase Storage: "+(error.message||JSON.stringify(error)));
   path=signed.path;
-  let thumbnailPath="";
+  let thumbnailPath="",thumbnailWarning="";
   try{
    videoStage="Membuat thumbnail video";notice("videoAdminNotice","Membuat cuplikan gambar video...");
    const thumb=await makeVideoThumbnail(file),thumbSign=await api({action:"video_upload_sign",extension:"jpg",file_size:thumb.size,video_path:path});
@@ -320,10 +330,10 @@ $("videoAdminForm").onsubmit=async e=>{
    const thumbUpload=await novelDb.storage.from("lexiaa-ng-videos").uploadToSignedUrl(thumbSign.path,thumbSign.token,thumb,{contentType:"image/jpeg",upsert:false});
    if(thumbUpload.error)throw new Error(thumbUpload.error.message||"Thumbnail gagal diunggah.");
    thumbnailPath=thumbSign.path;
-  }catch(thumbError){console.warn("[LEXIAA thumbnail]",thumbError);notice("videoAdminNotice","Video terunggah. Thumbnail gagal dibuat; video tetap akan disimpan.");}
+  }catch(thumbError){console.warn("[LEXIAA thumbnail]",thumbError);thumbnailWarning=thumbError?.message||"Penyebab tidak diketahui";}
   videoStage="Menyimpan data katalog";notice("videoAdminNotice","Menyimpan katalog video...");
   await api({action:"video_save",title,price,video_path:path,thumbnail_path:thumbnailPath,mime_type:mime,file_size:file.size});
-  notice("videoAdminNotice","Video berhasil diunggah dan diterbitkan.",true);$("videoAdminForm").reset();$("videoCompressBox").classList.add("hidden");await loadVideoAdmin();
+  notice("videoAdminNotice",thumbnailWarning?"Video tersimpan, tetapi thumbnail gagal: "+thumbnailWarning:"Video berhasil diunggah dan diterbitkan.",!thumbnailWarning);$("videoAdminForm").reset();$("videoCompressBox").classList.add("hidden");await loadVideoAdmin();
  }catch(err){const detail=err?.message||String(err)||"Error tidak memiliki pesan";console.error("[LEXIAA video upload]",videoStage,err);notice("videoAdminNotice","Gagal pada tahap: "+videoStage+". Detail: "+detail);}
  finally{btn.disabled=false;}
 };
