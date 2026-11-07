@@ -1236,7 +1236,7 @@ function ngWalletPhone(mode){
   ngWalletState.phoneDigits=value;ngWalletPhoneRender();
  }));
  $("ngWalletPhoneNext").onclick=()=>{const region=ngPhoneRegion(),digits=ngWalletState.phoneDigits;if(digits.length<region.min||digits.length>region.max){ngWalletError("Periksa kembali panjang nomor telepon.");return;}ngWalletState.phone=region.code+digits;if(mode==="register")ngWalletPin("create");else ngWalletPin("login");};
- $("ngWalletCancel").onclick=ngWalletStart;ngWalletPhoneRender();
+ $("ngWalletCancel").onclick=()=>mode==="payment-link"?ngWalletPaymentCancel():ngWalletStart();ngWalletPhoneRender();
 }
 function ngWalletPin(kind){
  ngWalletState.stage=kind==="create"?"pin-create":kind==="confirm"?"pin-confirm":"pin-login";
