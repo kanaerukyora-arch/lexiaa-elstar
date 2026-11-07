@@ -1221,6 +1221,7 @@ async function loadLexiaaProStatus(){
   if(data.pro_active){status.textContent="Status: LEXIAA N.G Pro AKTIF sampai "+new Date(data.pro_ends_at).toLocaleString("id-ID")+".";
     form.hidden=true;renew.hidden=false;renew.textContent="PERPANJANG · "+new Intl.NumberFormat("id-ID",{style:"currency",currency:"IDR",maximumFractionDigits:0}).format(data.renewal_price||0);renew.disabled=Number(data.renewal_price)<=0;
   }else if(data.application_status==="pending"){status.textContent="Pengajuan kamu sedang menunggu keputusan admin. Notifikasi akan dikirim melalui menu Pesan dan email.";form.hidden=true;}
+  else if(data.membership_exists){status.textContent="Masa aktif LEXIAA N.G Pro kamu telah berakhir. Kamu dapat memperpanjang keanggotaan.";form.hidden=true;renew.hidden=false;renew.textContent="PERPANJANG · "+new Intl.NumberFormat("id-ID",{style:"currency",currency:"IDR",maximumFractionDigits:0}).format(data.renewal_price||0);renew.disabled=Number(data.renewal_price)<=0;}
   else if(data.application_status==="rejected"){status.textContent="Pengajuan sebelumnya belum disetujui. Kamu dapat mengirim pengajuan baru.";form.hidden=false;submit.disabled=false;}
   else{status.textContent="Kamu belum terdaftar sebagai LEXIAA N.G Pro.";form.hidden=false;submit.disabled=false;}
   const {data:{user}}=await supabase.auth.getUser();if(user?.email&&!$("lexiaaProEmail").value)$("lexiaaProEmail").value=user.email;
