@@ -406,6 +406,7 @@ begin
  update public.ng_wallet_accounts set balance=balance-v_amount,updated_at=v_now where auth_user_id=v_uid returning balance into v_balance;
  insert into public.ng_wallet_transactions(auth_user_id,description,amount,direction,status)
  values(v_uid,'Langganan Lexiaa N.G Video VIP ('||p_package||')',v_amount,'debit','success');
+ select balance into v_balance from public.ng_wallet_accounts where auth_user_id=v_uid;
  insert into public.ng_video_vip_subscriptions(user_id,package_code,amount,starts_at,ends_at,updated_at)
  values(v_uid,p_package,v_amount,v_start,v_end,v_now)
  on conflict(user_id) do update set package_code=excluded.package_code,amount=excluded.amount,starts_at=excluded.starts_at,ends_at=excluded.ends_at,updated_at=v_now;
@@ -437,6 +438,7 @@ begin
  update public.ng_wallet_accounts set balance=balance-v_amount,updated_at=now() where auth_user_id=v_uid returning balance into v_balance;
  insert into public.ng_wallet_transactions(auth_user_id,description,amount,direction,status)
  values(v_uid,'Pembelian video: '||v_video.title,v_amount,'debit','success');
+ select balance into v_balance from public.ng_wallet_accounts where auth_user_id=v_uid;
  insert into public.ng_video_purchases(user_id,video_id,amount) values(v_uid,p_video_id,v_amount) on conflict(user_id,video_id) do nothing;
  return jsonb_build_object('success',true,'balance',v_balance,'amount',v_amount,'list_price',v_video.price,'discount_percent',v_discount);
 end $$;
