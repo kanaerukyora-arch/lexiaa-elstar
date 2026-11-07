@@ -167,7 +167,7 @@ async function loadProApplications(){
   for(const a of items){
    const card=document.createElement("article");card.className="pro-app-card";
    const title=document.createElement("strong");title.textContent=a.full_name+" · "+String(a.status||"").toUpperCase();
-   const meta=document.createElement("div");meta.className="pro-app-meta";meta.textContent="Tanggal lahir: "+a.birth_date+" | Email: "+a.email+" | WhatsApp: "+a.whatsapp+" | Diajukan: "+new Date(a.created_at).toLocaleString("id-ID");
+   const meta=document.createElement("div");meta.className="pro-app-meta";meta.textContent="Tanggal lahir: "+a.birth_date+" | Email: "+a.email+" | WhatsApp: "+a.whatsapp+" | Wallet N.G: "+(a.wallet_phone||"Belum diisi")+" | Diajukan: "+new Date(a.created_at).toLocaleString("id-ID");
    card.append(title,meta);
    if(a.status==="pending"){
     const actions=document.createElement("div");actions.className="pro-app-actions";
