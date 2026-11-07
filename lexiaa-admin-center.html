@@ -226,7 +226,7 @@ async function compressVideoIfNeeded(file){
     const workerResponse=await fetch(mirror.pkg+"worker.js");
     if(!workerResponse.ok)throw new Error("Worker CDN gagal dimuat ("+workerResponse.status+").");
     let workerSource=await workerResponse.text();
-    workerSource=workerSource.replace(/(["'])\\.\\/(const|errors)\\.js\\1/g,(_,quote,name)=>quote+mirror.pkg+name+".js"+quote);
+    workerSource=workerSource.replace(/(["'])\.\/(const|errors)\.js\1/g,(_,quote,name)=>quote+mirror.pkg+name+".js"+quote);
     classWorkerURL=URL.createObjectURL(new Blob([workerSource],{type:"text/javascript"}));
     const [coreResponse,wasmResponse]=await Promise.all([fetch(mirror.core+"ffmpeg-core.js"),fetch(mirror.core+"ffmpeg-core.wasm")]);
     if(!coreResponse.ok||!wasmResponse.ok)throw new Error("File mesin FFmpeg gagal dimuat dari CDN.");
