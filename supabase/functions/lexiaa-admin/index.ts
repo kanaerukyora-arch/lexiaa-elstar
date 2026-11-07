@@ -98,7 +98,7 @@ Deno.serve(async req => {
 
     if (input.action === "video_catalog") {
       const [{ data: videos, error: videoError }, { data: purchases, error: purchaseError }, { data: subscription, error: subError }] = await Promise.all([
-        db.from("ng_videos").select("id,title,price,mime_type,file_size,created_at").eq("is_published", true).order("created_at", { ascending: false }),
+        db.from("ng_videos").select("id,title,price,mime_type,file_size,created_at,thumbnail_path").eq("is_published", true).order("created_at", { ascending: false }),
         db.from("ng_video_purchases").select("video_id").eq("user_id", customer.id),
         db.from("ng_video_vip_subscriptions").select("ends_at,package_code").eq("user_id", customer.id).maybeSingle()
       ]);
