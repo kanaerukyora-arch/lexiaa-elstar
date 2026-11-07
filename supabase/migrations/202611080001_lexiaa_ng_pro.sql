@@ -235,7 +235,7 @@ begin
     return jsonb_build_object('success',false,'message','Akun Wallet N.G tidak ditemukan.','wallet_missing',true);
   end if;
 
-  if v_daily.free_spins_used < case when exists(select 1 from public.ng_pro_memberships where user_id=v_uid and status='active' and starts_at<=now() and ends_at>now()) then 20 else 10 end then
+  if v_daily.free_spins_used < (case when exists(select 1 from public.ng_pro_memberships where user_id=v_uid and status='active' and starts_at<=now() and ends_at>now()) then 20 else 10 end) then
     update public.ng_wallet_spin_daily
       set free_spins_used=free_spins_used+1,updated_at=now()
       where auth_user_id=v_uid and spin_date=v_day;
