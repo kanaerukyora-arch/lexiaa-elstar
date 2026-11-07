@@ -1286,7 +1286,8 @@ $("ngFeatureClose").addEventListener("click",closeNgFeature);
 /* N.G popups are intentionally modal: backdrop taps never dismiss them. */
 ngFeatureBackdrop.addEventListener("click",e=>{if(e.target===ngFeatureBackdrop){e.preventDefault();e.stopPropagation();}});
 
-let ngVideoPayment=null,ngVideoObjectUrl=null;
+let ngVideoPayment=null,ngVideoObjectUrl=null,ngVideoPosterObjectUrls=[];
+function ngVideoClearPosterUrls(){for(const url of ngVideoPosterObjectUrls)URL.revokeObjectURL(url);ngVideoPosterObjectUrls=[];}
 const NG_VIDEO_PACKAGES=[
  {code:"1h",label:"1 Jam",price:100000,duration:"1 jam"},
  {code:"10h",label:"10 Jam",price:200000,duration:"10 jam"},
@@ -1318,6 +1319,7 @@ function ngVideoNav(active){
   return '<div class="ng-video-poster" aria-label="Pratinjau '+ngEscape(title||"video")+'">'+(thumbnail?'<img src="'+ngEscape(thumbnail)+'" alt="" loading="lazy" decoding="async">':'▶')+'</div>';
  }
  async function ngShowVideos(){
+  ngVideoClearPosterUrls();
   try{
    const d=await ngNovelApi("video_catalog"),videos=d.videos||[],active=d.vip_active===true,sub=d.subscription;
    const end=sub?.ends_at?new Date(sub.ends_at):null;
@@ -1351,6 +1353,7 @@ function ngVideoNav(active){
   }
  }
  async function ngShowOfflineVideos(){
+  ngVideoClearPosterUrls();
   try{
    const saved=await ngVideoOfflineList();
    const now=Date.now();
@@ -1358,7 +1361,9 @@ function ngVideoNav(active){
    if(!saved.length)html+='<div class="ng-video-empty">Belum ada video yang disimpan offline. Buka Tonton Video Online lalu pilih Simpan Video Offline.</div>';
    for(const v of saved){
     const valid=!!v.blob&&!!v.vip_ends_at&&now<new Date(v.vip_ends_at).getTime();
-    html+='<article class="ng-video-card">'+ngVideoPoster(v.title||"Video LEXIAA",v.thumbnail_url)+'<h4>'+ngEscape(v.title||"Video LEXIAA")+'</h4><div class="ng-video-tag">'+(valid?'Tersimpan Offline':'Akses VIP Berakhir')+'</div><button class="ng-fantasy-btn" type="button" data-video-play-offline="'+v.id+'" '+(valid?'':'disabled')+'>Tonton Video Offline</button></article>';
+    const thumbUrl=v.thumbnail_blob?URL.createObjectURL(v.thumbnail_blob):(v.thumbnail_url||"");
+    if(v.thumbnail_blob)ngVideoPosterObjectUrls.push(thumbUrl);
+    html+='<article class="ng-video-card">'+ngVideoPoster(v.title||"Video LEXIAA",thumbUrl)+'<h4>'+ngEscape(v.title||"Video LEXIAA")+'</h4><div class="ng-video-tag">'+(valid?'Tersimpan Offline':'Akses VIP Berakhir')+'</div><button class="ng-fantasy-btn" type="button" data-video-play-offline="'+v.id+'" '+(valid?'':'disabled')+'>Tonton Video Offline</button></article>';
    }
    html+='</div></div>';ngFeatureContent.innerHTML=html;ngVideoBindNav();
    ngFeatureContent.querySelectorAll("[data-video-play-offline]").forEach(b=>b.onclick=()=>ngVideoPlay(b.dataset.videoPlayOffline,"offline"));
@@ -1422,14 +1427,16 @@ async function ngVideoSaveOffline(id,button){
  try{
   // The server checks VIP and individual ownership before issuing this short-lived URL and offline expiry.
   const d=await ngNovelApi("video_stream",{video_id:id});
+  let thumbnailBlob=null;
+  if(d.thumbnail_url){try{const thumbResponse=await fetch(d.thumbnail_url);if(thumbResponse.ok)thumbnailBlob=await thumbResponse.blob();}catch(thumbError){console.warn("Thumbnail offline tidak tersimpan:",thumbError);}}
   const cached=await ngVideoOfflineGet(id);
   if(cached?.blob){
-   cached.vip_ends_at=d.vip_ends_at;await ngVideoOfflinePut(cached);savedSuccessfully=true;close();
+   cached.vip_ends_at=d.vip_ends_at;if(thumbnailBlob)cached.thumbnail_blob=thumbnailBlob;await ngVideoOfflinePut(cached);savedSuccessfully=true;close();
    await ngVideoDialog({title:"Offline Siap Digunakan",message:"Video sudah tersimpan. Masa akses offline diperbarui sampai "+new Date(d.vip_ends_at).toLocaleString("id-ID")+".",actions:[{label:"Oke"}]});return;
   }
   const response=await fetch(d.url);if(!response.ok)throw new Error("Unduhan video gagal ("+response.status+").");
   const blob=await response.blob();if(!blob.size)throw new Error("File video kosong.");
-  await ngVideoOfflinePut({id,blob,title:d.title,mime_type:d.mime_type,vip_ends_at:d.vip_ends_at,saved_at:new Date().toISOString()});savedSuccessfully=true;
+  await ngVideoOfflinePut({id,blob,title:d.title,mime_type:d.mime_type,thumbnail_blob:thumbnailBlob,vip_ends_at:d.vip_ends_at,saved_at:new Date().toISOString()});savedSuccessfully=true;
   close();await ngVideoDialog({title:"Tersimpan Offline",message:"Video berhasil disimpan di perangkat ini. Video bisa diputar tanpa internet sampai "+new Date(d.vip_ends_at).toLocaleString("id-ID")+". Setelah VIP habis, sambungkan internet dan aktifkan VIP kembali untuk memperbarui akses.",mark:"✓",actions:[{label:"Lanjutkan"}]});
  }catch(e){close();await ngVideoDialog({title:"Gagal Menyimpan",message:e.message,mark:"!",actions:[{label:"Mengerti"}]});}
  finally{if(button&&!savedSuccessfully){button.disabled=false;button.textContent=old||"Simpan Video Offline";}if(savedSuccessfully)await ngShowVideos();}
