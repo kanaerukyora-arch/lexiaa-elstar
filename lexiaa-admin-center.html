@@ -315,7 +315,7 @@ $("videoAdminForm").onsubmit=async e=>{
   let thumbnailPath="";
   try{
    videoStage="Membuat thumbnail video";notice("videoAdminNotice","Membuat cuplikan gambar video...");
-   const thumb=await makeVideoThumbnail(file),thumbSign=await api({action:"video_upload_sign",extension:"jpg",file_size:thumb.size});
+   const thumb=await makeVideoThumbnail(file),thumbSign=await api({action:"video_upload_sign",extension:"jpg",file_size:thumb.size,video_path:path});
    if(!thumbSign?.path||!thumbSign?.token)throw new Error("Izin unggah thumbnail tidak tersedia.");
    const thumbUpload=await novelDb.storage.from("lexiaa-ng-videos").uploadToSignedUrl(thumbSign.path,thumbSign.token,thumb,{contentType:"image/jpeg",upsert:false});
    if(thumbUpload.error)throw new Error(thumbUpload.error.message||"Thumbnail gagal diunggah.");
