@@ -167,22 +167,28 @@ Deno.serve(async req => {
     }
 
     if (input.action === "novel_catalog") {
-      const [{ data: novels, error: novelError }, { data: purchases, error: purchaseError }] = await Promise.all([
+      const [{ data: novels, error: novelError }, { data: purchases, error: purchaseError }, { data: membership, error: proError }, { data: proSettings, error: settingsError }] = await Promise.all([
         db.from("lexiaa_novels").select("id,title,price,cover_path,cover_mode,created_at").eq("is_published", true).order("created_at", { ascending: false }),
         db.from("lexiaa_novel_purchases").select("novel_id").eq("user_id", customer.id),
+        db.from("ng_pro_memberships").select("status,starts_at,ends_at").eq("user_id", customer.id).maybeSingle(),
+        db.from("ng_pro_settings").select("discount_percent").eq("id", true).maybeSingle()
       ]);
       if (novelError) return json({ error: "Gagal memuat katalog novel: " + novelError.message }, 400);
-      if (purchaseError) return json({ error: "Gagal memuat status pembelian: " + purchaseError.message }, 400);
+      if (purchaseError || proError || settingsError) return json({ error: "Gagal memuat status pembelian atau keanggotaan Pro." }, 400);
       const owned = new Set((purchases || []).map((p: any) => p.novel_id));
+      const proActive = Boolean(membership && membership.status === "active" && new Date(membership.starts_at).getTime() <= Date.now() && new Date(membership.ends_at).getTime() > Date.now());
+      const discountPercent = proActive ? Math.max(0, Math.min(100, Number(proSettings?.discount_percent ?? 50))) : 0;
       const result = await Promise.all((novels || []).map(async (n: any) => {
         let cover_url: string | null = null;
         if (n.cover_path) {
           const { data } = await db.storage.from("lexiaa-novels").createSignedUrl(n.cover_path, 900);
           cover_url = data?.signedUrl || null;
         }
-        return { id: n.id, title: n.title, price: Number(n.price), cover_url, owned: owned.has(n.id) };
+        const listPrice = Number(n.price);
+        const price = Math.floor(listPrice * (100 - discountPercent) / 100);
+        return { id: n.id, title: n.title, price, list_price: listPrice, discount_percent: discountPercent, cover_url, owned: owned.has(n.id) };
       }));
-      return json({ novels: result });
+      return json({ is_pro: proActive, discount_percent: discountPercent, novels: result });
     }
 
     if (input.action === "novel_buy") {
