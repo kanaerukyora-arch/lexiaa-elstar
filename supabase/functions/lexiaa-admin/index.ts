@@ -217,7 +217,7 @@ Deno.serve(async req => {
 
   if (input.action === "pro_applications") {
     const { data, error } = await db.from("ng_pro_applications")
-      .select("id,user_id,full_name,birth_date,email,whatsapp,status,created_at")
+      .select("id,user_id,full_name,birth_date,email,whatsapp,wallet_phone,status,created_at")
       .order("created_at", { ascending: false });
     if (error) return json({ error: "Gagal memuat pengajuan Pro: " + error.message }, 400);
     return json({ applications: data || [] });
@@ -254,7 +254,7 @@ Deno.serve(async req => {
       return json({ error: "Keputusan atau masa aktif Pro tidak valid." }, 400);
     }
     const { data: app, error: appError } = await db.from("ng_pro_applications")
-      .select("id,user_id,full_name,email,status").eq("id", applicationId).maybeSingle();
+      .select("id,user_id,full_name,email,wallet_phone,status").eq("id", applicationId).maybeSingle();
     if (appError || !app) return json({ error: "Pengajuan tidak ditemukan." }, 404);
     if (app.status !== "pending") return json({ error: "Pengajuan ini sudah diproses." }, 409);
 
