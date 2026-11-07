@@ -2,6 +2,7 @@
 // Admin API. Keep verify_jwt=false because the browser sends a custom HMAC admin token.
 // This function verifies that custom token itself before every privileged action.
 import { createClient } from "npm:@supabase/supabase-js@2";
+import nodemailer from "npm:nodemailer@^9";
 
 const cors = {
   "Access-Control-Allow-Origin": "*",
@@ -12,6 +13,39 @@ const cors = {
 const json = (data: unknown, status = 200) =>
   new Response(JSON.stringify(data), { status, headers: cors });
 const enc = new TextEncoder();
+
+function escapeHtml(value: string) {
+  return value.replace(/[&<>"']/g, ch => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch] || ch));
+}
+async function sendProEmail(to: string, subject: string, body: string) {
+  const host = Deno.env.get("SMTP_HOST") || "";
+  const port = Number(Deno.env.get("SMTP_PORT") || "465");
+  const user = Deno.env.get("SMTP_USER") || "";
+  const pass = Deno.env.get("SMTP_PASS") || "";
+  const from = Deno.env.get("LEXIAA_PRO_FROM_EMAIL") || user;
+  if (!host || !user || !pass || !from || !to || !/^\S+@\S+\.\S+$/.test(to)) {
+    return { sent: false, error: "Konfigurasi SMTP atau email penerima belum lengkap." };
+  }
+  try {
+    const transport = nodemailer.createTransport({
+      host, port, secure: port === 465,
+      auth: { user, pass },
+    });
+    const safeSubject = escapeHtml(subject);
+    const safeBody = escapeHtml(body).replace(/\n/g, "<br>");
+    await transport.sendMail({
+      from: { name: "LEXIAA N.G", address: from },
+      to, subject,
+      html: `<!doctype html><html><body style="margin:0;background:#080d1d;padding:32px 12px;font-family:Arial,sans-serif;color:#eef5ff"><div style="max-width:580px;margin:auto;border:1px solid #26365d;border-radius:22px;overflow:hidden;background:#101a34"><div style="padding:28px 30px;background:linear-gradient(120deg,#101a34,#19234a);border-bottom:1px solid #2b3d68"><div style="font-size:12px;letter-spacing:4px;color:#52e5ff;font-weight:bold">LEXIAA</div><div style="font-size:22px;font-weight:bold;margin-top:8px;color:#fff">THE NEXT GENERATION</div></div><div style="padding:30px"><div style="font-size:20px;font-weight:bold;color:#72eaff;margin-bottom:18px">${safeSubject}</div><div style="font-size:14px;line-height:1.8;color:#dce7ff">${safeBody}</div><div style="height:1px;background:#2a3a61;margin:26px 0 18px"></div><div style="font-size:11px;letter-spacing:2px;color:#8295bd">LEXIAA N.G · NOTIFIKASI RESMI</div></div></div></body></html>`,
+      text: body,
+    });
+    await transport.close();
+    return { sent: true, error: "" };
+  } catch (e) {
+    return { sent: false, error: String(e).slice(0, 300) };
+  }
+}
+
 
 function b64url(bytes: Uint8Array) {
   let s = "";
@@ -266,7 +300,9 @@ Deno.serve(async req => {
       ? "Masa aktif LEXIAA N.G Pro kamu telah diperbarui hingga " + new Date(endsAt).toLocaleString("id-ID", { timeZone: "Asia/Jakarta" }) + "." + (note ? "\\nCatatan admin: " + note : "")
       : "Keanggotaan LEXIAA N.G Pro kamu telah dinonaktifkan." + "\\nCatatan admin: " + note;
     await db.from("lexiaa_messages").insert({ recipient_id: userId, title, body });
-    return json({ success: true, status, starts_at: startsAt, ends_at: endsAt });
+    const { data: target } = await db.auth.admin.getUserById(userId);
+    const emailResult = target?.user?.email ? await sendProEmail(target.user.email, title, body) : { sent: false, error: "Email akun tidak ditemukan." };
+    return json({ success: true, status, starts_at: startsAt, ends_at: endsAt, email_sent: emailResult.sent, email_error: emailResult.error });
   }
 
   if (input.action === "pro_applications") {
@@ -332,28 +368,8 @@ Deno.serve(async req => {
       : "Maaf, pengajuan LEXIAA N.G Pro kamu belum disetujui." + (note ? "\\nCatatan admin: " + note : "");
     const { error: messageError } = await db.from("lexiaa_messages").insert({ recipient_id: app.user_id, title, body });
 
-    let emailSent = false, emailError = "";
-    const resendKey = Deno.env.get("RESEND_API_KEY") || "";
-    const fromEmail = Deno.env.get("LEXIAA_PRO_FROM_EMAIL") || "";
-    if (resendKey && fromEmail && app.email) {
-      try {
-        const resp = await fetch("https://api.resend.com/emails", {
-          method: "POST",
-          headers: { "Authorization": "Bearer " + resendKey, "Content-Type": "application/json" },
-          body: JSON.stringify({
-            from: fromEmail,
-            to: [app.email],
-            subject: title,
-            html: "<div style='font-family:Arial,sans-serif;max-width:560px;margin:auto;padding:24px;background:#10152c;color:#f4f7ff;border-radius:16px'><h2>" + title + "</h2><p>" + body.replace(/\\n/g, "<br>") + "</p><p>LEXIAA · THE NEXT GENERATION</p></div>"
-          })
-        });
-        emailSent = resp.ok;
-        if (!resp.ok) emailError = (await resp.text()).slice(0, 300);
-      } catch (e) { emailError = String(e); }
-    } else {
-      emailError = "RESEND_API_KEY atau LEXIAA_PRO_FROM_EMAIL belum dipasang.";
-    }
-    return json({ success: true, decision, email_sent: emailSent, email_error: emailError,
+    const emailResult = app.email ? await sendProEmail(app.email, title, body) : { sent: false, error: "Email pengajuan tidak ditemukan." };
+    return json({ success: true, decision, email_sent: emailResult.sent, email_error: emailResult.error,
       message_saved: !messageError, ends_at: decision === "approved" ? endsAt : null });
   }
 
