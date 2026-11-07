@@ -188,10 +188,8 @@ button,input{font:inherit}button{cursor:pointer}#particles{position:fixed;inset:
 .ng-video-nav button.active{border-bottom-color:#29251d;background:transparent;color:#211e19;box-shadow:none}
 .ng-video-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px 12px}
 .ng-video-card{min-width:0;overflow:hidden;border:0;border-radius:12px;background:transparent;padding:0;text-align:center}
-.ng-video-poster{display:grid;place-items:center;aspect-ratio:16/9;overflow:hidden;border-radius:11px;background:linear-gradient(135deg,#314a5b,#c08b62 52%,#e9bd7b);color:#fff;font-size:38px;text-shadow:0 2px 10px #0008}
-.ng-video-card:nth-child(4n+2) .ng-video-poster{background:linear-gradient(135deg,#304f68,#a56c55,#e8b87b)}
-.ng-video-card:nth-child(4n+3) .ng-video-poster{background:linear-gradient(135deg,#142d42,#427e83,#e6b76b)}
-.ng-video-card:nth-child(4n) .ng-video-poster{background:linear-gradient(135deg,#8b5262,#f0a45e,#f6d18a)}
+.ng-video-poster{display:grid;place-items:center;aspect-ratio:16/9;overflow:hidden;border-radius:11px;background:linear-gradient(135deg,#26394a,#5b5265);color:#fff;font-size:30px;text-shadow:0 2px 10px #0008}
+.ng-video-poster img{display:block;width:100%;height:100%;object-fit:cover;object-position:center;background:#17202d}
 .ng-video-card h4{margin:7px 0 8px;font:800 clamp(12px,1.6vw,16px) Inter,sans-serif;color:#171717;line-height:1.25;overflow-wrap:anywhere}
 .ng-video-card p{margin:5px 0;color:#69645b;font-size:10px}
 .ng-video-card .ng-video-price{color:#191919;font-size:clamp(13px,1.7vw,17px);font-weight:500;margin:7px 0 0}
@@ -1316,8 +1314,8 @@ function ngVideoNav(active){
   openNgFeature();
   await ngShowVideos();
  }
- function ngVideoPoster(title){
-  return '<div class="ng-video-poster" aria-label="Pratinjau video">▶</div>';
+ function ngVideoPoster(title,thumbnail){
+  return '<div class="ng-video-poster" aria-label="Pratinjau '+ngEscape(title||"video")+'">'+(thumbnail?'<img src="'+ngEscape(thumbnail)+'" alt="" loading="lazy" decoding="async">':'▶')+'</div>';
  }
  async function ngShowVideos(){
   try{
@@ -1330,7 +1328,7 @@ function ngVideoNav(active){
    for(const v of videos){
     const free=Number(v.price)===0,owned=!!v.owned,eligible=free||owned,playable=active&&eligible;
     const saved=await ngVideoOfflineGet(v.id);
-    html+='<article class="ng-video-card">'+ngVideoPoster(v.title)+'<h4>'+ngEscape(v.title)+'</h4>';
+    html+='<article class="ng-video-card">'+ngVideoPoster(v.title,v.thumbnail_url)+'<h4>'+ngEscape(v.title)+'</h4>';
     if(!eligible){
      html+='<button class="ng-fantasy-btn" type="button" data-video-buy="'+v.id+'">Beli Sekarang</button><div class="ng-video-price">'+ngNovelRupiah(v.price)+'</div>';
     }else{
@@ -1360,7 +1358,7 @@ function ngVideoNav(active){
    if(!saved.length)html+='<div class="ng-video-empty">Belum ada video yang disimpan offline. Buka Tonton Video Online lalu pilih Simpan Video Offline.</div>';
    for(const v of saved){
     const valid=!!v.blob&&!!v.vip_ends_at&&now<new Date(v.vip_ends_at).getTime();
-    html+='<article class="ng-video-card">'+ngVideoPoster(v.title||"Video LEXIAA")+'<h4>'+ngEscape(v.title||"Video LEXIAA")+'</h4><div class="ng-video-tag">'+(valid?'Tersimpan Offline':'Akses VIP Berakhir')+'</div><button class="ng-fantasy-btn" type="button" data-video-play-offline="'+v.id+'" '+(valid?'':'disabled')+'>Tonton Video Offline</button></article>';
+    html+='<article class="ng-video-card">'+ngVideoPoster(v.title||"Video LEXIAA",v.thumbnail_url)+'<h4>'+ngEscape(v.title||"Video LEXIAA")+'</h4><div class="ng-video-tag">'+(valid?'Tersimpan Offline':'Akses VIP Berakhir')+'</div><button class="ng-fantasy-btn" type="button" data-video-play-offline="'+v.id+'" '+(valid?'':'disabled')+'>Tonton Video Offline</button></article>';
    }
    html+='</div></div>';ngFeatureContent.innerHTML=html;ngVideoBindNav();
    ngFeatureContent.querySelectorAll("[data-video-play-offline]").forEach(b=>b.onclick=()=>ngVideoPlay(b.dataset.videoPlayOffline,"offline"));
@@ -1409,7 +1407,7 @@ async function ngVideoPlay(id,mode="online"){
   if(ngVideoObjectUrl)URL.revokeObjectURL(ngVideoObjectUrl);
   ngVideoObjectUrl=src.startsWith("blob:")?src:null;
   ngFeatureTitle(mode==="offline"?"PEMUTAR VIDEO OFFLINE":"PEMUTAR VIDEO ONLINE");
-  ngFeatureContent.innerHTML='<div class="ng-video-wrap"><video id="ngVideoPlayer" class="ng-video-player" controls playsinline autoplay></video><p class="muted">'+playLabel+'</p><div class="ng-video-player-actions"><button class="ng-fantasy-btn secondary" id="ngVideoReturn" type="button">KEMBALI</button>'+(mode==="online"?'<button class="ng-fantasy-btn" id="ngVideoSaveFromPlayer" type="button">SIMPAN OFFLINE</button>':'')+'</div></div>';
+  ngFeatureContent.innerHTML='<div class="ng-video-wrap"><video id="ngVideoPlayer" class="ng-video-player" controls playsinline autoplay preload="metadata" poster="'+(mode==="online"&&d.thumbnail_url?ngEscape(d.thumbnail_url):"")+'"></video><p class="muted">'+playLabel+'</p><div class="ng-video-player-actions"><button class="ng-fantasy-btn secondary" id="ngVideoReturn" type="button">KEMBALI</button>'+(mode==="online"?'<button class="ng-fantasy-btn" id="ngVideoSaveFromPlayer" type="button">SIMPAN OFFLINE</button>':'')+'</div></div>';
   $("ngVideoPlayer").src=src;
   $("ngVideoReturn").onclick=()=>{stopNgVideoPlayback();mode==="offline"?ngShowOfflineVideos():ngShowVideos();};
   $("ngVideoSaveFromPlayer")?.addEventListener("click",()=>ngVideoSaveOffline(id,$("ngVideoSaveFromPlayer")));
