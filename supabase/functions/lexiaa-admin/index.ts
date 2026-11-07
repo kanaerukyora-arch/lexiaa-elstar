@@ -214,6 +214,95 @@ Deno.serve(async req => {
   }
 
 
+
+  if (input.action === "pro_applications") {
+    const { data, error } = await db.from("ng_pro_applications")
+      .select("id,user_id,full_name,birth_date,email,whatsapp,status,created_at")
+      .order("created_at", { ascending: false });
+    if (error) return json({ error: "Gagal memuat pengajuan Pro: " + error.message }, 400);
+    return json({ applications: data || [] });
+  }
+
+  if (input.action === "pro_settings_get") {
+    const { data, error } = await db.from("ng_pro_settings").select("*").eq("id", true).single();
+    if (error) return json({ error: "Gagal memuat pengaturan Pro: " + error.message }, 400);
+    return json({ settings: data });
+  }
+
+  if (input.action === "pro_settings_save") {
+    const renewal_price = Number(input.renewal_price);
+    const duration_days = Number(input.duration_days);
+    const daily_bonus = Number(input.daily_bonus);
+    if (!Number.isSafeInteger(renewal_price) || renewal_price < 0 || renewal_price > 1000000000 ||
+        !Number.isInteger(duration_days) || duration_days < 1 || duration_days > 3650 ||
+        !Number.isSafeInteger(daily_bonus) || daily_bonus < 0 || daily_bonus > 1000000000) {
+      return json({ error: "Harga, durasi, atau bonus harian tidak valid." }, 400);
+    }
+    const { data, error } = await db.from("ng_pro_settings")
+      .upsert({ id: true, renewal_price, duration_days, daily_bonus, discount_percent: 50, cashback_percent: 20, updated_at: new Date().toISOString() })
+      .select("*").single();
+    if (error) return json({ error: "Gagal menyimpan pengaturan Pro: " + error.message }, 400);
+    return json({ success: true, settings: data });
+  }
+
+  if (input.action === "pro_decide") {
+    const applicationId = String(input.application_id || "");
+    const decision = input.decision === "approved" ? "approved" : input.decision === "rejected" ? "rejected" : "";
+    const durationDays = Number(input.duration_days || 30);
+    const note = String(input.admin_note || "").trim().slice(0, 500);
+    if (!applicationId || !decision || !Number.isInteger(durationDays) || durationDays < 1 || durationDays > 3650) {
+      return json({ error: "Keputusan atau masa aktif Pro tidak valid." }, 400);
+    }
+    const { data: app, error: appError } = await db.from("ng_pro_applications")
+      .select("id,user_id,full_name,email,status").eq("id", applicationId).maybeSingle();
+    if (appError || !app) return json({ error: "Pengajuan tidak ditemukan." }, 404);
+    if (app.status !== "pending") return json({ error: "Pengajuan ini sudah diproses." }, 409);
+
+    const now = new Date();
+    const endsAt = new Date(now.getTime() + durationDays * 86400000).toISOString();
+    const { error: updateError } = await db.from("ng_pro_applications").update({
+      status: decision, admin_note: note || null, reviewed_at: now.toISOString(), reviewed_by: "LEXIAA ADMIN"
+    }).eq("id", applicationId).eq("status", "pending");
+    if (updateError) return json({ error: "Gagal menyimpan keputusan: " + updateError.message }, 400);
+
+    if (decision === "approved") {
+      const { error: memberError } = await db.from("ng_pro_memberships").upsert({
+        user_id: app.user_id, application_id: app.id, status: "active",
+        starts_at: now.toISOString(), ends_at: endsAt, updated_at: now.toISOString()
+      });
+      if (memberError) return json({ error: "Keputusan tersimpan, tetapi aktivasi Pro gagal: " + memberError.message }, 400);
+    }
+    const title = decision === "approved" ? "LEXIAA N.G Pro Disetujui!" : "Pengajuan LEXIAA N.G Pro";
+    const body = decision === "approved"
+      ? "Selamat, pengajuan LEXIAA N.G Pro kamu telah disetujui. Keanggotaan aktif sampai " + new Date(endsAt).toLocaleString("id-ID", { timeZone: "Asia/Jakarta" }) + ". Semua benefit Pro sudah dapat digunakan."
+      : "Maaf, pengajuan LEXIAA N.G Pro kamu belum disetujui." + (note ? "\\nCatatan admin: " + note : "");
+    const { error: messageError } = await db.from("lexiaa_messages").insert({ recipient_id: app.user_id, title, body });
+
+    let emailSent = false, emailError = "";
+    const resendKey = Deno.env.get("RESEND_API_KEY") || "";
+    const fromEmail = Deno.env.get("LEXIAA_PRO_FROM_EMAIL") || "";
+    if (resendKey && fromEmail && app.email) {
+      try {
+        const resp = await fetch("https://api.resend.com/emails", {
+          method: "POST",
+          headers: { "Authorization": "Bearer " + resendKey, "Content-Type": "application/json" },
+          body: JSON.stringify({
+            from: fromEmail,
+            to: [app.email],
+            subject: title,
+            html: "<div style='font-family:Arial,sans-serif;max-width:560px;margin:auto;padding:24px;background:#10152c;color:#f4f7ff;border-radius:16px'><h2>" + title + "</h2><p>" + body.replace(/\\n/g, "<br>") + "</p><p>LEXIAA · THE NEXT GENERATION</p></div>"
+          })
+        });
+        emailSent = resp.ok;
+        if (!resp.ok) emailError = (await resp.text()).slice(0, 300);
+      } catch (e) { emailError = String(e); }
+    } else {
+      emailError = "RESEND_API_KEY atau LEXIAA_PRO_FROM_EMAIL belum dipasang.";
+    }
+    return json({ success: true, decision, email_sent: emailSent, email_error: emailError,
+      message_saved: !messageError, ends_at: decision === "approved" ? endsAt : null });
+  }
+
   if (input.action === "video_list") {
     const { data, error } = await db.from("ng_videos").select("id,title,price,video_path,mime_type,file_size,is_published,created_at").order("created_at", { ascending: false });
     if (error) return json({ error: "Gagal memuat daftar video: " + error.message }, 400);
