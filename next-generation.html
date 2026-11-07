@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#05070d"><link rel="manifest" href="./manifest.webmanifest"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="description" content="LEXIAA THE NEXT GENERATION — a new holographic experience.">
+<script>try{const c=navigator.connection||navigator.mozConnection||navigator.webkitConnection;const low=(Number(navigator.deviceMemory)>0&&Number(navigator.deviceMemory)<=4)||(Number(navigator.hardwareConcurrency)>0&&Number(navigator.hardwareConcurrency)<=4)||!!c?.saveData||!!(c?.effectiveType&&/2g|slow-2g/i.test(c.effectiveType));if(low)document.documentElement.classList.add("ng-low-perf");}catch(e){}</script>
 <title>LEXIAA — THE NEXT GENERATION</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -906,6 +907,33 @@ body:has(#loginView.active) main{min-height:0}
 }
 
 .ng-video-nav{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:0 0 15px}.ng-video-nav button{min-height:44px;padding:9px 10px;border:1px solid #8e9cff88;border-radius:12px;background:#15164d;color:#d9dcff;font:800 10px Orbitron,sans-serif;letter-spacing:.04em}.ng-video-nav button.active{background:linear-gradient(110deg,#7951db,#168ed0);border-color:#c7c5ff;color:#fff;box-shadow:0 0 18px #786cff55}.ng-video-nav button:active{transform:scale(.98)}.ng-video-card button:disabled{opacity:.45;cursor:not-allowed}
+/* Adaptive performance profile: preserve the design while reducing GPU-heavy effects on entry-level phones. */
+html.ng-low-perf body{background:#070b16}
+html.ng-low-perf body:before{display:none}
+html.ng-low-perf #particles{display:none!important}
+html.ng-low-perf .particle{display:none!important}
+html.ng-low-perf .fantasy-bg-video,html.ng-low-perf .lexiaa-magic-canvas{display:none!important}
+html.ng-low-perf .login-card,html.ng-low-perf .clock-panel,html.ng-low-perf .glass-panel,
+html.ng-low-perf #dashboardView .ng-auth-panel,html.ng-low-perf #dashboardView .ng-wallet-history,
+html.ng-low-perf #dashboardView .lexiaa-ref-topbar,html.ng-low-perf #dashboardView .lexiaa-sidebar,
+html.ng-low-perf #dashboardView .fantasy-panel,html.ng-low-perf #dashboardView .ng-feature-backdrop,
+html.ng-low-perf #dashboardView .lexiaa-ng-backdrop,html.ng-low-perf #dashboardView .lexiaa-settings-backdrop,
+html.ng-low-perf #dashboardView .lexiaa-updates-backdrop,html.ng-low-perf #dashboardView .lexiaa-account-search-backdrop,
+html.ng-low-perf #lexiaaMessagesBackdrop,html.ng-low-perf #ngNovelDialogRoot{
+ backdrop-filter:none!important;-webkit-backdrop-filter:none!important;box-shadow:0 4px 14px #0005!important
+}
+html.ng-low-perf .view{animation-duration:.12s}
+html.ng-low-perf .orb{animation:none;box-shadow:0 0 18px #52e7ff44}
+html.ng-low-perf button,html.ng-low-perf input{transition:none!important}
+@media(max-width:700px){
+ .login-card,.clock-panel,.glass-panel,#dashboardView .fantasy-panel,
+ #dashboardView .lexiaa-ref-topbar,#dashboardView .lexiaa-sidebar,
+ #dashboardView .ng-feature-backdrop,#dashboardView .lexiaa-ng-backdrop,
+ #dashboardView .lexiaa-settings-backdrop,#dashboardView .lexiaa-updates-backdrop,
+ #dashboardView .lexiaa-account-search-backdrop,#lexiaaMessagesBackdrop,#ngNovelDialogRoot{
+  backdrop-filter:none!important;-webkit-backdrop-filter:none!important
+ }
+}
 </style>
 
 </head>
@@ -1048,11 +1076,11 @@ body:has(#loginView.active) main{min-height:0}
 <script type="module">
 const SUPABASE_URL="https://sudvolmlzunzofzwjbfn.supabase.co",SUPABASE_ANON_KEY="sb_publishable_OOUKks8e7IfILH7TsOit0g_8qK0hNiL";
 const $=id=>document.getElementById(id),loginView=$("loginView"),dashboardView=$("dashboardView");let supabase=null,dashboardEntered=false;
-function show(view){if(view==="login")dashboardEntered=false;loginView.classList.toggle("active",view==="login");dashboardView.classList.toggle("active",view==="dashboard");$("systemPill").textContent=view==="dashboard"?"● SYSTEM ONLINE":"● SECURE ACCESS";window.scrollTo({top:0,behavior:"smooth"});}
+function show(view){if(view==="login")dashboardEntered=false;loginView.classList.toggle("active",view==="login");dashboardView.classList.toggle("active",view==="dashboard");$("systemPill").textContent=view==="dashboard"?"● SYSTEM ONLINE":"● SECURE ACCESS";window.scrollTo({top:0,behavior:document.documentElement.classList.contains("ng-low-perf")?"auto":"smooth"});}
 let lexiaaPingTimer=null,lexiaaPingBusy=false;
 async function updateNetworkStatus(){const el=$("networkValue");if(!el)return;if(!navigator.onLine){el.textContent="Offline · -- ms";return;}const connection=navigator.connection||navigator.mozConnection||navigator.webkitConnection;const type=(connection?.type||"").toLowerCase();const effective=(connection?.effectiveType||"").toLowerCase();let label=type==="wifi"?"Wi-Fi":type==="cellular"?(effective?effective.toUpperCase()+" · Data seluler":"Data seluler"):(effective?effective.toUpperCase():"Online");if(lexiaaPingBusy)return;lexiaaPingBusy=true;const controller=new AbortController();const timeout=setTimeout(()=>controller.abort(),5000);const started=performance.now();try{const response=await fetch(location.origin+"/?lexiaa_ping="+Date.now(),{method:"HEAD",cache:"no-store",credentials:"same-origin",signal:controller.signal});const elapsed=Math.max(0,Math.round(performance.now()-started));if(!response.ok)throw new Error("Ping endpoint HTTP "+response.status);el.textContent=label+" · "+elapsed+" ms";}catch(error){el.textContent=label+" · Ping gagal";}finally{clearTimeout(timeout);lexiaaPingBusy=false;}}
-function startLexiaaPing(){if(lexiaaPingTimer)clearInterval(lexiaaPingTimer);updateNetworkStatus();lexiaaPingTimer=setInterval(updateNetworkStatus,1000);}
-window.addEventListener("online",updateNetworkStatus);window.addEventListener("offline",updateNetworkStatus);if(navigator.connection)navigator.connection.addEventListener?.("change",updateNetworkStatus);document.addEventListener("visibilitychange",()=>{if(!document.hidden)updateNetworkStatus();});startLexiaaPing();window.addEventListener("online",updateNetworkStatus);window.addEventListener("offline",updateNetworkStatus);if(navigator.connection)navigator.connection.addEventListener?.("change",updateNetworkStatus);updateNetworkStatus();
+function startLexiaaPing(){if(lexiaaPingTimer)clearInterval(lexiaaPingTimer);updateNetworkStatus();lexiaaPingTimer=setInterval(()=>{if(!document.hidden)updateNetworkStatus();},30000);}
+window.addEventListener("online",updateNetworkStatus);window.addEventListener("offline",updateNetworkStatus);if(navigator.connection)navigator.connection.addEventListener?.("change",updateNetworkStatus);document.addEventListener("visibilitychange",()=>{if(!document.hidden)updateNetworkStatus();});startLexiaaPing();
 const accountSearch=$("lexiaaAccountSearch"),accountResults=$("lexiaaAccountResults"),accountQuery=$("lexiaaAccountQuery");
 function accountNode(profile){const card=document.createElement("article");card.className="lexiaa-account-card";const realUsername=profile.username&&!/^lexiaa_[a-f0-9]{10}$/i.test(profile.username);const realDisplay=profile.display_name&&profile.display_name.trim().toLowerCase()!=="pengguna lexiaa";const emailLabel=profile.email_hint||"";const publicLabel=realDisplay?profile.display_name:(emailLabel||(realUsername?"@"+profile.username:"Lexiaa"));const avatar=document.createElement("div");avatar.className="lexiaa-account-avatar";if(profile.avatar_url){avatar.style.backgroundImage='url("'+profile.avatar_url.replace(/["\\]/g,"")+'")';}else{avatar.classList.add("is-brand");const brand=document.createElement("span");brand.textContent="LEXIAA";avatar.append(brand);}const info=document.createElement("div");info.className="lexiaa-account-meta";const name=document.createElement("strong");name.textContent=publicLabel;info.append(name);if(realDisplay&&realUsername){const handle=document.createElement("span");handle.textContent="@"+profile.username;info.append(handle);}else if(!realDisplay&&!realUsername){const note=document.createElement("span");note.textContent="Anggota Lexiaa";info.append(note);}const badge=document.createElement("span");badge.className="lexiaa-account-badge "+(profile.nextgen_joined_at?"is-next":"is-old");badge.textContent=profile.nextgen_joined_at?"LEXIAA NEW":"LEXIAA OLD";card.append(avatar,info,badge);return card;}
 function showAccountRows(rows){accountResults.replaceChildren();if(!rows.length){const empty=document.createElement("div");empty.className="lexiaa-account-state";empty.textContent="Belum ada akun yang cocok. Coba kata kunci lain.";accountResults.append(empty);return;}rows.forEach(p=>accountResults.append(accountNode(p)));}
@@ -1455,7 +1483,7 @@ $("enterLandscapeMode")?.addEventListener("click",async()=>{
  else if(button){button.disabled=false;button.textContent="COBA LAGI";}
 });
 function markLexiaaNextGen(){if(!supabase)return;supabase.auth.getUser().then(async({data,error})=>{if(error||!data?.user)return;const{error:profileError}=await supabase.from("lexiaa_profiles").update({nextgen_joined_at:new Date().toISOString()}).eq("id",data.user.id);if(profileError)console.warn("Status Next Gen belum tersimpan:",profileError.message);}).catch(e=>console.warn("Directory sync:",e));}
-function enterDashboard(){if(dashboardEntered)return;dashboardEntered=true;try{localStorage.setItem("lexiaa-nextgen-mode","1");localStorage.setItem("lexiaa-last-experience","next");}catch(e){}markLexiaaNextGen();show("dashboard");loadOnlineProfile();requestImmersive();loadBattery();tick();if(window.lexiaaClockTimer)clearInterval(window.lexiaaClockTimer);window.lexiaaClockTimer=setInterval(tick,1000);loadBattery();loadProfileSettings();refreshUnreadMessages();if(lexiaaMessagesPoll)clearInterval(lexiaaMessagesPoll);lexiaaMessagesPoll=setInterval(refreshUnreadMessages,30000);const video=$("fantasyBgVideo");if(video){video.currentTime=0;video.play().catch(()=>{});}tick();loadLocation();}
+function enterDashboard(){if(dashboardEntered)return;dashboardEntered=true;try{localStorage.setItem("lexiaa-nextgen-mode","1");localStorage.setItem("lexiaa-last-experience","next");}catch(e){}markLexiaaNextGen();show("dashboard");loadOnlineProfile();requestImmersive();tick();if(window.lexiaaClockTimer)clearInterval(window.lexiaaClockTimer);window.lexiaaClockTimer=setInterval(tick,1000);loadBattery();loadProfileSettings();refreshUnreadMessages();if(lexiaaMessagesPoll)clearInterval(lexiaaMessagesPoll);lexiaaMessagesPoll=setInterval(refreshUnreadMessages,30000);const video=$("fantasyBgVideo");if(video){if(document.documentElement.classList.contains("ng-low-perf")){video.pause();video.removeAttribute("autoplay");}else{video.currentTime=0;video.play().catch(()=>{});}}tick();loadLocation();}
 $("nextLoginForm").addEventListener("submit",async e=>{e.preventDefault();requestImmersive();const ambientReady=window.lexiaaPrimeAmbient?.();if(!supabase){notice("Koneksi autentikasi belum siap. Periksa internet lalu muat ulang halaman.");return;}const btn=$("loginSubmit");btn.disabled=true;btn.textContent="AUTHENTICATING...";notice("");try{const{data,error}=await supabase.auth.signInWithPassword({email:$("nextEmail").value.trim(),password:$("nextPassword").value});if(error)throw error;if(!data?.session)throw new Error("Login belum menghasilkan sesi aktif. Silakan coba lagi.");notice("ACCESS GRANTED","success");enterDashboard();if(ambientReady&&typeof ambientReady.then==="function")ambientReady.then(()=>window.lexiaaStartAmbient?.()).catch(err=>console.warn("Audio ambience:",err));else window.lexiaaStartAmbient?.();}catch(err){notice(err.message||"Login gagal. Periksa email dan kata sandi.");}finally{btn.disabled=false;btn.textContent="AUTHENTICATE & ENTER";}});
 $("togglePassword").addEventListener("click",()=>{const input=$("nextPassword"),visible=input.type==="password";input.type=visible?"text":"password";$("togglePassword").textContent=visible?"HIDE":"SHOW";});
 async function returnToOldLexia(){try{localStorage.removeItem("lexiaa-nextgen-mode");localStorage.setItem("lexiaa-last-experience","old");}catch(e){}try{if(document.fullscreenElement)await document.exitFullscreen();}catch(e){}try{if(screen.orientation&&screen.orientation.unlock)screen.orientation.unlock();}catch(e){}location.replace("./?experience=old");}
@@ -1469,7 +1497,7 @@ try{const{createClient}=await import("https://cdn.jsdelivr.net/npm/@supabase/sup
    Isolated from auth, dashboard data, navigation and orientation handlers. */
 (()=>{
  const canvas=$("lexiaaMagicCanvas"),dashboard=$("dashboardView");
- if(!dashboard)return;
+ if(!dashboard||document.documentElement.classList.contains("ng-low-perf"))return;
  const ctx=canvas.getContext("2d",{alpha:true});if(!ctx)return;
  let w=0,h=0,dpr=1,raf=0,active=false,last=0,fireflies=[],petals=[];
  const rand=(a,b)=>a+Math.random()*(b-a);
@@ -1501,5 +1529,5 @@ try{const{createClient}=await import("https://cdn.jsdelivr.net/npm/@supabase/sup
  document.addEventListener("pointerdown",()=>{if(dashboard.classList.contains("active")&&!ambientStarted)window.lexiaaStartAmbient?.();},{passive:true});
 })();
 
-tick();setInterval(tick,1000);for(let i=0;i<34;i++){const p=document.createElement("i");p.className="particle";p.style.left=Math.random()*100+"%";p.style.top=Math.random()*100+"%";p.style.animationDelay=-Math.random()*14+"s";p.style.animationDuration=9+Math.random()*12+"s";$("particles").appendChild(p);}
+tick();if(!document.documentElement.classList.contains("ng-low-perf")){for(let i=0;i<16;i++){const p=document.createElement("i");p.className="particle";p.style.left=Math.random()*100+"%";p.style.top=Math.random()*100+"%";p.style.animationDelay=-Math.random()*14+"s";p.style.animationDuration=9+Math.random()*12+"s";$("particles").appendChild(p);}}
 </script></body></html>
