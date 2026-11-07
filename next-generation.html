@@ -1164,6 +1164,7 @@ html.ng-low-perf button,html.ng-low-perf input{transition:none!important}
    <p id="lexiaaProNotice" class="pro-note"></p>
    <button class="pro-submit" id="lexiaaProSubmit" type="submit">KIRIM PENGAJUAN</button>
   </form>
+  <label id="lexiaaProRenewPinLabel" for="lexiaaProRenewPin" hidden>PIN WALLET N.G</label><input id="lexiaaProRenewPin" type="password" inputmode="numeric" maxlength="4" pattern="[0-9]{4}" placeholder="Masukkan 4 digit PIN" autocomplete="off" hidden>
   <button class="pro-submit" id="lexiaaProRenew" type="button" hidden>PERPANJANG LEXIAA N.G PRO</button>
  </section>
 </div>
@@ -1214,12 +1215,12 @@ $("lexiaaProfileForm")?.addEventListener("submit",async e=>{e.preventDefault();c
 function openLexiaaPro(){const root=$("lexiaaProBackdrop");root.classList.add("open");root.setAttribute("aria-hidden","false");loadLexiaaProStatus();}
 function closeLexiaaPro(){const root=$("lexiaaProBackdrop");root.classList.remove("open");root.setAttribute("aria-hidden","true");}
 async function loadLexiaaProStatus(){
- const status=$("lexiaaProStatus"),form=$("lexiaaProForm"),submit=$("lexiaaProSubmit"),renew=$("lexiaaProRenew");
- status.textContent="Memeriksa status pengajuan...";form.hidden=true;renew.hidden=true;submit.disabled=true;
+ const status=$("lexiaaProStatus"),form=$("lexiaaProForm"),submit=$("lexiaaProSubmit"),renew=$("lexiaaProRenew"),pin=$("lexiaaProRenewPin"),pinLabel=$("lexiaaProRenewPinLabel");
+ status.textContent="Memeriksa status pengajuan...";form.hidden=true;renew.hidden=true;pin.hidden=true;pinLabel.hidden=true;submit.disabled=true;
  try{
   const {data,error}=await supabase.rpc("ng_pro_status");if(error)throw error;if(!data?.success)throw new Error(data?.message||"Status Pro belum dapat diperiksa.");
   if(data.pro_active){status.textContent="Status: LEXIAA N.G Pro AKTIF sampai "+new Date(data.pro_ends_at).toLocaleString("id-ID")+".";
-    form.hidden=true;renew.hidden=false;renew.textContent="PERPANJANG · "+new Intl.NumberFormat("id-ID",{style:"currency",currency:"IDR",maximumFractionDigits:0}).format(data.renewal_price||0);renew.disabled=Number(data.renewal_price)<=0;
+    form.hidden=true;renew.hidden=false;pin.hidden=false;pinLabel.hidden=false;renew.textContent="PERPANJANG · "+new Intl.NumberFormat("id-ID",{style:"currency",currency:"IDR",maximumFractionDigits:0}).format(data.renewal_price||0);renew.disabled=Number(data.renewal_price)<=0;
   }else if(data.application_status==="pending"){status.textContent="Pengajuan kamu sedang menunggu keputusan admin. Notifikasi akan dikirim melalui menu Pesan dan email.";form.hidden=true;}
   else if(data.membership_exists){status.textContent="Masa aktif LEXIAA N.G Pro kamu telah berakhir. Kamu dapat memperpanjang keanggotaan.";form.hidden=true;renew.hidden=false;renew.textContent="PERPANJANG · "+new Intl.NumberFormat("id-ID",{style:"currency",currency:"IDR",maximumFractionDigits:0}).format(data.renewal_price||0);renew.disabled=Number(data.renewal_price)<=0;}
   else if(data.application_status==="rejected"){status.textContent="Pengajuan sebelumnya belum disetujui. Kamu dapat mengirim pengajuan baru.";form.hidden=false;submit.disabled=false;}
@@ -1245,7 +1246,7 @@ $("lexiaaProForm")?.addEventListener("submit",async e=>{
 });
 $("lexiaaProRenew")?.addEventListener("click",async()=>{
  const btn=$("lexiaaProRenew");if(!confirm("Perpanjang keanggotaan LEXIAA N.G Pro menggunakan saldo Wallet N.G?"))return;
- btn.disabled=true;try{const {data,error}=await supabase.rpc("ng_pro_renew");if(error)throw error;if(!data?.success)throw new Error(data?.message||"Perpanjangan gagal.");alert("LEXIAA N.G Pro berhasil diperpanjang sampai "+new Date(data.ends_at).toLocaleString("id-ID")+".");await loadLexiaaProStatus();}
+ btn.disabled=true;try{const pin=$("lexiaaProRenewPin").value;if(!/^[0-9]{4}$/.test(pin))throw new Error("Masukkan PIN Wallet N.G 4 digit.");const {data,error}=await supabase.rpc("ng_pro_renew",{p_pin:pin});if(error)throw error;if(!data?.success)throw new Error(data?.message||"Perpanjangan gagal.");alert("LEXIAA N.G Pro berhasil diperpanjang sampai "+new Date(data.ends_at).toLocaleString("id-ID")+".");await loadLexiaaProStatus();$("lexiaaProRenewPin").value="";}
  catch(e){alert(e.message||"Perpanjangan gagal.");}finally{btn.disabled=false;}
 });
 async function claimLexiaaProDailyBonus(){if(!supabase)return;try{const{data,error}=await supabase.rpc("ng_pro_claim_daily_bonus");if(error)throw error;if(data?.credited)console.info("LEXIAA N.G Pro daily bonus credited",data.amount);}catch(e){console.warn("Bonus harian Pro belum diproses:",e.message||e);}}
