@@ -105,10 +105,18 @@ Deno.serve(async req => {
       if (videoError || purchaseError || subError) return json({ error: "Gagal memuat katalog video." }, 400);
       const owned = new Set((purchases || []).map((p: any) => p.video_id));
       const active = Boolean(subscription && new Date(subscription.ends_at).getTime() > Date.now());
-      return json({ vip_active: active, subscription: subscription || null, videos: (videos || []).map((v: any) => ({
-        id: v.id, title: v.title, price: Number(v.price), mime_type: v.mime_type, file_size: Number(v.file_size),
-        owned: owned.has(v.id), playable: active && (Number(v.price) === 0 || owned.has(v.id))
-      })) });
+      const catalog = await Promise.all((videos || []).map(async (v: any) => {
+        let thumbnail_url: string | null = null;
+        if (v.thumbnail_path) {
+          const { data: thumb } = await db.storage.from("lexiaa-ng-videos").createSignedUrl(v.thumbnail_path, 3600);
+          thumbnail_url = thumb?.signedUrl || null;
+        }
+        return {
+          id: v.id, title: v.title, price: Number(v.price), mime_type: v.mime_type, file_size: Number(v.file_size),
+          thumbnail_url, owned: owned.has(v.id), playable: active && (Number(v.price) === 0 || owned.has(v.id))
+        };
+      }));
+      return json({ vip_active: active, subscription: subscription || null, videos: catalog });
     }
 
     if (input.action === "video_stream") {
@@ -116,7 +124,7 @@ Deno.serve(async req => {
       if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(videoId)) return json({ error: "Video tidak valid." }, 400);
       const [{ data: sub }, { data: video }, { data: purchase }] = await Promise.all([
         db.from("ng_video_vip_subscriptions").select("ends_at").eq("user_id", customer.id).maybeSingle(),
-        db.from("ng_videos").select("id,title,price,video_path,mime_type").eq("id", videoId).eq("is_published", true).maybeSingle(),
+        db.from("ng_videos").select("id,title,price,video_path,mime_type,thumbnail_path").eq("id", videoId).eq("is_published", true).maybeSingle(),
         db.from("ng_video_purchases").select("id").eq("user_id", customer.id).eq("video_id", videoId).maybeSingle()
       ]);
       if (!sub || new Date(sub.ends_at).getTime() <= Date.now()) return json({ error: "Langganan VIP kamu sudah berakhir. Aktifkan VIP kembali untuk menonton." }, 403);
@@ -124,7 +132,12 @@ Deno.serve(async req => {
       if (Number(video.price) > 0 && !purchase) return json({ error: "Video ini harus dibeli terlebih dahulu." }, 403);
       const { data: signed, error: signError } = await db.storage.from("lexiaa-ng-videos").createSignedUrl(video.video_path, 90);
       if (signError || !signed?.signedUrl) return json({ error: "Gagal menyiapkan pemutaran video." }, 400);
-      return json({ url: signed.signedUrl, mime_type: video.mime_type, title: video.title, vip_ends_at: sub.ends_at });
+      let thumbnail_url: string | null = null;
+      if (video.thumbnail_path) {
+        const { data: thumb } = await db.storage.from("lexiaa-ng-videos").createSignedUrl(video.thumbnail_path, 3600);
+        thumbnail_url = thumb?.signedUrl || null;
+      }
+      return json({ url: signed.signedUrl, mime_type: video.mime_type, title: video.title, thumbnail_url, vip_ends_at: sub.ends_at });
     }
 
     if (input.action === "video_vip_purchase") {
@@ -209,10 +222,11 @@ Deno.serve(async req => {
 
   if (input.action === "video_upload_sign") {
     const ext = String(input.extension || "").toLowerCase();
-    const mime = ext === "mp4" ? "video/mp4" : ext === "webm" ? "video/webm" : "";
+    const mime = ext === "mp4" ? "video/mp4" : ext === "webm" ? "video/webm" : ext === "jpg" ? "image/jpeg" : "";
     const size = Number(input.file_size);
-    if (!mime || !Number.isSafeInteger(size) || size < 1 || size > 52428800) return json({ error: "Video harus MP4/WebM dan maksimal 50 MB." }, 400);
-    const path = "admin/" + crypto.randomUUID() + "/video." + ext;
+    const maxSize = ext === "jpg" ? 200000 : 52428800;
+    if (!mime || !Number.isSafeInteger(size) || size < 1 || size > maxSize) return json({ error: "File video atau thumbnail tidak valid." }, 400);
+    const path = "admin/" + crypto.randomUUID() + (ext === "jpg" ? "/thumbnail.jpg" : "/video." + ext);
     const { data, error } = await db.storage.from("lexiaa-ng-videos").createSignedUploadUrl(path);
     if (error || !data?.token) return json({ error: "Gagal menyiapkan unggahan video: " + (error?.message || "Token upload tidak tersedia.") }, 400);
     return json({ path, token: data.token, mime_type: mime });
@@ -220,12 +234,14 @@ Deno.serve(async req => {
 
   if (input.action === "video_save") {
     const title = String(input.title || "").trim(), price = Number(input.price);
-    const path = String(input.video_path || ""), mime = String(input.mime_type || "");
+    const path = String(input.video_path || ""), mime = String(input.mime_type || ""), thumbnailPath = String(input.thumbnail_path || "");
     const size = Number(input.file_size);
+    const expectedThumbnail = path.replace(/\/video\.(?:mp4|webm)$/i, "/thumbnail.jpg");
     if (!title || title.length > 160 || !Number.isSafeInteger(price) || price < 0 || price > 1000000000 ||
-        !path.startsWith("admin/") || !["video/mp4","video/webm"].includes(mime) ||
-        !Number.isSafeInteger(size) || size < 1 || size > 52428800) return json({ error: "Judul, harga, atau file video tidak valid." }, 400);
-    const { data, error } = await db.from("ng_videos").insert({ title, price, video_path: path, mime_type: mime, file_size: size, is_published: true })
+        !/^admin\/[a-f0-9-]+\/video\.(?:mp4|webm)$/i.test(path) || !["video/mp4","video/webm"].includes(mime) ||
+        !Number.isSafeInteger(size) || size < 1 || size > 52428800 ||
+        (thumbnailPath && thumbnailPath !== expectedThumbnail)) return json({ error: "Judul, harga, atau file video tidak valid." }, 400);
+    const { data, error } = await db.from("ng_videos").insert({ title, price, video_path: path, thumbnail_path: thumbnailPath || null, mime_type: mime, file_size: size, is_published: true })
       .select("id,title,price,video_path,mime_type,file_size,is_published,created_at").single();
     if (error) return json({ error: "Gagal menyimpan video: " + error.message }, 400);
     return json({ success: true, video: data });
