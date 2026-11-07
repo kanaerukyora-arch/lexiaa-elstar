@@ -260,6 +260,24 @@ async function compressVideoIfNeeded(file){
   return new File([outputBlob],safeName,{type:"video/mp4",lastModified:Date.now()});
  }finally{URL.revokeObjectURL(objectUrl);}
 }
+async function makeVideoThumbnail(file){
+ const objectUrl=URL.createObjectURL(file),video=document.createElement("video");
+ video.muted=true;video.playsInline=true;video.preload="metadata";video.src=objectUrl;
+ try{
+  await new Promise((resolve,reject)=>{
+   video.onloadedmetadata=()=>{try{video.currentTime=Math.min(.8,Math.max(0,(video.duration||1)*.12));}catch(err){reject(err);}};
+   video.onseeked=resolve;video.onerror=()=>reject(new Error("Cuplikan video tidak dapat dibaca."));
+   video.load();
+  });
+  const width=320,height=180,canvas=document.createElement("canvas");canvas.width=width;canvas.height=height;
+  const ctx=canvas.getContext("2d",{alpha:false});if(!ctx)throw new Error("Canvas thumbnail tidak tersedia.");
+  const scale=Math.max(width/video.videoWidth,height/video.videoHeight),sw=width/scale,sh=height/scale,sx=(video.videoWidth-sw)/2,sy=(video.videoHeight-sh)/2;
+  ctx.drawImage(video,sx,sy,sw,sh,0,0,width,height);
+  const blob=await new Promise(resolve=>canvas.toBlob(resolve,"image/jpeg",.68));
+  if(!blob)throw new Error("Gagal membuat gambar thumbnail.");
+  return blob;
+ }finally{video.removeAttribute("src");video.load();URL.revokeObjectURL(objectUrl);}
+}
 async function loadVideoAdmin(){
  const host=$("videoAdminList");host.textContent="Memuat video...";
  try{
@@ -293,8 +311,18 @@ $("videoAdminForm").onsubmit=async e=>{
   if(!signed?.path||!signed?.token)throw new Error("Server tidak mengembalikan token unggah yang lengkap.");
   videoStage="Mengirim file ke Supabase Storage";const {data,error}=await novelDb.storage.from("lexiaa-ng-videos").uploadToSignedUrl(signed.path,signed.token,file,{contentType:mime,upsert:false});
   if(error)throw new Error("Supabase Storage: "+(error.message||JSON.stringify(error)));
-  path=signed.path;videoStage="Menyimpan data katalog";notice("videoAdminNotice","Menyimpan katalog video...");
-  await api({action:"video_save",title,price,video_path:path,mime_type:mime,file_size:file.size});
+  path=signed.path;
+  let thumbnailPath="";
+  try{
+   videoStage="Membuat thumbnail video";notice("videoAdminNotice","Membuat cuplikan gambar video...");
+   const thumb=await makeVideoThumbnail(file),thumbSign=await api({action:"video_upload_sign",extension:"jpg",file_size:thumb.size});
+   if(!thumbSign?.path||!thumbSign?.token)throw new Error("Izin unggah thumbnail tidak tersedia.");
+   const thumbUpload=await novelDb.storage.from("lexiaa-ng-videos").uploadToSignedUrl(thumbSign.path,thumbSign.token,thumb,{contentType:"image/jpeg",upsert:false});
+   if(thumbUpload.error)throw new Error(thumbUpload.error.message||"Thumbnail gagal diunggah.");
+   thumbnailPath=thumbSign.path;
+  }catch(thumbError){console.warn("[LEXIAA thumbnail]",thumbError);notice("videoAdminNotice","Video terunggah. Thumbnail gagal dibuat; video tetap akan disimpan.");}
+  videoStage="Menyimpan data katalog";notice("videoAdminNotice","Menyimpan katalog video...");
+  await api({action:"video_save",title,price,video_path:path,thumbnail_path:thumbnailPath,mime_type:mime,file_size:file.size});
   notice("videoAdminNotice","Video berhasil diunggah dan diterbitkan.",true);$("videoAdminForm").reset();$("videoCompressBox").classList.add("hidden");await loadVideoAdmin();
  }catch(err){const detail=err?.message||String(err)||"Error tidak memiliki pesan";console.error("[LEXIAA video upload]",videoStage,err);notice("videoAdminNotice","Gagal pada tahap: "+videoStage+". Detail: "+detail);}
  finally{btn.disabled=false;}
