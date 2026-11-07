@@ -97,26 +97,33 @@ Deno.serve(async req => {
     }
 
     if (input.action === "video_catalog") {
-      const [{ data: videos, error: videoError }, { data: purchases, error: purchaseError }, { data: subscription, error: subError }] = await Promise.all([
+      const [{ data: videos, error: videoError }, { data: purchases, error: purchaseError }, { data: subscription, error: subError }, { data: membership, error: proError }, { data: proSettings, error: settingsError }] = await Promise.all([
         db.from("ng_videos").select("id,title,price,mime_type,file_size,created_at,thumbnail_path").eq("is_published", true).order("created_at", { ascending: false }),
         db.from("ng_video_purchases").select("video_id").eq("user_id", customer.id),
-        db.from("ng_video_vip_subscriptions").select("ends_at,package_code").eq("user_id", customer.id).maybeSingle()
+        db.from("ng_video_vip_subscriptions").select("ends_at,package_code").eq("user_id", customer.id).maybeSingle(),
+        db.from("ng_pro_memberships").select("status,starts_at,ends_at").eq("user_id", customer.id).maybeSingle(),
+        db.from("ng_pro_settings").select("discount_percent").eq("id", true).maybeSingle()
       ]);
-      if (videoError || purchaseError || subError) return json({ error: "Gagal memuat katalog video." }, 400);
+      if (videoError || purchaseError || subError || proError || settingsError) return json({ error: "Gagal memuat katalog video." }, 400);
       const owned = new Set((purchases || []).map((p: any) => p.video_id));
       const active = Boolean(subscription && new Date(subscription.ends_at).getTime() > Date.now());
+      const proActive = Boolean(membership && membership.status === "active" && new Date(membership.starts_at).getTime() <= Date.now() && new Date(membership.ends_at).getTime() > Date.now());
+      const discountPercent = proActive ? Math.max(0, Math.min(100, Number(proSettings?.discount_percent ?? 50))) : 0;
       const catalog = await Promise.all((videos || []).map(async (v: any) => {
         let thumbnail_url: string | null = null;
         if (v.thumbnail_path) {
           const { data: thumb } = await db.storage.from("lexiaa-ng-videos").createSignedUrl(v.thumbnail_path, 3600);
           thumbnail_url = thumb?.signedUrl || null;
         }
+        const listPrice = Number(v.price);
+        const price = Math.floor(listPrice * (100 - discountPercent) / 100);
         return {
-          id: v.id, title: v.title, price: Number(v.price), mime_type: v.mime_type, file_size: Number(v.file_size),
-          thumbnail_url, owned: owned.has(v.id), playable: active && (Number(v.price) === 0 || owned.has(v.id))
+          id: v.id, title: v.title, price, list_price: listPrice, discount_percent: discountPercent,
+          mime_type: v.mime_type, file_size: Number(v.file_size), thumbnail_url, owned: owned.has(v.id),
+          playable: active && (listPrice === 0 || owned.has(v.id))
         };
       }));
-      return json({ vip_active: active, subscription: subscription || null, videos: catalog });
+      return json({ vip_active: active, subscription: subscription || null, is_pro: proActive, discount_percent: discountPercent, videos: catalog });
     }
 
     if (input.action === "video_stream") {
