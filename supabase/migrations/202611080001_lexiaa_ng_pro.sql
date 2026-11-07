@@ -104,15 +104,17 @@ begin
  return jsonb_build_object('success',true,'credited',true,'amount',v_amount,'balance',v_balance);
 end $$;
 
-create or replace function public.ng_pro_renew()
+create or replace function public.ng_pro_renew(p_pin text)
 returns jsonb language plpgsql security definer set search_path=public,pg_temp as $$
-declare v_uid uuid:=auth.uid(); v_account public.ng_wallet_accounts%rowtype; v_settings public.ng_pro_settings%rowtype; v_start timestamptz; v_end timestamptz; v_balance bigint;
+declare v_uid uuid:=auth.uid(); v_account public.ng_wallet_accounts%rowtype; v_settings public.ng_pro_settings%rowtype; v_start timestamptz; v_end timestamptz; v_balance bigint; v_login jsonb;
 begin
  if v_uid is null then return jsonb_build_object('success',false,'message','Sesi tidak valid.'); end if;
  select * into v_settings from public.ng_pro_settings where id=true;
  if v_settings.renewal_price<=0 then return jsonb_build_object('success',false,'message','Perpanjangan Pro belum dibuka oleh admin.'); end if;
  select * into v_account from public.ng_wallet_accounts where auth_user_id=v_uid and payments_linked_at is not null for update;
  if not found then return jsonb_build_object('success',false,'message','Hubungkan Wallet N.G terlebih dahulu.'); end if;
+ v_login:=public.ng_wallet_login(v_account.phone,p_pin);
+ if coalesce((v_login->>'success')::boolean,false) is not true then return v_login; end if;
  if v_account.balance<v_settings.renewal_price then return jsonb_build_object('success',false,'message','Saldo Wallet N.G tidak mencukupi.'); end if;
  v_start:=now();
  select greatest(now(),ends_at) into v_start from public.ng_pro_memberships where user_id=v_uid and status='active' for update;
@@ -130,11 +132,11 @@ end $$;
 revoke all on function public.ng_pro_submit_application(text,date,text,text) from public,anon;
 revoke all on function public.ng_pro_status() from public,anon;
 revoke all on function public.ng_pro_claim_daily_bonus() from public,anon;
-revoke all on function public.ng_pro_renew() from public,anon;
+revoke all on function public.ng_pro_renew(text) from public,anon;
 grant execute on function public.ng_pro_submit_application(text,date,text,text) to authenticated;
 grant execute on function public.ng_pro_status() to authenticated;
 grant execute on function public.ng_pro_claim_daily_bonus() to authenticated;
-grant execute on function public.ng_pro_renew() to authenticated;
+grant execute on function public.ng_pro_renew(text) to authenticated;
 -- LEXIAA N.G Spin & Quest: daily spins, server-picked prizes, wallet credits, and capped game rewards.
 -- Run once in the Supabase SQL Editor.
 
