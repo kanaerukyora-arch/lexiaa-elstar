@@ -106,9 +106,9 @@ begin
     return jsonb_build_object('success',false,'message','Putaran habis. Selesaikan Quest atau kembali besok.');
   end if;
 
-  -- Weighted roll out of 10,000,000 using cryptographically secure random bytes.
-  -- ZONK 89.889889%; Rp1jt 10%; Rp2jt 0.1%; Rp3jt 0.01%;
-  -- Rp100jt 0.0001%; Rp999jt 0.00001%; Rp1M 0.000001% (1 in 100,000,000).
+  -- Weighted roll out of 1,000,000,000 using cryptographically secure random bytes.
+  -- ZONK 40%; Rp1jt 40%; Rp2jt 10%; Rp3jt 5%; Rp100jt 4%;
+  -- Rp999jt 0.9%; Rp1M (Rp1 miliar) 0.1%.
   v_bytes := extensions.gen_random_bytes(4);
   v_roll := (get_byte(v_bytes,0)::bigint << 24)
           + (get_byte(v_bytes,1)::bigint << 16)
@@ -116,17 +116,17 @@ begin
           + get_byte(v_bytes,3)::bigint;
   v_roll := mod(v_roll,1000000000);
 
-  if v_roll < 898898890 then
+  if v_roll < 400000000 then
     v_prize := 'ZONK';
-  elsif v_roll < 998898890 then
+  elsif v_roll < 800000000 then
     v_prize := 'Rp1.000.000'; v_amount := 1000000;
-  elsif v_roll < 999898890 then
+  elsif v_roll < 900000000 then
     v_prize := 'Rp2.000.000'; v_amount := 2000000;
-  elsif v_roll < 999998890 then
+  elsif v_roll < 950000000 then
     v_prize := 'Rp3.000.000'; v_amount := 3000000;
-  elsif v_roll < 999999890 then
+  elsif v_roll < 990000000 then
     v_prize := 'Rp100.000.000'; v_amount := 100000000;
-  elsif v_roll < 999999990 then
+  elsif v_roll < 999000000 then
     v_prize := 'Rp999.000.000'; v_amount := 999000000;
   else
     v_prize := 'Rp1.000.000.000'; v_amount := 1000000000;
