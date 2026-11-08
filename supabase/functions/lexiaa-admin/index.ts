@@ -410,7 +410,15 @@ Deno.serve(async req => {
     return json({ success: true, video: data });
   }
 
-  if (input.action === "video_pro_only") {\n    const id = String(input.id || "");\n    if (!id) return json({ error: "ID video tidak valid." }, 400);\n    const { error } = await db.from("ng_videos").update({ is_pro_only: input.is_pro_only === true, updated_at: new Date().toISOString() }).eq("id", id);\n    if (error) return json({ error: "Gagal mengubah akses Pro video: " + error.message }, 400);\n    return json({ success: true });\n  }\n\n  if (input.action === "video_publish") {
+  if (input.action === "video_pro_only") {
+    const id = String(input.id || "");
+    if (!id) return json({ error: "ID video tidak valid." }, 400);
+    const { error } = await db.from("ng_videos").update({ is_pro_only: input.is_pro_only === true, updated_at: new Date().toISOString() }).eq("id", id);
+    if (error) return json({ error: "Gagal mengubah akses Pro video: " + error.message }, 400);
+    return json({ success: true });
+  }
+
+  if (input.action === "video_publish") {
     const id = String(input.id || "");
     if (!id) return json({ error: "ID video tidak valid." }, 400);
     const { error } = await db.from("ng_videos").update({ is_published: input.is_published === true, updated_at: new Date().toISOString() }).eq("id", id);
@@ -479,7 +487,15 @@ Deno.serve(async req => {
     return json({ success: true });
   }
 
-  if (input.action === "novel_pro_only") {\n    const id = String(input.id || "");\n    if (!id) return json({ error: "ID novel tidak valid." }, 400);\n    const { error } = await db.from("lexiaa_novels").update({ is_pro_only: input.is_pro_only === true, updated_at: new Date().toISOString() }).eq("id", id);\n    if (error) return json({ error: "Gagal mengubah akses Pro novel: " + error.message }, 400);\n    return json({ success: true });\n  }\n\n  if (input.action === "novel_publish") {
+  if (input.action === "novel_pro_only") {
+    const id = String(input.id || "");
+    if (!id) return json({ error: "ID novel tidak valid." }, 400);
+    const { error } = await db.from("lexiaa_novels").update({ is_pro_only: input.is_pro_only === true, updated_at: new Date().toISOString() }).eq("id", id);
+    if (error) return json({ error: "Gagal mengubah akses Pro novel: " + error.message }, 400);
+    return json({ success: true });
+  }
+
+  if (input.action === "novel_publish") {
     const id = String(input.id || "");
     const published = input.is_published === true;
     const { error } = await db.from("lexiaa_novels").update({ is_published: published, updated_at: new Date().toISOString() }).eq("id", id);
