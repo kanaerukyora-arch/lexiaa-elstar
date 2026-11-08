@@ -1326,8 +1326,9 @@ async function ngShowShop(){
  try{
   const data=await ngNovelApi("novel_catalog");const novels=Array.isArray(data.novels)?data.novels:[];
   if(!novels.length){host.innerHTML='<div class="ng-novel-empty"><span>✧</span><b>Belum Ada Novel</b><p>Koleksi baru akan segera hadir di perpustakaan LEXIAA.</p></div>';return;}
-  host.innerHTML=novels.map(n=>'<article class="ng-novel-card"><div class="ng-novel-cover">'+(n.cover_url?'<img src="'+ngEscape(n.cover_url)+'" alt="Sampul '+ngEscape(n.title)+'" loading="lazy">':'<div class="ng-novel-cover-placeholder">📖<small>LEXIAA NOVEL</small></div>')+'</div><div class="ng-novel-info"><h4>'+ngEscape(n.title)+'</h4>'+(Number(n.discount_percent)>0?'<div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap"><s style="opacity:.65;font-size:.85em">'+ngNovelRupiah(n.list_price)+'</s><strong style="color:#35d69a">'+ngNovelRupiah(n.price)+'</strong><small style="color:#35d69a;font-weight:800">DISKON '+Number(n.discount_percent)+'%</small></div>':'<strong>'+ngNovelRupiah(n.price)+'</strong>')+'<button type="button" class="ng-fantasy-btn ng-novel-action" data-novel-id="'+ngEscape(n.id)+'" data-owned="'+(n.owned?'1':'0')+'">'+(n.owned?'UNDUH NOVEL':'BELI SEKARANG')+'</button></div></article>').join("");
+  host.innerHTML=novels.map(n=>{const locked=n.is_pro_only===true&&data.is_pro!==true;return '<article class="ng-novel-card"><div class="ng-novel-cover">'+(n.cover_url?'<img src="'+ngEscape(n.cover_url)+'" alt="Sampul '+ngEscape(n.title)+'" loading="lazy">':'<div class="ng-novel-cover-placeholder">📖<small>LEXIAA NOVEL</small></div>')+'</div><div class="ng-novel-info"><h4>'+ngEscape(n.title)+'</h4>'+(locked?'<strong style="color:#d6b5ff">✦ KHUSUS ANGGOTA PRO</strong>':(Number(n.discount_percent)>0?'<div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap"><s style="opacity:.65;font-size:.85em">'+ngNovelRupiah(n.list_price)+'</s><strong style="color:#35d69a">'+ngNovelRupiah(n.price)+'</strong><small style="color:#35d69a;font-weight:800">DISKON '+Number(n.discount_percent)+'%</small></div>':'<strong>'+ngNovelRupiah(n.price)+'</strong>'))+(locked?'<button type="button" class="ng-fantasy-btn" data-novel-pro-lock="1">AKTIFKAN PRO</button>':'<button type="button" class="ng-fantasy-btn ng-novel-action" data-novel-id="'+ngEscape(n.id)+'" data-owned="'+(n.owned?'1':'0')+'">'+(n.owned?'UNDUH NOVEL':'BELI SEKARANG')+'</button>')+'</div></article>';}).join("");
   host.querySelectorAll("[data-novel-id]").forEach(btn=>{const novel=novels.find(n=>n.id===btn.dataset.novelId);btn.onclick=()=>btn.dataset.owned==="1"?ngNovelDownload(novel.id,btn):ngNovelBuy(novel,btn);});
+  host.querySelectorAll("[data-novel-pro-lock]").forEach(btn=>btn.onclick=()=>ngNovelDialog({title:"Konten Khusus Pro",message:"Novel ini hanya tersedia untuk anggota LEXIAA N.G Pro yang masa aktifnya masih berlaku.",mark:"✦",actions:[{label:"Mengerti"}]}));
  }catch(e){host.innerHTML='<div class="ng-novel-empty"><b>Perpustakaan belum dapat dibuka</b><p>'+ngEscape(e.message)+'</p><button type="button" class="ng-fantasy-btn" id="ngNovelRetry">COBA LAGI</button></div>';$("ngNovelRetry").onclick=ngShowShop;}
 }
 const ngWalletState={stage:"",phone:"",phoneDigits:"",region:"ID",pin:"",confirmPin:"",name:"",mode:"",account:null};
@@ -1542,10 +1543,11 @@ function ngVideoNav(active){
    html+='<div class="ng-video-grid">';
    if(!videos.length)html+='<div class="ng-video-empty">Belum ada video yang diterbitkan.</div>';
    for(const v of videos){
-    const free=Number(v.price)===0,owned=!!v.owned,eligible=free||owned,playable=active&&eligible;
+    const free=Number(v.price)===0,owned=!!v.owned,eligible=free||owned,playable=active&&eligible,proLocked=v.is_pro_only===true&&d.is_pro!==true;
     const saved=await ngVideoOfflineGet(v.id);
     html+='<article class="ng-video-card">'+ngVideoPoster(v.title,v.thumbnail_url)+'<h4>'+ngEscape(v.title)+'</h4>';
-    if(!eligible){
+    if(proLocked){html+='<div class="ng-video-price" style="color:#d6b5ff">✦ KHUSUS ANGGOTA PRO</div><button class="ng-fantasy-btn" type="button" data-video-pro-lock="1">AKTIFKAN PRO</button>';}
+    else if(!eligible){
      html+='<button class="ng-fantasy-btn" type="button" data-video-buy="'+v.id+'">Beli Sekarang</button>'+ngVideoPriceMarkup(v.list_price??v.price);
     }else{
      if(playable)html+='<button class="ng-fantasy-btn" type="button" data-video-play="'+v.id+'">Tonton Video Online</button>';
@@ -1558,6 +1560,7 @@ function ngVideoNav(active){
    html+='</div></div>';ngFeatureContent.innerHTML=html;ngVideoBindNav();
    $("ngVideoChooseVip")?.addEventListener("click",ngVideoPackages);
    ngFeatureContent.querySelectorAll("[data-video-vip]").forEach(b=>b.onclick=ngVideoPackages);
+   ngFeatureContent.querySelectorAll("[data-video-pro-lock]").forEach(b=>b.onclick=()=>ngVideoDialog({title:"Konten Khusus Pro",message:"Video ini hanya tersedia untuk anggota LEXIAA N.G Pro yang masa aktifnya masih berlaku.",mark:"✦",actions:[{label:"Mengerti"}]}));
    ngFeatureContent.querySelectorAll("[data-video-buy]").forEach(b=>b.onclick=()=>ngVideoBeginPayment({kind:"video",videoId:b.dataset.videoBuy,title:videos.find(v=>v.id===b.dataset.videoBuy)?.title,amount:Number(videos.find(v=>v.id===b.dataset.videoBuy)?.price||0)}));
    ngFeatureContent.querySelectorAll("[data-video-play]").forEach(b=>b.onclick=()=>ngVideoPlay(b.dataset.videoPlay,"online"));
    ngFeatureContent.querySelectorAll("[data-video-offline]").forEach(b=>b.onclick=()=>ngVideoSaveOffline(b.dataset.videoOffline,b));
