@@ -82,10 +82,10 @@
 </form><div id="walletList" class="users"><p class="muted">Masuk untuk memuat nomor Wallet.</p></div>
 </section>
 </div>
-<section class="panel" id="novelAdminPanel"><h2>LEXIAA NOVEL · KELOLA KATALOG</h2><p class="muted">Unggah PDF, atur harga, dan sampul novel. Login admin tetap sama dengan menu Wallet.</p><form id="novelAdminForm"><label>JUDUL NOVEL</label><input id="novelAdminTitle" maxlength="160" required><label>HARGA (RUPIAH)</label><input id="novelAdminPrice" type="number" min="0" max="1000000000" required><label>FILE PDF</label><input id="novelAdminPdf" type="file" accept="application/pdf,.pdf" required><label>SAMPUL</label><select id="novelAdminCoverMode"><option value="pdf">Ambil halaman pertama PDF</option><option value="custom">Gambar sendiri</option></select><div id="novelAdminCustomWrap" class="hidden"><label>GAMBAR SAMPUL</label><input id="novelAdminCover" type="file" accept="image/jpeg,image/png,image/webp"></div><p id="novelAdminNotice" class="notice"></p><button id="novelAdminSave">UNGGAH NOVEL</button></form><h2 style="margin-top:18px">DAFTAR NOVEL</h2><div id="novelAdminList" class="users"></div><button type="button" class="secondary" id="refreshNovels">MUAT ULANG</button></section><section class="panel" id="videoAdminPanel"><h2>LEXIAA N.G VIDEO · VIP</h2><p class="muted">Unggah video MP4/WebM, atur harga, dan kelola tayangan VIP. Harga Rp0 berarti gratis untuk pelanggan VIP aktif.</p>
+<section class="panel" id="novelAdminPanel"><h2>LEXIAA NOVEL · KELOLA KATALOG</h2><p class="muted">Unggah PDF, atur harga, dan sampul novel. Login admin tetap sama dengan menu Wallet.</p><form id="novelAdminForm"><label>JUDUL NOVEL</label><input id="novelAdminTitle" maxlength="160" required><label>HARGA (RUPIAH)</label><input id="novelAdminPrice" type="number" min="0" max="1000000000" required><label>FILE PDF</label><input id="novelAdminPdf" type="file" accept="application/pdf,.pdf" required><label style="display:flex;align-items:center;gap:9px;letter-spacing:0;font-size:12px"><input id="novelAdminProOnly" type="checkbox" style="width:auto"> KHUSUS ANGGOTA PRO AKTIF</label><label>SAMPUL</label><select id="novelAdminCoverMode"><option value="pdf">Ambil halaman pertama PDF</option><option value="custom">Gambar sendiri</option></select><div id="novelAdminCustomWrap" class="hidden"><label>GAMBAR SAMPUL</label><input id="novelAdminCover" type="file" accept="image/jpeg,image/png,image/webp"></div><p id="novelAdminNotice" class="notice"></p><button id="novelAdminSave">UNGGAH NOVEL</button></form><h2 style="margin-top:18px">DAFTAR NOVEL</h2><div id="novelAdminList" class="users"></div><button type="button" class="secondary" id="refreshNovels">MUAT ULANG</button></section><section class="panel" id="videoAdminPanel"><h2>LEXIAA N.G VIDEO · VIP</h2><p class="muted">Unggah video MP4/WebM, atur harga, dan kelola tayangan VIP. Harga Rp0 berarti gratis untuk pelanggan VIP aktif.</p>
 <form id="videoAdminForm"><label>JUDUL VIDEO</label><input id="videoAdminTitle" maxlength="160" required>
 <label>HARGA KHUSUS (RUPIAH)</label><input id="videoAdminPrice" type="number" min="0" max="1000000000" value="0" required>
-<label>FILE VIDEO · MP4 / WEBM</label><input id="videoAdminFile" type="file" accept="video/mp4,video/webm,.mp4,.webm" required>
+<label>FILE VIDEO · MP4 / WEBM</label><input id="videoAdminFile" type="file" accept="video/mp4,video/webm,.mp4,.webm" required><label style="display:flex;align-items:center;gap:9px;letter-spacing:0;font-size:12px"><input id="videoAdminProOnly" type="checkbox" style="width:auto"> KHUSUS ANGGOTA PRO AKTIF</label>
 <div class="section-note">Batas akhir setiap video adalah 50 MB. Jika file lebih besar, Admin akan mencoba mengompresnya menjadi di bawah 50 MB. Kompresi dilakukan di browser dan bisa berat untuk HP.</div>
 <div id="videoCompressBox" class="hidden"><div class="row"><span class="video-pulse"></span><b id="videoProgressTitle">Sedang Mengompres Video...</b></div><div class="video-progress"><span id="videoProgressBar"></span></div><p id="videoProgressText" class="muted">Menyiapkan mesin kompresi...</p></div>
 <p id="videoAdminNotice" class="notice"></p><button id="videoAdminSave">UNGGAH VIDEO</button></form>
@@ -282,13 +282,14 @@ async function loadNovelAdmin(){
   for(const n of items){
    const row=document.createElement("div");row.className="user";
    const info=document.createElement("div"),title=document.createElement("strong"),meta=document.createElement("small"),actions=document.createElement("div");
-   title.textContent=n.title;meta.textContent=rupiah(n.price)+" · "+(n.is_published?"Tayang":"Disembunyikan");info.append(title,meta);
+   title.textContent=n.title;meta.textContent=rupiah(n.price)+" · "+(n.is_published?"Tayang":"Disembunyikan")+" · "+(n.is_pro_only?"KHUSUS PRO":"UMUM");info.append(title,meta);
    actions.className="row";
+   const proToggle=document.createElement("button");proToggle.className="secondary";proToggle.textContent=n.is_pro_only?"BUKA UNTUK UMUM":"JADIKAN PRO";proToggle.onclick=async()=>{try{await api({action:"novel_pro_only",id:n.id,is_pro_only:!n.is_pro_only});await loadNovelAdmin();}catch(e){notice("novelAdminNotice",e.message);}};
    const toggle=document.createElement("button");toggle.className="secondary";toggle.textContent=n.is_published?"SEMBUNYIKAN":"TERBITKAN";
    toggle.onclick=async()=>{try{await api({action:"novel_publish",id:n.id,is_published:!n.is_published});await loadNovelAdmin();}catch(e){notice("novelAdminNotice",e.message);}};
    const del=document.createElement("button");del.className="danger";del.textContent="HAPUS";
    del.onclick=async()=>{if(!confirm("Hapus novel "+n.title+"? Novel yang telah dibeli tidak dapat dihapus."))return;try{await api({action:"novel_delete",id:n.id});await loadNovelAdmin();}catch(e){notice("novelAdminNotice",e.message);}};
-   actions.append(toggle,del);row.append(info,actions);host.append(row);
+   actions.append(proToggle,toggle,del);row.append(info,actions);host.append(row);
   }
  }catch(e){host.textContent=e.message;}
 }
@@ -306,7 +307,7 @@ $("novelAdminForm").onsubmit=async e=>{
   notice("novelAdminNotice","Mengunggah sampul...");
   const ext=cover.type==="image/png"?"png":cover.type==="image/webp"?"webp":"jpg",coverPath=await novelUpload("cover",cover,ext);
   notice("novelAdminNotice","Menyimpan katalog...");
-  await api({action:"novel_save",title,price,pdf_path:pdfPath,cover_path:coverPath,cover_mode:$("novelAdminCoverMode").value,is_published:true});
+  await api({action:"novel_save",title,price,pdf_path:pdfPath,cover_path:coverPath,cover_mode:$("novelAdminCoverMode").value,is_published:true,is_pro_only:$("novelAdminProOnly").checked});
   notice("novelAdminNotice","Novel berhasil diterbitkan.",true);$("novelAdminForm").reset();$("novelAdminCustomWrap").classList.add("hidden");await loadNovelAdmin();
  }catch(err){notice("novelAdminNotice",err.message);}finally{btn.disabled=false;}
 };
@@ -406,12 +407,13 @@ async function loadVideoAdmin(){
   for(const v of items){
    const row=document.createElement("div");row.className="user";
    const info=document.createElement("div"),title=document.createElement("strong"),meta=document.createElement("small"),actions=document.createElement("div");
-   title.textContent=v.title;meta.textContent=rupiah(v.price)+" · "+videoBytes(v.file_size)+" · "+(v.is_published?"Tayang":"Disembunyikan");info.append(title,meta);actions.className="row";
+   title.textContent=v.title;meta.textContent=rupiah(v.price)+" · "+videoBytes(v.file_size)+" · "+(v.is_published?"Tayang":"Disembunyikan")+" · "+(v.is_pro_only?"KHUSUS PRO":"UMUM");info.append(title,meta);actions.className="row";
+   const proToggle=document.createElement("button");proToggle.className="secondary";proToggle.textContent=v.is_pro_only?"BUKA UNTUK UMUM":"JADIKAN PRO";proToggle.onclick=async()=>{try{await api({action:"video_pro_only",id:v.id,is_pro_only:!v.is_pro_only});await loadVideoAdmin();}catch(e){notice("videoAdminNotice",e.message);}};
    const toggle=document.createElement("button");toggle.className="secondary";toggle.textContent=v.is_published?"SEMBUNYIKAN":"TERBITKAN";
    toggle.onclick=async()=>{try{await api({action:"video_publish",id:v.id,is_published:!v.is_published});await loadVideoAdmin();}catch(e){notice("videoAdminNotice",e.message);}};
    const del=document.createElement("button");del.className="danger";del.textContent="HAPUS";
    del.onclick=async()=>{if(!confirm("Hapus video "+v.title+"? Jika sudah dibeli, sembunyikan saja."))return;try{await api({action:"video_delete",id:v.id});await loadVideoAdmin();}catch(e){notice("videoAdminNotice",e.message);}};
-   actions.append(toggle,del);row.append(info,actions);host.append(row);
+   actions.append(proToggle,toggle,del);row.append(info,actions);host.append(row);
   }
  }catch(e){host.textContent=e.message;}
 }
@@ -442,7 +444,7 @@ $("videoAdminForm").onsubmit=async e=>{
    thumbnailPath=thumbSign.path;
   }catch(thumbError){console.warn("[LEXIAA thumbnail]",thumbError);thumbnailWarning=thumbError?.message||"Penyebab tidak diketahui";}
   videoStage="Menyimpan data katalog";notice("videoAdminNotice","Menyimpan katalog video...");
-  await api({action:"video_save",title,price,video_path:path,thumbnail_path:thumbnailPath,mime_type:mime,file_size:file.size});
+  await api({action:"video_save",title,price,video_path:path,thumbnail_path:thumbnailPath,mime_type:mime,file_size:file.size,is_pro_only:$("videoAdminProOnly").checked});
   notice("videoAdminNotice",thumbnailWarning?"Video tersimpan, tetapi thumbnail gagal: "+thumbnailWarning:"Video berhasil diunggah dan diterbitkan.",!thumbnailWarning);$("videoAdminForm").reset();$("videoCompressBox").classList.add("hidden");await loadVideoAdmin();
  }catch(err){const detail=err?.message||String(err)||"Error tidak memiliki pesan";console.error("[LEXIAA video upload]",videoStage,err);notice("videoAdminNotice","Gagal pada tahap: "+videoStage+". Detail: "+detail);}
  finally{btn.disabled=false;}
