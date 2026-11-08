@@ -132,7 +132,7 @@ Deno.serve(async req => {
 
     if (input.action === "video_catalog") {
       const [{ data: videos, error: videoError }, { data: purchases, error: purchaseError }, { data: subscription, error: subError }, { data: membership, error: proError }, { data: proSettings, error: settingsError }] = await Promise.all([
-        db.from("ng_videos").select("id,title,price,mime_type,file_size,created_at,thumbnail_path").eq("is_published", true).order("created_at", { ascending: false }),
+        db.from("ng_videos").select("id,title,price,mime_type,file_size,created_at,thumbnail_path,is_pro_only").eq("is_published", true).order("created_at", { ascending: false }),
         db.from("ng_video_purchases").select("video_id").eq("user_id", customer.id),
         db.from("ng_video_vip_subscriptions").select("ends_at,package_code").eq("user_id", customer.id).maybeSingle(),
         db.from("ng_pro_memberships").select("status,starts_at,ends_at").eq("user_id", customer.id).maybeSingle(),
@@ -154,7 +154,7 @@ Deno.serve(async req => {
         return {
           id: v.id, title: v.title, price, list_price: listPrice, discount_percent: discountPercent,
           mime_type: v.mime_type, file_size: Number(v.file_size), thumbnail_url, owned: owned.has(v.id),
-          playable: active && (listPrice === 0 || owned.has(v.id))
+          playable: active && (listPrice === 0 || owned.has(v.id)), is_pro_only: v.is_pro_only === true
         };
       }));
       return json({ vip_active: active, subscription: subscription || null, is_pro: proActive, discount_percent: discountPercent, videos: catalog });
@@ -165,11 +165,17 @@ Deno.serve(async req => {
       if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(videoId)) return json({ error: "Video tidak valid." }, 400);
       const [{ data: sub }, { data: video }, { data: purchase }] = await Promise.all([
         db.from("ng_video_vip_subscriptions").select("ends_at").eq("user_id", customer.id).maybeSingle(),
-        db.from("ng_videos").select("id,title,price,video_path,mime_type,thumbnail_path").eq("id", videoId).eq("is_published", true).maybeSingle(),
+        db.from("ng_videos").select("id,title,price,video_path,mime_type,thumbnail_path,is_pro_only").eq("id", videoId).eq("is_published", true).maybeSingle(),
         db.from("ng_video_purchases").select("id").eq("user_id", customer.id).eq("video_id", videoId).maybeSingle()
       ]);
       if (!sub || new Date(sub.ends_at).getTime() <= Date.now()) return json({ error: "Langganan VIP kamu sudah berakhir. Aktifkan VIP kembali untuk menonton." }, 403);
       if (!video) return json({ error: "Video tidak ditemukan." }, 404);
+      if (video.is_pro_only === true) {
+        const { data: membership, error: proError } = await db.from("ng_pro_memberships").select("status,starts_at,ends_at").eq("user_id", customer.id).maybeSingle();
+        if (proError) return json({ error: "Gagal memeriksa status Pro." }, 400);
+        const proActive = Boolean(membership && membership.status === "active" && new Date(membership.starts_at).getTime() <= Date.now() && new Date(membership.ends_at).getTime() > Date.now());
+        if (!proActive) return json({ error: "Video ini khusus anggota LEXIAA N.G Pro aktif." }, 403);
+      }
       if (Number(video.price) > 0 && !purchase) return json({ error: "Video ini harus dibeli terlebih dahulu." }, 403);
       const { data: signed, error: signError } = await db.storage.from("lexiaa-ng-videos").createSignedUrl(video.video_path, 90);
       if (signError || !signed?.signedUrl) return json({ error: "Gagal menyiapkan pemutaran video." }, 400);
@@ -194,6 +200,14 @@ Deno.serve(async req => {
     if (input.action === "video_buy") {
       const videoId = String(input.video_id || "");
       if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(videoId)) return json({ error: "Video tidak valid." }, 400);
+      const { data: targetVideo, error: targetVideoError } = await db.from("ng_videos").select("is_pro_only").eq("id", videoId).maybeSingle();
+      if (targetVideoError || !targetVideo) return json({ error: "Video tidak ditemukan." }, 404);
+      if (targetVideo.is_pro_only === true) {
+        const { data: membership, error: proError } = await db.from("ng_pro_memberships").select("status,starts_at,ends_at").eq("user_id", customer.id).maybeSingle();
+        if (proError) return json({ error: "Gagal memeriksa status Pro." }, 400);
+        const proActive = Boolean(membership && membership.status === "active" && new Date(membership.starts_at).getTime() <= Date.now() && new Date(membership.ends_at).getTime() > Date.now());
+        if (!proActive) return json({ error: "Video ini hanya dapat dibeli anggota LEXIAA N.G Pro aktif." }, 403);
+      }
       const { data, error } = await userDb.rpc("ng_video_purchase_linked", { p_pin: String(input.pin || ""), p_video_id: videoId });
       if (error) return json({ error: "Pembelian video gagal diproses: " + error.message }, 400);
       if (!data?.success) return json({ error: data?.message || "Pembelian tidak berhasil.", ...data }, 400);
@@ -202,7 +216,7 @@ Deno.serve(async req => {
 
     if (input.action === "novel_catalog") {
       const [{ data: novels, error: novelError }, { data: purchases, error: purchaseError }, { data: membership, error: proError }, { data: proSettings, error: settingsError }] = await Promise.all([
-        db.from("lexiaa_novels").select("id,title,price,cover_path,cover_mode,created_at").eq("is_published", true).order("created_at", { ascending: false }),
+        db.from("lexiaa_novels").select("id,title,price,cover_path,cover_mode,created_at,is_pro_only").eq("is_published", true).order("created_at", { ascending: false }),
         db.from("lexiaa_novel_purchases").select("novel_id").eq("user_id", customer.id),
         db.from("ng_pro_memberships").select("status,starts_at,ends_at").eq("user_id", customer.id).maybeSingle(),
         db.from("ng_pro_settings").select("discount_percent").eq("id", true).maybeSingle()
@@ -220,7 +234,7 @@ Deno.serve(async req => {
         }
         const listPrice = Number(n.price);
         const price = Math.floor(listPrice * (100 - discountPercent) / 100);
-        return { id: n.id, title: n.title, price, list_price: listPrice, discount_percent: discountPercent, cover_url, owned: owned.has(n.id) };
+        return { id: n.id, title: n.title, price, list_price: listPrice, discount_percent: discountPercent, cover_url, owned: owned.has(n.id), is_pro_only: n.is_pro_only === true };
       }));
       return json({ is_pro: proActive, discount_percent: discountPercent, novels: result });
     }
@@ -229,6 +243,14 @@ Deno.serve(async req => {
       const novelId = String(input.novel_id || "");
       if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(novelId)) {
         return json({ error: "Novel tidak valid." }, 400);
+      }
+      const { data: targetNovel, error: targetNovelError } = await db.from("lexiaa_novels").select("is_pro_only").eq("id", novelId).maybeSingle();
+      if (targetNovelError || !targetNovel) return json({ error: "Novel tidak ditemukan." }, 404);
+      if (targetNovel.is_pro_only === true) {
+        const { data: membership, error: proError } = await db.from("ng_pro_memberships").select("status,starts_at,ends_at").eq("user_id", customer.id).maybeSingle();
+        if (proError) return json({ error: "Gagal memeriksa status Pro." }, 400);
+        const proActive = Boolean(membership && membership.status === "active" && new Date(membership.starts_at).getTime() <= Date.now() && new Date(membership.ends_at).getTime() > Date.now());
+        if (!proActive) return json({ error: "Novel ini hanya dapat dibeli anggota LEXIAA N.G Pro aktif." }, 403);
       }
       const { data, error } = await userDb.rpc("lexiaa_novel_buy_with_pin", { p_novel_id: novelId, p_pin: String(input.pin || "") });
       if (error) return json({ error: "Pembelian gagal diproses: " + error.message }, 400);
@@ -246,8 +268,14 @@ Deno.serve(async req => {
       if (purchaseError) return json({ error: "Gagal memeriksa kepemilikan novel: " + purchaseError.message }, 400);
       if (!purchase) return json({ error: "Novel ini belum dibeli oleh akunmu." }, 403);
       const { data: novel, error: novelError } = await db.from("lexiaa_novels")
-        .select("title,pdf_path").eq("id", novelId).maybeSingle();
+        .select("title,pdf_path,is_pro_only").eq("id", novelId).maybeSingle();
       if (novelError || !novel) return json({ error: "File novel tidak ditemukan." }, 404);
+      if (novel.is_pro_only === true) {
+        const { data: membership, error: proError } = await db.from("ng_pro_memberships").select("status,starts_at,ends_at").eq("user_id", customer.id).maybeSingle();
+        if (proError) return json({ error: "Gagal memeriksa status Pro." }, 400);
+        const proActive = Boolean(membership && membership.status === "active" && new Date(membership.starts_at).getTime() <= Date.now() && new Date(membership.ends_at).getTime() > Date.now());
+        if (!proActive) return json({ error: "Novel ini khusus anggota LEXIAA N.G Pro aktif." }, 403);
+      }
       const { data: signed, error: signError } = await db.storage.from("lexiaa-novels")
         .createSignedUrl(novel.pdf_path, 90, { download: String(novel.title || "lexiaa-novel").replace(/[\\/\\:*?"<>|]/g, "_") + ".pdf" });
       if (signError || !signed?.signedUrl) return json({ error: "Gagal menyiapkan unduhan novel." }, 400);
