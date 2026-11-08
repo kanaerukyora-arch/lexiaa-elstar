@@ -374,7 +374,7 @@ Deno.serve(async req => {
   }
 
   if (input.action === "video_list") {
-    const { data, error } = await db.from("ng_videos").select("id,title,price,video_path,mime_type,file_size,is_published,created_at").order("created_at", { ascending: false });
+    const { data, error } = await db.from("ng_videos").select("id,title,price,video_path,mime_type,file_size,is_published,is_pro_only,created_at").order("created_at", { ascending: false });
     if (error) return json({ error: "Gagal memuat daftar video: " + error.message }, 400);
     return json({ videos: data || [] });
   }
@@ -404,13 +404,13 @@ Deno.serve(async req => {
         !/^admin\/[a-f0-9-]+\/video\.(?:mp4|webm)$/i.test(path) || !["video/mp4","video/webm"].includes(mime) ||
         !Number.isSafeInteger(size) || size < 1 || size > 52428800 ||
         (thumbnailPath && thumbnailPath !== expectedThumbnail)) return json({ error: "Judul, harga, atau file video tidak valid." }, 400);
-    const { data, error } = await db.from("ng_videos").insert({ title, price, video_path: path, thumbnail_path: thumbnailPath || null, mime_type: mime, file_size: size, is_published: true })
-      .select("id,title,price,video_path,mime_type,file_size,is_published,created_at").single();
+    const { data, error } = await db.from("ng_videos").insert({ title, price, video_path: path, thumbnail_path: thumbnailPath || null, mime_type: mime, file_size: size, is_published: true, is_pro_only: input.is_pro_only === true })
+      .select("id,title,price,video_path,mime_type,file_size,is_published,is_pro_only,created_at").single();
     if (error) return json({ error: "Gagal menyimpan video: " + error.message }, 400);
     return json({ success: true, video: data });
   }
 
-  if (input.action === "video_publish") {
+  if (input.action === "video_pro_only") {\n    const id = String(input.id || "");\n    if (!id) return json({ error: "ID video tidak valid." }, 400);\n    const { error } = await db.from("ng_videos").update({ is_pro_only: input.is_pro_only === true, updated_at: new Date().toISOString() }).eq("id", id);\n    if (error) return json({ error: "Gagal mengubah akses Pro video: " + error.message }, 400);\n    return json({ success: true });\n  }\n\n  if (input.action === "video_publish") {
     const id = String(input.id || "");
     if (!id) return json({ error: "ID video tidak valid." }, 400);
     const { error } = await db.from("ng_videos").update({ is_published: input.is_published === true, updated_at: new Date().toISOString() }).eq("id", id);
@@ -430,7 +430,7 @@ Deno.serve(async req => {
 
   if (input.action === "novel_list") {
     const { data, error } = await db.from("lexiaa_novels")
-      .select("id,title,price,pdf_path,cover_path,cover_mode,is_published,created_at")
+      .select("id,title,price,pdf_path,cover_path,cover_mode,is_published,is_pro_only,created_at")
       .order("created_at", { ascending: false });
     if (error) return json({ error: "Gagal memuat katalog novel: " + error.message }, 400);
     return json({ novels: data || [] });
@@ -457,11 +457,11 @@ Deno.serve(async req => {
     if (!title || title.length > 160 || !Number.isSafeInteger(price) || price < 0 || price > 1_000_000_000 || !pdfPath.startsWith("admin/") || (coverPath && !coverPath.startsWith("admin/"))) {
       return json({ error: "Judul, harga, atau file novel tidak valid." }, 400);
     }
-    const payload = { title, price, pdf_path: pdfPath, cover_path: coverPath, cover_mode: coverMode, is_published: input.is_published !== false, updated_at: new Date().toISOString() };
+    const payload = { title, price, pdf_path: pdfPath, cover_path: coverPath, cover_mode: coverMode, is_published: input.is_published !== false, is_pro_only: input.is_pro_only === true, updated_at: new Date().toISOString() };
     const query = id
       ? db.from("lexiaa_novels").update(payload).eq("id", id)
       : db.from("lexiaa_novels").insert(payload);
-    const { data, error } = await query.select("id,title,price,pdf_path,cover_path,cover_mode,is_published,created_at").single();
+    const { data, error } = await query.select("id,title,price,pdf_path,cover_path,cover_mode,is_published,is_pro_only,created_at").single();
     if (error) return json({ error: "Gagal menyimpan novel: " + error.message }, 400);
     return json({ success: true, novel: data });
   }
@@ -479,7 +479,7 @@ Deno.serve(async req => {
     return json({ success: true });
   }
 
-  if (input.action === "novel_publish") {
+  if (input.action === "novel_pro_only") {\n    const id = String(input.id || "");\n    if (!id) return json({ error: "ID novel tidak valid." }, 400);\n    const { error } = await db.from("lexiaa_novels").update({ is_pro_only: input.is_pro_only === true, updated_at: new Date().toISOString() }).eq("id", id);\n    if (error) return json({ error: "Gagal mengubah akses Pro novel: " + error.message }, 400);\n    return json({ success: true });\n  }\n\n  if (input.action === "novel_publish") {
     const id = String(input.id || "");
     const published = input.is_published === true;
     const { error } = await db.from("lexiaa_novels").update({ is_published: published, updated_at: new Date().toISOString() }).eq("id", id);
