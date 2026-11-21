@@ -49,3 +49,76 @@ using (bucket_id = 'lexiaa-ng-qris');
 -- Customer requests and QRIS configuration are accessed only through the Edge Function.
 -- The Edge Function uses the service role after verifying the signed-in user's identity
 -- or the separate LEXIAA admin token.
+
+create or replace function public.ng_wallet_topup_review(
+  p_request_id uuid,
+  p_decision text,
+  p_admin_note text default null
+) returns jsonb
+language plpgsql
+security definer
+set search_path = public, extensions
+as $$
+declare
+  v_req public.ng_wallet_topup_requests%rowtype;
+  v_credit jsonb;
+  v_note text := left(coalesce(trim(p_admin_note), ''), 500);
+  v_title text;
+  v_body text;
+begin
+  if p_decision not in ('approved','rejected') then
+    return jsonb_build_object('success',false,'message','Keputusan admin tidak valid.');
+  end if;
+
+  select * into v_req
+  from public.ng_wallet_topup_requests
+  where id = p_request_id
+  for update;
+
+  if not found then
+    return jsonb_build_object('success',false,'message','Pengajuan top-up tidak ditemukan.');
+  end if;
+  if v_req.status <> 'pending' then
+    return jsonb_build_object('success',false,'message','Pengajuan ini sudah pernah diproses.');
+  end if;
+
+  if p_decision = 'approved' then
+    v_credit := public.ng_wallet_admin_credit(
+      v_req.user_id,
+      v_req.amount,
+      'Top Up QRIS LEXIAA N.G'
+    );
+    if coalesce((v_credit->>'success')::boolean,false) is not true then
+      raise exception 'Gagal menambahkan saldo: %', coalesce(v_credit->>'message','RPC saldo gagal.');
+    end if;
+    v_title := 'Top Up Wallet N.G Berhasil';
+    v_body := 'Pembayaran QRIS sebesar Rp' || to_char(v_req.amount, 'FM999G999G999') ||
+      ' telah diverifikasi. Saldo Wallet N.G kamu sudah ditambahkan.';
+  else
+    v_title := 'Top Up Wallet N.G Ditolak';
+    v_body := 'Pengajuan top up QRIS sebesar Rp' || to_char(v_req.amount, 'FM999G999G999') ||
+      ' belum dapat diterima.' ||
+      case when v_note <> '' then E'\nCatatan admin: ' || v_note else '' end;
+  end if;
+
+  update public.ng_wallet_topup_requests
+  set status = p_decision,
+      admin_note = nullif(v_note,''),
+      reviewed_at = now(),
+      reviewed_by = 'LEXIAA ADMIN'
+  where id = p_request_id;
+
+  insert into public.lexiaa_messages(recipient_id,title,body)
+  values (v_req.user_id, v_title, v_body);
+
+  return jsonb_build_object(
+    'success',true,
+    'status',p_decision,
+    'amount',v_req.amount,
+    'balance',case when p_decision='approved' then (v_credit->>'balance')::numeric else null end
+  );
+end;
+$$;
+
+revoke all on function public.ng_wallet_topup_review(uuid,text,text) from public, anon, authenticated;
+grant execute on function public.ng_wallet_topup_review(uuid,text,text) to service_role;
