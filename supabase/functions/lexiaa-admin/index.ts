@@ -641,6 +641,16 @@ Deno.serve(async req => {
     });
   }
 
+  if (input.action === "wallet_topup_qris_admin_list") {
+    const { data, error } = await db.from("ng_wallet_topup_qris").select("amount,image_path,updated_at").order("amount");
+    if (error) return json({ error: "Gagal membaca pengaturan QRIS: " + error.message }, 400);
+    return json({ qris: (data || []).map((item: any) => ({
+      amount: item.amount,
+      image_url: db.storage.from("lexiaa-ng-qris").getPublicUrl(item.image_path).data.publicUrl,
+      updated_at: item.updated_at
+    })) });
+  }
+
   if (input.action === "wallet_topup_qris_upload_sign") {
     const amount = Number(input.amount);
     const ext = String(input.extension || "").toLowerCase();
