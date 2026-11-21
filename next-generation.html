@@ -211,6 +211,28 @@ button,input{font:inherit}button{cursor:pointer}#particles{position:fixed;inset:
 @media(max-width:560px){#dashboardView .ng-feature-modal:has(.ng-video-wrap){width:96vw!important;aspect-ratio:4/3;max-height:88dvh!important;padding:14px 10px!important}}
 
 
+/* LEXIAA N.G QRIS top-up neon interface */
+#dashboardView .ng-topup-wrap{display:grid;gap:13px;color:#fff}
+#dashboardView .ng-topup-intro{padding:15px;border:1px solid #9e9aff88;border-radius:15px;background:linear-gradient(125deg,#28217bdc,#123b78dc);box-shadow:0 0 24px #6e63ff33}
+#dashboardView .ng-topup-intro b{display:block;font:800 12px Orbitron,sans-serif;letter-spacing:.12em;color:#c8f8ff;text-shadow:0 0 12px #55eaff}
+#dashboardView .ng-topup-intro p{margin:7px 0 0;color:#e0e5ff;font-size:11px;line-height:1.6}
+#dashboardView .ng-topup-amounts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+#dashboardView .ng-topup-amount{min-height:58px;border:1px solid #9b9cff;border-radius:12px;background:linear-gradient(135deg,#35258b,#176eaa);color:#fff;font:800 15px Orbitron,sans-serif;text-shadow:0 0 9px #a4f5ff;box-shadow:0 0 14px #766cff44}
+#dashboardView .ng-topup-amount.active{border-color:#9bfff2;background:linear-gradient(120deg,#5534b8,#087e9d);box-shadow:0 0 0 2px #8fffee55,0 0 22px #59eaff99}
+#dashboardView .ng-topup-qr-card{padding:15px;border:1px solid #9d9cff;border-radius:17px;background:linear-gradient(145deg,#101b50,#252078);box-shadow:inset 0 0 25px #7f77ff22,0 0 22px #6a5dff33;text-align:center}
+#dashboardView .ng-topup-payee{font:800 clamp(16px,4vw,22px) Orbitron,sans-serif;color:#fff;text-shadow:0 0 7px #fff,0 0 17px #66eaff,0 0 28px #8b6bff;margin:3px 0 8px}
+#dashboardView .ng-topup-value{font:800 clamp(22px,6vw,30px) Orbitron,sans-serif;color:#fff;text-shadow:0 0 8px #fff,0 0 18px #5ceaff,0 0 32px #9a6cff;margin:7px 0 13px}
+#dashboardView .ng-topup-qr{display:block;width:min(100%,340px);max-height:440px;object-fit:contain;margin:0 auto;border-radius:10px;background:#fff;padding:8px;box-shadow:0 0 0 1px #fff,0 0 25px #7deaff66}
+#dashboardView .ng-topup-qris-logo{font:900 16px Orbitron,sans-serif;letter-spacing:.12em;color:#d9faff;text-shadow:0 0 12px #58dfff;margin:8px 0}
+#dashboardView .ng-topup-caption{color:#c6d8ff;font-size:10px;line-height:1.6;margin:9px 0 0}
+#dashboardView .ng-topup-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+#dashboardView .ng-topup-actions button{min-height:46px;border:1px solid #c7baff;border-radius:11px;color:#fff;background:linear-gradient(110deg,#7650df,#1689bd);font-weight:800;font-size:11px;box-shadow:0 0 15px #695dff55}
+#dashboardView .ng-topup-actions button.secondary{background:#ffffff10;border-color:#aeb9ff88}
+#dashboardView .ng-topup-proof{display:grid;gap:9px;padding:14px;border:1px solid #a69cff77;border-radius:14px;background:#090f35a8}
+#dashboardView .ng-topup-proof input{width:100%;color:#fff;font-size:11px}
+#dashboardView .ng-topup-status{padding:12px;border:1px solid #82dfff66;border-radius:12px;background:#0b2449;color:#d9faff;font-size:11px;line-height:1.7}
+#dashboardView .ng-topup-glowline{height:1px;background:linear-gradient(90deg,transparent,#7af3ff,#b78aff,transparent);box-shadow:0 0 12px #6beaff}
+
 /* Wallet N.G Spin & Quest */
 #dashboardView .ng-spin-page{color:#fff;padding:8px 2px 18px}
 #dashboardView .ng-spin-back{border:1px solid #ffffff55;background:#ffffff12;color:#fff;border-radius:10px;padding:9px 12px;font-size:12px;margin-bottom:14px}
@@ -1468,6 +1490,45 @@ async function ngWalletPaymentProcess(account){
  }
 }
 
+async function ngWalletTopupStart(){
+ try{
+  const data=await ngNovelApi("wallet_topup_qris");
+  const amounts=[20000,50000,75000,100000],available=new Map((data.qris||[]).map(x=>[Number(x.amount),x.image_url]));
+  let selected=0;const fmt=n=>ngNovelRupiah(n).replace(",00","");
+  const body=()=>'<div class="ng-topup-wrap"><div class="ng-topup-intro"><b>✦ TOP UP WALLET N.G</b><p>Pilih nominal, pindai QRIS, lalu unggah bukti pembayaran. Saldo akan masuk setelah admin memverifikasi pembayaran.</p></div><div class="ng-topup-amounts">'+amounts.map(n=>'<button type="button" class="ng-topup-amount '+(selected===n?'active':'')+'" data-topup-amount="'+n+'">'+fmt(n)+'</button>').join("")+'</div><div id="ngTopupQrArea"></div><p id="ngTopupNotice" class="ng-topup-caption" role="status"></p><button type="button" class="ng-fantasy-btn secondary" id="ngTopupBack">KEMBALI KE WALLET</button></div>';
+  ngWalletShell("PEMBAYARAN QRIS",body());
+  const render=()=>{
+   const host=$("ngTopupQrArea");if(!host)return;const url=available.get(selected);
+   if(!selected){host.innerHTML='<div class="ng-topup-status">Pilih salah satu nominal untuk menampilkan QRIS pembayaran.</div>';return;}
+   if(!url){host.innerHTML='<div class="ng-topup-status">QRIS '+fmt(selected)+' belum diunggah admin. Silakan pilih nominal lain.</div>';return;}
+   host.innerHTML='<div class="ng-topup-qr-card"><div class="ng-topup-payee">FATHAN MUFADHIL</div><div class="ng-topup-value">'+fmt(selected)+'</div><div class="ng-topup-qris-logo">QRIS · LEXIAA N.G</div><div class="ng-topup-glowline"></div><img class="ng-topup-qr" src="'+url+'" alt="QRIS '+fmt(selected)+'"><p class="ng-topup-caption">Pindai QRIS di atas dan pastikan nominal pembayaran tepat '+fmt(selected)+'.</p></div><div class="ng-topup-actions"><button type="button" id="ngTopupPaid">SUDAH BAYAR</button><button type="button" class="secondary" id="ngTopupLater">LAIN KALI</button></div>';
+   $("ngTopupPaid").onclick=openProof;$("ngTopupLater").onclick=()=>ngWalletShowAccount(ngWalletState.account);
+  };
+  const openProof=()=>{
+   const host=$("ngTopupQrArea");
+   host.insertAdjacentHTML("beforeend",'<div class="ng-topup-proof" id="ngTopupProof"><b>UNGGAH BUKTI PEMBAYARAN</b><p class="ng-topup-caption">Pilih foto/screenshot bukti pembayaran yang menampilkan nominal dan status berhasil.</p><input type="file" id="ngTopupProofFile" accept="image/jpeg,image/png,image/webp"><button type="button" id="ngTopupSubmitProof" class="ng-fantasy-btn">KIRIM BUKTI PEMBAYARAN</button><p id="ngTopupUploadNotice" class="ng-topup-caption"></p></div>');
+   $("ngTopupPaid").disabled=true;$("ngTopupLater").disabled=true;
+   $("ngTopupSubmitProof").onclick=async()=>{
+    const file=$("ngTopupProofFile").files?.[0],notice=$("ngTopupUploadNotice"),btn=$("ngTopupSubmitProof");
+    if(!file){notice.textContent="Pilih foto bukti pembayaran terlebih dahulu.";return;}
+    if(!["image/jpeg","image/png","image/webp"].includes(file.type)||file.size>5*1024*1024){notice.textContent="Format harus JPG, PNG, atau WebP maksimal 5 MB.";return;}
+    btn.disabled=true;notice.textContent="Mengunggah bukti pembayaran...";
+    try{
+     const ext=file.type==="image/png"?"png":file.type==="image/webp"?"webp":"jpg";
+     const signed=await ngNovelApi("wallet_topup_upload_sign",{amount:selected,extension:ext});
+     const {error:uploadError}=await supabase.storage.from("lexiaa-ng-topup-proof").uploadToSignedUrl(signed.path,signed.token,file,{contentType:file.type,upsert:false});
+     if(uploadError)throw uploadError;
+     await ngNovelApi("wallet_topup_submit",{amount:selected,proof_path:signed.path});
+     ngWalletShell("BUKTI PEMBAYARAN TERKIRIM",'<div class="ng-topup-wrap"><div class="ng-topup-status"><b>✓ Pengajuan berhasil dikirim.</b><br>Mohon tunggu verifikasi admin maksimal <b>1 × 24 jam</b>. Hasil diterima atau ditolak akan dikirim melalui menu Pesan LEXIAA N.G.</div><button type="button" class="ng-fantasy-btn" id="ngTopupDone">KEMBALI KE WALLET</button></div>');
+     $("ngTopupDone").onclick=()=>ngWalletShowAccount(ngWalletState.account);
+    }catch(error){notice.textContent=error.message||"Bukti pembayaran gagal dikirim.";btn.disabled=false;}
+   };
+  };
+  ngFeatureContent.querySelectorAll("[data-topup-amount]").forEach(btn=>btn.onclick=()=>{selected=Number(btn.dataset.topupAmount);ngFeatureContent.querySelectorAll("[data-topup-amount]").forEach(x=>x.classList.toggle("active",x===btn));render();});
+  $("ngTopupBack").onclick=()=>ngWalletShowAccount(ngWalletState.account);render();
+ }catch(error){await ngNovelDialog({title:"Top Up Belum Siap",message:error.message||"QRIS belum dapat dimuat.",mark:"!",actions:[{label:"TUTUP"}]});}
+}
+
 async function ngWalletLoadHistory(){
  const host=$("ngWalletHistoryList");if(!host)return;
  try{
@@ -1487,8 +1548,9 @@ async function ngWalletLoadHistory(){
 function ngWalletShowAccount(result){
  ngWalletState.account=result;ngWalletState.name=result.name||ngWalletState.name;ngWalletState.stage="account";
  const balance=new Intl.NumberFormat("id-ID",{maximumFractionDigits:0}).format(Number(result.balance||0)),rawName=result.name||ngWalletState.name,name=ngEscape(rawName),phone=ngEscape(result.phone||ngWalletState.phone),initial=ngEscape((rawName||"L").trim().charAt(0).toUpperCase());
- ngWalletShell("SALDO LEXIAA N.G",'<div class="ng-wallet-dashboard"><div class="ng-wallet-top"><div class="ng-wallet-profile"><span class="ng-wallet-avatar">'+initial+'</span><span class="ng-wallet-welcome">Halo,<strong>'+name+'</strong></span></div><div class="ng-wallet-top-actions"><span class="ng-region-chip">'+ngPhoneRegion().flag+' '+ngPhoneRegion().id+'</span><button type="button" class="ng-wallet-logout" id="ngWalletSignOut" aria-label="Keluar">×</button></div></div><div class="ng-wallet-dash-hero"><div class="ng-wallet-dash-content"><div class="ng-wallet-greeting"><span>Nama: '+name+'</span><small>'+phone+'</small></div><div class="ng-wallet-balance ng-wallet-balance-modern"><div class="ng-wallet-balance-copy"><small>Saldo Anda</small><strong id="ngWalletBalance">Rp '+balance+'</strong></div><span class="ng-wallet-purse">▣</span></div><h3>Menu Cepat</h3><div class="ng-wallet-quick"><button type="button" id="ngWalletGetBalance"><b>✦</b>Dapatkan Saldo<br><small>Spin &amp; Quest</small></button><button type="button" disabled><b>▤</b>Tambah Saldo / Top Up</button></div><div class="ng-wallet-history"><div class="ng-wallet-history-head"><b>Riwayat Transaksi</b><span id="ngWalletHistoryCount">Terbaru</span></div><div id="ngWalletHistoryList"><p class="ng-wallet-empty">Memuat riwayat transaksi…</p></div></div></div></div><nav class="ng-wallet-bottom"><span class="active">⌂<small>Beranda</small></span><span>▥<small>Statistik</small></span><span>♧<small>Shop</small></span><span>♙<small>Misi</small></span><span>●<small>Akun</small></span></nav></div>');
+ ngWalletShell("SALDO LEXIAA N.G",'<div class="ng-wallet-dashboard"><div class="ng-wallet-top"><div class="ng-wallet-profile"><span class="ng-wallet-avatar">'+initial+'</span><span class="ng-wallet-welcome">Halo,<strong>'+name+'</strong></span></div><div class="ng-wallet-top-actions"><span class="ng-region-chip">'+ngPhoneRegion().flag+' '+ngPhoneRegion().id+'</span><button type="button" class="ng-wallet-logout" id="ngWalletSignOut" aria-label="Keluar">×</button></div></div><div class="ng-wallet-dash-hero"><div class="ng-wallet-dash-content"><div class="ng-wallet-greeting"><span>Nama: '+name+'</span><small>'+phone+'</small></div><div class="ng-wallet-balance ng-wallet-balance-modern"><div class="ng-wallet-balance-copy"><small>Saldo Anda</small><strong id="ngWalletBalance">Rp '+balance+'</strong></div><span class="ng-wallet-purse">▣</span></div><h3>Menu Cepat</h3><div class="ng-wallet-quick"><button type="button" id="ngWalletGetBalance"><b>✦</b>Dapatkan Saldo<br><small>Spin &amp; Quest</small></button><button type="button" id="ngWalletTopup"><b>▤</b>Tambah Saldo / Top Up<br><small>QRIS · 20K–100K</small></button></div><div class="ng-wallet-history"><div class="ng-wallet-history-head"><b>Riwayat Transaksi</b><span id="ngWalletHistoryCount">Terbaru</span></div><div id="ngWalletHistoryList"><p class="ng-wallet-empty">Memuat riwayat transaksi…</p></div></div></div></div><nav class="ng-wallet-bottom"><span class="active">⌂<small>Beranda</small></span><span>▥<small>Statistik</small></span><span>♧<small>Shop</small></span><span>♙<small>Misi</small></span><span>●<small>Akun</small></span></nav></div>');
  $("ngWalletSignOut").onclick=ngWalletStart;
+ $("ngWalletTopup").onclick=ngWalletTopupStart;
  ngWalletLoadHistory();
 }
 $("ngFeatureClose").addEventListener("click",closeNgFeature);
