@@ -81,6 +81,20 @@
 <p id="creditNotice" class="notice"></p><button id="creditButton" disabled>KIRIM SALDO</button>
 </form><div id="walletList" class="users"><p class="muted">Masuk untuk memuat nomor Wallet.</p></div>
 </section>
+<section class="panel" id="walletTopupAdminPanel">
+ <div class="row between"><div><h2>WALLET N.G · QRIS TOP UP</h2><p class="muted">Unggah foto QRIS asli untuk tiap nominal. Foto QR tidak diubah; nama penerima dan nominal diberi efek neon di halaman pembayaran.</p></div><button type="button" class="secondary" id="refreshTopups">MUAT ULANG</button></div>
+ <div class="grid">
+  <div><label>QRIS RP20.000</label><input type="file" id="qrisFile20000" accept="image/jpeg,image/png,image/webp"><button type="button" class="secondary" data-qris-amount="20000">SIMPAN QRIS RP20.000</button><small id="qrisStatus20000" class="muted">Belum diperiksa</small></div>
+  <div><label>QRIS RP50.000</label><input type="file" id="qrisFile50000" accept="image/jpeg,image/png,image/webp"><button type="button" class="secondary" data-qris-amount="50000">SIMPAN QRIS RP50.000</button><small id="qrisStatus50000" class="muted">Belum diperiksa</small></div>
+  <div><label>QRIS RP75.000</label><input type="file" id="qrisFile75000" accept="image/jpeg,image/png,image/webp"><button type="button" class="secondary" data-qris-amount="75000">SIMPAN QRIS RP75.000</button><small id="qrisStatus75000" class="muted">Belum diperiksa</small></div>
+  <div><label>QRIS RP100.000</label><input type="file" id="qrisFile100000" accept="image/jpeg,image/png,image/webp"><button type="button" class="secondary" data-qris-amount="100000">SIMPAN QRIS RP100.000</button><small id="qrisStatus100000" class="muted">Belum diperiksa</small></div>
+ </div>
+ <p id="qrisAdminNotice" class="notice"></p>
+ <h2 style="margin-top:22px">PENGAJUAN TOP UP PENGGUNA</h2>
+ <p class="muted">Periksa nominal dan bukti transfer sebelum menekan TERIMA. Saldo hanya bertambah setelah konfirmasi admin.</p>
+ <div id="walletTopupRequestList" class="users"><p class="muted">Memuat pengajuan...</p></div>
+ <p id="walletTopupNotice" class="notice"></p>
+</section>
 </div>
 <section class="panel" id="novelAdminPanel"><h2>LEXIAA NOVEL · KELOLA KATALOG</h2><p class="muted">Unggah PDF, atur harga, dan sampul novel. Login admin tetap sama dengan menu Wallet.</p><form id="novelAdminForm"><label>JUDUL NOVEL</label><input id="novelAdminTitle" maxlength="160" required><label>HARGA (RUPIAH)</label><input id="novelAdminPrice" type="number" min="0" max="1000000000" required><label>FILE PDF</label><input id="novelAdminPdf" type="file" accept="application/pdf,.pdf" required><label style="display:flex;align-items:center;gap:9px;letter-spacing:0;font-size:12px"><input id="novelAdminProOnly" type="checkbox" style="width:auto"> KHUSUS ANGGOTA PRO AKTIF</label><label>SAMPUL</label><select id="novelAdminCoverMode"><option value="pdf">Ambil halaman pertama PDF</option><option value="custom">Gambar sendiri</option></select><div id="novelAdminCustomWrap" class="hidden"><label>GAMBAR SAMPUL</label><input id="novelAdminCover" type="file" accept="image/jpeg,image/png,image/webp"></div><p id="novelAdminNotice" class="notice"></p><button id="novelAdminSave">UNGGAH NOVEL</button></form><h2 style="margin-top:18px">DAFTAR NOVEL</h2><div id="novelAdminList" class="users"></div><button type="button" class="secondary" id="refreshNovels">MUAT ULANG</button></section><section class="panel" id="videoAdminPanel"><h2>LEXIAA N.G VIDEO · VIP</h2><p class="muted">Unggah video MP4/WebM, atur harga, dan kelola tayangan VIP. Harga Rp0 berarti gratis untuk pelanggan VIP aktif.</p>
 <form id="videoAdminForm"><label>JUDUL VIDEO</label><input id="videoAdminTitle" maxlength="160" required>
@@ -110,6 +124,66 @@ async function api(payload){
   throw new Error(detail);
  }
  return data;
+}
+const adminStorage=createClient("https://sudvolmlzunzofzwjbfn.supabase.co",API_KEY,{auth:{persistSession:false,autoRefreshToken:false}});
+async function saveQris(amount){
+ const input=$("qrisFile"+amount),file=input.files?.[0];
+ if(!file){notice("qrisAdminNotice","Pilih foto QRIS untuk nominal "+rupiah(amount)+".");return;}
+ if(!["image/jpeg","image/png","image/webp"].includes(file.type)||file.size>5*1024*1024){notice("qrisAdminNotice","Foto QRIS harus JPG, PNG, atau WebP maksimal 5 MB.");return;}
+ notice("qrisAdminNotice","Mengunggah QRIS "+rupiah(amount)+"...");
+ try{
+  const ext=file.type==="image/png"?"png":file.type==="image/webp"?"webp":"jpg";
+  const signed=await api({action:"wallet_topup_qris_upload_sign",amount,extension:ext});
+  const {error}=await adminStorage.storage.from("lexiaa-ng-qris").uploadToSignedUrl(signed.path,signed.token,file,{contentType:file.type,upsert:false});
+  if(error)throw error;
+  await api({action:"wallet_topup_qris_save",amount,image_path:signed.path});
+  $("qrisStatus"+amount).textContent="QRIS tersimpan ✓";input.value="";
+  notice("qrisAdminNotice","QRIS "+rupiah(amount)+" berhasil disimpan.",true);
+ }catch(e){notice("qrisAdminNotice",e.message);}
+}
+async function loadQrisStatus(){
+ try{
+  const d=await api({action:"wallet_topup_qris"});
+  for(const amount of [20000,50000,75000,100000]){
+   const item=(d.qris||[]).find(x=>Number(x.amount)===amount);
+   $("qrisStatus"+amount).textContent=item?"QRIS sudah tersedia ✓":"QRIS belum diunggah";
+  }
+ }catch(e){notice("qrisAdminNotice",e.message);}
+}
+async function loadTopupRequests(){
+ const host=$("walletTopupRequestList");host.textContent="Memuat pengajuan top-up...";
+ try{
+  const d=await api({action:"wallet_topup_requests"}),items=d.requests||[];host.replaceChildren();
+  if(!items.length){host.textContent="Belum ada pengajuan top-up.";return;}
+  for(const item of items){
+   const card=document.createElement("article");card.className="user";card.style.gridTemplateColumns="1fr";
+   const info=document.createElement("div"),title=document.createElement("strong"),meta=document.createElement("small");
+   title.textContent=rupiah(item.amount)+" · "+String(item.status).toUpperCase();
+   meta.textContent="Wallet: "+item.wallet_phone+" · User ID: "+item.user_id+" · Email: "+(item.email||"—")+" · Diajukan: "+new Date(item.created_at).toLocaleString("id-ID");
+   info.append(title,meta);card.append(info);
+   if(item.proof_url){const img=document.createElement("img");img.src=item.proof_url;img.alt="Bukti pembayaran "+rupiah(item.amount);img.loading="lazy";img.style.cssText="display:block;width:min(100%,420px);max-height:520px;object-fit:contain;border:1px solid #70dfff55;border-radius:12px;background:#071225;padding:5px";card.append(img);}
+   if(item.status==="pending"){
+    const note=document.createElement("textarea");note.maxLength=500;note.placeholder="Catatan admin (opsional, wajib diisi jika ditolak)";card.append(note);
+    const actions=document.createElement("div");actions.className="row";
+    const approve=document.createElement("button");approve.type="button";approve.textContent="TERIMA & TAMBAHKAN SALDO";
+    approve.onclick=()=>reviewTopup(item,"approved",note.value,approve);
+    const reject=document.createElement("button");reject.type="button";reject.className="danger";reject.textContent="TOLAK";
+    reject.onclick=()=>{if(!note.value.trim()){notice("walletTopupNotice","Isi alasan penolakan terlebih dahulu.");note.focus();return;}reviewTopup(item,"rejected",note.value,reject);};
+    actions.append(approve,reject);card.append(actions);
+   }else if(item.admin_note){const note=document.createElement("small");note.textContent="Catatan admin: "+item.admin_note;card.append(note);}
+   host.append(card);
+  }
+ }catch(e){host.textContent=e.message;notice("walletTopupNotice","Gagal memuat pengajuan top-up.");}
+}
+async function reviewTopup(item,decision,note,button){
+ const actionName=decision==="approved"?"Terima dan tambahkan saldo":"Tolak";
+ if(!confirm(actionName+" pengajuan "+rupiah(item.amount)+" untuk Wallet "+item.wallet_phone+"?"))return;
+ button.disabled=true;notice("walletTopupNotice","Memproses keputusan...");
+ try{
+  const d=await api({action:"wallet_topup_review",request_id:item.id,decision,admin_note:note});
+  notice("walletTopupNotice",decision==="approved"?"Pembayaran diterima. Saldo berhasil ditambahkan: "+rupiah(d.balance):"Pengajuan ditolak. Saldo tidak berubah.",true);
+  await Promise.all([loadTopupRequests(),loadWallets()]);
+ }catch(e){notice("walletTopupNotice",e.message);button.disabled=false;}
 }
 const isOld=u=>u.old_registered===true;
 const isNew=u=>Boolean(u.nextgen_joined_at);
@@ -247,9 +321,9 @@ async function loadUsers(){
  }catch(e){$("userList").textContent=e.message;notice("listNotice","Periksa deployment Edge Function dan konfigurasi backend.");}
 }
 $("loginForm").addEventListener("submit",async e=>{e.preventDefault();$("loginButton").disabled=true;notice("loginNotice","Memverifikasi...");
- try{const d=await api({action:"login",key:$("adminKey").value,password:$("adminPassword").value});if(!d.token)throw new Error("Server tidak mengembalikan token admin.");token=d.token;sessionStorage.setItem("lexiaaAdminNewToken",token);$("loginPanel").classList.add("hidden");$("adminPanel").classList.remove("hidden");await Promise.all([loadUsers(),loadWallets(),loadNovelAdmin(),loadVideoAdmin(),loadProSettings(),loadProApplications(),loadProMemberships()]);}
+ try{const d=await api({action:"login",key:$("adminKey").value,password:$("adminPassword").value});if(!d.token)throw new Error("Server tidak mengembalikan token admin.");token=d.token;sessionStorage.setItem("lexiaaAdminNewToken",token);$("loginPanel").classList.add("hidden");$("adminPanel").classList.remove("hidden");await Promise.all([loadUsers(),loadWallets(),loadTopupRequests(),loadQrisStatus(),loadNovelAdmin(),loadVideoAdmin(),loadProSettings(),loadProApplications(),loadProMemberships()]);}
  catch(err){notice("loginNotice",err.message);}finally{$("loginButton").disabled=false;}});
-$("refresh").onclick=()=>{loadUsers();loadWallets();};$("refreshWallets").onclick=loadWallets;$("walletRecipient").onchange=updateWalletRecipient;$("search").oninput=paint;$("sort").onchange=paint;$("clearSearch").onclick=()=>{$("search").value="";filter="all";document.querySelectorAll("[data-filter]").forEach(b=>b.classList.toggle("active",b.dataset.filter==="all"));paint();};
+$("refresh").onclick=()=>{loadUsers();loadWallets();loadTopupRequests();};$("refreshWallets").onclick=loadWallets;$("refreshTopups").onclick=()=>{loadTopupRequests();loadQrisStatus();};document.querySelectorAll("[data-qris-amount]").forEach(b=>b.onclick=()=>saveQris(Number(b.dataset.qrisAmount)));$("walletRecipient").onchange=updateWalletRecipient;$("search").oninput=paint;$("sort").onchange=paint;$("clearSearch").onclick=()=>{$("search").value="";filter="all";document.querySelectorAll("[data-filter]").forEach(b=>b.classList.toggle("active",b.dataset.filter==="all"));paint();};
 $("tabs").addEventListener("click",e=>{const b=e.target.closest("[data-filter]");if(!b)return;filter=b.dataset.filter;document.querySelectorAll("[data-filter]").forEach(x=>x.classList.toggle("active",x===b));paint();});
 $("creditForm").addEventListener("submit",async e=>{e.preventDefault();const recipient=$("walletRecipient").value;const w=wallets.find(x=>x.recipient_id===recipient);if(!w){notice("creditNotice","Pilih nomor Wallet yang terdaftar.");return;}const amount=Number($("amount").value);if(!Number.isSafeInteger(amount)||amount<1||amount>1e9){notice("creditNotice","Nominal harus Rp1 sampai Rp1.000.000.000.");return;}if(!confirm("Tambahkan "+rupiah(amount)+" ke Wallet nomor "+w.phone+" ("+(w.display_name||"tanpa nama")+")?"))return;
  $("creditButton").disabled=true;notice("creditNotice","Memproses saldo...");
