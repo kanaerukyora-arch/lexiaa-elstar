@@ -112,7 +112,7 @@ Deno.serve(async req => {
   const bearer = (req.headers.get("Authorization") || "").replace(/^Bearer\s+/i, "");
   const db = createClient(url, service, { auth: { persistSession: false, autoRefreshToken: false } });
 
-  const customerAction = ["novel_catalog", "novel_buy", "novel_download", "video_catalog", "video_status", "video_stream", "video_vip_purchase", "video_buy"].includes(String(input.action || ""));
+  const customerAction = ["novel_catalog", "novel_buy", "novel_download", "video_catalog", "video_status", "video_stream", "video_vip_purchase", "video_buy", "wallet_topup_qris", "wallet_topup_upload_sign", "wallet_topup_submit", "wallet_topup_status"].includes(String(input.action || ""));
   if (customerAction) {
     if (!bearer) return json({ error: "Silakan masuk ke akun LEXIAA terlebih dahulu." }, 401);
     const { data: authData, error: authError } = await db.auth.getUser(bearer);
@@ -122,6 +122,63 @@ Deno.serve(async req => {
       auth: { persistSession: false, autoRefreshToken: false },
       global: { headers: { Authorization: "Bearer " + bearer } },
     });
+
+    if (input.action === "wallet_topup_qris") {
+      const { data, error } = await db.from("ng_wallet_topup_qris").select("amount,image_path").order("amount");
+      if (error) return json({ error: "QRIS belum dikonfigurasi admin: " + error.message }, 400);
+      return json({ qris: (data || []).map((item: any) => ({
+        amount: item.amount,
+        image_url: db.storage.from("lexiaa-ng-qris").getPublicUrl(item.image_path).data.publicUrl
+      })) });
+    }
+
+    if (input.action === "wallet_topup_upload_sign") {
+      const amount = Number(input.amount);
+      const ext = String(input.extension || "").toLowerCase();
+      if (![20000,50000,75000,100000].includes(amount) || !["jpg","jpeg","png","webp"].includes(ext)) {
+        return json({ error: "Nominal atau format bukti pembayaran tidak valid." }, 400);
+      }
+      const { data: wallet, error: walletError } = await db.from("ng_wallet_accounts")
+        .select("phone").eq("auth_user_id", customer.id).maybeSingle();
+      if (walletError || !wallet) return json({ error: "Akun ini belum memiliki Wallet N.G yang terhubung." }, 404);
+      const path = customer.id + "/" + crypto.randomUUID() + "." + ext;
+      const { data, error } = await db.storage.from("lexiaa-ng-topup-proof").createSignedUploadUrl(path);
+      if (error || !data?.token) return json({ error: "Gagal menyiapkan unggahan bukti: " + (error?.message || "Token tidak tersedia.") }, 400);
+      return json({ path, token: data.token, mime_type: ext === "png" ? "image/png" : ext === "webp" ? "image/webp" : "image/jpeg" });
+    }
+
+    if (input.action === "wallet_topup_submit") {
+      const amount = Number(input.amount);
+      const proofPath = String(input.proof_path || "");
+      if (![20000,50000,75000,100000].includes(amount) || !proofPath.startsWith(customer.id + "/") || proofPath.includes("..")) {
+        return json({ error: "Nominal atau bukti pembayaran tidak valid." }, 400);
+      }
+      const { data: wallet, error: walletError } = await db.from("ng_wallet_accounts")
+        .select("phone").eq("auth_user_id", customer.id).maybeSingle();
+      if (walletError || !wallet) return json({ error: "Wallet N.G tidak ditemukan untuk akun ini." }, 404);
+      const { data: fileCheck, error: fileError } = await db.storage.from("lexiaa-ng-topup-proof").list(customer.id, { search: proofPath.split("/").pop(), limit: 5 });
+      if (fileError || !fileCheck?.some((file: any) => file.name === proofPath.split("/").pop())) {
+        return json({ error: "Foto bukti belum berhasil diunggah. Coba unggah ulang." }, 400);
+      }
+      const { data, error } = await db.from("ng_wallet_topup_requests").insert({
+        user_id: customer.id, wallet_phone: wallet.phone, amount, proof_path: proofPath, status: "pending"
+      }).select("id,amount,status,created_at").single();
+      if (error) return json({ error: "Gagal mengirim pengajuan top-up: " + error.message }, 400);
+      await db.from("lexiaa_messages").insert({
+        recipient_id: customer.id,
+        title: "Bukti Top Up Wallet N.G Diterima",
+        body: "Bukti pembayaran sebesar Rp" + amount.toLocaleString("id-ID") + " sudah diterima. Mohon tunggu verifikasi admin maksimal 1 x 24 jam. Hasil diterima atau ditolak akan dikirim melalui menu Pesan."
+      });
+      return json({ success: true, request: data });
+    }
+
+    if (input.action === "wallet_topup_status") {
+      const { data, error } = await db.from("ng_wallet_topup_requests")
+        .select("id,amount,status,admin_note,created_at,reviewed_at")
+        .eq("user_id", customer.id).order("created_at", { ascending: false }).limit(10);
+      if (error) return json({ error: "Gagal memuat status top-up: " + error.message }, 400);
+      return json({ requests: data || [] });
+    }
 
     if (input.action === "video_status") {
       const { data, error } = await db.from("ng_video_vip_subscriptions").select("package_code,starts_at,ends_at").eq("user_id", customer.id).maybeSingle();
@@ -582,6 +639,56 @@ Deno.serve(async req => {
       profile_directory_available: !profileResult.error,
       profile_directory_error: profileResult.error?.message || null,
     });
+  }
+
+  if (input.action === "wallet_topup_qris_upload_sign") {
+    const amount = Number(input.amount);
+    const ext = String(input.extension || "").toLowerCase();
+    if (![20000,50000,75000,100000].includes(amount) || !["jpg","jpeg","png","webp"].includes(ext)) {
+      return json({ error: "Nominal atau format foto QRIS tidak valid." }, 400);
+    }
+    const path = amount + "/" + crypto.randomUUID() + "." + ext;
+    const { data, error } = await db.storage.from("lexiaa-ng-qris").createSignedUploadUrl(path);
+    if (error || !data?.token) return json({ error: "Gagal menyiapkan unggahan QRIS: " + (error?.message || "Token tidak tersedia.") }, 400);
+    return json({ path, token: data.token, mime_type: ext === "png" ? "image/png" : ext === "webp" ? "image/webp" : "image/jpeg" });
+  }
+
+  if (input.action === "wallet_topup_qris_save") {
+    const amount = Number(input.amount), path = String(input.image_path || "");
+    if (![20000,50000,75000,100000].includes(amount) || !path.startsWith(amount + "/") || path.includes("..")) {
+      return json({ error: "Nominal atau lokasi foto QRIS tidak valid." }, 400);
+    }
+    const { data: files, error: fileError } = await db.storage.from("lexiaa-ng-qris").list(String(amount), { search: path.split("/").pop(), limit: 5 });
+    if (fileError || !files?.some((file: any) => file.name === path.split("/").pop())) return json({ error: "Foto QRIS belum ditemukan di penyimpanan." }, 400);
+    const { error } = await db.from("ng_wallet_topup_qris").upsert({ amount, image_path: path, updated_at: new Date().toISOString() });
+    if (error) return json({ error: "Gagal menyimpan QRIS: " + error.message }, 400);
+    return json({ success: true, image_url: db.storage.from("lexiaa-ng-qris").getPublicUrl(path).data.publicUrl });
+  }
+
+  if (input.action === "wallet_topup_requests") {
+    const { data, error } = await db.from("ng_wallet_topup_requests")
+      .select("id,user_id,wallet_phone,amount,proof_path,status,admin_note,created_at,reviewed_at")
+      .order("created_at", { ascending: false }).limit(200);
+    if (error) return json({ error: "Gagal memuat pengajuan top-up: " + error.message }, 400);
+    const requests = await Promise.all((data || []).map(async (item: any) => {
+      const { data: signed } = await db.storage.from("lexiaa-ng-topup-proof").createSignedUrl(item.proof_path, 600);
+      const { data: authUser } = await db.auth.admin.getUserById(item.user_id);
+      return { ...item, proof_url: signed?.signedUrl || null, email: authUser?.user?.email || null };
+    }));
+    return json({ requests });
+  }
+
+  if (input.action === "wallet_topup_review") {
+    const id = String(input.request_id || "");
+    const decision = input.decision === "approved" ? "approved" : input.decision === "rejected" ? "rejected" : "";
+    const note = String(input.admin_note || "").trim().slice(0, 500);
+    if (!id || !decision) return json({ error: "Pengajuan atau keputusan tidak valid." }, 400);
+    const { data, error } = await db.rpc("ng_wallet_topup_review", {
+      p_request_id: id, p_decision: decision, p_admin_note: note
+    });
+    if (error) return json({ error: "Gagal memproses pengajuan: " + error.message }, 400);
+    if (!data?.success) return json({ error: data?.message || "Pengajuan tidak berhasil diproses." }, 409);
+    return json(data);
   }
 
   if (input.action === "wallet_accounts") {
